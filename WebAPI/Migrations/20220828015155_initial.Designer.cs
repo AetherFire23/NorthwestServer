@@ -12,8 +12,8 @@ using WebAPI;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20220802012756_11")]
-    partial class _11
+    [Migration("20220828015155_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,6 +32,9 @@ namespace WebAPI.Migrations
 
                     b.Property<int>("ActionPoints")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("CurrentChatRoomId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CurrentRoom")
                         .HasColumnType("int");
@@ -60,20 +63,6 @@ namespace WebAPI.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.GameState", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("FoodAmount")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GameStates");
-                });
-
             modelBuilder.Entity("WebAPI.Models.Item", b =>
                 {
                     b.Property<Guid>("Id")
@@ -97,17 +86,20 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("MessageText")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("SenderName")
+                    b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -116,7 +108,7 @@ namespace WebAPI.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.PrivateRoomParticipants", b =>
+            modelBuilder.Entity("WebAPI.Models.PrivateChatRoomParticipant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -131,6 +123,40 @@ namespace WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PrivateChatRooms");
+                });
+
+            modelBuilder.Entity("WebAPI.Models.PrivateInvitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FromPlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FromPlayerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequestFulfilled")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ToPlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ToPlayerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Invitations");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Room", b =>

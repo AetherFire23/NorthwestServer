@@ -106,6 +106,23 @@ namespace WebAPI.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("WebAPI.Models.PrivateChatRoomParticipant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ParticipantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PrivateChatRooms");
+                });
+
             modelBuilder.Entity("WebAPI.Models.PrivateInvitation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -138,23 +155,6 @@ namespace WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Invitations");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.PrivateRoomParticipants", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ParticipantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PrivateChatRooms");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Room", b =>
