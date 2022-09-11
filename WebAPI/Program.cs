@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.AspNetCore.HttpLogging;
 using WebAPI.Services.ChatService;
 using WebAPI.GameState_Management.Game_State_Repository;
+using WebAPI.GameTasks;
+using System.Reflection;
 
 namespace WebAPI
 {
@@ -22,6 +24,8 @@ namespace WebAPI
             builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IGameStateRepository, GameStateRepository>();
+
+            RegisterGameTaskTypes(builder);
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -88,6 +92,19 @@ namespace WebAPI
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static void RegisterGameTaskTypes(WebApplicationBuilder builder)
+        {
+            var types = typeof(IGameTask).Assembly.GetTypes()
+                .Where(type => type.IsClass && !type.IsAbstract
+                    && typeof(IGameTask).IsAssignableFrom(type)
+                    && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
+
+            foreach (var type in types)
+            {
+                builder.Services.AddTransient(type);
+            }
         }
     }
 }

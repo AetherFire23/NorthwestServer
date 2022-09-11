@@ -6,6 +6,7 @@ using System.Linq;
 using WebAPI.Services.ChatService;
 using WebAPI.GameState_Management;
 using WebAPI.GameState_Management.Game_State_Repository;
+using WebAPI.GameTasks;
 
 namespace WebAPI.Controllers
 {
@@ -15,17 +16,19 @@ namespace WebAPI.Controllers
     {
         private readonly ILogger<TheCrewController> _logger;
         private readonly IChatService _chatService;
-        IPlayerRepository _playerRepository;
-        IPlayerService _playerService;
-        IGameStateRepository _gameStateRepository;
-        PlayerContext _playerContext;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly IPlayerService _playerService;
+        private readonly IGameStateRepository _gameStateRepository;
+        private readonly PlayerContext _playerContext;
+        private readonly IServiceProvider _serviceProvider;
 
         public TheCrewController(ILogger<TheCrewController> logger,
             PlayerContext playerContext,
             IPlayerRepository playerRepository,
             IPlayerService playerService,
             IChatService chatService,
-            IGameStateRepository gameStateRepository)
+            IGameStateRepository gameStateRepository,
+            IServiceProvider serviceProvider)
         {
             _logger = logger;
             _playerRepository = playerRepository;
@@ -33,14 +36,15 @@ namespace WebAPI.Controllers
             _playerContext = playerContext;
             _chatService = chatService;
             _gameStateRepository = gameStateRepository;
+            _serviceProvider = serviceProvider;
 
-            Guid fredGud = new Guid("F0415BB0-5F22-4E79-1D4C-08DA5F69A35F");
+            //Guid fredGud = new Guid("F0415BB0-5F22-4E79-1D4C-08DA5F69A35F");
 
-            Guid gameId = new Guid("F76A4822-8D96-4073-E7F8-08DA70D59137");
-            var fred = _playerRepository.GetPlayerByName("fred");
-            var ben = _playerRepository.GetPlayerByName("ben");
+            //Guid gameId = new Guid("F76A4822-8D96-4073-E7F8-08DA70D59137");
+            //var fred = _playerRepository.GetPlayerByName("fred");
+            //var ben = _playerRepository.GetPlayerByName("ben");
 
-            _playerContext.SaveChanges();
+            //_playerContext.SaveChanges();
         }
 
         // [HttpGet(Name = "GetLocalPlayer")]
@@ -67,6 +71,35 @@ namespace WebAPI.Controllers
         {
             var gameState = _gameStateRepository.GetPlayerGameState(playerId, lastTimeStamp);
             return Ok(gameState);
+        }
+
+        [HttpPost]
+        [Route("GameTask")]
+        public async Task<ActionResult<string>> GameTask(Guid playerId, GameTaskCode taskCode, Dictionary<string, string> parameters)
+        {
+            var gameState = _gameStateRepository.GetPlayerGameState(playerId, null);
+            if (gameState == null)
+            {
+                return NotFound($"The player {playerId} was not found");
+            }
+
+            var context = new GameTaskContext
+            {
+                GameState = gameState,
+                Parameters = parameters ?? new Dictionary<string, string>()
+            };
+
+            Type gameTaskType = GameTaskTypeSelector.GetGameTaskType(taskCode);
+            var gameTask = _serviceProvider.GetService(gameTaskType) as IGameTask;
+
+            var result = gameTask.Validate(context);
+            if (!result.IsValid)
+            {
+                return Ok(result.ErrorMessage);
+            }
+
+            gameTask.Execute(context);
+            return Ok($"The task {taskCode} was executed successfully.");
         }
 
         [HttpPut]
