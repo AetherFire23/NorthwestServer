@@ -6,15 +6,7 @@ namespace WebAPI.Models
     {
         [Key]
         public Guid Id { get; set; }
-
-        public Guid GameId { get; set; }
+        public RoomType RoomType { get; set; }
         
-        public int ReferenceId { get; set; } // pour l'enum
     }
-}
-
-public enum ItemType
-{
-    Wrench,
-    Hose
 }

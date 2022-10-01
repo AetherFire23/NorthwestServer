@@ -4,6 +4,7 @@ namespace WebAPI.GameTasks
     {
         public GameTaskValidationResult()
         {
+
         }
 
         public GameTaskValidationResult(string errorMessage)

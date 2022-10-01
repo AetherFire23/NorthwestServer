@@ -1,14 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-
+using WebAPI.Enums;
 
 public class Player
 {
     [Key]
     public Guid Id { get; set; }
+    
     public Guid GameId { get; set; }
 
     public Guid CurrentChatRoomId { get; set; }
+    
+    public Guid CurrentGameRoomId { get; set; }
+    
+    public ProfessionType Profession { get; set; }
 
     public float X { get; set; }
 
@@ -18,20 +23,17 @@ public class Player
 
     public string Name { get; set; }
 
-    public RoomType CurrentRoom { get; set; }
-
     public int HealthPoints { get; set; }
+
     public int ActionPoints { get; set; }
 
 }
-
 
 public enum RoomType
 {
     Start,
     Second
 }
-
 
 namespace WebAPI
 {

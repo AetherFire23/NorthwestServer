@@ -1,18 +1,20 @@
 ﻿
 using WebAPI;
 using WebAPI.Models;
+using WebAPI.Models.DTOs;
 
 public interface IPlayerRepository
 {
-    public List<string> GetPlayerNames();
-    public List<Player> GetPlayers();
 
-    public Player GetPlayerByName(string name);
+    public Player GetPlayer(string name);
 
-    public Player GetPlayerById(Guid id);
+    public Player GetPlayer(Guid id);
     public List<PrivateInvitation> GetPlayerInvitations(Guid playerId);
-    public List<PrivateInvitation> GetPlayerInvitations(Player player);
-    public List<Player> GetPlayersInCurrentGame(Player player);
-    public List<Player> GetPlayersInCurrentGame(Guid playerId);
+    public List<Player> GetPlayersInCurrentGame(Guid gameId);
+    //public PlayerDTO GetPlayerDTO(Guid playerId);
+
+    public RoomDTO GetRoomDTO(Guid roomId);
+
+    public PlayerDTO MapPlayerDTO(Guid playerId);
 }
 

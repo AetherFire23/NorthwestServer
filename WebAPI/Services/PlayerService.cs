@@ -12,7 +12,7 @@ public class PlayerService : IPlayerService
     }
     public void UpdatePlayerPosition(Player player)
     {
-        Player selectedPlayer = _playerRepository.GetPlayerById(player.Id);
+        Player selectedPlayer = _playerRepository.GetPlayer(player.Id);
         selectedPlayer.X = player.X;
         selectedPlayer.Y = player.Y;
         selectedPlayer.Z = player.Z;

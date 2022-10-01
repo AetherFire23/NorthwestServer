@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WebAPI.Enums;
 
 namespace WebAPI.Models
 {
@@ -6,7 +7,7 @@ namespace WebAPI.Models
     {
         [Key]
         public Guid Id { get; set; }
-        public int ReferenceId { get; set; } // Pour l'enum
-        public Guid Owner { get; set; } // pourrait etre un joueur ou une room
+        public Guid OwnerId { get; set; } // pourrait etre un joueur ou une room
+        public ItemType ItemType { get; set; } // Pour l'enum
     }
 }

@@ -12,7 +12,7 @@ using WebAPI;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20220828015155_initial")]
+    [Migration("20220925184912_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,8 +36,8 @@ namespace WebAPI.Migrations
                     b.Property<Guid>("CurrentChatRoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CurrentRoom")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CurrentGameRoomId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
@@ -48,6 +48,9 @@ namespace WebAPI.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Profession")
+                        .HasColumnType("int");
 
                     b.Property<float>("X")
                         .HasColumnType("real");
@@ -69,11 +72,11 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Owner")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ReferenceId")
+                    b.Property<int>("ItemType")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -165,15 +168,26 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("GameId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ReferenceId")
+                    b.Property<int>("RoomType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("WebAPI.Models.Skill", b =>
+                {
+                    b.Property<Guid>("OwnerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SkillType")
+                        .HasColumnType("int");
+
+                    b.HasKey("OwnerId");
+
+                    b.ToTable("Skills");
                 });
 #pragma warning restore 612, 618
         }

@@ -21,7 +21,7 @@ namespace WebAPI.GameTasks
             }
 
             string targetId = context.Parameters[TargetIdKey];
-            var targetPlayer = _playerRepository.GetPlayerById(Guid.Parse(targetId));
+            var targetPlayer = _playerRepository.GetPlayer(Guid.Parse(targetId));
 
             if (targetPlayer == null)
             {

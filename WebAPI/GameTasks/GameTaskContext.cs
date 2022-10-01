@@ -1,4 +1,5 @@
 using WebAPI.GameState_Management;
+using WebAPI.Models.DTOs;
 
 namespace WebAPI.GameTasks
 {
@@ -6,6 +7,6 @@ namespace WebAPI.GameTasks
     {
         public GameState GameState { get; set; }
         public Dictionary<string, string> Parameters { get; set; }
-        public Player Player => GameState.Player;
+        public PlayerDTO Player => GameState.PlayerDTO;
     }
 }

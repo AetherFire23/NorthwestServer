@@ -12,6 +12,7 @@ namespace WebAPI
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<Skill> Skills { get; set; }
         public DbSet<PrivateChatRoomParticipant> PrivateChatRooms { get; set;}
         public DbSet<PrivateInvitation> Invitations { get; set; }
 

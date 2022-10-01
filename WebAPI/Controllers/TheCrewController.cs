@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using WebAPI.Models;
-using WebAPI.Rooms;
-using System.Linq;
-using WebAPI.Services.ChatService;
 using WebAPI.GameState_Management;
 using WebAPI.GameState_Management.Game_State_Repository;
 using WebAPI.GameTasks;
+using WebAPI.Models;
+using WebAPI.Models.DTOs;
+using WebAPI.Services.ChatService;
 
 namespace WebAPI.Controllers
 {
+    // Fait roomDTO, playerDTO
+    // Fait des items utilisables
+    // ItemType
+
     [ApiController]
     [Route("[controller]")]
     public class TheCrewController : ControllerBase
@@ -38,32 +40,22 @@ namespace WebAPI.Controllers
             _gameStateRepository = gameStateRepository;
             _serviceProvider = serviceProvider;
 
-            //Guid fredGud = new Guid("F0415BB0-5F22-4E79-1D4C-08DA5F69A35F");
+            //  Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
 
-            //Guid gameId = new Guid("F76A4822-8D96-4073-E7F8-08DA70D59137");
-            //var fred = _playerRepository.GetPlayerByName("fred");
-            //var ben = _playerRepository.GetPlayerByName("ben");
+            //var p =  _playerRepository.GetPlayer(defaultPlayer1Guid);
 
-            //_playerContext.SaveChanges();
+            // _playerContext.Items.Add(new Item()
+            // {
+            //     Id = Guid.NewGuid(),
+            //     ItemType = Enums.ItemType.Wrench,
+            //     OwnerId = defaultPlayer1Guid,
+            // });
+
+            // _playerContext.SaveChanges();
+
+            // var pDTo = _playerRepository.MapPlayerDTO(defaultPlayer1Guid);
         }
 
-        // [HttpGet(Name = "GetLocalPlayer")]
-        [HttpGet]
-        [Route("GetPlayers")]
-        public async Task<ActionResult<List<Player>>> GetPlayers()
-        {
-            //return myPlayerContext.Players.ToList();
-            var players = _playerContext.Players.ToList();
-            //  var players = Task.FromResult(this._playerContext.Players.ToList()).ConfigureAwait(false);
-            return Ok(players);
-        }
-
-        [HttpGet]
-        [Route("DoNothing")]
-        public async void DoNothing()
-        {
-
-        }
 
         [HttpGet]
         [Route("GetGameState")]
@@ -73,10 +65,25 @@ namespace WebAPI.Controllers
             return Ok(gameState);
         }
 
-        [HttpPost]
-        [Route("GameTask")]
-        public async Task<ActionResult<string>> GameTask(Guid playerId, GameTaskCode taskCode, Dictionary<string, string> parameters)
+        [HttpPut]
+        [Route("UpdateCurrentRoomId")]
+        public async Task<ActionResult<string>> UpdateCurrentRoomId(string playerGuid, string currentChatRoom)
         {
+            Guid playerId = new Guid(playerGuid);
+            var player = _playerRepository.GetPlayer(playerId);
+
+            Guid currentChatRoomId = new Guid(currentChatRoom);
+
+            player.CurrentChatRoomId = currentChatRoomId;
+            _playerContext.SaveChanges();
+            return Ok("success");
+        }
+
+        [HttpPost]
+        [Route("TryExecuteGameTask")]
+        public async Task<ActionResult<string>> GameTask(Guid playerId, GameTaskCode taskCode, [FromBody] Dictionary<string, string> parameters)
+        { // ben : probleme de transfert avec le dictionnaire, demander si je peux pas mettre un string a la place 
+            //demander multiple FromBody ou jsp 
             var gameState = _gameStateRepository.GetPlayerGameState(playerId, null);
             if (gameState == null)
             {
@@ -102,50 +109,6 @@ namespace WebAPI.Controllers
             return Ok($"The task {taskCode} was executed successfully.");
         }
 
-        [HttpPut]
-        [Route("SwitchRooms")]
-        public async Task<ActionResult> SwitchRoom([FromBody] Player player, RoomType desiredRoomTransition)
-        {
-            RoomType playerRoomType = player.CurrentRoom;
-            List<RoomType> adjacentRooms = AdjacentRooms.dic.GetValueOrDefault(playerRoomType);
-
-            if (adjacentRooms == null) throw new NotImplementedException($"This was null : {nameof(adjacentRooms)}");
-
-            bool isAdjacent = adjacentRooms.Contains(playerRoomType);
-
-            if (isAdjacent)
-            {
-                var requestingUserInContext = _playerRepository.GetPlayerById(player.Id);
-                requestingUserInContext.CurrentRoom = desiredRoomTransition;
-                _playerContext.SaveChanges();
-                return Ok(requestingUserInContext);
-            }
-
-            return Ok(player);
-        }
-
-        //[HttpPut]
-        //[Route("CookTask")]
-        //public async Task<ActionResult<string>> CookTask([FromBody] Player player) // F0415BB0-5F22-4E79-1D4C-08DA5F69A35F
-        //{
-        //}
-
-        [HttpGet]
-        [Route("GetPlayerNames")]
-        public async Task<ActionResult<List<string>>> GetPlayerNames()
-        {
-            var names = _playerRepository.GetPlayerNames();
-            return Ok(names);
-        }
-
-        [HttpGet]
-        [Route("GetPlayerByName")]
-        public async Task<ActionResult<Player>> GetPlayerByName(string name)
-        {
-            var player = await Task.FromResult(_playerRepository.GetPlayerByName(name)).ConfigureAwait(false);
-            return Ok(player);
-        }
-
         [HttpPut] // put = update, post = creation
         [Route("UpdatePositionByPlayerModel")]
         public async Task<ActionResult> UpdatePositionByPlayerModel([FromBody] Player UnityPlayerModel) // va dependre de comment je manage les data
@@ -154,22 +117,11 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpGet] // must work privateRooms now.
-        [Route("GetMessages")]
-        public async Task<ActionResult<List<Message>>> GetMessages(string playerGuid) // returns messages in current room
-        {
-            Guid playerId = new Guid(playerGuid);
-            var player = _playerRepository.GetPlayerById(playerId);
-            var currentRoomMessages = _playerContext.Messages.Where(message => message.RoomId == player.CurrentChatRoomId).ToList();
-
-            return Ok(currentRoomMessages);
-        }
-
         [HttpPut]
         [Route("PutNewMessageToServer")]
         public async Task<ActionResult> PutNewMessageToServer(string guid, string roomId, string receivedMessage)
         {
-            var player = _playerRepository.GetPlayerById(new Guid(guid));
+            var player = _playerRepository.GetPlayer(new Guid(guid));
 
             var message = new Message()
             {
@@ -186,48 +138,12 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [Route("GetPlayersCurrentGame")]
-        public async Task<ActionResult<List<Player>>> GetPlayersCurrentGame(string playerGuid)
-        {
-            Guid playerId = new Guid(playerGuid);
-            var player = _playerRepository.GetPlayerById(playerId);
-
-            var currentPlayers = _playerContext.Players.Where(apiPlayer => apiPlayer.GameId == player.GameId).ToList();
-            return Ok(currentPlayers);
-        }
-
-        [HttpGet]
-        [Route("GetPlayersCurrentGameChatRoom")]
-        public async Task<ActionResult<List<Player>>> GetPlayersCurrentGameChatRoom(string playerGuid)
-        {
-            Guid playerId = new Guid(playerGuid);
-            var player = _playerRepository.GetPlayerById(playerId);
-
-            if (player.GameId == player.CurrentChatRoomId) // si global, get tous les joueurs dans global 
-            {
-                var currentPlayers = _playerContext.Players.Where(apiPlayer => apiPlayer.GameId == player.GameId).ToList();
-                return Ok(currentPlayers);
-            }
-
-            else // si dans une privee, get tous les joueurs participant au private
-            {
-                var playersInRoomGuids = _playerContext.PrivateChatRooms.Where(pair => pair.RoomId == player.CurrentChatRoomId)
-                    .Select(guid => guid.ParticipantId).ToList();
-                var playersInRoom = _playerContext.Players.Where(qPlayer => playersInRoomGuids.Contains(qPlayer.Id)).ToList();
-
-                return Ok(playersInRoom);
-            }
-            throw new Exception("shouldnt return nothing");
-            return null;
-        }
-
         [HttpPut]
-        [Route("PutCreateChatRoom")] // techniquement ce sera la guid cree par le unity client que je vais utiliser donc faudra reecrire cela 
+        [Route("PutCreateChatRoom")] // pense obsolet 
         public async Task<ActionResult<string>> PutCreatePrivateChatRoom(string playerGuid) // UpdateOrCreate ? pour 
         {
             Guid playerId = new Guid(playerGuid);
-            var player = _playerRepository.GetPlayerById(playerId);
+            var player = _playerRepository.GetPlayer(playerId);
 
             var privateRoomPair = new PrivateChatRoomParticipant
             {
@@ -244,10 +160,10 @@ namespace WebAPI.Controllers
         [Route("InviteToChatRoom")]
         public async Task<ActionResult<string>> PutInviteToChatRoom([FromBody] PrivateInvitation invitation)
         {
-            Player requestingPlayer = _playerRepository.GetPlayerById(invitation.FromPlayerId);
+            Player requestingPlayer = _playerRepository.GetPlayer(invitation.FromPlayerId);
 
             //must complete the invitedusername
-            invitation.ToPlayerName = _playerRepository.GetPlayerById(invitation.ToPlayerId).Name;
+            invitation.ToPlayerName = _playerRepository.GetPlayer(invitation.ToPlayerId).Name;
 
             // Dont add invitation if player already in room
             foreach (var privateRoomPair in _playerContext.PrivateChatRooms)
@@ -278,24 +194,6 @@ namespace WebAPI.Controllers
             return Ok("yeah");
         }
 
-        [HttpGet]
-        [Route("GetPendingInvitations")]
-        public async Task<ActionResult<PrivateInvitation>> GetPendingInvitations(string playerGuid)
-        {
-            Guid playerId = new Guid(playerGuid);
-            var player = _playerRepository.GetPlayerById(playerId);
-
-            // var firstPendingInvite = _playerContext.Invitations.Where(invite => invite.InvitedGuid == player.Id).FirstOrDefault();
-
-            var firstPendingInvite = _playerContext.Invitations.FirstOrDefault(invi => invi.ToPlayerId == playerId);
-            if (firstPendingInvite == null)
-            {
-                return new PrivateInvitation() { Id = Guid.Empty }; // no invites found
-            }
-
-            return firstPendingInvite;
-        }
-
         [HttpPut]
         [Route("SendInvitationResponse")]
         public async Task<string> SendInvitationResponse([FromBody] PrivateInvitation invitation)
@@ -310,19 +208,11 @@ namespace WebAPI.Controllers
             invite.RequestFulfilled = true;
             invite.RoomId = invitation.RoomId;
 
-            var invitingPlayer = _playerRepository.GetPlayerById(invite.FromPlayerId);
+            var invitingPlayer = _playerRepository.GetPlayer(invite.FromPlayerId);
 
             if (invite.IsAccepted)
             {
-                //var CurrentRoomGuids = _playerContext.PrivateChatRooms.Select(pair => pair.RoomId);
-                //bool currentRoomDoesNotExist = !CurrentRoomGuids.Contains(invite.InvitedRoomGuid);
-                //if (currentRoomDoesNotExist)
-                //{
-                //    var newPrivate
-                //}
-
                 //specify that the player is in that room
-
                 var privatePair = new PrivateChatRoomParticipant()
                 {
                     Id = Guid.NewGuid(),
@@ -332,7 +222,7 @@ namespace WebAPI.Controllers
                 };
 
                 // I dont need the invitation after having resolved it 
-                _playerContext.Invitations.Remove(invite);
+                _playerContext.Invitations.Remove(invite); // Removed quand yer accepted mais pas removed quand yer refuse ? possibilite de bug 
 
                 _playerContext.PrivateChatRooms.Add(privatePair);
             }
@@ -341,35 +231,6 @@ namespace WebAPI.Controllers
 
             return $"You successfully invited {invitingPlayer.Name} to your private chat room. ";
         }
-
-
-        [HttpGet]
-        [Route("GetPrivateRoomGuids")]
-        public async Task<ActionResult<List<Guid>>> GetPrivateRoomGuids(string playerGuid)
-        {
-            Guid playerId = new Guid(playerGuid);
-            var player = _playerRepository.GetPlayerById(playerId);
-
-            var playerRoomPairs = _playerContext.PrivateChatRooms.Where(pair => pair.ParticipantId == playerId);
-
-            var privateRoomIds = playerRoomPairs.Select(pair => pair.RoomId);
-            return Ok(privateRoomIds.ToList());
-        }
-
-        [HttpPut]
-        [Route("UpdateCurrentRoomId")]
-        public async Task<ActionResult<string>> UpdateCurrentRoomId(string playerGuid, string currentChatRoom)
-        {
-            Guid playerId = new Guid(playerGuid);
-            var player = _playerRepository.GetPlayerById(playerId);
-
-            Guid currentChatRoomId = new Guid(currentChatRoom);
-
-            player.CurrentChatRoomId = currentChatRoomId;
-            _playerContext.SaveChanges();
-            return Ok("success");
-        }
-
 
         [HttpDelete]
         [Route("ClearInvitations")]
@@ -389,7 +250,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("AddPlayerRoomPair")]
+        [Route("AddPlayerRoomPair")] // pense c'est lui utilise par unity
         public async Task<ActionResult> AddPlayerRoomPair(string playerGuid, string newRoomGuid)
         {
             Guid playerid = new Guid(playerGuid);
@@ -405,6 +266,94 @@ namespace WebAPI.Controllers
             _playerContext.PrivateChatRooms.Add(pair);
             _playerContext.SaveChanges();
 
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("TransferItem")]
+        public async Task<ActionResult> TransferItem(Guid ownerId, Guid targetId, Guid itemId) // pourrait devenir une method dans le service
+        {
+            Item? selectedItem = _playerContext.Items.First(i => i.Id == itemId);
+            selectedItem.OwnerId = targetId;
+            _playerContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("ChangeRoom")]
+        public async Task<ActionResult> ChangeRoom(Guid targetRoomId) // pourrait devenir une method dans le service
+        {
+            var p = _playerRepository.GetPlayer(targetRoomId);
+            p.CurrentGameRoomId = targetRoomId;
+
+            _playerContext.SaveChanges();
+            return Ok();
+        }
+
+
+        [HttpGet]
+        [Route("RunConstructor")]
+        public async void DoNothing()
+        {
+
+        }
+
+        [HttpPut]
+        [Route("AddDefaultValues")]
+        public async Task<ActionResult> GetGameState()
+        {
+            
+            Guid defaultGameGuid = new Guid("DE74B055-BA84-41A2-BAEA-4E380293E227");
+            Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
+            Guid firstRoomId = new Guid("57D88036-A7C8-448D-B2D9-0842E83D8231");
+            Guid defaultItemId = new Guid("F0970083-468F-40AF-9BAE-F333C76A5D92");
+            Item item = new Item()
+            {
+                Id = defaultItemId,
+                ItemType = Enums.ItemType.Wrench,
+                OwnerId = defaultPlayer1Guid,
+            };
+            _playerContext.Items.Add(item);
+
+            Room defaultRoom = new Room()
+            {
+                Id = firstRoomId,
+                RoomType = RoomType.Start
+            };
+            _playerContext.Rooms.Add(defaultRoom);
+
+            Player fredPlayerModel = new Player()
+            {
+                ActionPoints = 10,
+                CurrentChatRoomId = defaultGameGuid,
+                CurrentGameRoomId = defaultRoom.Id,
+                GameId = defaultGameGuid,
+                HealthPoints = 10,
+                Id = defaultPlayer1Guid,
+                Name = "Fred",
+                Profession = Enums.ProfessionType.Commander,
+                X = 0,
+                Y = 0,
+                Z = 0,
+            };
+            _playerContext.Players.Add(fredPlayerModel);
+
+            //PlayerDTO playerDTO = new PlayerDTO()
+            //{
+            //    Id = fredPlayerModel.Id,
+            //    ActionPoints = fredPlayerModel.ActionPoints,
+            //    GameId = fredPlayerModel.GameId,
+            //    HealthPoints = fredPlayerModel.HealthPoints,
+            //    Items = _playerContext.Items.Where(i=> i.OwnerId == fredPlayerModel.Id).ToList(),
+            //    Name = fredPlayerModel.Name,
+            //    Skills = _playerContext.Skills.Where(s => s.OwnerId == fredPlayerModel.Id).Select(s=> s.SkillType).ToList(),
+            //    X = fredPlayerModel.X,
+            //    Y = fredPlayerModel.Y,
+            //    Z = fredPlayerModel.Z
+
+            //};
+
+            _playerContext.SaveChanges();
             return Ok();
         }
     }

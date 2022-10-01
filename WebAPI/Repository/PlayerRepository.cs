@@ -1,42 +1,35 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Text;
 using WebAPI;
+using WebAPI.Enums;
 using WebAPI.Models;
+using WebAPI.Models.DTOs;
 
 public class PlayerRepository : IPlayerRepository
 {
     PlayerContext _playerContext;
+
     DbSet<Player> Players => _playerContext.Players;
+
     public PlayerRepository(PlayerContext playerContext)
     {
         _playerContext = playerContext;
     }
 
-    public List<string> GetPlayerNames()
+    public Player GetPlayer(string name)
     {
-        return _playerContext.Players.Select(player => player.Name).ToList();
-    }
+        Player? possiblePlayer = _playerContext.Players.FirstOrDefault(player => player.Name.Equals(name));
 
-    public List<Player> GetPlayers()
-    {
-        return _playerContext.Players.ToList();
-    }
-
-    public Player GetPlayerByName(string name)
-    {
-        Player? candidate = _playerContext.Players.FirstOrDefault(player => player.Name.Equals(name));
-
-        if (candidate is null)
+        if (possiblePlayer is null)
         {
-            throw new NotImplementedException("dude wtf");
+            throw new NotImplementedException("PlayerNotFound");
         }
 
-        return candidate;
+        return possiblePlayer;
     }
 
-    public Player GetPlayerById(Guid id)
+    public Player GetPlayer(Guid id)
     {
-      //  return _playerContext.Players.Where(queriedPlayer => queriedPlayer.Id == id).First();
         return _playerContext.Players.FirstOrDefault(queriedPlayer => queriedPlayer.Id == id);
     }
 
@@ -45,27 +38,77 @@ public class PlayerRepository : IPlayerRepository
         var playerInvites = _playerContext.Invitations.Where(invite => invite.ToPlayerId == playerId).ToList();
         return playerInvites;
     }
-    public List<PrivateInvitation> GetPlayerInvitations(Player player)
+
+    public List<Player> GetPlayersInCurrentGame(Guid gameId)
     {
-        var playerInvites = _playerContext.Invitations.Where(invite => invite.ToPlayerId == player.Id).ToList();
-        return playerInvites;
+        return Players.Where(player => player.GameId == gameId).ToList();
     }
 
-    public List<Player> GetPlayersInCurrentGame(Player player)
+    public PlayerDTO MapPlayerDTO(Guid playerId)
     {
-        var players = _playerContext.Players.Where(qPlayer => qPlayer.GameId == player.GameId).ToList();
-        return players;
+        Player player = GetPlayer(playerId);
+
+        List<Item> items = GetOwnedItems(playerId).ToList();
+
+        List<SkillType> skillsOwned = GetOwnedSkills(playerId);
+        
+
+        PlayerDTO playerDTO = new PlayerDTO()
+        {
+            // Common with player
+            Id = playerId,
+            GameId = player.GameId,
+            Name = player.Name,
+            X = player.X,
+            Y = player.Y,
+            Z = player.Z,
+            ActionPoints = player.ActionPoints,
+            HealthPoints = player.HealthPoints,
+            CurrentChatRoomId = player.CurrentChatRoomId,
+            CurrentGameRoomId = player.CurrentGameRoomId,
+            Profession = player.Profession,
+
+            // mapped in Context
+            Items = items,
+            Skills = skillsOwned,
+            
+        };
+
+        return playerDTO;
     }
 
-    public List<Player> GetPlayersInCurrentGame(Guid playerId)
+    public List<SkillType> GetOwnedSkills(Guid ownerId)
     {
-        var player = _playerContext.Players.FirstOrDefault(qPlayer => qPlayer.Id == playerId);
-        var players = _playerContext.Players.Where(qPlayer => qPlayer.GameId == player.GameId).ToList();
-        return players;
+        return _playerContext.Skills.Where(s => s.OwnerId == ownerId)
+            .Select(s => s.SkillType).ToList();
     }
 
-    public void ChangeRooms(Player player, RoomType roomtype)
+    public List<Item> GetOwnedItems(Guid ownerId)
     {
+        return this._playerContext.Items.Where(item => item.OwnerId == ownerId).ToList();
+    }
 
+    public RoomDTO GetRoomDTO(Guid roomId)
+    {
+        Room requestedRoom = _playerContext.Rooms.FirstOrDefault(room => room.Id == roomId);
+
+        if(requestedRoom is null)
+        {
+            return new RoomDTO();
+        }
+
+        var playersInRoom = _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToList();
+
+        var items = _playerContext.Items.Where(item => item.OwnerId == roomId).ToList();
+
+        RoomDTO roomDTO = new RoomDTO()
+        {
+            Id = requestedRoom.Id,
+            RoomType = requestedRoom.RoomType,
+            Items = items,
+            Players = playersInRoom,
+        };
+
+        return roomDTO;
     }
 }

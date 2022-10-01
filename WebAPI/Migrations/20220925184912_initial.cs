@@ -32,8 +32,8 @@ namespace WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReferenceId = table.Column<int>(type: "int", nullable: false),
-                    Owner = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,11 +63,12 @@ namespace WebAPI.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CurrentChatRoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrentGameRoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Profession = table.Column<int>(type: "int", nullable: false),
                     X = table.Column<float>(type: "real", nullable: false),
                     Y = table.Column<float>(type: "real", nullable: false),
                     Z = table.Column<float>(type: "real", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CurrentRoom = table.Column<int>(type: "int", nullable: false),
                     HealthPoints = table.Column<int>(type: "int", nullable: false),
                     ActionPoints = table.Column<int>(type: "int", nullable: false)
                 },
@@ -94,21 +95,24 @@ namespace WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReferenceId = table.Column<int>(type: "int", nullable: false)
+                    RoomType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
                 });
 
-            //migrationBuilder.InsertData(
-            //   table: "Players",
-            //   columns: new[] { "Id", "GameId", "CurrentChatRoomId", "X", "Y", "Z", "Name", "CurrentRoom", "HealthPoints", "ActionPoints" },
-            //   values: new object[,]
-            //   {
-            //                { new Guid("991e0c2f-a768-40b9-9eaa-b7c31eb3fcc4"), "fred", "allo", "" },
-            //   });
+            migrationBuilder.CreateTable(
+                name: "Skills",
+                columns: table => new
+                {
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SkillType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Skills", x => x.OwnerId);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -130,6 +134,9 @@ namespace WebAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Rooms");
+
+            migrationBuilder.DropTable(
+                name: "Skills");
         }
     }
 }

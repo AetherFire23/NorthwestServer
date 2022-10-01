@@ -1,5 +1,6 @@
 ﻿using WebAPI.GameState_Management.Game_State_Service;
 using WebAPI.Models;
+using WebAPI.Models.DTOs;
 
 namespace WebAPI.GameState_Management.Game_State_Repository
 {
@@ -15,52 +16,46 @@ namespace WebAPI.GameState_Management.Game_State_Repository
 
         public GameState GetPlayerGameState(Guid playerId, DateTime? lastTimeStamp) // va appeler a etre modified pour le cheating car jenvoie tout en meme temps 
         {
-            var player = _playerRepository.GetPlayerById(playerId); // delete roomid, add private chatroom
-            var gameState = new GameState() // passer par Id la prochaine fois 
-            {                               // veux toujours passer le minimum quand tu communiques entre des fonctions 
-                Player = player,            // objet pas modified 
-                Invitations = _playerRepository.GetPlayerInvitations(player),
-                NewMessages = GetNewMessages(lastTimeStamp, player),
-                Players = _playerRepository.GetPlayersInCurrentGame(player),
-                TimeStamp = DateTime.UtcNow,
-                PrivateChatRooms = GetChatRoomsWithMainPlayerInIt(player),
+            //temp
+            Player player = _playerContext.Players.First(player => player.Id == playerId);
+
+            PlayerDTO playerDTO = _playerRepository.MapPlayerDTO(playerId); // delete roomid, add private chatroom
+            List<PrivateInvitation> invitations = _playerRepository.GetPlayerInvitations(playerDTO.Id);
+            List<Message> newMessages = GetNewMessages(lastTimeStamp, playerDTO.GameId);
+            List<Player> players = _playerRepository.GetPlayersInCurrentGame(playerDTO.GameId);
+            DateTime timeStamp = DateTime.UtcNow;
+            List<PrivateChatRoomParticipant> chatRoomParticipants = GetChatRoomsWithMainPlayerInIt(playerDTO.Id);
+            RoomDTO roomDTO = _playerRepository.GetRoomDTO(player.CurrentGameRoomId); // bug ici ofc car je nai pa de room mesemble
+
+            var gameState = new GameState() 
+            {                               
+                PlayerDTO = playerDTO,      
+                Invitations = invitations, 
+                NewMessages = newMessages,
+                Players = players, // Va falloir faire un PlayerDTO pour cacher de l'info un jour
+                TimeStamp = timeStamp,
+                PrivateChatRooms = chatRoomParticipants,
+                Room = roomDTO
             };
             return gameState;
         }
 
-        public List<PrivateChatRoomParticipant> GetChatRoomsWithMainPlayerInIt(Player mainPlayer)
+        public List<PrivateChatRoomParticipant> GetChatRoomsWithMainPlayerInIt(Guid playerID)
         {
-            //var roomsTheMainPlayerIsIn = _playerContext.PrivateChatRooms.Where(pair => pair.ParticipantId == mainPlayer.Id);
-
-            //List<PrivateChatRoomParticipant> participantsInSameRoomAsPlayer =
-            //    roomsTheMainPlayerIsIn.Join(_playerContext.PrivateChatRooms,
-            //    chatRoomWithMainPlayer => chatRoomWithMainPlayer.RoomId,
-            //    chatRoomWithAnyPlayer => chatRoomWithAnyPlayer.RoomId,
-            //    (p1, p2) => new PrivateChatRoomParticipant()
-            //    {
-            //        Id = p2.Id,
-            //        ParticipantId = p2.ParticipantId,
-            //        RoomId = p2.RoomId,
-            //    })
-            //    .Where(privateRoom=> privateRoom.ParticipantId != mainPlayer.Id).ToList();
-
-            var roomsTheMainPlayerIsIn = _playerContext.PrivateChatRooms.Where(pair => pair.ParticipantId == mainPlayer.Id).ToList();
-
+            var roomsTheMainPlayerIsIn = _playerContext.PrivateChatRooms.Where(pair => pair.ParticipantId == playerID).ToList();
             var chatRoomIds = roomsTheMainPlayerIsIn.Select(chatRoom => chatRoom.RoomId).ToList();
+            var chatRoomWithMainPlayer = _playerContext.PrivateChatRooms.Where(room => chatRoomIds.Contains(room.RoomId)).ToList(); // qqch marche pas
+            var excludeMainPlayer = chatRoomWithMainPlayer.Where(room => room.ParticipantId != playerID).ToList();
 
-
-            var participantsInSameRoomAsPlayer = _playerContext.PrivateChatRooms.Where(room => chatRoomIds.Contains(room.RoomId)).ToList(); // qqch marche pas
-            var excludeMainPlayer = participantsInSameRoomAsPlayer.Where(room => room.ParticipantId != mainPlayer.Id).ToList();
-
-            return participantsInSameRoomAsPlayer;
+            return chatRoomWithMainPlayer;
         }
 
-        public List<Message> GetNewMessages(DateTime? lastTimeStamp, Player player)
+        public List<Message> GetNewMessages(DateTime? lastTimeStamp, Guid gameId)
         {
             bool hasReceivedMessages = lastTimeStamp != null;
             return !hasReceivedMessages
-                ? GetMessagesFromGameId(player.GameId)
-                : GetMessagesAfterTimeStamp(lastTimeStamp, player.GameId);
+                   ? GetMessagesFromGameId(gameId)
+                   : GetMessagesAfterTimeStamp(lastTimeStamp, gameId);
         }
 
         public List<Message> GetMessagesFromGameId(Guid gameId)
@@ -71,18 +66,9 @@ namespace WebAPI.GameState_Management.Game_State_Repository
 
         public List<Message> GetMessagesAfterTimeStamp(DateTime? timeStamp, Guid gameId)
         {
-            List<Message> messagesAfterTimeStamp = new List<Message>();
-            foreach (Message message in _playerContext.Messages)
-            {
-                bool isAfterTimeStamp = message.Created > timeStamp;
-                if (!isAfterTimeStamp) continue;
-
-                bool isPlayerGame = message.GameId == gameId;
-                if (!isPlayerGame) continue;
-
-                messagesAfterTimeStamp.Add(message);
-            }
-            return messagesAfterTimeStamp;
+            return _playerContext.Messages
+                .Where(message => message.Created > timeStamp
+                      && message.GameId == gameId).ToList();
         }
     }
 }
