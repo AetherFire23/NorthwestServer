@@ -32,7 +32,7 @@ namespace WebAPI.GameState_Management.Game_State_Repository
                 PlayerDTO = playerDTO,      
                 Invitations = invitations, 
                 NewMessages = newMessages,
-                Players = players, // Va falloir faire un PlayerDTO pour cacher de l'info un jour
+                Players = players, 
                 TimeStamp = timeStamp,
                 PrivateChatRooms = chatRoomParticipants,
                 Room = roomDTO

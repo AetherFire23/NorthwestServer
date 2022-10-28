@@ -15,6 +15,9 @@ namespace WebAPI
         public DbSet<Skill> Skills { get; set; }
         public DbSet<PrivateChatRoomParticipant> PrivateChatRooms { get; set;}
         public DbSet<PrivateInvitation> Invitations { get; set; }
+        public DbSet<AdjacentRoom> AdjacentRooms { get; set; }
+
+        public DbSet<Station> Station { get; set; }
 
         //There is constructor injection. This must exist to be configurable in Program.cs
         public PlayerContext(DbContextOptions<PlayerContext> options) : base(options)

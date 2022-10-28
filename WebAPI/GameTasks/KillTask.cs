@@ -1,8 +1,14 @@
+using WebAPI.Repository;
+
 namespace WebAPI.GameTasks
 {
     [GameTask(GameTaskCode.Kill)]
     public class KillTask : GameTaskBase
     {
+        public KillTask(PlayerContext playerContext, IStationRepository stationRepository) : base(playerContext, stationRepository)
+        {
+
+        }
         public override GameTaskValidationResult Validate(GameTaskContext context)
         {
             return new GameTaskValidationResult();

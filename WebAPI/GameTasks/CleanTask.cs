@@ -1,4 +1,5 @@
 using WebAPI.GameState_Management;
+using WebAPI.Repository;
 
 namespace WebAPI.GameTasks
 {
@@ -8,7 +9,7 @@ namespace WebAPI.GameTasks
         private const string TargetIdKey = "TargetId";
         private readonly IPlayerRepository _playerRepository;
 
-        public CleanTask(IPlayerRepository playerRepository)
+        public CleanTask(PlayerContext playerContext, IStationRepository stationRepository, IPlayerRepository playerRepository) : base(playerContext, stationRepository)
         {
             _playerRepository = playerRepository;
         }

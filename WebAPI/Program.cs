@@ -7,6 +7,8 @@ using WebAPI.Services.ChatService;
 using WebAPI.GameState_Management.Game_State_Repository;
 using WebAPI.GameTasks;
 using System.Reflection;
+using WebAPI.Room_template;
+using WebAPI.Repository;
 
 namespace WebAPI
 {
@@ -24,6 +26,8 @@ namespace WebAPI
             builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IGameStateRepository, GameStateRepository>();
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped<IStationRepository, StationRepository>();
 
             RegisterGameTaskTypes(builder);
 

@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebAPI.GameState_Management;
 using WebAPI.GameState_Management.Game_State_Repository;
 using WebAPI.GameTasks;
+using WebAPI.GameTasks.Stations;
 using WebAPI.Models;
 using WebAPI.Models.DTOs;
+using WebAPI.Room_template;
 using WebAPI.Services.ChatService;
 
 namespace WebAPI.Controllers
@@ -23,14 +26,15 @@ namespace WebAPI.Controllers
         private readonly IGameStateRepository _gameStateRepository;
         private readonly PlayerContext _playerContext;
         private readonly IServiceProvider _serviceProvider;
-
+        private readonly IRoomRepository _roomRepository;
         public TheCrewController(ILogger<TheCrewController> logger,
             PlayerContext playerContext,
             IPlayerRepository playerRepository,
             IPlayerService playerService,
             IChatService chatService,
             IGameStateRepository gameStateRepository,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IRoomRepository roomRepository)
         {
             _logger = logger;
             _playerRepository = playerRepository;
@@ -39,6 +43,7 @@ namespace WebAPI.Controllers
             _chatService = chatService;
             _gameStateRepository = gameStateRepository;
             _serviceProvider = serviceProvider;
+            _roomRepository = roomRepository;
 
             //  Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
 
@@ -54,7 +59,24 @@ namespace WebAPI.Controllers
             // _playerContext.SaveChanges();
 
             // var pDTo = _playerRepository.MapPlayerDTO(defaultPlayer1Guid);
+            //firstPLayer = new Player()
+            //{
+            //    Id = firstPLayer.Id,
+            //    ActionPoints = firstPLayer.ActionPoints,
+            //    CurrentChatRoomId = firstPLayer.CurrentChatRoomId,
+            //    CurrentGameRoomId = firstPLayer.CurrentGameRoomId,
+            //    GameId = firstPLayer.GameId,
+            //    HealthPoints = 33,
+            //    Name = "I was changed",
+            //    Profession = firstPLayer.Profession,
+            //    X = firstPLayer.X,
+            //    Y = firstPLayer.Y,
+            //    Z = firstPLayer.Z
+            //};
         }
+        [HttpGet]
+        [Route("runcs")]
+        public async Task<ActionResult> RunConstructor() { return Ok(); }
 
 
         [HttpGet]
@@ -65,25 +87,15 @@ namespace WebAPI.Controllers
             return Ok(gameState);
         }
 
+
         [HttpPut]
-        [Route("UpdateCurrentRoomId")]
-        public async Task<ActionResult<string>> UpdateCurrentRoomId(string playerGuid, string currentChatRoom)
-        {
-            Guid playerId = new Guid(playerGuid);
-            var player = _playerRepository.GetPlayer(playerId);
-
-            Guid currentChatRoomId = new Guid(currentChatRoom);
-
-            player.CurrentChatRoomId = currentChatRoomId;
-            _playerContext.SaveChanges();
-            return Ok("success");
-        }
-
-        [HttpPost]
         [Route("TryExecuteGameTask")]
         public async Task<ActionResult<string>> GameTask(Guid playerId, GameTaskCode taskCode, [FromBody] Dictionary<string, string> parameters)
         { // ben : probleme de transfert avec le dictionnaire, demander si je peux pas mettre un string a la place 
-            //demander multiple FromBody ou jsp 
+          //demander multiple FromBody ou jsp 
+
+            // GameTaskCode taskCode2 = (GameTaskCode)Convert.ToInt32(taskCode);
+
             var gameState = _gameStateRepository.GetPlayerGameState(playerId, null);
             if (gameState == null)
             {
@@ -189,6 +201,8 @@ namespace WebAPI.Controllers
                 }
             }
 
+            _playerContext.PrivateChatRooms.Any(x => x.RoomId == invitation.RoomId && x.ParticipantId == invitation.ToPlayerId ); // should be able to replace those two horrible queries
+
             _playerContext.Invitations.Add(invitation);
             _playerContext.SaveChanges();
             return Ok("yeah");
@@ -281,15 +295,26 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("ChangeRoom")]
-        public async Task<ActionResult> ChangeRoom(Guid targetRoomId) // pourrait devenir une method dans le service
+        public async Task<ActionResult<string>> ChangeRoom(Guid playerId, string targetRoomName)
         {
-            var p = _playerRepository.GetPlayer(targetRoomId);
-            p.CurrentGameRoomId = targetRoomId;
+            var player = _playerRepository.GetPlayer(playerId);
 
-            _playerContext.SaveChanges();
-            return Ok();
+            var currentRoom = _playerContext.Rooms.First(x => x.Id == player.CurrentGameRoomId);
+
+            var targetRoom = _playerContext.Rooms.First(x => x.Name == targetRoomName);
+
+            bool connectionExists = _playerContext.AdjacentRooms.FirstOrDefault(x => x.RoomId == currentRoom.Id && x.AdjacentId == targetRoom.Id) is not null;
+
+            if (connectionExists)
+            {
+                player.CurrentGameRoomId = targetRoom.Id;
+                _playerContext.SaveChanges();
+
+                return Ok("Tu as change de room!");
+            }
+
+            return Ok("Eat my shorts, the room does not exist.");
         }
-
 
         [HttpGet]
         [Route("RunConstructor")]
@@ -302,11 +327,12 @@ namespace WebAPI.Controllers
         [Route("AddDefaultValues")]
         public async Task<ActionResult> GetGameState()
         {
-            
+
             Guid defaultGameGuid = new Guid("DE74B055-BA84-41A2-BAEA-4E380293E227");
             Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
             Guid firstRoomId = new Guid("57D88036-A7C8-448D-B2D9-0842E83D8231");
             Guid defaultItemId = new Guid("F0970083-468F-40AF-9BAE-F333C76A5D92");
+
             Item item = new Item()
             {
                 Id = defaultItemId,
@@ -317,6 +343,8 @@ namespace WebAPI.Controllers
 
             Room defaultRoom = new Room()
             {
+                GameId = defaultGameGuid,
+                Name = "testRoom",
                 Id = firstRoomId,
                 RoomType = RoomType.Start
             };
@@ -336,22 +364,86 @@ namespace WebAPI.Controllers
                 Y = 0,
                 Z = 0,
             };
+
+            _roomRepository.CreateNewGameRooms();
+
             _playerContext.Players.Add(fredPlayerModel);
 
-            //PlayerDTO playerDTO = new PlayerDTO()
-            //{
-            //    Id = fredPlayerModel.Id,
-            //    ActionPoints = fredPlayerModel.ActionPoints,
-            //    GameId = fredPlayerModel.GameId,
-            //    HealthPoints = fredPlayerModel.HealthPoints,
-            //    Items = _playerContext.Items.Where(i=> i.OwnerId == fredPlayerModel.Id).ToList(),
-            //    Name = fredPlayerModel.Name,
-            //    Skills = _playerContext.Skills.Where(s => s.OwnerId == fredPlayerModel.Id).Select(s=> s.SkillType).ToList(),
-            //    X = fredPlayerModel.X,
-            //    Y = fredPlayerModel.Y,
-            //    Z = fredPlayerModel.Z
+            _playerContext.SaveChanges();
+            return Ok();
+        }
 
-            //};
+
+        [HttpPut]
+        [Route("CreateNewGame")] // replaces defaultvalues
+        public async Task<ActionResult> CreateNewGame()
+        {
+            // Init rooms
+            _roomRepository.CreateNewGameRooms();
+
+            //Guids
+            Guid defaultGameGuid = new Guid("DE74B055-BA84-41A2-BAEA-4E380293E227");
+            Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
+            Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
+            //Players
+            Player fredPlayerModel = new Player()
+            {
+                ActionPoints = 10,
+                CurrentChatRoomId = defaultGameGuid,
+                CurrentGameRoomId = _playerContext.Rooms.First().Id,
+                GameId = defaultGameGuid,
+                HealthPoints = 10,
+                Id = defaultPlayer1Guid,
+                Name = "Fred",
+                Profession = Enums.ProfessionType.Commander,
+                X = 0,
+                Y = 0,
+                Z = 0,
+            };
+            Player benPlayerModel = new Player()
+            {
+                ActionPoints = 4,
+                CurrentChatRoomId = defaultGameGuid,
+                CurrentGameRoomId = _playerContext.Rooms.First().Id,
+                GameId = defaultGameGuid,
+                HealthPoints = 5,
+                Id = defaultplayer2guid,
+                Name = "Ben",
+                Profession = Enums.ProfessionType.Commander,
+                X = 0,
+                Y = 0,
+                Z = 0,
+
+            };
+            _playerContext.Players.Add(fredPlayerModel);
+            _playerContext.Players.Add(benPlayerModel);
+
+            //Messages
+            Message sampleMessage = new Message()
+            {
+                Id = Guid.NewGuid(),
+                Created = DateTime.Now,
+                GameId = defaultGameGuid,
+                RoomId = defaultGameGuid,
+                Name = "Fred",
+                Text = "Testoman!"
+            };
+            _playerContext.Messages.Add(sampleMessage);
+
+            //Stations
+            Station station = new Station()
+            {
+                Id = Guid.NewGuid(),
+                Name = "CookStation1", // pour faire la diff ds unity, va avoir besoin de template hehelol
+                GameTaskCode = GameTaskCode.Cook,
+                GameId = defaultGameGuid,
+                SerializedStation = JsonConvert.SerializeObject(new CookStationProperties()
+                {
+                    MoneyMade = 5,
+                    State = Enums.State.Pristine
+                }),
+            };
+            _playerContext.Station.Add(station);
 
             _playerContext.SaveChanges();
             return Ok();

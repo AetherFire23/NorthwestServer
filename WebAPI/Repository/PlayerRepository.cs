@@ -107,6 +107,8 @@ public class PlayerRepository : IPlayerRepository
             RoomType = requestedRoom.RoomType,
             Items = items,
             Players = playersInRoom,
+            Name = requestedRoom.Name,
+            GameId = requestedRoom.GameId,
         };
 
         return roomDTO;
