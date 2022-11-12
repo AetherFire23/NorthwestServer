@@ -8,12 +8,12 @@ namespace WebAPI.GameTasks
     [GameTask(GameTaskCode.Cook)]
     public class CookTask : GameTaskBase
     {
-        private const string _stationNameParam = "stationName";
+        private const string _stationNameParam = "stationName"; 
 
-        private readonly IStationRepository _StationRepo;
+        private readonly IStationRepository _stationRepo;
         public CookTask(PlayerContext playerContext, IStationRepository stationRepository) : base(playerContext, stationRepository)
         {
-            _StationRepo = stationRepository;
+            _stationRepo = stationRepository;
         }
 
         public override GameTaskValidationResult Validate(GameTaskContext context)
@@ -31,13 +31,10 @@ namespace WebAPI.GameTasks
         public override void Execute(GameTaskContext context)
         {
             string roomName = context.Parameters[_stationNameParam];
-
-            //SomeSharedLogic();
-
-            var cookStation = _StationRepo.RetrieveStation<CookStationProperties>(context.Player.Id, roomName);
-
-
-            _StationRepo.SaveStation(cookStation);
+            var cookStation = _stationRepo.RetrieveStation(context.Player.Id, roomName);
+            var properties = (CookStationProperties)cookStation.ExtraProperties;
+            
+            _stationRepo.SaveStation(cookStation);
         }
     }
 }

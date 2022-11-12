@@ -64,7 +64,55 @@ namespace WebAPI.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("WebAPI.GameTasks.Stations.Station", b =>
+            modelBuilder.Entity("WebAPI.Game_Actions.GameAction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("GameActionType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SerializedProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GameActions");
+                });
+
+            modelBuilder.Entity("WebAPI.Game_Actions.RoomLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EventText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PrivacyLevel")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TriggeringPlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoomLogs");
+                });
+
+            modelBuilder.Entity("WebAPI.Game_Actions.TriggerNotification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,20 +121,84 @@ namespace WebAPI.Migrations
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GameTaskCode")
+                    b.Property<bool>("Handled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NotificationType")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("SerializedProperties")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SerializedStation")
+                    b.Property<Guid>("ToId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TriggerNotifications");
+                });
+
+            modelBuilder.Entity("WebAPI.Main_Menu.Models.FriendPair", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Friend1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Friend2")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FriendPairs");
+                });
+
+            modelBuilder.Entity("WebAPI.Main_Menu.Models.MenuNotification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Handled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MenuNotificationType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Retrieved")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ToId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MenuNotifications");
+                });
+
+            modelBuilder.Entity("WebAPI.Main_Menu.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Station");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("WebAPI.Models.AdjacentRoom", b =>
@@ -235,6 +347,31 @@ namespace WebAPI.Migrations
                     b.HasKey("OwnerId");
 
                     b.ToTable("Skills");
+                });
+
+            modelBuilder.Entity("WebAPI.Models.Station", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("GameTaskCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SerializedProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Stations");
                 });
 #pragma warning restore 612, 618
         }

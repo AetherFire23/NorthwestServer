@@ -13,7 +13,7 @@ public class Player
     
     public Guid CurrentGameRoomId { get; set; }
     
-    public ProfessionType Profession { get; set; }
+    public RoleType Profession { get; set; }
 
     public float X { get; set; }
 

@@ -3,7 +3,7 @@ using WebAPI.Repository;
 
 namespace WebAPI.GameTasks
 {
-    public abstract class GameTaskBase : IGameTask
+    public abstract class GameTaskBase : IGameTask 
     {
         private PlayerContext _playerContext;
         private IStationRepository _StationRepository;

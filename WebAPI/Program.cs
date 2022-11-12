@@ -9,6 +9,7 @@ using WebAPI.GameTasks;
 using System.Reflection;
 using WebAPI.Room_template;
 using WebAPI.Repository;
+using WebAPI.Game_Actions;
 
 namespace WebAPI
 {
@@ -28,6 +29,8 @@ namespace WebAPI
             builder.Services.AddScoped<IGameStateRepository, GameStateRepository>();
             builder.Services.AddScoped<IRoomRepository, RoomRepository>();
             builder.Services.AddScoped<IStationRepository, StationRepository>();
+            builder.Services.AddScoped<IGameActionsRepository, GameActionsRepository>();
+            builder.Services.AddScoped<IMainMenuRepository, MainMenuRepository>();
 
             RegisterGameTaskTypes(builder);
 
