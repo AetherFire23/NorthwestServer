@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Text;
 using WebAPI;
 using WebAPI.Enums;
+using WebAPI.Game_Actions;
 using WebAPI.Models;
 using WebAPI.Models.DTOs;
 
@@ -51,7 +53,7 @@ public class PlayerRepository : IPlayerRepository
         List<Item> items = GetOwnedItems(playerId).ToList();
 
         List<SkillType> skillsOwned = GetOwnedSkills(playerId);
-        
+
 
         PlayerDTO playerDTO = new PlayerDTO()
         {
@@ -71,7 +73,7 @@ public class PlayerRepository : IPlayerRepository
             // mapped in Context
             Items = items,
             Skills = skillsOwned,
-            
+
         };
 
         return playerDTO;
@@ -85,14 +87,14 @@ public class PlayerRepository : IPlayerRepository
 
     public List<Item> GetOwnedItems(Guid ownerId)
     {
-        return this._playerContext.Items.Where(item => item.OwnerId == ownerId).ToList();
+        return _playerContext.Items.Where(item => item.OwnerId == ownerId).ToList();
     }
 
     public RoomDTO GetRoomDTO(Guid roomId)
     {
         Room requestedRoom = _playerContext.Rooms.FirstOrDefault(room => room.Id == roomId);
 
-        if(requestedRoom is null)
+        if (requestedRoom is null)
         {
             return new RoomDTO();
         }
@@ -112,5 +114,21 @@ public class PlayerRepository : IPlayerRepository
         };
 
         return roomDTO;
+    }
+
+    public List<TriggerNotificationDTO> GetTriggerNotifications(Guid playerId, DateTime? timeStamp)
+    {
+        var triggers = _playerContext.TriggerNotifications.Where(x => x.ToId == playerId && timeStamp > x.DateTime).ToList();
+        var triggersDTO = triggers.Select(x => new TriggerNotificationDTO()
+        {
+            Id = x.Id,
+            DateTime = x.DateTime,
+            ExtraProperties = JsonConvert.DeserializeObject<object>(x.SerializedProperties),
+            GameId = x.GameId,
+            Handled = x.Handled,
+            NotificationType = x.NotificationType,
+            ToId = x.ToId,
+        }).ToList();
+        return triggersDTO;
     }
 }

@@ -6,5 +6,6 @@ namespace WebAPI.Models
     {
         public Station CookStation1;
         public Station ResearchStation;
+        public Station CannonStation;
     }
 }

@@ -13,6 +13,7 @@ namespace WebAPI.Game_Actions
         // playerId pour tout le monde ? pis dans le fond les global ca ferait juste mettre plein de playerId
 
         public NotificationType NotificationType { get; set; }
+        public DateTime DateTime { get; set; }
         public object ExtraProperties { get; set; }
     }
 }

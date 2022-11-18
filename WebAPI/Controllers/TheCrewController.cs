@@ -193,7 +193,6 @@ namespace WebAPI.Controllers
         [Route("AddDefaultValues")]
         public async Task<ActionResult> GetGameState()
         {
-
             Guid defaultGameGuid = new Guid("DE74B055-BA84-41A2-BAEA-4E380293E227");
 
             Message sampleMessage = new Message()
@@ -308,6 +307,7 @@ namespace WebAPI.Controllers
             Guid defaultGameGuid = new Guid("DE74B055-BA84-41A2-BAEA-4E380293E227");
             Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
             Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
+
             //Players
             Player fredPlayerModel = new Player()
             {
@@ -364,6 +364,8 @@ namespace WebAPI.Controllers
                 ItemType = ItemType.Hose,
                 OwnerId = defaultPlayer1Guid,
             });
+
+
 
             _playerContext.SaveChanges();
             return Ok();

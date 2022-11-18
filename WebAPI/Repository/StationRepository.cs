@@ -55,5 +55,33 @@ namespace WebAPI.Repository
                 ExtraProperties = JsonConvert.DeserializeObject<object>(station.SerializedProperties),
             };
         }
+
+        
+
+        private StationTemplate BuildStationsTemplates()
+        {
+            var cookstation = new Station()
+            {
+                Name = "CookStation1",
+                Id = Guid.NewGuid(),
+                GameTaskCode = GameTasks.GameTaskCode.Cook,
+                SerializedProperties = String.Empty,
+            };
+
+            var CannonStation = new Station()
+            {
+                Name = "CannonStation",
+                Id = Guid.NewGuid(),
+                GameTaskCode = GameTasks.GameTaskCode.Kill,
+                SerializedProperties = String.Empty,
+            };
+
+            var stationsTemplate = new StationTemplate()
+            {
+                CookStation1 = cookstation,
+                CannonStation = CannonStation
+            };
+            return stationsTemplate;
+        }
     }
 }

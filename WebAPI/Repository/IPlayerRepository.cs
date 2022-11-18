@@ -1,5 +1,6 @@
 ﻿
 using WebAPI;
+using WebAPI.Game_Actions;
 using WebAPI.Models;
 using WebAPI.Models.DTOs;
 
@@ -16,5 +17,6 @@ public interface IPlayerRepository
     public RoomDTO GetRoomDTO(Guid roomId);
 
     public PlayerDTO MapPlayerDTO(Guid playerId);
+    public List<TriggerNotificationDTO> GetTriggerNotifications(Guid playerId, DateTime? timeStamp);
 }
 
