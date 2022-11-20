@@ -1,7 +1,5 @@
-using System;
-using Microsoft.EntityFrameworkCore.SqlServer;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.AspNetCore.HttpLogging;
 using WebAPI.Services.ChatService;
 using WebAPI.GameState_Management.Game_State_Repository;
@@ -58,12 +56,8 @@ namespace WebAPI
 
             });
 
-
-
             //Cant use builder after building.
             var app = builder.Build();
-
-
 
             app.UseHttpLogging();
 
