@@ -13,7 +13,9 @@ namespace WebAPI.Game_Actions
 
         public Guid GameId { get; set; }
 
-        public DateTime? TimeStamp { get; set; }
+        public DateTime? Created { get; set; }
+
+        public string CreatedBy { get; set; }
 
         [Column(TypeName = "nvarchar(20)")]
         public GameActionType GameActionType { get; set; }

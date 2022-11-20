@@ -12,7 +12,7 @@ using WebAPI;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20221120180037_initial")]
+    [Migration("20221120211552_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,13 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("GameActionType")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
@@ -82,9 +89,6 @@ namespace WebAPI.Migrations
                     b.Property<string>("SerializedProperties")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("TimeStamp")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -97,15 +101,19 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EventText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PrivacyLevel")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("TimeStamp")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("TriggeringPlayerId")
                         .HasColumnType("uniqueidentifier");
@@ -356,24 +364,24 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("GameId")
+                    b.Property<Guid>("GameActionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Handled")
+                    b.Property<bool>("IsReceived")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NotificationType")
-                        .HasColumnType("int");
+                    b.Property<string>("NotificationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SerializedProperties")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ToId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

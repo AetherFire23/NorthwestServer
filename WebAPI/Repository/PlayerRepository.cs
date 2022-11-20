@@ -118,17 +118,14 @@ public class PlayerRepository : IPlayerRepository
 
     public List<TriggerNotificationDTO> GetTriggerNotifications(Guid playerId, DateTime? timeStamp)
     {
-        var triggers = _playerContext.TriggerNotifications.Where(x => x.ToId == playerId && timeStamp > x.DateTime).ToList();
-        var triggersDTO = triggers.Select(x => new TriggerNotificationDTO()
+        var notifications = _playerContext.TriggerNotifications.Where(x => x.PlayerId == playerId && x.Created > timeStamp && !x.IsReceived).ToList();
+
+        foreach (var notification in notifications)
         {
-            Id = x.Id,
-            DateTime = x.DateTime,
-            ExtraProperties = JsonConvert.DeserializeObject<object>(x.SerializedProperties),
-            GameId = x.GameId,
-            Handled = x.Handled,
-            NotificationType = x.NotificationType,
-            ToId = x.ToId,
-        }).ToList();
-        return triggersDTO;
+            notification.IsReceived = true;
+            _playerContext.TriggerNotifications.Update(notification);
+        }
+
+        return notifications.Select(notification => notification.ToDTO()).ToList();
     }
 }

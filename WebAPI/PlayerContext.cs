@@ -38,6 +38,11 @@ namespace WebAPI
                 .Entity<GameAction>()
                 .Property(e => e.GameActionType)
                 .HasConversion(new EnumToStringConverter<GameActionType>());
+
+            modelBuilder
+                .Entity<TriggerNotification>()
+                .Property(e => e.NotificationType)
+                .HasConversion(new EnumToStringConverter<NotificationType>());
         }
     }
 }
