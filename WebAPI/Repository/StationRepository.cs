@@ -16,12 +16,17 @@ namespace WebAPI.Repository
             _playerContext = playerContext;
         }
 
-        public StationDTO RetrieveStation(Guid playerId, string stationName)
+        public StationDTO RetrieveStation<T>(Guid playerId, string stationName)
         {
-            var station = GetStation(playerId, stationName);
-            var stationDTO = CreateDTO(station);
+            var player = _playerRepository.GetPlayer(playerId);
+
+            var station = _playerContext.Stations.First(x => x.GameId == player.GameId && x.Name == stationName);
+
+            var stationDTO = CreateDTO<T>(station);
+
             return stationDTO;
         }
+
 
         public void SaveStation(StationDTO station)
         {
@@ -37,14 +42,8 @@ namespace WebAPI.Repository
             return station;
         }
 
-        private Station GetStation(Guid playerId, string stationName) // call au contexte
-        {
-            var player = _playerRepository.GetPlayer(playerId);
-            var station = _playerContext.Stations.First(x => x.GameId == player.GameId && x.Name == stationName);
-            return station;
-        }
 
-        private StationDTO CreateDTO(Station station) // From Db
+        private StationDTO CreateDTO<T>(Station station) // From Db
         {
             return new StationDTO()
             {
@@ -52,7 +51,7 @@ namespace WebAPI.Repository
                 GameId = station.GameId,
                 GameTaskCode = station.GameTaskCode,
                 Name = station.Name,
-                ExtraProperties = JsonConvert.DeserializeObject<object>(station.SerializedProperties),
+                ExtraProperties = JsonConvert.DeserializeObject<T>(station.SerializedProperties),
             };
         }
 
