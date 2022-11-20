@@ -70,8 +70,9 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GameActionType")
-                        .HasColumnType("int");
+                    b.Property<string>("GameActionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");

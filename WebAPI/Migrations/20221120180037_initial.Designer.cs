@@ -12,7 +12,7 @@ using WebAPI;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20221117192516_initial")]
+    [Migration("20221120180037_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,8 +72,9 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GameActionType")
-                        .HasColumnType("int");
+                    b.Property<string>("GameActionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");

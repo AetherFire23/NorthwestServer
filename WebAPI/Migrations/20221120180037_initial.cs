@@ -42,7 +42,7 @@ namespace WebAPI.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GameActionType = table.Column<int>(type: "int", nullable: false),
+                    GameActionType = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     SerializedProperties = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
