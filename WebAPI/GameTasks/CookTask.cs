@@ -31,9 +31,11 @@ namespace WebAPI.GameTasks
         public override void Execute(GameTaskContext context)
         {
             string roomName = context.Parameters[_stationNameParam];
-            var cookStation = _stationRepo.RetrieveStation(context.Player.Id, roomName);
+            var cookStation = _stationRepo.RetrieveStation<CookStationProperties>(context.Player.Id, roomName);
+
             var properties = (CookStationProperties)cookStation.ExtraProperties;
-            
+
+
             _stationRepo.SaveStation(cookStation);
         }
     }

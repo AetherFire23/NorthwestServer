@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using WebAPI.Enums;
 using WebAPI.Game_Actions;
 using WebAPI.GameState_Management;
 using WebAPI.Main_Menu.Models;
@@ -28,6 +30,19 @@ namespace WebAPI
         //There is constructor injection. This must exist to be configurable in Program.cs
         public PlayerContext(DbContextOptions<PlayerContext> options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<GameAction>()
+                .Property(e => e.GameActionType)
+                .HasConversion(new EnumToStringConverter<GameActionType>());
+
+            modelBuilder
+                .Entity<TriggerNotification>()
+                .Property(e => e.NotificationType)
+                .HasConversion(new EnumToStringConverter<NotificationType>());
         }
     }
 }

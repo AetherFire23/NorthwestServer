@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Game_Actions\NewFolder\**" />
+    <Content Remove="Game_Actions\NewFolder\**" />
+    <EmbeddedResource Remove="Game_Actions\NewFolder\**" />
+    <None Remove="Game_Actions\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>
@@ -23,10 +30,6 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Game_Actions\NewFolder\" />
   </ItemGroup>
 
 </Project>

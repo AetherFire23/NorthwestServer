@@ -11,4 +11,6 @@ namespace WebAPI.GameTasks.Stations
         public string Name { get; set; }
         public object ExtraProperties { get; set; }
     }
+
+
 }

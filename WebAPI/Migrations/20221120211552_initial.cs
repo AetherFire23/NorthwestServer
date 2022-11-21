@@ -41,8 +41,9 @@ namespace WebAPI.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GameActionType = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GameActionType = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     SerializedProperties = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -155,8 +156,9 @@ namespace WebAPI.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TriggeringPlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PrivacyLevel = table.Column<int>(type: "int", nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EventText = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    EventText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -209,12 +211,12 @@ namespace WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ToId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Handled = table.Column<bool>(type: "bit", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NotificationType = table.Column<int>(type: "int", nullable: false),
-                    SerializedProperties = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    GameActionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsReceived = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NotificationType = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    SerializedProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

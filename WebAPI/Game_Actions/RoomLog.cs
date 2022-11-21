@@ -9,7 +9,8 @@ namespace WebAPI.Game_Actions
         public Guid Id { get; set; }
         public Guid TriggeringPlayerId { get; set; } // for private logs
         public RoomLogPrivacyLevel PrivacyLevel { get; set; }
-        public DateTime? TimeStamp { get; set; }
         public string EventText { get; set; }
+        public DateTime? Created { get; set; }
+        public string CreatedBy { get; set; }
     }
 }
