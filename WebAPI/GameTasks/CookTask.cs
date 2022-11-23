@@ -1,7 +1,6 @@
 using WebAPI.GameState_Management;
-using WebAPI.GameTasks.Stations;
-using WebAPI.Repository;
-using WebAPI.Room_template;
+using WebAPI.Interfaces;
+using WebAPI.Models;
 
 namespace WebAPI.GameTasks
 {

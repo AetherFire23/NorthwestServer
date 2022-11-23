@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
-using WebAPI.GameTasks.Stations;
+using WebAPI.Db_Models;
+using WebAPI.DTOs;
+using WebAPI.Interfaces;
 using WebAPI.Models;
 
 namespace WebAPI.Repository

@@ -1,4 +1,4 @@
-﻿using WebAPI.GameTasks.Stations;
+﻿using WebAPI.Db_Models;
 
 namespace WebAPI.Models
 {

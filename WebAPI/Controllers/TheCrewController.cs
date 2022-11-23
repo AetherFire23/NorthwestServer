@@ -1,16 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using WebAPI.Db_Models;
 using WebAPI.Enums;
-using WebAPI.Game_Actions;
 using WebAPI.GameState_Management;
-using WebAPI.GameState_Management.Game_State_Repository;
 using WebAPI.GameTasks;
-using WebAPI.GameTasks.Stations;
-using WebAPI.Main_Menu.Models;
+using WebAPI.Interfaces;
 using WebAPI.Models;
-using WebAPI.Repository;
-using WebAPI.Room_template;
-using WebAPI.Services.ChatService;
 
 namespace WebAPI.Controllers
 {
@@ -18,12 +13,12 @@ namespace WebAPI.Controllers
     [Route("[controller]")]
     public class TheCrewController : ControllerBase
     {
-        private readonly ILogger<TheCrewController> _logger;
-        private readonly IChatService _chatService;
-        private readonly IPlayerRepository _playerRepository;
-        private readonly IPlayerService _playerService;
-        private readonly IGameStateRepository _gameStateRepository;
         private readonly PlayerContext _playerContext;
+
+
+        private readonly ILogger<TheCrewController> _logger;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly IGameStateRepository _gameStateRepository;
         private readonly IServiceProvider _serviceProvider;
         private readonly IRoomRepository _roomRepository;
         private readonly IGameActionsRepository _gameActionsRepository;
@@ -32,8 +27,6 @@ namespace WebAPI.Controllers
         public TheCrewController(ILogger<TheCrewController> logger,
             PlayerContext playerContext,
             IPlayerRepository playerRepository,
-            IPlayerService playerService,
-            IChatService chatService,
             IGameStateRepository gameStateRepository,
             IServiceProvider serviceProvider,
             IRoomRepository roomRepository,
@@ -42,9 +35,7 @@ namespace WebAPI.Controllers
         {
             _logger = logger;
             _playerRepository = playerRepository;
-            _playerService = playerService;
             _playerContext = playerContext;
-            _chatService = chatService;
             _gameStateRepository = gameStateRepository;
             _serviceProvider = serviceProvider;
             _roomRepository = roomRepository;
@@ -100,7 +91,10 @@ namespace WebAPI.Controllers
         [Route("UpdatePositionByPlayerModel")]
         public async Task<ActionResult> UpdatePositionByPlayerModel([FromBody] Player UnityPlayerModel) // va dependre de comment je manage les data
         {
-            _playerService.UpdatePlayerPosition(UnityPlayerModel);
+            var player = _playerContext.Players.First(x => x.Id == UnityPlayerModel.Id);
+            player.X = UnityPlayerModel.X;
+            player.Y = UnityPlayerModel.Y;
+            player.Z = UnityPlayerModel.Z;
             return Ok();
         }
 

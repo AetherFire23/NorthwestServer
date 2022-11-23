@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using WebAPI.Db_Models;
 using WebAPI.Enums;
 using WebAPI.Game_Actions;
 using WebAPI.GameState_Management;
-using WebAPI.Main_Menu.Models;
-using WebAPI.Models;
 
 namespace WebAPI
 {

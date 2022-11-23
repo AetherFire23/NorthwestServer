@@ -1,5 +1,5 @@
 using WebAPI.GameState_Management;
-using WebAPI.Repository;
+using WebAPI.Interfaces;
 
 namespace WebAPI.GameTasks
 {

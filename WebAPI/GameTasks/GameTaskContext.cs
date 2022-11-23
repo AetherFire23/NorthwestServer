@@ -1,5 +1,5 @@
+using WebAPI.DTOs;
 using WebAPI.GameState_Management;
-using WebAPI.Models.DTOs;
 
 namespace WebAPI.GameTasks
 {

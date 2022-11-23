@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
+using WebAPI.Db_Models;
 using WebAPI.Enums;
-using WebAPI.Models;
 
 namespace WebAPI.Game_Actions
 {

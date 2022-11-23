@@ -1,4 +1,4 @@
-using WebAPI.Repository;
+using WebAPI.Interfaces;
 
 namespace WebAPI.GameTasks
 {

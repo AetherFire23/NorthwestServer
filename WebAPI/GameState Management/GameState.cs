@@ -1,6 +1,5 @@
-﻿using WebAPI.Game_Actions;
-using WebAPI.Models;
-using WebAPI.Models.DTOs;
+﻿using WebAPI.Db_Models;
+using WebAPI.DTOs;
 
 namespace WebAPI.GameState_Management
 {
