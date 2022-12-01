@@ -24,11 +24,10 @@ namespace WebAPI.Repository
             PlayerDTO playerDTO = _playerRepository.MapPlayerDTO(playerId); // delete roomid, add private chatroom
             //List<PrivateInvitation> invitations = _playerRepository.GetPlayerInvitations(playerDTO.Id);
             List<Message> newMessages = GetNewMessages(lastTimeStamp, playerDTO.GameId);
-            List<Player> players = _playerRepository.GetPlayersInCurrentGame(playerDTO.GameId);
+            List<Player> players = _playerRepository.GetPlayersInGame(playerDTO.GameId);
             DateTime timeStamp = DateTime.UtcNow;
             List<PrivateChatRoomParticipant> chatRoomParticipants = GetChatRoomsWithMainPlayerInIt(playerDTO.Id);
             RoomDTO roomDTO = _playerRepository.GetRoomDTO(player.CurrentGameRoomId); // bug ici ofc car je nai pa de room mesemble
-
 
             var gameState = new GameState()
             {

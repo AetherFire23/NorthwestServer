@@ -6,6 +6,9 @@ using System.Reflection;
 using WebAPI.Repository;
 using WebAPI.Game_Actions;
 using WebAPI.Interfaces;
+using Quartz;
+using WebAPI.Jobs;
+using WebAPI.Services;
 
 namespace WebAPI
 {
@@ -18,28 +21,79 @@ namespace WebAPI
             // Add services to the container.
             builder.Services.AddControllers();
 
-            // Dependecies
+
+
+            RegisterGameTaskTypes(builder);
+
+            builder.Services.AddQuartz(q =>
+            {
+                q.SchedulerId = "Scheduler-Core";
+
+                q.UseMicrosoftDependencyInjectionJobFactory();
+
+                q.UseSimpleTypeLoader();
+                q.UseInMemoryStore();
+                q.UseDefaultThreadPool(tp =>
+                {
+                    tp.MaxConcurrency = 10;
+                });
+
+                // 1. example
+
+                //q.ScheduleJob<HelloJob>(trigger => trigger
+                //    .WithIdentity("Combined Configuration Trigger")
+                //    .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(1)))
+                //    .WithDailyTimeIntervalSchedule(x => x.WithInterval(2, IntervalUnit.Second))
+                //    .WithDescription("my awesome trigger configured for a job with single call")
+                //);
+
+
+
+
+                //// 2. recurr cycles
+
+               // q.ScheduleJob<CycleJob>(trigger => trigger
+               //.WithIdentity("Combined Configuration Trigger")
+               //.StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(2)))
+               //.WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Second))
+               //.WithDescription("my awesome trigger configured for a job with single call")
+               //);
+
+
+                //// 3. once
+                //q.ScheduleJob<CycleJob>(trigger => trigger
+                //    .WithIdentity("Combined Configuration Trigger")
+                //    .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
+                //    .WithDescription("my awesome trigger configured for a job with single call")
+
+            });
+
+            builder.Services.AddQuartzServer(options =>
+            {
+                // when shutting down we want jobs to complete gracefully
+                options.WaitForJobsToComplete = true;
+            });
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            // Dependencies
             builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
             builder.Services.AddScoped<IGameStateRepository, GameStateRepository>();
             builder.Services.AddScoped<IRoomRepository, RoomRepository>();
             builder.Services.AddScoped<IStationRepository, StationRepository>();
             builder.Services.AddScoped<IGameActionsRepository, GameActionsRepository>();
             builder.Services.AddScoped<IMainMenuRepository, MainMenuRepository>();
-
-            RegisterGameTaskTypes(builder);
-
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<ICycleManager, CycleManager>();
+            builder.Services.AddScoped<IGameRepository, GameRepository>();
+            builder.Services.AddTransient<CycleJob>();
 
             //Add db context here
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<PlayerContext>(options
            => options.UseSqlServer(connectionString));
-
-
-
 
             builder.Services.AddHttpLogging(logging =>
             {
@@ -72,7 +126,6 @@ namespace WebAPI
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred");
                 }
-
             }
 
             // Configure the HTTP request pipeline.

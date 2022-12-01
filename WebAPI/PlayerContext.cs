@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Db_Models;
+using WebAPI.Entities;
 using WebAPI.Enums;
 using WebAPI.Game_Actions;
 using WebAPI.GameState_Management;
@@ -25,6 +26,7 @@ namespace WebAPI
         public DbSet<User> Users { get; set; }
         public DbSet<MenuNotification> MenuNotifications { get; set; }
         public DbSet<FriendPair> FriendPairs { get; set; }
+        public DbSet<Game> Games { get; set; }
 
         //There is constructor injection. This must exist to be configurable in Program.cs
         public PlayerContext(DbContextOptions<PlayerContext> options) : base(options)

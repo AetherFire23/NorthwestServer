@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Game_Actions\NewFolder\**" />
+    <Compile Remove="Game_Settings\**" />
     <Content Remove="Game_Actions\NewFolder\**" />
+    <Content Remove="Game_Settings\**" />
     <EmbeddedResource Remove="Game_Actions\NewFolder\**" />
+    <EmbeddedResource Remove="Game_Settings\**" />
     <None Remove="Game_Actions\NewFolder\**" />
+    <None Remove="Game_Settings\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +29,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.5.0" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.5.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
   </ItemGroup>
 
@@ -35,7 +42,6 @@
   <ItemGroup>
     <Folder Include="GameState Management\Game State Service\" />
     <Folder Include="GameTasks\Stations\" />
-    <Folder Include="Game_Settings\" />
   </ItemGroup>
 
 </Project>

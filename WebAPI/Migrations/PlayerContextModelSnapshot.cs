@@ -64,64 +64,24 @@ namespace WebAPI.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("WebAPI.Game_Actions.GameAction", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.AdjacentRoom", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GameActionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid>("GameId")
+                    b.Property<Guid>("AdjacentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("SerializedProperties")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GameActions");
-                });
-
-            modelBuilder.Entity("WebAPI.Game_Actions.RoomLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EventText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PrivacyLevel")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TriggeringPlayerId")
+                    b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoomLogs");
+                    b.ToTable("AdjacentRooms");
                 });
 
-            modelBuilder.Entity("WebAPI.Main_Menu.Models.FriendPair", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.FriendPair", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -138,7 +98,24 @@ namespace WebAPI.Migrations
                     b.ToTable("FriendPairs");
                 });
 
-            modelBuilder.Entity("WebAPI.Main_Menu.Models.MenuNotification", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.Item", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ItemType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("WebAPI.Db_Models.MenuNotification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -168,56 +145,7 @@ namespace WebAPI.Migrations
                     b.ToTable("MenuNotifications");
                 });
 
-            modelBuilder.Entity("WebAPI.Main_Menu.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.AdjacentRoom", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AdjacentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AdjacentRooms");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Item", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ItemType")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Message", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -245,7 +173,7 @@ namespace WebAPI.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.PrivateChatRoomParticipant", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.PrivateChatRoomParticipant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -262,7 +190,7 @@ namespace WebAPI.Migrations
                     b.ToTable("PrivateChatRooms");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.PrivateInvitation", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.PrivateInvitation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -296,7 +224,7 @@ namespace WebAPI.Migrations
                     b.ToTable("Invitations");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Room", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.Room", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,7 +245,35 @@ namespace WebAPI.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Skill", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.RoomLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EventText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PrivacyLevel")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TriggeringPlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoomLogs");
+                });
+
+            modelBuilder.Entity("WebAPI.Db_Models.Skill", b =>
                 {
                     b.Property<Guid>("OwnerId")
                         .ValueGeneratedOnAdd()
@@ -331,7 +287,7 @@ namespace WebAPI.Migrations
                     b.ToTable("Skills");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Station", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.Station", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -356,7 +312,7 @@ namespace WebAPI.Migrations
                     b.ToTable("Stations");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.TriggerNotification", b =>
+            modelBuilder.Entity("WebAPI.Db_Models.TriggerNotification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -373,7 +329,7 @@ namespace WebAPI.Migrations
 
                     b.Property<string>("NotificationType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<Guid>("PlayerId")
                         .HasColumnType("uniqueidentifier");
@@ -384,6 +340,67 @@ namespace WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TriggerNotifications");
+                });
+
+            modelBuilder.Entity("WebAPI.Db_Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("WebAPI.Entities.Game", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("NextTick")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("WebAPI.Game_Actions.GameAction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GameActionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SerializedProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GameActions");
                 });
 #pragma warning restore 612, 618
         }

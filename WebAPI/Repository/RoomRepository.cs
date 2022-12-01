@@ -91,18 +91,6 @@ namespace WebAPI.Repository
                     AdjacentNames = new List<string>()
                     {
                         nameof(LevelTemplate.EntryHall),
-                        nameof(LevelTemplate.Kitchen2),
-                    },
-                    RoomType = RoomType.Second
-                },
-
-                Kitchen2 = new RoomTemplate()
-                {
-                    Id = Guid.Empty,
-                    Name = nameof(LevelTemplate.Kitchen2),
-                    AdjacentNames = new List<string>()
-                    {
-                        nameof(LevelTemplate.Kitchen1),
                     },
                     RoomType = RoomType.Second
                 },

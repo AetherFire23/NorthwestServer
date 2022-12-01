@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Security.AccessControl;
 using WebAPI.Db_Models;
+using WebAPI.Enums;
+using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
@@ -13,6 +17,66 @@ namespace WebAPI.Controllers
         {
             _playerRepository = playerRepository;
             _playerContext = playerContext;
+        }
+
+        [HttpPut]
+        [Route("CreateChatroom")] // used
+        public async Task<ActionResult<ClientCallResult>> CreateChatroom(string playerGuid, string newRoomGuid)
+        {
+            Guid playerid = new Guid(playerGuid);
+            Guid newRoomid = new Guid(newRoomGuid);
+
+            var pair = new PrivateChatRoomParticipant()
+            {
+                Id = Guid.NewGuid(),
+                ParticipantId = playerid,
+                RoomId = newRoomid
+            };
+
+            _playerContext.PrivateChatRooms.Add(pair);
+            _playerContext.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPut] // put = update, post = creation
+        [Route("LeaveChatRoom")] // used 
+        public async Task<ActionResult<ClientCallResult>> LeaveChatRoom(Guid playerId, Guid roomToLeave) // va dependre de comment je manage les data
+        {
+            var t = _playerContext.PrivateChatRooms.First(x => x.RoomId == roomToLeave && x.ParticipantId == playerId);
+            _playerContext.PrivateChatRooms.Remove(t);
+            _playerContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("InviteToRoom")]
+        public async Task<ActionResult<ClientCallResult>> InviteToRoom(Guid fromId, Guid targetPlayer) // va dependre de comment je manage les data
+        {
+            var invitation = new PrivateInvitationNotification()
+            {
+                FromPlayerId = fromId,
+                IsAccepted = false,
+                FromPlayerName = _playerRepository.GetPlayer(fromId).Name,
+                RoomId = Guid.NewGuid(),
+                ToPlayerName = _playerRepository.GetPlayer(targetPlayer).Name,
+            };
+
+            var newNotif = new TriggerNotification()
+            {
+                Id = Guid.NewGuid(),
+                Created = DateTime.UtcNow,
+                GameActionId = Guid.Empty,
+                IsReceived = false,
+                NotificationType = NotificationType.PrivInv,
+                PlayerId = targetPlayer,
+                SerializedProperties = JsonConvert.SerializeObject(invitation)
+            };
+
+            _playerContext.TriggerNotifications.Add(newNotif);
+
+            _playerContext.SaveChanges();
+            return Ok(ClientCallResult.Success);
         }
 
         [HttpPut]
@@ -37,80 +101,22 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("PutCreateChatRoom")] // pense obsolet 
-        public async Task<ActionResult<string>> PutCreatePrivateChatRoom(string playerGuid) // UpdateOrCreate ? pour 
+        [Route("SendInviteResponse")]
+        public async Task<ActionResult<ClientCallResult>> SendInviteResponse(Guid triggerId, bool isAccepted)
         {
-            Guid playerId = new Guid(playerGuid);
-            //var player = _playerRepository.GetPlayer(playerId);
+            var invite = _playerContext.TriggerNotifications.First(x => x.Id == triggerId);
 
-            var privateRoomPair = new PrivateChatRoomParticipant
+            var props = JsonConvert.DeserializeObject<PrivateInvitationNotification>(invite.SerializedProperties);
+            var newPair = new PrivateChatRoomParticipant()
             {
                 Id = Guid.NewGuid(),
-                ParticipantId = playerId,
-                RoomId = Guid.NewGuid(),
+                ParticipantId = invite.PlayerId,
+                RoomId = props.RoomId,
             };
-            _playerContext.PrivateChatRooms.Add(privateRoomPair);
-            _playerContext.SaveChanges();
-            return Ok("lol");
-        }
-
-        [HttpPut]
-        [Route("InviteToChatRoom")]
-        public async Task<ActionResult<string>> InvitePlayerToChatRoom([FromBody] PrivateInvitation invitation)
-        {
-            Player requestingPlayer = _playerRepository.GetPlayer(invitation.FromPlayerId);
-
-            //must complete the invitedusername
-            invitation.ToPlayerName = _playerRepository.GetPlayer(invitation.ToPlayerId).Name;
-
-            bool playerAlreadyInRoom = _playerContext.PrivateChatRooms.Any(x => x.RoomId == invitation.RoomId && x.ParticipantId == invitation.ToPlayerId); // should be able to replace those two horrible queries
-            bool identicalInvitationExists = _playerContext.Invitations.Any(x => x.RoomId == invitation.RoomId && x.ToPlayerId == invitation.ToPlayerId);
-
-            if (playerAlreadyInRoom || identicalInvitationExists)
-            {
-                return "yeah!";
-            }
-            _playerContext.Invitations.Add(invitation);
-            _playerContext.SaveChanges();
-            return Ok("yeah");
-        }
-
-        [HttpPut]
-        [Route("SendInvitationResponse")]
-        public async Task<string> SendPrivateChatRoomInviteResponse([FromBody] PrivateInvitation invitation)
-        {
-            var invite = _playerContext.Invitations.FirstOrDefault(invite => invite.Id == invitation.Id);
-
-            invite.FromPlayerId = invitation.FromPlayerId;
-            invite.FromPlayerName = invitation.FromPlayerName;
-            invite.ToPlayerName = invitation.ToPlayerName;
-            invite.ToPlayerId = invitation.ToPlayerId;
-            invite.IsAccepted = invitation.IsAccepted;
-            invite.RequestFulfilled = true;
-            invite.RoomId = invitation.RoomId;
-
-            var invitingPlayer = _playerRepository.GetPlayer(invite.FromPlayerId);
-
-            if (invite.IsAccepted)
-            {
-                //specify that the player is in that room
-                var privatePair = new PrivateChatRoomParticipant()
-                {
-                    Id = Guid.NewGuid(),
-                    RoomId = invitation.RoomId,
-                    ParticipantId = invite.ToPlayerId,
-
-                };
-
-                // I dont need the invitation after having resolved it 
-                _playerContext.Invitations.Remove(invite); // Removed quand yer accepted mais pas removed quand yer refuse ? possibilite de bug 
-
-                _playerContext.PrivateChatRooms.Add(privatePair);
-            }
 
             _playerContext.SaveChanges();
 
-            return $"You successfully invited {invitingPlayer.Name} to your private chat room. ";
+            return ClientCallResult.Success;
         }
     }
 }

@@ -40,7 +40,7 @@ public class PlayerRepository : IPlayerRepository
         return playerInvites;
     }
 
-    public List<Player> GetPlayersInCurrentGame(Guid gameId)
+    public List<Player> GetPlayersInGame(Guid gameId)
     {
         return Players.Where(player => player.GameId == gameId).ToList();
     }
@@ -117,14 +117,25 @@ public class PlayerRepository : IPlayerRepository
 
     public List<TriggerNotificationDTO> GetTriggerNotifications(Guid playerId, DateTime? timeStamp)
     {
-        var notifications = _playerContext.TriggerNotifications.Where(x => x.PlayerId == playerId && x.Created > timeStamp && !x.IsReceived).ToList();
+        List<TriggerNotification> notifications = new();
+        if(timeStamp is null)
+        {
+            notifications = _playerContext.TriggerNotifications.Where(x=> x.PlayerId == playerId && !x.IsReceived).ToList();
+        }
+
+        else
+        {
+            notifications = _playerContext.TriggerNotifications.Where(x => x.PlayerId == playerId && x.Created > timeStamp && !x.IsReceived).ToList();
+        }
 
         foreach (var notification in notifications)
         {
             notification.IsReceived = true;
-            _playerContext.TriggerNotifications.Update(notification);
+            _playerContext.TriggerNotifications.Update(notification); 
         }
 
-        return notifications.Select(notification => notification.ToDTO()).ToList();
+        _playerContext.SaveChanges();
+        //return notifications;
+      return notifications.Select(notification => notification.ToDTO()).ToList();
     }
 }

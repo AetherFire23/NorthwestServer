@@ -10,7 +10,7 @@ public interface IPlayerRepository
 
     public Player GetPlayer(Guid id);
     public List<PrivateInvitation> GetPlayerInvitations(Guid playerId);
-    public List<Player> GetPlayersInCurrentGame(Guid gameId);
+    public List<Player> GetPlayersInGame(Guid gameId);
     //public PlayerDTO GetPlayerDTO(Guid playerId);
 
     public RoomDTO GetRoomDTO(Guid roomId);

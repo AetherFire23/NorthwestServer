@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebAPI.Db_Models;
+using WebAPI.Entities;
 using WebAPI.Enums;
 using WebAPI.GameState_Management;
 using WebAPI.GameTasks;
@@ -45,9 +46,9 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("runcs")]
-        public async Task<ActionResult> RunConstructor() 
-        { 
-            return Ok(); 
+        public async Task<ActionResult> RunConstructor()
+        {
+            return Ok();
         }
 
         [HttpGet]
@@ -60,12 +61,12 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("TryExecuteGameTask")]
-        public async Task<ActionResult<string>> GameTask(Guid playerId, GameTaskCode taskCode, [FromBody] Dictionary<string, string> parameters)
+        public async Task<ActionResult<ClientCallResult>> GameTask(Guid playerId, GameTaskCode taskCode, [FromBody] Dictionary<string, string> parameters)
         {
             var gameState = _gameStateRepository.GetPlayerGameState(playerId, null);
             if (gameState == null)
             {
-                return NotFound($"The player {playerId} was not found");
+                return NotFound(ClientCallResult.Failure);
             }
 
             var context = new GameTaskContext
@@ -84,12 +85,12 @@ namespace WebAPI.Controllers
             }
 
             gameTask.Execute(context);
-            return Ok($"The task {taskCode} was executed successfully.");
+            return Ok(ClientCallResult.Success);
         }
 
         [HttpPut] // put = update, post = creation
         [Route("UpdatePositionByPlayerModel")]
-        public async Task<ActionResult> UpdatePositionByPlayerModel([FromBody] Player UnityPlayerModel) // va dependre de comment je manage les data
+        public async Task<ActionResult<ClientCallResult>> UpdatePositionByPlayerModel([FromBody] Player UnityPlayerModel) // va dependre de comment je manage les data
         {
             var player = _playerContext.Players.First(x => x.Id == UnityPlayerModel.Id);
             player.X = UnityPlayerModel.X;
@@ -98,41 +99,25 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+
+
+
         [HttpPut]
         [Route("dwdwdw")]
         public async Task<ActionResult<ClientCallResult>> Test2()
         {
             var t = new ClientCallResult()
             {
-                Success = true,
-                SuccessMessage = "Win!",
+                IsSuccessful = true,
             };
             return Ok(t);
         }
 
-        [HttpPut]
-        [Route("AddPlayerRoomPair")] 
-        public async Task<ActionResult> AddPlayerRoomPair(string playerGuid, string newRoomGuid)
-        {
-            Guid playerid = new Guid(playerGuid);
-            Guid newRoomid = new Guid(newRoomGuid);
 
-            var pair = new PrivateChatRoomParticipant()
-            {
-                Id = Guid.NewGuid(),
-                ParticipantId = playerid,
-                RoomId = newRoomid
-            };
-
-            _playerContext.PrivateChatRooms.Add(pair);
-            _playerContext.SaveChanges();
-
-            return Ok();
-        }
 
         [HttpPut]
         [Route("TransferItem")] // me sers meme pas du ownerId
-        public async Task<ActionResult> TransferItem(Guid ownerId, Guid targetId, Guid itemId) // pourrait devenir une method dans le service
+        public async Task<ActionResult<ClientCallResult>> TransferItem(Guid ownerId, Guid targetId, Guid itemId) // pourrait devenir une method dans le service
         {
             Item? selectedItem = _playerContext.Items.First(i => i.Id == itemId);
             selectedItem.OwnerId = targetId;
@@ -142,7 +127,7 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("ChangeRoom")]
-        public async Task<ActionResult<string>> ChangeRoom(Guid playerId, string targetRoomName)
+        public async Task<ActionResult<ClientCallResult>> ChangeRoom(Guid playerId, string targetRoomName)
         {
             var player = _playerRepository.GetPlayer(playerId);
 
@@ -160,10 +145,10 @@ namespace WebAPI.Controllers
                 _gameActionsRepository.ChangeRoomAction(player, currentRoom, targetRoom);
                 // creer une nouvelle gameAction
 
-                return Ok("Tu as change de room!"); 
+                return Ok(ClientCallResult.Success);
             }
 
-            return Ok("Eat my shorts, the room does not exist.");
+            return Ok(ClientCallResult.Success);
         }
 
         [HttpGet]
@@ -206,9 +191,9 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("AddOrRemoveFriend")]
-        public async Task<ActionResult> InteractWithFriends(Guid userId, FriendOptions option, [FromBody] FriendContext context)
+        public async Task<ActionResult<ClientCallResult>> InteractWithFriends(Guid userId, FriendOptions option, [FromBody] FriendContext context)
         {
-             switch (option)
+            switch (option)
             {
                 case FriendOptions.Invite:
                     {
@@ -233,7 +218,7 @@ namespace WebAPI.Controllers
                             TimeStamp = DateTime.Now,
                         };
                         _playerContext.MenuNotifications.Add(newNotification);
-                        
+
                         break;
                     }
                 case FriendOptions.AcceptOrDecline:
@@ -241,10 +226,10 @@ namespace WebAPI.Controllers
                         var notifications = _playerContext.MenuNotifications.Where(x => x.ToId == userId && x.MenuNotificationType == MenuNotificationType.FriendInvite).ToList();
                         var correctNotification = new MenuNotification();
                         var correctContext = new FriendContext();
-                        foreach(var n in notifications)
+                        foreach (var n in notifications)
                         {
                             FriendContext friendContext = JsonConvert.DeserializeObject<FriendContext>(n.ExtraProperties);
-                            if(context.CallerUserId == friendContext.CallerUserId)
+                            if (context.CallerUserId == friendContext.CallerUserId)
                             {
                                 correctNotification = n;
                                 correctContext = friendContext;
@@ -283,7 +268,7 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("GetMainMenuState")]
-        public async Task<ActionResult> GetMainMenuState(Guid userId)
+        public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
         {
             var t = _mainMenuRepository.GetMainMenuState(userId);
             return Ok();
@@ -302,6 +287,16 @@ namespace WebAPI.Controllers
             Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
             Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
 
+            // Games
+            var g = new Game()
+            {
+                Id = defaultGameGuid,
+                Active = true,
+                NextTick = DateTime.UtcNow.AddSeconds(5),
+            };
+
+            _playerContext.Games.Add(g);
+
             //Players
             Player fredPlayerModel = new Player()
             {
@@ -317,6 +312,7 @@ namespace WebAPI.Controllers
                 Y = 0,
                 Z = 0,
             };
+
             Player benPlayerModel = new Player()
             {
                 ActionPoints = 4,
@@ -327,8 +323,8 @@ namespace WebAPI.Controllers
                 Id = defaultplayer2guid,
                 Name = "Ben",
                 Profession = Enums.RoleType.Commander,
-                X = 0,
-                Y = 0,
+                X = -15,
+                Y = -5,
                 Z = 0,
 
             };
@@ -345,7 +341,7 @@ namespace WebAPI.Controllers
                 SerializedProperties = JsonConvert.SerializeObject(new CookStationProperties()
                 {
                     MoneyMade = 5,
-                    State = Enums.State.Pristine
+                    State = State.Pristine
                 }),
             };
             _playerContext.Stations.Add(station);
@@ -358,7 +354,6 @@ namespace WebAPI.Controllers
                 ItemType = ItemType.Hose,
                 OwnerId = defaultPlayer1Guid,
             });
-
 
 
             _playerContext.SaveChanges();

@@ -4,6 +4,6 @@
     {
         CycleChanged,
         DoorOpen,
-        PrivateChatRoomInvitation
+        PrivInv,
     }
 }
