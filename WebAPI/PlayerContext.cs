@@ -6,6 +6,7 @@ using WebAPI.Entities;
 using WebAPI.Enums;
 using WebAPI.Game_Actions;
 using WebAPI.GameState_Management;
+using WebAPI.Temp_settomgs;
 
 namespace WebAPI
 {
@@ -27,6 +28,10 @@ namespace WebAPI
         public DbSet<MenuNotification> MenuNotifications { get; set; }
         public DbSet<FriendPair> FriendPairs { get; set; }
         public DbSet<Game> Games { get; set; }
+
+        public DbSet<GameSetting> GameSetting { get; set; }
+        public DbSet<RoleSetting> RoleSettings { get; set; }
+        public DbSet<TaskSetting> TaskSettings { get; set; }
 
         //There is constructor injection. This must exist to be configurable in Program.cs
         public PlayerContext(DbContextOptions<PlayerContext> options) : base(options)

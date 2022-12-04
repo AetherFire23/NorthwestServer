@@ -52,19 +52,19 @@ namespace WebAPI
 
                 //// 2. recurr cycles
 
-               // q.ScheduleJob<CycleJob>(trigger => trigger
-               //.WithIdentity("Combined Configuration Trigger")
-               //.StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(2)))
-               //.WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Second))
-               //.WithDescription("my awesome trigger configured for a job with single call")
-               //);
+                // q.ScheduleJob<CycleJob>(trigger => trigger
+                //.WithIdentity("Combined Configuration Trigger")
+                //.StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(2)))
+                //.WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Second))
+                //.WithDescription("my awesome trigger configured for a job with single call")
+                //);
 
 
-                //// 3. once
-                //q.ScheduleJob<CycleJob>(trigger => trigger
-                //    .WithIdentity("Combined Configuration Trigger")
-                //    .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
-                //    .WithDescription("my awesome trigger configured for a job with single call")
+               // 3.once
+                q.ScheduleJob<CycleJob>(trigger => trigger
+                    .WithIdentity("Combined Configuration Trigger")
+                    .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
+                    .WithDescription("my awesome trigger configured for a job with single call"));
 
             });
 
@@ -79,14 +79,29 @@ namespace WebAPI
             builder.Services.AddSwaggerGen();
 
             // Dependencies
-            builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
-            builder.Services.AddScoped<IGameStateRepository, GameStateRepository>();
-            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
-            builder.Services.AddScoped<IStationRepository, StationRepository>();
-            builder.Services.AddScoped<IGameActionsRepository, GameActionsRepository>();
-            builder.Services.AddScoped<IMainMenuRepository, MainMenuRepository>();
-            builder.Services.AddScoped<ICycleManager, CycleManager>();
+            builder.Services.AddScoped<ICycleManagerService, CycleManagerService>();
+
+            // Services
+            builder.Services.AddScoped<IPlayerService, PlayerService>();
+            builder.Services.AddScoped<IGameTaskService, GameTaskService>();
+            builder.Services.AddScoped<IPlayerService, PlayerService>();
+            builder.Services.AddScoped<IFriendService, FriendService>();
+            builder.Services.AddScoped<IGameStateService, GameStateService>();
+            builder.Services.AddScoped<IChatService, ChatService>();
+
+            // Repos
             builder.Services.AddScoped<IGameRepository, GameRepository>();
+            builder.Services.AddScoped<IMainMenuRepository, MainMenuRepository>();
+            builder.Services.AddScoped<IGameActionsRepository, GameActionsRepository>();
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped<IGameStateRepository, GameStateRepository>();
+            builder.Services.AddScoped<IStationRepository, StationRepository>();
+            builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+            builder.Services.AddScoped<IChatRepository, ChatRepository>();
+
+
+            
+            // Injection jobs
             builder.Services.AddTransient<CycleJob>();
 
             //Add db context here

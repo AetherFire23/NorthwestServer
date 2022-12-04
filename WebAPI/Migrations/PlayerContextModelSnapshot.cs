@@ -402,6 +402,52 @@ namespace WebAPI.Migrations
 
                     b.ToTable("GameActions");
                 });
+
+            modelBuilder.Entity("WebAPI.Temp_settomgs.GameSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CycleTimeOffsetInSeconds")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GameSetting");
+                });
+
+            modelBuilder.Entity("WebAPI.Temp_settomgs.RoleSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RoleType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoleSettings");
+                });
+
+            modelBuilder.Entity("WebAPI.Temp_settomgs.TaskSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SerializedProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TaskCode")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskSettings");
+                });
 #pragma warning restore 612, 618
         }
     }

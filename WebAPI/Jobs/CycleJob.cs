@@ -7,8 +7,8 @@ namespace WebAPI.Jobs
     public class CycleJob : IJob
     {
         private readonly IGameRepository _gameRepository;
-        private readonly ICycleManager _cycleManager;
-        public CycleJob(IGameRepository gameRepository, ICycleManager cycleManager)
+        private readonly ICycleManagerService _cycleManager;
+        public CycleJob(IGameRepository gameRepository, ICycleManagerService cycleManager)
         {
             _cycleManager = cycleManager;
             _gameRepository = gameRepository;

@@ -1,4 +1,5 @@
 ﻿using WebAPI.Db_Models;
+using WebAPI.DTOs;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 
@@ -13,15 +14,38 @@ namespace WebAPI.Repository
             _playerContext = playerContext;
         }
 
-        public void CreateNewGameRooms()
+        public RoomDTO GetRoomDTO(Guid roomId)
         {
-            Guid newGameGuid = Guid.NewGuid();
-            CreateNewRooms(newGameGuid);
+            Room requestedRoom = _playerContext.Rooms.FirstOrDefault(room => room.Id == roomId);
+
+            if (requestedRoom is null)
+            {
+                return new RoomDTO();
+            }
+
+            var playersInRoom = _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToList();
+
+            var items = _playerContext.Items.Where(item => item.OwnerId == roomId).ToList();
+
+            RoomDTO roomDTO = new RoomDTO()
+            {
+                Id = requestedRoom.Id,
+                RoomType = requestedRoom.RoomType,
+                Items = items,
+                Players = playersInRoom,
+                Name = requestedRoom.Name,
+                GameId = requestedRoom.GameId,
+            };
+
+            return roomDTO;
         }
 
-        public void CreateNewRooms(Guid gameId)
+        public void CreateNewRooms()
         {
-            Guid kitchen1ID = new Guid("c4ac05eb-8ad5-4320-8843-cb41a6906bc6");
+
+            Guid gameId = Guid.NewGuid();
+
+          //  Guid kitchen1ID = new Guid("c4ac05eb-8ad5-4320-8843-cb41a6906bc6");
             Guid kitchen2ID = new Guid("bf3accf0-a319-48c5-8c64-2a045d4b16e5");
             Guid entryHallID = new Guid("80998e1e-15ba-46bb-a1a8-b8b8c89c7004");
             var GetTemplate = BuildLevelTemplate();

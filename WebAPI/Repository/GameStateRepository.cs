@@ -8,12 +8,14 @@ namespace WebAPI.Repository
 {
     public class GameStateRepository : IGameStateRepository
     {
+        private readonly IRoomRepository _roomRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly PlayerContext _playerContext;
-        public GameStateRepository(PlayerContext playerContext, IPlayerRepository playerRepository)
+        public GameStateRepository(PlayerContext playerContext, IPlayerRepository playerRepository, IRoomRepository roomRepository)
         {
             _playerContext = playerContext;
             _playerRepository = playerRepository;
+            _roomRepository = roomRepository;
         }
 
         public GameState GetPlayerGameState(Guid playerId, DateTime? lastTimeStamp) // va appeler a etre modified pour le cheating car jenvoie tout en meme temps 
@@ -27,8 +29,9 @@ namespace WebAPI.Repository
             List<Player> players = _playerRepository.GetPlayersInGame(playerDTO.GameId);
             DateTime timeStamp = DateTime.UtcNow;
             List<PrivateChatRoomParticipant> chatRoomParticipants = GetChatRoomsWithMainPlayerInIt(playerDTO.Id);
-            RoomDTO roomDTO = _playerRepository.GetRoomDTO(player.CurrentGameRoomId); // bug ici ofc car je nai pa de room mesemble
+            // RoomDTO roomDTO = _playerRepository.GetRoomDTO(player.CurrentGameRoomId); // bug ici ofc car je nai pa de room mesemble
 
+            RoomDTO roomDTO = _roomRepository.GetRoomDTO(player.CurrentGameRoomId);
             var gameState = new GameState()
             {
                 PlayerDTO = playerDTO,
@@ -72,7 +75,5 @@ namespace WebAPI.Repository
                 .Where(message => message.Created > timeStamp
                       && message.GameId == gameId).ToList();
         }
-
-
     }
 }

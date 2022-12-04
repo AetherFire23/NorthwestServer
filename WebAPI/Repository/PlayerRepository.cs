@@ -31,7 +31,12 @@ public class PlayerRepository : IPlayerRepository
 
     public Player GetPlayer(Guid id)
     {
-        return _playerContext.Players.FirstOrDefault(queriedPlayer => queriedPlayer.Id == id);
+        return _playerContext.Players.First(queriedPlayer => queriedPlayer.Id == id);
+    }
+
+    public Item GetItem(Guid itemId)
+    {
+        return _playerContext.Items.First(x=> x.Id == itemId);
     }
 
     public List<PrivateInvitation> GetPlayerInvitations(Guid playerId)
@@ -89,32 +94,6 @@ public class PlayerRepository : IPlayerRepository
         return _playerContext.Items.Where(item => item.OwnerId == ownerId).ToList();
     }
 
-    public RoomDTO GetRoomDTO(Guid roomId)
-    {
-        Room requestedRoom = _playerContext.Rooms.FirstOrDefault(room => room.Id == roomId);
-
-        if (requestedRoom is null)
-        {
-            return new RoomDTO();
-        }
-
-        var playersInRoom = _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToList();
-
-        var items = _playerContext.Items.Where(item => item.OwnerId == roomId).ToList();
-
-        RoomDTO roomDTO = new RoomDTO()
-        {
-            Id = requestedRoom.Id,
-            RoomType = requestedRoom.RoomType,
-            Items = items,
-            Players = playersInRoom,
-            Name = requestedRoom.Name,
-            GameId = requestedRoom.GameId,
-        };
-
-        return roomDTO;
-    }
-
     public List<TriggerNotificationDTO> GetTriggerNotifications(Guid playerId, DateTime? timeStamp)
     {
         List<TriggerNotification> notifications = new();
@@ -135,7 +114,13 @@ public class PlayerRepository : IPlayerRepository
         }
 
         _playerContext.SaveChanges();
-        //return notifications;
-      return notifications.Select(notification => notification.ToDTO()).ToList();
+
+        return notifications.Select(x => x.ToDTO()).ToList();
+    }
+
+    public List<TriggerNotification> GetAllTriggersOfType(Guid playerId, NotificationType notificationType)
+    {
+        var triggersOfType = _playerContext.TriggerNotifications.Where(x=> x.Id == playerId && x.NotificationType == notificationType).ToList();
+        return triggersOfType;
     }
 }

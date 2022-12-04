@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Security.AccessControl;
 using WebAPI.Db_Models;
 using WebAPI.Enums;
+using WebAPI.Interfaces;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -13,69 +14,38 @@ namespace WebAPI.Controllers
     {
         private readonly IPlayerRepository _playerRepository;
         private readonly PlayerContext _playerContext;
-        public ChatController(IPlayerRepository playerRepository, PlayerContext playerContext)
+        private readonly IChatService _chatService;
+        public ChatController(IPlayerRepository playerRepository, 
+            PlayerContext playerContext, 
+            IChatService chatService)
         {
             _playerRepository = playerRepository;
             _playerContext = playerContext;
+            _chatService = chatService;
         }
 
         [HttpPut]
         [Route("CreateChatroom")] // used
         public async Task<ActionResult<ClientCallResult>> CreateChatroom(string playerGuid, string newRoomGuid)
         {
-            Guid playerid = new Guid(playerGuid);
-            Guid newRoomid = new Guid(newRoomGuid);
-
-            var pair = new PrivateChatRoomParticipant()
-            {
-                Id = Guid.NewGuid(),
-                ParticipantId = playerid,
-                RoomId = newRoomid
-            };
-
-            _playerContext.PrivateChatRooms.Add(pair);
-            _playerContext.SaveChanges();
-
-            return Ok();
+            ClientCallResult result = _chatService.CreateChatroom(playerGuid, newRoomGuid);
+            return Ok(result);
         }
 
         [HttpPut] // put = update, post = creation
         [Route("LeaveChatRoom")] // used 
         public async Task<ActionResult<ClientCallResult>> LeaveChatRoom(Guid playerId, Guid roomToLeave) // va dependre de comment je manage les data
         {
-            var t = _playerContext.PrivateChatRooms.First(x => x.RoomId == roomToLeave && x.ParticipantId == playerId);
-            _playerContext.PrivateChatRooms.Remove(t);
-            _playerContext.SaveChanges();
-            return Ok();
+            ClientCallResult result = _chatService.LeaveChatRoom(playerId, roomToLeave);
+            return Ok(result);
         }
 
         [HttpPut]
         [Route("InviteToRoom")]
-        public async Task<ActionResult<ClientCallResult>> InviteToRoom(Guid fromId, Guid targetPlayer) // va dependre de comment je manage les data
+        public async Task<ActionResult<ClientCallResult>> InviteToRoom(Guid fromId, Guid targetPlayer, Guid targetRoomId) 
         {
-            var invitation = new PrivateInvitationNotification()
-            {
-                FromPlayerId = fromId,
-                IsAccepted = false,
-                FromPlayerName = _playerRepository.GetPlayer(fromId).Name,
-                RoomId = Guid.NewGuid(),
-                ToPlayerName = _playerRepository.GetPlayer(targetPlayer).Name,
-            };
-
-            var newNotif = new TriggerNotification()
-            {
-                Id = Guid.NewGuid(),
-                Created = DateTime.UtcNow,
-                GameActionId = Guid.Empty,
-                IsReceived = false,
-                NotificationType = NotificationType.PrivInv,
-                PlayerId = targetPlayer,
-                SerializedProperties = JsonConvert.SerializeObject(invitation)
-            };
-
-            _playerContext.TriggerNotifications.Add(newNotif);
-
-            _playerContext.SaveChanges();
+            _chatService.InviteToRoom(fromId, targetPlayer, targetRoomId);
+            // demander a ben pour quand jai besoin de props + la base class
             return Ok(ClientCallResult.Success);
         }
 
@@ -83,20 +53,7 @@ namespace WebAPI.Controllers
         [Route("PutNewMessageToServer")]
         public async Task<ActionResult> PutNewMessageToServer(string guid, string roomId, string receivedMessage)
         {
-            var player = _playerRepository.GetPlayer(new Guid(guid));
-
-            var message = new Message()
-            {
-                Id = Guid.NewGuid(),
-                GameId = player.GameId,
-                Text = receivedMessage,
-                Name = player.Name,
-                RoomId = new Guid(roomId),
-                Created = DateTime.UtcNow,
-            };
-
-            _playerContext.Messages.Add(message);
-            _playerContext.SaveChanges();
+            _chatService.PutNewMessageToServer(guid, roomId, receivedMessage);
             return Ok();
         }
 
@@ -104,18 +61,7 @@ namespace WebAPI.Controllers
         [Route("SendInviteResponse")]
         public async Task<ActionResult<ClientCallResult>> SendInviteResponse(Guid triggerId, bool isAccepted)
         {
-            var invite = _playerContext.TriggerNotifications.First(x => x.Id == triggerId);
-
-            var props = JsonConvert.DeserializeObject<PrivateInvitationNotification>(invite.SerializedProperties);
-            var newPair = new PrivateChatRoomParticipant()
-            {
-                Id = Guid.NewGuid(),
-                ParticipantId = invite.PlayerId,
-                RoomId = props.RoomId,
-            };
-
-            _playerContext.SaveChanges();
-
+            _chatService.SendInviteResponse(triggerId, isAccepted);
             return ClientCallResult.Success;
         }
     }

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.DTOs;
 using WebAPI.Enums;
+using WebAPI.Models;
 
 namespace WebAPI.Db_Models
 {
@@ -23,16 +24,35 @@ namespace WebAPI.Db_Models
 
         public TriggerNotificationDTO ToDTO()
         {
-            return new TriggerNotificationDTO
+
+            var notif = new TriggerNotificationDTO()
             {
-                Id = Id,
-                GameActionId = GameActionId,
-                PlayerId = PlayerId,
-                IsReceived = IsReceived,
-                Created = Created,
-                NotificationType = NotificationType,
-                ExtraProperties = JsonConvert.DeserializeObject<object>(SerializedProperties ?? "{}")
+                Id = this.Id,
+                Created = this.Created,
+                GameActionId = this.GameActionId,
+                IsReceived = this.IsReceived,
+                NotificationType = this.NotificationType,
+                PlayerId = this.PlayerId,
             };
+            switch(this.NotificationType)
+            {
+                case NotificationType.PrivInv:
+                    {
+                        var asClass = JsonConvert.DeserializeObject<PrivateInvitationProperties>(this.SerializedProperties);
+                        notif.ExtraProperties = (object)asClass;
+                        break;
+                    }
+                case NotificationType.CycleChanged:
+                    {
+                        break;
+                    }
+                case NotificationType.DoorOpen:
+                    {
+                        break;
+                    }
+            }
+
+            return notif;
         }
     }
 }
