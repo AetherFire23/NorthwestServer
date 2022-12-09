@@ -30,7 +30,7 @@ namespace WebAPI.Game_Actions
             var notifications = GetNotificationsToPlayersInRoom(gameAction.Id, to.Id, player.Id);
 
             _playerContext.GameActions.Add(gameAction);
-            _playerContext.RoomLogs.Add(roomLog);
+            _playerContext.Logs.Add(roomLog);
             _playerContext.TriggerNotifications.AddRange(notifications);
 
             _playerContext.SaveChanges();

@@ -5,7 +5,7 @@ namespace WebAPI.Interfaces
 {
     public interface IRoomRepository
     {
-        public void CreateNewRooms();
+        public void CreateNewRooms(Guid gameId);
 
         public LevelTemplate BuildLevelTemplate();
 

@@ -1,8 +1,8 @@
 ﻿using WebAPI.Db_Models;
 using WebAPI.DTOs;
 using WebAPI.Game_Actions;
-using WebAPI.GameState_Management;
 using WebAPI.Interfaces;
+using WebAPI.Models;
 
 namespace WebAPI.Repository
 {
@@ -40,9 +40,22 @@ namespace WebAPI.Repository
                 Players = players,
                 TimeStamp = timeStamp,
                 PrivateChatRooms = chatRoomParticipants,
-                Room = roomDTO
+                Room = roomDTO,
+                Logs = _playerRepository.GetAccessibleLogs(playerId, lastTimeStamp),
+                Rooms = GetAllRoomsInGame(player.GameId),
             };
+
             return gameState;
+        }
+
+        public List<RoomDTO> GetAllRoomsInGame(Guid gameId)
+        {
+            var roomsInGame = _playerContext.Rooms.Where(x => x.GameId == gameId).ToList();
+
+            List<RoomDTO> roomDTOs = roomsInGame.Select(x => _roomRepository.GetRoomDTO(x.Id)).ToList();
+
+            return roomDTOs;
+
         }
 
         public List<PrivateChatRoomParticipant> GetChatRoomsWithMainPlayerInIt(Guid playerID)

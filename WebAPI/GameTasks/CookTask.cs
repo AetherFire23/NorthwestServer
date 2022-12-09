@@ -1,4 +1,4 @@
-using WebAPI.GameState_Management;
+
 using WebAPI.Interfaces;
 using WebAPI.Models;
 
@@ -29,6 +29,11 @@ namespace WebAPI.GameTasks
 
         public override void Execute(GameTaskContext context)
         {
+            // si X objets sont presents
+            // fais Y et depense Z points 
+
+            // 
+
             string roomName = context.Parameters[_stationNameParam];
             var cookStation = _stationRepo.RetrieveStation<CookStationProperties>(context.Player.Id, roomName);
 

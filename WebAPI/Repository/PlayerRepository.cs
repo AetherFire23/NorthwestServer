@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Quartz.Core;
 using System.Text;
 using WebAPI;
 using WebAPI.Db_Models;
@@ -36,7 +37,7 @@ public class PlayerRepository : IPlayerRepository
 
     public Item GetItem(Guid itemId)
     {
-        return _playerContext.Items.First(x=> x.Id == itemId);
+        return _playerContext.Items.First(x => x.Id == itemId);
     }
 
     public List<PrivateInvitation> GetPlayerInvitations(Guid playerId)
@@ -58,7 +59,6 @@ public class PlayerRepository : IPlayerRepository
 
         List<SkillType> skillsOwned = GetOwnedSkills(playerId);
 
-
         PlayerDTO playerDTO = new PlayerDTO()
         {
             // Common with player
@@ -77,7 +77,6 @@ public class PlayerRepository : IPlayerRepository
             // mapped in Context
             Items = items,
             Skills = skillsOwned,
-
         };
 
         return playerDTO;
@@ -97,9 +96,9 @@ public class PlayerRepository : IPlayerRepository
     public List<TriggerNotificationDTO> GetTriggerNotifications(Guid playerId, DateTime? timeStamp)
     {
         List<TriggerNotification> notifications = new();
-        if(timeStamp is null)
+        if (timeStamp is null)
         {
-            notifications = _playerContext.TriggerNotifications.Where(x=> x.PlayerId == playerId && !x.IsReceived).ToList();
+            notifications = _playerContext.TriggerNotifications.Where(x => x.PlayerId == playerId && !x.IsReceived).ToList();
         }
 
         else
@@ -110,7 +109,7 @@ public class PlayerRepository : IPlayerRepository
         foreach (var notification in notifications)
         {
             notification.IsReceived = true;
-            _playerContext.TriggerNotifications.Update(notification); 
+            _playerContext.TriggerNotifications.Update(notification);
         }
 
         _playerContext.SaveChanges();
@@ -120,7 +119,39 @@ public class PlayerRepository : IPlayerRepository
 
     public List<TriggerNotification> GetAllTriggersOfType(Guid playerId, NotificationType notificationType)
     {
-        var triggersOfType = _playerContext.TriggerNotifications.Where(x=> x.Id == playerId && x.NotificationType == notificationType).ToList();
+        var triggersOfType = _playerContext.TriggerNotifications.Where(x => x.Id == playerId && x.NotificationType == notificationType).ToList();
         return triggersOfType;
+    }
+
+    public List<Log> GetAccessibleLogs(Guid playerId, DateTime? lastTimeStamp)
+    {
+        var logs = new List<Log>();
+
+        var newServerLogs = lastTimeStamp is null
+            ? _playerContext.Logs
+            : _playerContext.Logs.Where(x => x.Created > lastTimeStamp);
+
+        foreach (var log in newServerLogs)
+        {
+            if (log.IsPublic)
+            {
+                logs.Add(log);
+            }
+
+            else
+            {
+                var playersIdsWhoCanSeeLog = _playerContext.LogAccessPermission.Where(x => x.LogId == log.Id)
+                    .Select(x => x.PlayerId);
+
+                bool canSeePrivateLog = playersIdsWhoCanSeeLog.Contains(playerId);
+
+                if (canSeePrivateLog)
+                {
+                    logs.Add(log);
+                }
+            }
+        }
+
+        return logs;
     }
 }

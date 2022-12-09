@@ -18,21 +18,23 @@ namespace WebAPI.Game_Actions
                 GameId = Player.GameId,
                 GameActionType = GameActionType.RoomChanged,
                 SerializedProperties = JsonConvert.SerializeObject(this),
-                Created = DateTime.Now,
+                Created = DateTime.UtcNow,
                 CreatedBy = Player.Name
             };
         }
 
-        public RoomLog ToRoomLog()
+        public Log ToRoomLog()
         {
-            return new RoomLog()
+            return new Log()
             {
                 Id = Guid.NewGuid(),
                 TriggeringPlayerId = Player.Id,
-                PrivacyLevel = RoomLogPrivacyLevel.Public,
+                IsPublic = true,
                 EventText = $"Player {Player.Name}, has changed room from {Room1.Name}, to {Room2.Name}]",
-                Created = DateTime.Now,
+                Created = DateTime.UtcNow,
                 CreatedBy = Player.Name,
+                RoomId = Room2.Id,
+                
             };
         }
     }

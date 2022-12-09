@@ -1,5 +1,5 @@
 ﻿using WebAPI.Db_Models;
-using WebAPI.GameState_Management;
+using WebAPI.Models;
 
 namespace WebAPI.Interfaces
 {

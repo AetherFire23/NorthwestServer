@@ -4,7 +4,6 @@ using WebAPI.Db_Models;
 using WebAPI.Dummies;
 using WebAPI.Entities;
 using WebAPI.Enums;
-using WebAPI.GameState_Management;
 using WebAPI.GameTasks;
 using WebAPI.Interfaces;
 using WebAPI.Models;
@@ -104,13 +103,11 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-
         [HttpPut]
         [Route("1-CreateNewGame")]
         public async Task<ActionResult> CreateNewGame()
         {
-            // Init rooms
-            _roomRepository.CreateNewRooms();
+            _roomRepository.CreateNewRooms(DummyValues.defaultGameGuid);
 
             _playerContext.Games.Add(DummyValues.Game);
 
@@ -121,14 +118,11 @@ namespace WebAPI.Controllers
             b.CurrentGameRoomId = _playerContext.Rooms.First().Id;
             _playerContext.Players.Add(f);
 
-
             _playerContext.Players.Add(b);
 
             _playerContext.Items.Add(DummyValues.Item);
 
             _playerContext.Stations.Add(DummyValues.Station);
-
-
 
             _playerContext.SaveChanges();
             return Ok();
@@ -164,6 +158,7 @@ namespace WebAPI.Controllers
                 TaskCode = GameTaskCode.Cook,
                 SerializedProperties = JsonConvert.SerializeObject(new CookSettingProperties())
             };
+
             _playerContext.TaskSettings.Add(cookSetting);
 
             var CleanSetting = new TaskSetting()

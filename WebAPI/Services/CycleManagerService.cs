@@ -47,6 +47,20 @@ namespace WebAPI.Services
                     PlayerId = player.Id,
                     SerializedProperties = String.Empty,
                 };
+
+                Log log = new Log()
+                {
+                    Id = Guid.NewGuid(),
+                    Created = DateTime.UtcNow,
+                    CreatedBy = "Game",
+                    EventText = "A cycle has magnificently ticked.",
+                    TriggeringPlayerId = gameId,
+                    IsPublic = true,
+                    RoomId = Guid.Empty,
+                    
+                };
+
+                _playerContext.Logs.Add(log);
                 _playerContext.GameActions.Add(ga);
                 _playerContext.TriggerNotifications.Add(notif);
             }

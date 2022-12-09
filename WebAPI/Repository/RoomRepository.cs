@@ -18,10 +18,6 @@ namespace WebAPI.Repository
         {
             Room requestedRoom = _playerContext.Rooms.FirstOrDefault(room => room.Id == roomId);
 
-            if (requestedRoom is null)
-            {
-                return new RoomDTO();
-            }
 
             var playersInRoom = _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToList();
 
@@ -40,11 +36,8 @@ namespace WebAPI.Repository
             return roomDTO;
         }
 
-        public void CreateNewRooms()
+        public void CreateNewRooms(Guid gameId)
         {
-
-            Guid gameId = Guid.NewGuid();
-
           //  Guid kitchen1ID = new Guid("c4ac05eb-8ad5-4320-8843-cb41a6906bc6");
             Guid kitchen2ID = new Guid("bf3accf0-a319-48c5-8c64-2a045d4b16e5");
             Guid entryHallID = new Guid("80998e1e-15ba-46bb-a1a8-b8b8c89c7004");
@@ -71,7 +64,7 @@ namespace WebAPI.Repository
                 newRooms.Add(newDbRoom);
             }
 
-            // Create room connections : la premier join sert à faire correspondre la salle par defaut + la salle d'initialisation.
+            // Create room connections : la premier join sert à faire correspondre la salle par defaut + la salle a initialiser.
             //                           Le deuxième join sert à faire correspondre le nom adjacent de la pièce à la pièce initée (impossible d'obtenir l'ID de la pièce par défaut).
             List<AdjacentRoom> adjacentRooms = newRooms.Join(defaultRooms,
                 nr1 => nr1.Name,

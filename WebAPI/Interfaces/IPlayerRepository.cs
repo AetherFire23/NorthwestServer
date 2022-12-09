@@ -18,5 +18,6 @@ public interface IPlayerRepository
     public PlayerDTO MapPlayerDTO(Guid playerId);
     public List<TriggerNotificationDTO> GetTriggerNotifications(Guid playerId, DateTime? timeStamp);
     public List<TriggerNotification> GetAllTriggersOfType(Guid playerId, NotificationType notificationType);
-}
+    public List<Log> GetAccessibleLogs(Guid playerId, DateTime? lastTimeStamp);
+} 
 
