@@ -360,6 +360,27 @@ namespace WebAPI.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("WebAPI.Entities.Expedition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LeaderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Expeditions");
+                });
+
             modelBuilder.Entity("WebAPI.Entities.Game", b =>
                 {
                     b.Property<Guid>("Id")

@@ -29,11 +29,10 @@ namespace WebAPI.Repository
             return stationDTO;
         }
 
-
         public void SaveStation(StationDTO station)
         {
-            var currentStation = GetStation(station.Id); 
-            currentStation.SerializedProperties = JsonConvert.SerializeObject(station.ExtraProperties); 
+            var currentStation = GetStation(station.Id);
+            currentStation.SerializedProperties = JsonConvert.SerializeObject(station.ExtraProperties);
 
             _playerContext.SaveChanges();
         }
@@ -43,7 +42,6 @@ namespace WebAPI.Repository
             var station = _playerContext.Stations.First(x => x.Id == stationId);
             return station;
         }
-
 
         private StationDTO CreateDTO<T>(Station station) // From Db
         {
@@ -57,7 +55,11 @@ namespace WebAPI.Repository
             };
         }
 
-        
+        // pt que jai juste besoin du nom de la room a la place 
+        //private StationTemplate InitializeStations(StationTemplate stationTemplate, LevelTemplate levelTemplate)
+        //{
+        //    // prendrait le nom de la room dans la template, faire un join 
+        //}
 
         private StationTemplate BuildStationsTemplates()
         {

@@ -43,6 +43,7 @@ namespace WebAPI.Repository
                 Room = roomDTO,
                 Logs = _playerRepository.GetAccessibleLogs(playerId, lastTimeStamp),
                 Rooms = GetAllRoomsInGame(player.GameId),
+                Expeditions = _playerContext.Expeditions.Where(x=> x.GameId == player.GameId).ToList()
             };
 
             return gameState;

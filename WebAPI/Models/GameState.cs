@@ -1,5 +1,6 @@
 ﻿using WebAPI.Db_Models;
 using WebAPI.DTOs;
+using WebAPI.Entities;
 
 namespace WebAPI.Models
 {
@@ -16,6 +17,9 @@ namespace WebAPI.Models
         public List<Log> Logs { get; set; }
 
         public List<RoomDTO> Rooms { get; set; }
+
+        public List<Expedition> Expeditions { get; set; }
+
         public DateTime? TimeStamp { get; set; }
     }
 }

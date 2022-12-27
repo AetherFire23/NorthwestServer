@@ -53,7 +53,7 @@ namespace WebAPI.Services
                 return ClientCallResult.Success;
             }
 
-            return ClientCallResult.Success;
+            return ClientCallResult.Failure;
         }
     }
 }

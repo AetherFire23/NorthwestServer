@@ -88,6 +88,32 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Route("InitiateExpedition")]
+        public async Task<ActionResult<ClientCallResult>> JoinExpedition(Guid playerId, string expeditionName)
+        {
+            var player = _playerRepository.GetPlayer(playerId);
+            var expedition = _playerContext.Expeditions.First(x => x.Name == expeditionName && player.GameId == x.GameId);
+
+            if(expedition.IsCreated)
+            {
+                // join as new member ?
+            }
+
+            if(expedition.IsAvailableForCreation)
+            {
+                // create ?
+
+            }
+
+            //if()
+
+            // if no expedition of given name, initialize a new one.
+            // if no 
+
+            return ClientCallResult.Success;
+        }
+
+        [HttpPut]
         [Route("ChangeRoom")]
         public async Task<ActionResult<ClientCallResult>> ChangeRoom(Guid playerId, string targetRoomName)
         {
@@ -123,6 +149,8 @@ namespace WebAPI.Controllers
             _playerContext.Items.Add(DummyValues.Item);
 
             _playerContext.Stations.Add(DummyValues.Station);
+
+            _playerContext.Expeditions.Add(DummyValues.Expedition1);
 
             _playerContext.SaveChanges();
             return Ok();

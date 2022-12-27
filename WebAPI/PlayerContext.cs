@@ -34,6 +34,8 @@ namespace WebAPI
 
         public DbSet<LogAccessPermissions> LogAccessPermission { get; set; }
 
+        public DbSet<Expedition> Expeditions { get; set; }
+
         //There is constructor injection. This must exist to be configurable in Program.cs
         public PlayerContext(DbContextOptions<PlayerContext> options) : base(options)
         {

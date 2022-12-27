@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Runtime.CompilerServices;
 using WebAPI.Db_Models;
 using WebAPI.Entities;
 using WebAPI.Enums;
@@ -67,6 +68,16 @@ namespace WebAPI.Dummies
             Id = defaultGameGuid,
             Active = true,
             NextTick = DateTime.UtcNow.AddSeconds(5),
+        };
+
+        public static Expedition Expedition1 = new Expedition()
+        {
+            Name = "Expedition1",
+            GameId = defaultGameGuid,
+            Id = new Guid("5e77ae8e-5d92-42d9-836d-2ef8720a12f7"),
+            IsAvailableForCreation = true,
+            IsCreated = false,
+            LeaderId = Guid.Empty,
         };
     }
 }
