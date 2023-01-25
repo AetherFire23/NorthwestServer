@@ -7,7 +7,7 @@ namespace WebAPI.Services
 {
     public class CycleManagerService : ICycleManagerService
     {
-        private int _offsetInSeconds = 5;
+        public static int TimeBetweenTicksInSeconds = 5;
         private readonly PlayerContext _playerContext;
         private readonly IGameRepository _gameRepository;
         private readonly IPlayerRepository _playerRepository;
@@ -65,7 +65,7 @@ namespace WebAPI.Services
                 _playerContext.TriggerNotifications.Add(notif);
             }
 
-            game.NextTick = DateTime.UtcNow.AddSeconds(this._offsetInSeconds);
+            game.NextTick = DateTime.UtcNow.AddSeconds(TimeBetweenTicksInSeconds);
 
             _playerContext.SaveChanges();
             Console.WriteLine("Game Has ticked");

@@ -12,12 +12,14 @@ namespace WebAPI.Repository
         {
             _playerContext = playerContext;
         }
+
         public List<Game> GetTickableGames()
         {
             var currentDate = DateTime.UtcNow;
             var games = _playerContext.Games.Where(x => x.NextTick < currentDate && x.Active).ToList();
             return games;
         }
+
         public Game GetGame(Guid id)
         {
             var game = _playerContext.Games.First(x => x.Id == id);

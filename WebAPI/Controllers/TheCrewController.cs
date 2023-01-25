@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using WebAPI.Db_Models;
 using WebAPI.Dummies;
@@ -27,6 +28,7 @@ namespace WebAPI.Controllers
         private readonly IGameStateService _gameStateService;
         private readonly IGameTaskService _gameTaskService;
         private readonly IFriendService _friendService;
+        private readonly IGameMakerService _gameMakerService;
 
         public TheCrewController(ILogger<TheCrewController> logger,
             PlayerContext playerContext,
@@ -39,7 +41,8 @@ namespace WebAPI.Controllers
             IPlayerService playerService,
             IGameStateService gameStateService,
             IGameTaskService gameTaskService,
-            IFriendService friendService)
+            IFriendService friendService,
+            IGameMakerService gameMakerService)
         {
             _logger = logger;
             _playerRepository = playerRepository;
@@ -53,6 +56,7 @@ namespace WebAPI.Controllers
             _gameStateService = gameStateService;
             _gameTaskService = gameTaskService;
             _friendService = friendService;
+            _gameMakerService = gameMakerService;
         }
 
         [HttpGet]
@@ -87,6 +91,8 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+
+        // jva toute deleter
         [HttpPut]
         [Route("InitiateExpedition")]
         public async Task<ActionResult<ClientCallResult>> JoinExpedition(Guid playerId, string expeditionName)
@@ -94,21 +100,16 @@ namespace WebAPI.Controllers
             var player = _playerRepository.GetPlayer(playerId);
             var expedition = _playerContext.Expeditions.First(x => x.Name == expeditionName && player.GameId == x.GameId);
 
-            if(expedition.IsCreated)
+            if (expedition.IsCreated)
             {
                 // join as new member ?
             }
 
-            if(expedition.IsAvailableForCreation)
+            if (expedition.IsAvailableForCreation)
             {
                 // create ?
 
             }
-
-            //if()
-
-            // if no expedition of given name, initialize a new one.
-            // if no 
 
             return ClientCallResult.Success;
         }
@@ -126,6 +127,16 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
         {
             var t = _mainMenuRepository.GetMainMenuState(userId);
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("1-CreateNewGameDummyGame")]
+        public async Task<ActionResult> CreateNewGameDummyGame()
+        {
+
+
+            _gameMakerService.CreateDummyGame();
             return Ok();
         }
 

@@ -1,4 +1,5 @@
 ﻿using WebAPI.DTOs;
+using WebAPI.Models;
 
 namespace WebAPI.Interfaces
 {
@@ -6,5 +7,6 @@ namespace WebAPI.Interfaces
     {
         public StationDTO RetrieveStation<T>(Guid playerId, string stationName);
         public void SaveStation(StationDTO station);
+        public StationTemplate CreateAndAddStationsToDb();
     }
 }

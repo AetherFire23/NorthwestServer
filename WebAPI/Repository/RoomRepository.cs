@@ -14,6 +14,12 @@ namespace WebAPI.Repository
             _playerContext = playerContext;
         }
 
+        public List<Room> GetAllRooms(Guid gameId)
+        {
+            var rooms = _playerContext.Rooms.Where(x => x.GameId == gameId).ToList();
+            return rooms;
+        }
+        
         public RoomDTO GetRoomDTO(Guid roomId)
         {
             Room requestedRoom = _playerContext.Rooms.FirstOrDefault(room => room.Id == roomId);
@@ -36,16 +42,20 @@ namespace WebAPI.Repository
             return roomDTO;
         }
 
+        /// <summary>
+        /// Initializes level with the given gameId
+        /// </summary>
+        /// <param name="gameId"></param>
         public void CreateNewRooms(Guid gameId)
         {
           //  Guid kitchen1ID = new Guid("c4ac05eb-8ad5-4320-8843-cb41a6906bc6");
             Guid kitchen2ID = new Guid("bf3accf0-a319-48c5-8c64-2a045d4b16e5");
             Guid entryHallID = new Guid("80998e1e-15ba-46bb-a1a8-b8b8c89c7004");
-            var GetTemplate = BuildLevelTemplate();
+            var levelTemplate = BuildLevelTemplate();
 
             // Get default rooms 
             var defaultRooms = typeof(LevelTemplate).GetProperties()
-                .Select(x => x.GetValue(GetTemplate))
+                .Select(x => x.GetValue(levelTemplate))
                 .Select(x => (RoomTemplate)x).ToList();
 
 
@@ -86,7 +96,7 @@ namespace WebAPI.Repository
             _playerContext.SaveChanges(); // saved ! 
         }
 
-        public LevelTemplate BuildLevelTemplate()
+        private LevelTemplate BuildLevelTemplate()
         {
             LevelTemplate levelTemplate = new()
             {
@@ -124,10 +134,10 @@ namespace WebAPI.Repository
                     },
                     RoomType = RoomType.Start
                 },
+
+
+
             };
-
-
-
             return levelTemplate;
         }
     }

@@ -18,18 +18,17 @@ namespace WebAPI.Repository
             _roomRepository = roomRepository;
         }
 
-        public GameState GetPlayerGameState(Guid playerId, DateTime? lastTimeStamp) // va appeler a etre modified pour le cheating car jenvoie tout en meme temps 
+        public GameState GetPlayerGameState(Guid playerId, DateTime? lastTimeStamp)
         {
             //temp
-            Player player = _playerContext.Players.First(player => player.Id == playerId);
+            //Player player = _playerContext.Players.FirstOrDefault(player => player.Id == playerId);
+            Player player = _playerRepository.GetPlayer(playerId);
 
-            PlayerDTO playerDTO = _playerRepository.MapPlayerDTO(playerId); // delete roomid, add private chatroom
-            //List<PrivateInvitation> invitations = _playerRepository.GetPlayerInvitations(playerDTO.Id);
+            PlayerDTO playerDTO = _playerRepository.MapPlayerDTO(playerId);
             List<Message> newMessages = GetNewMessages(lastTimeStamp, playerDTO.GameId);
             List<Player> players = _playerRepository.GetPlayersInGame(playerDTO.GameId);
             DateTime timeStamp = DateTime.UtcNow;
             List<PrivateChatRoomParticipant> chatRoomParticipants = GetChatRoomsWithMainPlayerInIt(playerDTO.Id);
-            // RoomDTO roomDTO = _playerRepository.GetRoomDTO(player.CurrentGameRoomId); // bug ici ofc car je nai pa de room mesemble
 
             RoomDTO roomDTO = _roomRepository.GetRoomDTO(player.CurrentGameRoomId);
             var gameState = new GameState()
@@ -43,7 +42,6 @@ namespace WebAPI.Repository
                 Room = roomDTO,
                 Logs = _playerRepository.GetAccessibleLogs(playerId, lastTimeStamp),
                 Rooms = GetAllRoomsInGame(player.GameId),
-                Expeditions = _playerContext.Expeditions.Where(x=> x.GameId == player.GameId).ToList()
             };
 
             return gameState;
@@ -56,7 +54,6 @@ namespace WebAPI.Repository
             List<RoomDTO> roomDTOs = roomsInGame.Select(x => _roomRepository.GetRoomDTO(x.Id)).ToList();
 
             return roomDTOs;
-
         }
 
         public List<PrivateChatRoomParticipant> GetChatRoomsWithMainPlayerInIt(Guid playerID)

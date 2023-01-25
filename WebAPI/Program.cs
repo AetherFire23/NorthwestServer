@@ -21,8 +21,7 @@ namespace WebAPI
             // Add services to the container.
             builder.Services.AddControllers();
 
-
-
+       
             RegisterGameTaskTypes(builder);
 
             builder.Services.AddQuartz(q =>
@@ -60,7 +59,7 @@ namespace WebAPI
                 //);
 
 
-               // 3.once
+                // 3.once
                 q.ScheduleJob<CycleJob>(trigger => trigger
                     .WithIdentity("Combined Configuration Trigger")
                     .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
@@ -88,6 +87,9 @@ namespace WebAPI
             builder.Services.AddScoped<IFriendService, FriendService>();
             builder.Services.AddScoped<IGameStateService, GameStateService>();
             builder.Services.AddScoped<IChatService, ChatService>();
+            builder.Services.AddScoped<IGameMakerService, GameMakerService>();
+
+
 
             // Repos
             builder.Services.AddScoped<IGameRepository, GameRepository>();
@@ -98,9 +100,9 @@ namespace WebAPI
             builder.Services.AddScoped<IStationRepository, StationRepository>();
             builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
+            builder.Services.AddScoped<IGameMakerRepository, GameMakerRepository>();
 
 
-            
             // Injection jobs
             builder.Services.AddTransient<CycleJob>();
 
@@ -121,27 +123,39 @@ namespace WebAPI
 
             });
 
-            //Cant use builder after building.
+            // Cant use builder after building.
             var app = builder.Build();
 
             app.UseHttpLogging();
 
+
+
+
+
             //Migration
             using (var scope = app.Services.CreateScope())
             {
+
                 try
                 {
+                    // this deletes and recreates the whole databse when it is launched.
                     var playerContextService = scope.ServiceProvider.GetService<PlayerContext>();
-                    //context.Database.EnsureDeleted(); // deocher our recommecner
+                    playerContextService.Database.EnsureDeleted(); // deocher our recommecner
                     playerContextService.Database.Migrate();
-                }
 
+                    
+                    var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
+                    gameMakerService.CreateDummyGame();
+
+                }
                 catch (Exception ex)
                 {
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred");
                 }
             }
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -157,6 +171,8 @@ namespace WebAPI
             app.MapControllers();
 
             app.Run();
+
+
         }
 
         private static void RegisterGameTaskTypes(WebApplicationBuilder builder)

@@ -5,6 +5,8 @@
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
         public string Name { get; set; }
+
+        // What differentiates it from the Entity.
         public List<string> AdjacentNames { get; set; }
         public RoomType RoomType { get; set; }
     }

@@ -14,6 +14,18 @@ namespace WebAPI.Dummies
         public static Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
         public static Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
 
+        public static User RealFred = new User()
+        {
+            Id = defaultPlayer1Guid,
+            Username = "RealFred",
+        };
+
+        public static User RealBen = new User()
+        {
+            Id = defaultplayer2guid,
+            Username = "RealBen",
+        };
+
         public static Player Ben = new Player()
         {
             ActionPoints = 4,
