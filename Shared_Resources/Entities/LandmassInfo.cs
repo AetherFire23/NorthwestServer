@@ -1,4 +1,4 @@
-﻿using Shared_Resources.Db_Models;
+﻿using Shared_Resources.Entities;
 
 namespace Shared_Resources.Entities
 {

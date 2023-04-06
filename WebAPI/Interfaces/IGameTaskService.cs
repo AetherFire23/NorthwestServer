@@ -1,5 +1,5 @@
-﻿using WebAPI.GameTasks;
-using WebAPI.Models;
+﻿using Shared_Resources.GameTasks;
+using Shared_Resources.Models;
 
 namespace WebAPI.Interfaces
 {

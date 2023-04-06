@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
-using WebAPI.Db_Models;
-using WebAPI.DTOs;
+using Shared_Resources.DTOs;
+using Shared_Resources.Entities;
+using Shared_Resources.Enums;
+using Shared_Resources.GameTasks;
+using Shared_Resources.Models;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 
 namespace WebAPI.Repository
 {
@@ -69,7 +71,7 @@ namespace WebAPI.Repository
             {
                 Name = "CookStation1",
                 Id = Guid.NewGuid(),
-                GameTaskCode = GameTasks.GameTaskCode.Cook,
+                GameTaskCode = GameTaskCode.Cook,
                 SerializedProperties = SerializedDefaultCookStation,
                 GameId = gameId
             };
@@ -78,7 +80,7 @@ namespace WebAPI.Repository
             {
                 Name = "CannonStation",
                 Id = Guid.NewGuid(),
-                GameTaskCode = GameTasks.GameTaskCode.Kill,
+                GameTaskCode = GameTaskCode.Kill,
                 SerializedProperties = SerializedDefaultCannonProperty,
                 GameId = gameId
 
@@ -105,14 +107,14 @@ namespace WebAPI.Repository
 
         public static string SerializedDefaultCannonProperty = JsonConvert.SerializeObject(new CannonProperties()
         {
-            State = Enums.State.Pristine,
+            State = State.Pristine,
             Ammo = 5,
         });
 
         public static string SerializedDefaultCookStation = JsonConvert.SerializeObject(new CookStationProperties()
         {
             MoneyMade = 5,
-            State = Enums.State.Pristine,
+            State = State.Pristine,
         });
 
         public static string SerializedStation1DefaultProperty = JsonConvert.SerializeObject(new Station1Property()

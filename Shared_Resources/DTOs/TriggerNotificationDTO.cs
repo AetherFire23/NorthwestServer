@@ -1,6 +1,5 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.DTOs;
-using Shared_Resources.Enums;
+﻿using Shared_Resources.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shared_Resources.DTOs
 {

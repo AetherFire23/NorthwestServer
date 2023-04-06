@@ -1,5 +1,5 @@
 ﻿using Quartz.Core;
-using WebAPI.Entities;
+using Shared_Resources.Entities;
 
 namespace WebAPI.Interfaces
 {

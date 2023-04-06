@@ -1,4 +1,4 @@
-﻿using WebAPI.Enums;
+﻿using Shared_Resources.Enums;
 
 namespace WebAPI.Temp_settomgs
 {

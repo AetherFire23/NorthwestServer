@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shared_Resources.Entities;
+using Shared_Resources.Enums;
 using System.Security.Cryptography.X509Certificates;
 using WebAPI;
 using WebAPI.Dummies;
@@ -54,7 +56,7 @@ namespace TestProject1
                     GameId = Guid.NewGuid(),
                     HealthPoints = 0,
                     Name = "UTest",
-                    Profession = WebAPI.Enums.RoleType.Commander,
+                    Profession = RoleType.Commander,
                     X = 2f,
                     Y = 0,
                     Z = 0,

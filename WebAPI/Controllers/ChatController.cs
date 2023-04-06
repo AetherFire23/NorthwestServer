@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Shared_Resources.Models;
 using System.Security.AccessControl;
-using WebAPI.Db_Models;
-using WebAPI.Enums;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {

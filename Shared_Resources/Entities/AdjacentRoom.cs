@@ -1,7 +1,7 @@
 ﻿using Shared_Resources.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shared_Resources.Db_Models
+namespace Shared_Resources.Entities
 {
     public class AdjacentRoom : IEntity
     {

@@ -1,5 +1,4 @@
-﻿using WebAPI.Entities;
-
+﻿
 namespace WebAPI.Interfaces
 {
     public interface ICycleManagerService

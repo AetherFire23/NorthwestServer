@@ -1,10 +1,12 @@
-﻿namespace WebAPI.Temp_settomgs
+﻿using Shared_Resources.GameTasks;
+
+namespace WebAPI.Temp_settomgs
 {
     public class TaskSettingsModel
     {
         public TaskSetting CookSetting = new TaskSetting()
         {
-            TaskCode = GameTasks.GameTaskCode.Cook,
+            TaskCode = GameTaskCode.Cook,
         };
     }
 }

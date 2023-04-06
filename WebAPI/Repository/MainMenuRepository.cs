@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
-using WebAPI.Db_Models;
+using Shared_Resources.Entities;
+using Shared_Resources.Models;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 
 namespace WebAPI.Repository
 {

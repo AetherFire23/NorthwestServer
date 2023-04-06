@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Quartz.Core;
+using Shared_Resources.DTOs;
+using Shared_Resources.Entities;
+using Shared_Resources.Enums;
 using System.Text;
 using WebAPI;
-using WebAPI.Db_Models;
-using WebAPI.DTOs;
-using WebAPI.Enums;
 
 public class PlayerRepository : IPlayerRepository
 {

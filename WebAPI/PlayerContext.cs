@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebAPI.Db_Models;
-using WebAPI.Entities;
-using WebAPI.Enums;
+using Shared_Resources.Entities;
+using Shared_Resources.Enums;
 using WebAPI.Game_Actions;
 using WebAPI.Temp_settomgs;
 

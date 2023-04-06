@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GameState Management\**" />
     <Compile Remove="Game_Actions\NewFolder\**" />
     <Compile Remove="Game_Settings\**" />
+    <Content Remove="GameState Management\**" />
     <Content Remove="Game_Actions\NewFolder\**" />
     <Content Remove="Game_Settings\**" />
+    <EmbeddedResource Remove="GameState Management\**" />
     <EmbeddedResource Remove="Game_Actions\NewFolder\**" />
     <EmbeddedResource Remove="Game_Settings\**" />
+    <None Remove="GameState Management\**" />
     <None Remove="Game_Actions\NewFolder\**" />
     <None Remove="Game_Settings\**" />
   </ItemGroup>
@@ -30,7 +34,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Quartz.AspNetCore" Version="3.5.0" />
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.5.0" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
@@ -43,8 +47,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GameState Management\Game State Service\" />
     <Folder Include="GameTasks\Stations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared_Resources\Shared_Resources.csproj" />
   </ItemGroup>
 
 </Project>

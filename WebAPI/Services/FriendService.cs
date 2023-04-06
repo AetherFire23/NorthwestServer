@@ -1,5 +1,5 @@
-﻿using WebAPI.Interfaces;
-using WebAPI.Models;
+﻿using Shared_Resources.Models;
+using WebAPI.Interfaces;
 
 namespace WebAPI.Services
 {

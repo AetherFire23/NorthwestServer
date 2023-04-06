@@ -1,4 +1,5 @@
 
+using Shared_Resources.GameTasks;
 using WebAPI.Interfaces;
 
 namespace WebAPI.GameTasks

@@ -1,5 +1,5 @@
-﻿using WebAPI.Db_Models;
-using WebAPI.Entities;
+﻿using Shared_Resources.Entities;
+using Shared_Resources.Enums;
 using WebAPI.Game_Actions;
 using WebAPI.Interfaces;
 
@@ -33,7 +33,7 @@ namespace WebAPI.Services
                     Created = DateTime.UtcNow,
                     CreatedBy = "game",
                     GameId = gameId,
-                    GameActionType = Enums.GameActionType.CycleTick,
+                    GameActionType = GameActionType.CycleTick,
                     SerializedProperties = String.Empty,
                     
                 };
@@ -43,7 +43,7 @@ namespace WebAPI.Services
                     Created = DateTime.UtcNow,
                     IsReceived = false,
                     GameActionId = ga.Id,
-                    NotificationType = Enums.NotificationType.CycleChanged,
+                    NotificationType = NotificationType.CycleChanged,
                     PlayerId = player.Id,
                     SerializedProperties = String.Empty,
                 };

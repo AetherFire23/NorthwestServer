@@ -1,6 +1,4 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.DTOs;
-using Shared_Resources.Enums;
+﻿using Newtonsoft.Json;
 using Shared_Resources.GameTasks;
 
 namespace Shared_Resources.DTOs

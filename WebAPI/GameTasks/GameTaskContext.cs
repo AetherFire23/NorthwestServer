@@ -1,5 +1,6 @@
-using WebAPI.DTOs;
-using WebAPI.Models;
+
+using Shared_Resources.DTOs;
+using Shared_Resources.Models;
 
 namespace WebAPI.GameTasks
 {

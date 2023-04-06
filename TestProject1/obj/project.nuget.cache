@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "s//7jQQ2n+UmDgRGGPhQXcr4bXO80Ws7ces7uLQVHNPzzyDJldSGW78YyxOpvu7+5lL3bQRxHoSnZ0LOP09XJw==",
+  "dgSpecHash": "8poJPvci1+OmRg3yLFzPeZJ4kIBlRDvoncEHhB4FGAL7AdjJEOnQRjwBcaaHaevwuV7z+JFjTrGxEMQq/BYJ3Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\balth\\WebAPI\\TestProject1\\UnitTests.csproj",
   "expectedPackageFiles": [
@@ -47,7 +47,7 @@
     "C:\\Users\\balth\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\balth\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\balth\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\balth\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\balth\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\balth\\.nuget\\packages\\nuget.frameworks\\5.11.0\\nuget.frameworks.5.11.0.nupkg.sha512",
     "C:\\Users\\balth\\.nuget\\packages\\quartz\\3.5.0\\quartz.3.5.0.nupkg.sha512",
     "C:\\Users\\balth\\.nuget\\packages\\quartz.aspnetcore\\3.5.0\\quartz.aspnetcore.3.5.0.nupkg.sha512",

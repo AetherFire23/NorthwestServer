@@ -1,8 +1,9 @@
-﻿using WebAPI.Db_Models;
-using WebAPI.DTOs;
-using WebAPI.Game_Actions;
+﻿using WebAPI.Game_Actions;
+using Shared_Resources.Entities;
+using Shared_Resources.Interfaces;
+using Shared_Resources.DTOs;
 using WebAPI.Interfaces;
-using WebAPI.Models;
+using Shared_Resources.Models;
 
 namespace WebAPI.Repository
 {

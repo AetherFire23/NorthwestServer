@@ -1,12 +1,12 @@
-﻿using WebAPI.Db_Models;
-using WebAPI.DTOs;
-using WebAPI.Entities;
+﻿
 using WebAPI.Interfaces;
 using WebAPI.Repository;
 using WebAPI.TestFolder;
 using WebAPI.Constants;
 using Newtonsoft.Json;
 using LandmassTests;
+using Shared_Resources.Entities;
+using Shared_Resources.DTOs;
 
 namespace WebAPI.Services
 {

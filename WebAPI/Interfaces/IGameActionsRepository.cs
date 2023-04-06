@@ -1,4 +1,4 @@
-﻿using WebAPI.Db_Models;
+﻿using Shared_Resources.Entities;
 
 namespace WebAPI.Interfaces
 {

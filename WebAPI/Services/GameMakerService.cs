@@ -1,11 +1,11 @@
-﻿using System.Data;
+﻿using Shared_Resources.Entities;
+using Shared_Resources.Enums;
+using Shared_Resources.Models;
+using System.Data;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
-using WebAPI.Db_Models;
 using WebAPI.Dummies;
-using WebAPI.Entities;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 using WebAPI.Repository;
 
 namespace WebAPI.Services
@@ -76,14 +76,14 @@ namespace WebAPI.Services
                     new PlayerSelections() // ben
                     {
                            UserId = DummyValues.RealBen.Id,
-                           RoleType = Enums.RoleType.Commander,
+                           RoleType = RoleType.Commander,
                            Name = "BenPlayer"
                     },
 
                     new PlayerSelections() // fred
                     {
                            UserId = DummyValues.RealFred.Id,
-                           RoleType = Enums.RoleType.Medic,
+                           RoleType = RoleType.Medic,
                            Name = "FredPlayer",
                     },
                 },
@@ -122,7 +122,7 @@ namespace WebAPI.Services
                     GameId = info.Game.Id,
                     HealthPoints = 0,
                     Name = selection.Name,
-                    Profession = Enums.RoleType.Commander,
+                    Profession = RoleType.Commander,
                     X = 0f,
                     Y = 0f,
                     Z = 0f,
@@ -142,9 +142,9 @@ namespace WebAPI.Services
             // modify bonuses/skills  from classes 
             switch (player.Profession)
             {
-                case Enums.RoleType.Commander: return;
-                case Enums.RoleType.Medic: return;
-                case Enums.RoleType.Engineer: return;
+                case RoleType.Commander: return;
+                case RoleType.Medic: return;
+                case RoleType.Engineer: return;
             }
             throw new Exception("Selected Profession has no settings defined.");
         }
@@ -198,7 +198,7 @@ namespace WebAPI.Services
                 IsDiscarded = false,
                 GameId = infos.Game.Id,
                 Name = "Expedition1",
-                Value = Enums.CardValue.Positive
+                Value = CardValue.Positive
             };
 
             Card neutralCard = new Card()
@@ -207,7 +207,7 @@ namespace WebAPI.Services
                 IsDiscarded = false,
                 GameId = infos.Game.Id,
                 Name = "Kitchen1",
-                Value = Enums.CardValue.Neutral
+                Value = CardValue.Neutral
             };
 
             Card badCard = new Card()
@@ -216,7 +216,7 @@ namespace WebAPI.Services
                 IsDiscarded = false,
                 GameId = infos.Game.Id,
                 Name = "EntryHall",
-                Value = Enums.CardValue.Negative
+                Value = CardValue.Negative
             };
 
             _playerContext.Cards.Add(goodCard);

@@ -1,6 +1,7 @@
 
+using Shared_Resources.GameTasks;
+using Shared_Resources.Models;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 
 namespace WebAPI.GameTasks
 {

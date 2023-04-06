@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shared_Resources.GameTasks;
+using Shared_Resources.Models;
 using System;
 using WebAPI.GameTasks;
 using WebAPI.Interfaces;
-using WebAPI.Models;
-using WebAPI.Repository;
 
 namespace WebAPI.Services
 {

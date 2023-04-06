@@ -1,11 +1,11 @@
 
-namespace WebAPI.GameTasks
-{
-    public enum GameTaskCode
-    {
-        Cook,
-        Clean,
-        Kill,
-        Repair
-    }
-}
+//namespace WebAPI.GameTasks
+//{
+//    public enum GameTaskCode
+//    {
+//        Cook,
+//        Clean,
+//        Kill,
+//        Repair
+//    }
+//}

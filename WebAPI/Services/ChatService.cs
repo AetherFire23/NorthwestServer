@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using WebAPI.Db_Models;
-using WebAPI.Enums;
+using Shared_Resources.Entities;
+using Shared_Resources.Enums;
+using Shared_Resources.Models;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 
 namespace WebAPI.Services
 {

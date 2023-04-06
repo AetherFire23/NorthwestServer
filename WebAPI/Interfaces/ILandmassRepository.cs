@@ -1,5 +1,4 @@
-﻿using WebAPI.DTOs;
-using WebAPI.Entities;
+﻿using Shared_Resources.DTOs;
 using WebAPI.TestFolder;
 
 namespace WebAPI.Interfaces

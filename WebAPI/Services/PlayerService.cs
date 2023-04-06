@@ -1,7 +1,8 @@
-﻿using WebAPI.Db_Models;
+﻿
+using Shared_Resources.Entities;
+using Shared_Resources.Models;
 using WebAPI.Game_Actions;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 
 namespace WebAPI.Services
 {

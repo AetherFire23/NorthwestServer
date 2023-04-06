@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Shared_Resources.Entities;
 using System.Runtime.CompilerServices;
-using WebAPI.Db_Models;
-using WebAPI.Entities;
-using WebAPI.Enums;
-using WebAPI.GameTasks;
-using WebAPI.Models;
+using Shared_Resources.Enums;
+using Shared_Resources.GameTasks;
+using Shared_Resources.Models;
 
 namespace WebAPI.Dummies
 {
@@ -35,7 +34,7 @@ namespace WebAPI.Dummies
             HealthPoints = 5,
             Id = defaultplayer2guid,
             Name = "Ben",
-            Profession = Enums.RoleType.Commander,
+            Profession = RoleType.Commander,
             X = -15,
             Y = -5,
             Z = 0,
@@ -50,7 +49,7 @@ namespace WebAPI.Dummies
             HealthPoints = 5,
             Id = defaultPlayer1Guid,
             Name = "Fred",
-            Profession = Enums.RoleType.Commander,
+            Profession = RoleType.Commander,
             X = -15,
             Y = -5,
             Z = 0,

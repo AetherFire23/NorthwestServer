@@ -17,9 +17,5 @@ namespace Shared_Resources.Entities
         public bool IsAvailableForCreation { get; set; }
 
         public bool IsCreated { get; set; }
-
-
-
-
     }
 }

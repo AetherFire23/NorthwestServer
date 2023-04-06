@@ -2,15 +2,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
-using WebAPI.Db_Models;
 using WebAPI.Dummies;
-using WebAPI.Entities;
-using WebAPI.Enums;
 using WebAPI.GameTasks;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 using WebAPI.Temp_settomgs;
 using WebAPI.AutoMapper;
+using Shared_Resources.Entities;
+using Shared_Resources.Models;
+using Shared_Resources.GameTasks;
 
 namespace WebAPI.Controllers
 {

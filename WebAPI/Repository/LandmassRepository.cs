@@ -2,12 +2,10 @@
 using Microsoft.AspNetCore.Http.Metadata;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Shared_Resources.DTOs;
+using Shared_Resources.Entities;
 using System.Xml;
-using WebAPI.Db_Models;
-using WebAPI.DTOs;
-using WebAPI.Entities;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 using WebAPI.TestFolder;
 
 namespace WebAPI.Repository

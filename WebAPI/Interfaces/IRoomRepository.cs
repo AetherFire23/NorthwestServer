@@ -1,6 +1,5 @@
-﻿using WebAPI.Db_Models;
-using WebAPI.DTOs;
-using WebAPI.Models;
+﻿using Shared_Resources.DTOs;
+using Shared_Resources.Entities;
 
 namespace WebAPI.Interfaces
 {
