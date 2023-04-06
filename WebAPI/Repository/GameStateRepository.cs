@@ -30,6 +30,7 @@ namespace WebAPI.Repository
             DateTime timeStamp = DateTime.UtcNow;
             List<PrivateChatRoomParticipant> chatRoomParticipants = GetChatRoomsWithMainPlayerInIt(playerDTO.Id);
 
+            //string serializedLayout = _playerContext.Landmass.First(l => l.GameId == playerDTO.GameId).SerializedLandmassLayout;
             RoomDTO roomDTO = _roomRepository.GetRoomDTO(player.CurrentGameRoomId);
             var gameState = new GameState()
             {
@@ -42,6 +43,7 @@ namespace WebAPI.Repository
                 Room = roomDTO,
                 Logs = _playerRepository.GetAccessibleLogs(playerId, lastTimeStamp),
                 Rooms = GetAllRoomsInGame(player.GameId),
+                SerializedLayout = string.Empty,
             };
 
             return gameState;

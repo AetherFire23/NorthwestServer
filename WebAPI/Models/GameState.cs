@@ -15,5 +15,6 @@ namespace WebAPI.Models
         public List<Log> Logs { get; set; }
         public List<RoomDTO> Rooms { get; set; }
         public DateTime? TimeStamp { get; set; }
+        public string SerializedLayout { get; set; }
     }
 }

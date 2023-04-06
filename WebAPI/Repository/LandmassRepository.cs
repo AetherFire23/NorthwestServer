@@ -1,53 +1,49 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using LandmassTests;
+using Microsoft.AspNetCore.Http.Metadata;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Xml;
 using WebAPI.Db_Models;
 using WebAPI.DTOs;
 using WebAPI.Entities;
 using WebAPI.Interfaces;
+using WebAPI.Models;
+using WebAPI.TestFolder;
 
 namespace WebAPI.Repository
 {
     public class LandmassRepository : ILandmassRepository
     {
         private readonly PlayerContext _playerContext;
-        public LandmassRepository(PlayerContext playerContext)
+        private readonly IRoomRepository _roomRepository;
+        private readonly IStationRepository _stationRepository;
+        public LandmassRepository(PlayerContext playerContext, IRoomRepository roomRepository,
+            IStationRepository stationRepository)
         {
             _playerContext = playerContext;
+            _roomRepository = roomRepository;
+            _stationRepository = stationRepository;
         }
 
-        // ForService
-        public void NextLandmass(Guid gameId)
+        public void SaveLandmassLayout(Guid gameId, LandmassLayout layout)
         {
-            var currentSetup = GetCurrentLandmassDeckSetup(gameId);
+            var jsonSettings = new JsonSerializerSettings();
+            jsonSettings.PreserveReferencesHandling = PreserveReferencesHandling.All;
+            string s = JsonConvert.SerializeObject(layout, jsonSettings);
 
-            List<Card> drawnRoomcards = DrawNextLandmassCards(currentSetup);
+            var land = _playerContext.Landmass.First(l => l.GameId == gameId);
+            land.SerializedLandmassLayout = s;
+            _playerContext.SaveChanges();
+        }
 
-            // les rooms sont jamais added ou removed, sont juste modifies selon le landmass actif.
-
-            var landmassRooms = new List<Room>();
-            
-            foreach (var roomCard in drawnRoomcards)
-            {
-                var room = _playerContext.Rooms.FirstOrDefault(x => x.Name == roomCard.Name);
-                landmassRooms.Add(room);
-            }
-
-            
-
-            // je devrais evidemment faire du pairing de stations rendu la.
-            // Je pense je vais faire un Dictionaire de <string, string> (roomName, stations)
-            // ConcurrentDictionary is the way to go.
-            // stationIds
-
-            
-
-            LandmassInfo landmassInfo = new LandmassInfo()
-            {
-                
-            };
-
-            SavePreviousLandmass(gameId);
-
-            SaveCards(currentSetup);
+        public LandmassLayout GetRandomLandmassLayout()
+        {
+            string serialized = File.ReadAllText("Layout.txt");
+            var layouts = JsonConvert.DeserializeObject<List<LandmassLayout>>(serialized);
+            Random r = new Random();
+            int randomIndex = r.Next(0, layouts.Count);
+            LandmassLayout randomLayout = layouts[randomIndex];
+            return randomLayout;
         }
 
         public void SavePreviousLandmass(Guid gameId)
@@ -58,30 +54,21 @@ namespace WebAPI.Repository
             };
         }
 
-        public List<Card> DrawNextLandmassCards(DecksSetup setup)
-        {
-            //Some logic that determines which are drawn
-            return null;
-        }
-
-
-
-        public DecksSetup GetCurrentLandmassDeckSetup(Guid gameId)
+        public LandmassCards GetCurrentLandmassDeckSetup(Guid gameId)
         {
             var allCards = _playerContext.Cards.Where(x => x.GameId == gameId).ToList();
-            DecksSetup setup = new DecksSetup(allCards);
+            LandmassCards setup = new LandmassCards(allCards);
             return setup;
         }
 
-        public void SaveCards(DecksSetup decksSetup)
+        public void SaveDecksSetup(LandmassCards decksSetup)
         {
-            foreach (var card in decksSetup._allCards)
+            foreach (var card in decksSetup.AllCards)
             {
                 var oldCard = _playerContext.Cards.FirstOrDefault(x => x.Id == card.Id);
                 oldCard.Value = card.Value;
                 oldCard.IsDiscarded = card.IsDiscarded;
             }
-
             _playerContext.SaveChanges();
         }
     }

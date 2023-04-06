@@ -21,7 +21,6 @@ namespace WebAPI
             // Add services to the container.
             builder.Services.AddControllers();
 
-       
             RegisterGameTaskTypes(builder);
 
             builder.Services.AddQuartz(q =>
@@ -37,29 +36,7 @@ namespace WebAPI
                     tp.MaxConcurrency = 10;
                 });
 
-                // 1. example
 
-                //q.ScheduleJob<HelloJob>(trigger => trigger
-                //    .WithIdentity("Combined Configuration Trigger")
-                //    .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(1)))
-                //    .WithDailyTimeIntervalSchedule(x => x.WithInterval(2, IntervalUnit.Second))
-                //    .WithDescription("my awesome trigger configured for a job with single call")
-                //);
-
-
-
-
-                //// 2. recurr cycles
-
-                // q.ScheduleJob<CycleJob>(trigger => trigger
-                //.WithIdentity("Combined Configuration Trigger")
-                //.StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(2)))
-                //.WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Second))
-                //.WithDescription("my awesome trigger configured for a job with single call")
-                //);
-
-
-                // 3.once
                 q.ScheduleJob<CycleJob>(trigger => trigger
                     .WithIdentity("Combined Configuration Trigger")
                     .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
@@ -101,7 +78,11 @@ namespace WebAPI
             builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IGameMakerRepository, GameMakerRepository>();
+            builder.Services.AddScoped<ILandmassRepository, LandmassRepository>();
+            builder.Services.AddScoped<ILandmassService, LandmassService>();
 
+            // Configure Automapper
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
             // Injection jobs
             builder.Services.AddTransient<CycleJob>();
@@ -122,6 +103,7 @@ namespace WebAPI
                 logging.ResponseBodyLogLimit = 4096;
 
             });
+
 
             // Cant use builder after building.
             var app = builder.Build();
@@ -144,8 +126,6 @@ namespace WebAPI
                     playerContextService.Database.Migrate();
 
                     
-                    var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
-                    gameMakerService.CreateDummyGame();
 
                 }
                 catch (Exception ex)
@@ -153,6 +133,10 @@ namespace WebAPI
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred");
                 }
+                var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
+
+                gameMakerService.CreateDummyGame();
+
             }
 
 

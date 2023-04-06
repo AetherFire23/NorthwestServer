@@ -1,10 +1,12 @@
 ﻿using System.Data;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using WebAPI.Db_Models;
 using WebAPI.Dummies;
 using WebAPI.Entities;
 using WebAPI.Interfaces;
 using WebAPI.Models;
+using WebAPI.Repository;
 
 namespace WebAPI.Services
 {
@@ -14,15 +16,19 @@ namespace WebAPI.Services
         private readonly IRoomRepository _roomRepository;
         private readonly IStationRepository _stationRepository;
         private readonly PlayerContext _playerContext;
+        private readonly ILandmassService _landmassService;
+
         public GameMakerService(PlayerContext playerContext,
             IGameMakerRepository gameMakerRepository,
             IRoomRepository roomRepository,
-            IStationRepository stationRepository)
+            IStationRepository stationRepository,
+            ILandmassService landmassService)
         {
             _gameMakerRepository = gameMakerRepository;
             _roomRepository = roomRepository;
             _stationRepository = stationRepository;
             _playerContext = playerContext;
+            _landmassService = landmassService;
         }
 
         public void CreateGame(NewGameInfo newGameInfo)
@@ -40,12 +46,18 @@ namespace WebAPI.Services
 
             _playerContext.Games.Add(newGame);
             _roomRepository.CreateNewRooms(gameGuid);
+
             // Need to initialize rooms before players, because player construction requires a GameRoomId.
             InitializePlayers(newGameInfo);
             InitializeItems(newGameInfo);
 
-            // Stations are tied to rooms, currently, only in services that interact with them in a hardcoded way.
-            _stationRepository.CreateAndAddStationsToDb();
+            // Stations are tied to rooms, currently, only in services that interact with them in a hardcoded way. - So stations can be created independently of rooms
+            _stationRepository.CreateAndAddStationsToDb(gameGuid);
+
+            //
+            //InitializeSerializedLandmass(newGameInfo);
+            //InitializeLandmassLayoutAndRooms(newGameInfo);
+
             _playerContext.SaveChanges();
         }
 
@@ -79,11 +91,23 @@ namespace WebAPI.Services
             CreateGame(info);
         }
 
+        public void InitializeSerializedLandmass(NewGameInfo infos)
+        {
+            var newLandmass = new Landmass()
+            {
+                Id = Guid.NewGuid(),
+                GameId = infos.Game.Id,
+                SerializedLandmassLayout = string.Empty,
+            };
+            _playerContext.Landmass.Add(newLandmass);
+            _playerContext.SaveChanges();
+        }
+
         public void InitializePlayers(NewGameInfo info)
         {
             /* 
               Will need to clarify what gets initialized before what.
-              for example, class cannot depend on starting room, and starting room also depend on class. One needs to be
+              for example, class cannot depend on starting room(for knowing which bonuses is applying), and starting room also depend on class. One needs to be
               created before the other. 
             */
             foreach (var user in info.Users)
@@ -103,6 +127,7 @@ namespace WebAPI.Services
                     Y = 0f,
                     Z = 0f,
                 };
+
                 InitializePlayerRoleSettings(newPlayer);
 
                 //Starting room might change according to some variables. 
@@ -126,14 +151,14 @@ namespace WebAPI.Services
 
         public Guid GetStartingRoomId(Player player, NewGameInfo info)
         {
-            var rooms = _roomRepository.GetAllRooms(info.Game.Id);
+            var rooms = _roomRepository.GetRoomsInGame(info.Game.Id);
             // some code that sets the startRoomId.
             return rooms.First().Id;
         }
 
         public void InitializeItems(NewGameInfo info)
         {
-            List<Room> rooms = _roomRepository.GetAllRooms(info.Game.Id);
+            List<Room> rooms = _roomRepository.GetRoomsInGame(info.Game.Id);
 
             var newItem = DummyValues.Item;
             newItem.OwnerId = rooms.First().Id;
@@ -153,6 +178,51 @@ namespace WebAPI.Services
             //        default: { throw new Exception($"{room.Name} has not been found while initializing items."); };
             //    }
             //}
+        }
+
+        public void InitializeLandmassLayoutAndRooms(NewGameInfo info)
+        {
+            this.InitializeLandmassCards(info);
+            _landmassService.NextLandmass(info.Game.Id);
+        }
+
+        private void InitializeLandmassCards(NewGameInfo infos)
+        {
+            // disons, pour l'instant,
+            // 1 carte bonne,
+            // 1 carte neutral,
+            // 1 carte mauvaise
+            Card goodCard = new Card()
+            {
+                Id = Guid.NewGuid(),
+                IsDiscarded = false,
+                GameId = infos.Game.Id,
+                Name = "Expedition1",
+                Value = Enums.CardValue.Positive
+            };
+
+            Card neutralCard = new Card()
+            {
+                Id = Guid.NewGuid(),
+                IsDiscarded = false,
+                GameId = infos.Game.Id,
+                Name = "Kitchen1",
+                Value = Enums.CardValue.Neutral
+            };
+
+            Card badCard = new Card()
+            {
+                Id = Guid.NewGuid(),
+                IsDiscarded = false,
+                GameId = infos.Game.Id,
+                Name = "EntryHall",
+                Value = Enums.CardValue.Negative
+            };
+
+            _playerContext.Cards.Add(goodCard);
+            _playerContext.Cards.Add(neutralCard);
+            _playerContext.Cards.Add(badCard);
+            _playerContext.SaveChanges();
         }
     }
 }

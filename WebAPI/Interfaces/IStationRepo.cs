@@ -1,4 +1,5 @@
-﻿using WebAPI.DTOs;
+﻿using WebAPI.Db_Models;
+using WebAPI.DTOs;
 using WebAPI.Models;
 
 namespace WebAPI.Interfaces
@@ -7,6 +8,10 @@ namespace WebAPI.Interfaces
     {
         public StationDTO RetrieveStation<T>(Guid playerId, string stationName);
         public void SaveStation(StationDTO station);
-        public StationTemplate CreateAndAddStationsToDb();
+        public StationTemplate CreateAndAddStationsToDb(Guid gameId);
+
+        public Station GetStationByName(Guid gameId, string name);
+        public List<Station> GetAllActiveLandmassStations(Guid gameId);
+
     }
 }

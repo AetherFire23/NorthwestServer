@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using WebAPI.GameTasks;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 using WebAPI.Temp_settomgs;
+using WebAPI.AutoMapper;
 
 namespace WebAPI.Controllers
 {
@@ -29,6 +31,7 @@ namespace WebAPI.Controllers
         private readonly IGameTaskService _gameTaskService;
         private readonly IFriendService _friendService;
         private readonly IGameMakerService _gameMakerService;
+        private readonly IMapper _mapper;
 
         public TheCrewController(ILogger<TheCrewController> logger,
             PlayerContext playerContext,
@@ -42,7 +45,8 @@ namespace WebAPI.Controllers
             IGameStateService gameStateService,
             IGameTaskService gameTaskService,
             IFriendService friendService,
-            IGameMakerService gameMakerService)
+            IGameMakerService gameMakerService,
+            IMapper mapper)
         {
             _logger = logger;
             _playerRepository = playerRepository;
@@ -57,6 +61,7 @@ namespace WebAPI.Controllers
             _gameTaskService = gameTaskService;
             _friendService = friendService;
             _gameMakerService = gameMakerService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -167,6 +172,8 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+
+
         [HttpPut]
         [Route("2-AddDefaultValues")]
         public async Task<ActionResult> AddDefaultValues()
@@ -209,6 +216,27 @@ namespace WebAPI.Controllers
             _playerContext.TaskSettings.Add(CleanSetting);
 
             _playerContext.SaveChanges();
+            return Ok();
+        }
+
+
+        [HttpPut]
+        [Route("Yeah")]
+        public async Task<ActionResult<DestMappa>> TEstMapper()
+        {
+            var src = new SourceMappa()
+            {
+                Name = "Fred",
+                Same = 3
+            };
+            var test = _mapper.Map<DestMappa>(src);
+            return Ok(test);
+        }
+
+        [HttpPut]
+        [Route("unitTestTest")]
+        public async Task<ActionResult> TestXUnit()
+        {
             return Ok();
         }
     }

@@ -17,6 +17,18 @@ namespace WebAPI.Repository
             _playerContext = playerContext;
         }
 
+        public Station GetStationByName(Guid gameId, string name)
+        {
+            var station = _playerContext.Stations.FirstOrDefault(s => s.GameId == gameId && s.Name == name);
+            return station;
+        }
+
+        public List<Station> GetAllActiveLandmassStations(Guid gameId)
+        {
+            var stations = _playerContext.Stations.Where(s => s.IsActive && s.GameId == gameId).ToList();
+            return stations;
+        }
+
         public StationDTO RetrieveStation<T>(Guid playerId, string stationName)
         {
             var player = _playerRepository.GetPlayer(playerId);
@@ -51,7 +63,7 @@ namespace WebAPI.Repository
             };
         }
 
-        public StationTemplate CreateAndAddStationsToDb()
+        public StationTemplate CreateAndAddStationsToDb(Guid gameId)
         {
             var cookstation = new Station()
             {
@@ -59,6 +71,7 @@ namespace WebAPI.Repository
                 Id = Guid.NewGuid(),
                 GameTaskCode = GameTasks.GameTaskCode.Cook,
                 SerializedProperties = SerializedDefaultCookStation,
+                GameId = gameId
             };
 
             var CannonStation = new Station()
@@ -67,6 +80,8 @@ namespace WebAPI.Repository
                 Id = Guid.NewGuid(),
                 GameTaskCode = GameTasks.GameTaskCode.Kill,
                 SerializedProperties = SerializedDefaultCannonProperty,
+                GameId = gameId
+
             };
 
             var stationsTemplate = new StationTemplate()
@@ -98,6 +113,11 @@ namespace WebAPI.Repository
         {
             MoneyMade = 5,
             State = Enums.State.Pristine,
+        });
+
+        public static string SerializedStation1DefaultProperty = JsonConvert.SerializeObject(new Station1Property()
+        {
+            SomeValue = 5,
         });
     }
 }

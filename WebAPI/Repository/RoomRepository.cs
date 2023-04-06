@@ -8,21 +8,56 @@ namespace WebAPI.Repository
     public class RoomRepository : IRoomRepository
     {
         private readonly PlayerContext _playerContext;
+        private readonly IRoomRepository _roomRepository;
 
         public RoomRepository(PlayerContext playerContext)
         {
             _playerContext = playerContext;
         }
 
-        public List<Room> GetAllRooms(Guid gameId)
+        public List<Room> GetAllLandmassRooms(Guid gameId)
+        {
+            var rooms = _playerContext.Rooms.Where(r => r.IsLandmass && r.GameId == gameId).ToList();
+            return rooms;
+        }
+
+        public List<Room> GetAllActiveLandmassRooms(Guid gameId)
+        {
+            var rooms = _playerContext.Rooms.Where(r => r.IsActive && r.IsActive && r.GameId == gameId).ToList();
+            return rooms;
+        }
+
+        public Room GetRoomById(Guid roomId)
+        {
+            var room = _playerContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+            return room;
+        }
+
+
+        public void RemoveFromAllConnectedRooms(Guid roomId)
+        {
+            var connections = _playerContext.AdjacentRooms.Where(x => x.RoomId == roomId || x.AdjacentId == roomId).ToList();
+            _playerContext.RemoveRange(connections);
+            if (connections is null) return;
+
+            _playerContext.SaveChanges();
+        }
+
+        public List<Room> GetRoomsInGame(Guid gameId)
         {
             var rooms = _playerContext.Rooms.Where(x => x.GameId == gameId).ToList();
             return rooms;
         }
-        
+
+        public Room GetRoomFromName(Guid gameId, string roomName)
+        {
+            var room = _playerContext.Rooms.FirstOrDefault(r => r.Name == roomName);
+            return room;
+        }
+
         public RoomDTO GetRoomDTO(Guid roomId)
         {
-            Room requestedRoom = _playerContext.Rooms.FirstOrDefault(room => room.Id == roomId);
+            Room requestedRoom = GetRoomById(roomId);
 
 
             var playersInRoom = _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToList();
@@ -48,7 +83,7 @@ namespace WebAPI.Repository
         /// <param name="gameId"></param>
         public void CreateNewRooms(Guid gameId)
         {
-          //  Guid kitchen1ID = new Guid("c4ac05eb-8ad5-4320-8843-cb41a6906bc6");
+            //  Guid kitchen1ID = new Guid("c4ac05eb-8ad5-4320-8843-cb41a6906bc6");
             Guid kitchen2ID = new Guid("bf3accf0-a319-48c5-8c64-2a045d4b16e5");
             Guid entryHallID = new Guid("80998e1e-15ba-46bb-a1a8-b8b8c89c7004");
             var levelTemplate = BuildLevelTemplate();
@@ -70,6 +105,7 @@ namespace WebAPI.Repository
                     GameId = gameId,
                     Name = defaultRoom.Name,
                     RoomType = defaultRoom.RoomType,
+                    IsLandmass = false,
                 };
                 newRooms.Add(newDbRoom);
             }
@@ -95,6 +131,8 @@ namespace WebAPI.Repository
 
             _playerContext.SaveChanges(); // saved ! 
         }
+
+
 
         private LevelTemplate BuildLevelTemplate()
         {

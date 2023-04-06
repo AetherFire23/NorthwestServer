@@ -39,6 +39,8 @@ namespace WebAPI
         public DbSet<Deck> Decks { get; set; }
         public DbSet<Card> Cards { get; set; }
 
+        public DbSet<Landmass> Landmass { get; set; }
+
         //There is constructor injection. This must exist to be configurable in Program.cs
         public PlayerContext(DbContextOptions<PlayerContext> options) : base(options)
         {
