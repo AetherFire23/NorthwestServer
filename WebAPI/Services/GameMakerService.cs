@@ -61,6 +61,12 @@ namespace WebAPI.Services
             _playerContext.SaveChanges();
         }
 
+        public void InsertVeryDummyValues()
+        {
+            _playerContext.TriggerNotifications.Add(DummyValues.TriggerNotification1);
+            _playerContext.SaveChanges();
+        }
+
         public void CreateDummyGame()
         {
             NewGameInfo info = new NewGameInfo()

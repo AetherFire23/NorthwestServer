@@ -1,0 +1,5 @@
+C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netcoreapp2.0\Shared_Resources.csproj.AssemblyReference.cache
+C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netcoreapp2.0\Shared_Resources.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netcoreapp2.0\Shared_Resources.AssemblyInfoInputs.cache
+C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netcoreapp2.0\Shared_Resources.AssemblyInfo.cs
+C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netcoreapp2.0\Shared_Resources.csproj.CoreCompileInputs.cache

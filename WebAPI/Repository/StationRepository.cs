@@ -71,7 +71,7 @@ namespace WebAPI.Repository
             {
                 Name = "CookStation1",
                 Id = Guid.NewGuid(),
-                GameTaskCode = GameTaskCode.Cook,
+                GameTaskCode = GameTaskCodes.Cook,
                 SerializedProperties = SerializedDefaultCookStation,
                 GameId = gameId
             };
@@ -80,7 +80,7 @@ namespace WebAPI.Repository
             {
                 Name = "CannonStation",
                 Id = Guid.NewGuid(),
-                GameTaskCode = GameTaskCode.Kill,
+                GameTaskCode = GameTaskCodes.Cook,
                 SerializedProperties = SerializedDefaultCannonProperty,
                 GameId = gameId
 

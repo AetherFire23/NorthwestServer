@@ -59,13 +59,24 @@ namespace WebAPI.Dummies
         {
             Id = Guid.NewGuid(),
             Name = "CookStation1", // pour faire la diff ds unity, va avoir besoin de template hehelol
-            GameTaskCode = GameTaskCode.Cook,
+            GameTaskCode = GameTaskCodes.Cook,
             GameId = defaultGameGuid,
             SerializedProperties = JsonConvert.SerializeObject(new CookStationProperties()
             {
                 MoneyMade = 5,
                 State = State.Pristine
             }),
+        };
+
+        public static TriggerNotification TriggerNotification1 = new TriggerNotification()
+        {
+            Id = Guid.NewGuid(),
+            Created = DateTime.UtcNow,
+            GameActionId = Guid.NewGuid(),
+            IsReceived = false,
+            NotificationType = NotificationType.CycleChanged,
+            PlayerId = Guid.Empty,
+            SerializedProperties = string.Empty,
         };
 
         public static Item Item = new Item()

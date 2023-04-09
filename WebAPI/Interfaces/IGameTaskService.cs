@@ -5,7 +5,7 @@ namespace WebAPI.Interfaces
 {
     public interface IGameTaskService
     {
-        public ClientCallResult ExecuteGameTask(Guid playerId, GameTaskCode taskCode, Dictionary<string, string> parameters);
+        public ClientCallResult ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, Dictionary<string, string> parameters);
 
 
     }

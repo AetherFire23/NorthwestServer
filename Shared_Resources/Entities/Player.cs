@@ -1,14 +1,13 @@
 ﻿using Shared_Resources.Entities;
 using Shared_Resources.DTOs;
 using Shared_Resources.Enums;
-using System.ComponentModel.DataAnnotations;
 using Shared_Resources.Interfaces;
+using System;
 
 namespace Shared_Resources.Entities
 {
     public class Player : IEntity
     {
-        [Key]
         public Guid Id { get; set; }
 
         public Guid GameId { get; set; }
@@ -25,7 +24,7 @@ namespace Shared_Resources.Entities
 
         public float Z { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public int HealthPoints { get; set; }
 

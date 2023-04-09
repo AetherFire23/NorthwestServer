@@ -12,14 +12,13 @@ namespace WebAPI.Services
         private readonly IGameStateRepository _gameStateRepository;
         private readonly IServiceProvider _serviceProvider;
 
-
         public GameTaskService(IGameStateRepository gameStateRepository, IServiceProvider serviceProvider)
         {
             _gameStateRepository = gameStateRepository;
             _serviceProvider = serviceProvider;
         }
 
-        public ClientCallResult ExecuteGameTask(Guid playerId, GameTaskCode taskCode, Dictionary<string, string> parameters)
+        public ClientCallResult ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, Dictionary<string, string> parameters)
         {
             var gameState = _gameStateRepository.GetPlayerGameState(playerId, null);
             if (gameState == null)

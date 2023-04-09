@@ -73,7 +73,7 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("TryExecuteGameTask")]
-        public async Task<ActionResult<ClientCallResult>> GameTask(Guid playerId, GameTaskCode taskCode, [FromBody] Dictionary<string, string> parameters)
+        public async Task<ActionResult<ClientCallResult>> GameTask(Guid playerId, GameTaskCodes taskCode, [FromBody] Dictionary<string, string> parameters)
         {
             ClientCallResult result = _gameTaskService.ExecuteGameTask(playerId, taskCode, parameters);
             return Ok(result);
@@ -200,7 +200,7 @@ namespace WebAPI.Controllers
             var cookSetting = new TaskSetting()
             {
                 Id = Guid.NewGuid(),
-                TaskCode = GameTaskCode.Cook,
+                TaskCode = GameTaskCodes.Cook,
                 SerializedProperties = JsonConvert.SerializeObject(new CookSettingProperties())
             };
 
@@ -209,7 +209,7 @@ namespace WebAPI.Controllers
             var CleanSetting = new TaskSetting()
             {
                 Id = Guid.NewGuid(),
-                TaskCode = GameTaskCode.Cook,
+                TaskCode = GameTaskCodes.Cook,
                 SerializedProperties = JsonConvert.SerializeObject(new CleanSettingProperties())
             };
             _playerContext.TaskSettings.Add(CleanSetting);

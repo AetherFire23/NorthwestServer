@@ -4,5 +4,6 @@
     {
 
         public void CreateDummyGame();
+        public void InsertVeryDummyValues();
     }
 }

@@ -6,7 +6,8 @@ using Shared_Resources.Entities;
 using Shared_Resources.Enums;
 using System.Text;
 using WebAPI;
-
+using System;
+using System.Collections.Generic;
 public class PlayerRepository : IPlayerRepository
 {
     PlayerContext _playerContext;

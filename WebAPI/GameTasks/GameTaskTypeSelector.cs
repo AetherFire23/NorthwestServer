@@ -1,14 +1,15 @@
-using Shared_Resources.GameTasks;
+﻿using Shared_Resources.GameTasks;
 using System.Collections.Concurrent;
 using System.Reflection;
+using WebAPI.GameTasks;
 
 namespace WebAPI.GameTasks
 {
     public static class GameTaskTypeSelector
     {
-        private static readonly IReadOnlyDictionary<GameTaskCode, Type> _gameTasksMap = CreateTaskTypesMap();
+        private static readonly IReadOnlyDictionary<GameTaskCodes, Type> _gameTasksMap = CreateTaskTypesMap();
 
-        public static Type GetGameTaskType(GameTaskCode taskCode)
+        public static Type GetGameTaskType(GameTaskCodes taskCode)
         {
             if (!_gameTasksMap.ContainsKey(taskCode))
             {
@@ -18,9 +19,9 @@ namespace WebAPI.GameTasks
             return _gameTasksMap[taskCode];
         }
 
-        private static ConcurrentDictionary<GameTaskCode, Type> CreateTaskTypesMap()
+        private static ConcurrentDictionary<GameTaskCodes, Type> CreateTaskTypesMap()
         {
-            var gameTasksMap = new Dictionary<GameTaskCode, Type>();
+            var gameTasksMap = new Dictionary<GameTaskCodes, Type>();
 
             foreach (Type gameTaskType in GetTaskTypes())
             {
@@ -29,16 +30,16 @@ namespace WebAPI.GameTasks
                 gameTasksMap.Add(attr.TaskCode, gameTaskType);
             }
 
-            return new ConcurrentDictionary<GameTaskCode, Type>(gameTasksMap);
+            return new ConcurrentDictionary<GameTaskCodes, Type>(gameTasksMap);
         }
 
         private static List<Type> GetTaskTypes()
         {
-            return typeof(IGameTask).Assembly.GetTypes()
+            var types = typeof(Program).Assembly.GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract
-                    && typeof(IGameTask).IsAssignableFrom(type)
-                    && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null)
-                .ToList();
+                && typeof(IGameTask).IsAssignableFrom(type)
+                && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null).ToList();
+            return types;
         }
     }
 }

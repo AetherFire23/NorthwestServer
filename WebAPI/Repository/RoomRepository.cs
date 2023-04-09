@@ -8,8 +8,6 @@ namespace WebAPI.Repository
     public class RoomRepository : IRoomRepository
     {
         private readonly PlayerContext _playerContext;
-        private readonly IRoomRepository _roomRepository;
-
         public RoomRepository(PlayerContext playerContext)
         {
             _playerContext = playerContext;
@@ -110,6 +108,23 @@ namespace WebAPI.Repository
                 newRooms.Add(newDbRoom);
             }
 
+
+            // Pas integrated ici
+            List<Room> newRooms2 = defaultRooms.Select(r => r.ToRoom()).ToList();
+
+            // For each new room made, initialize its connections
+            var adjacentRooms2 = newRooms2.Select(room => room.AdjacentRoomNames.Select(adjacentName =>
+                new AdjacentRoom()
+                {
+                    Id = Guid.NewGuid(),
+                    RoomId = room.Id,
+                    AdjacentId = newRooms2.Single(x => x.Name.Equals(adjacentName)).Id,
+                })).SelectMany(x => x);
+
+
+
+
+            // techniquement plus efficace I guess mais c<est degueulasse
             // Create room connections : la premier join sert à faire correspondre la salle par defaut + la salle a initialiser.
             //                           Le deuxième join sert à faire correspondre le nom adjacent de la pièce à la pièce initée (impossible d'obtenir l'ID de la pièce par défaut).
             List<AdjacentRoom> adjacentRooms = newRooms.Join(defaultRooms,
@@ -131,8 +146,6 @@ namespace WebAPI.Repository
 
             _playerContext.SaveChanges(); // saved ! 
         }
-
-
 
         private LevelTemplate BuildLevelTemplate()
         {

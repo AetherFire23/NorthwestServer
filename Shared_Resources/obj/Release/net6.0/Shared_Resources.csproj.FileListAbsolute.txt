@@ -1,6 +1,5 @@
 C:\Users\balth\WebAPI\Shared_Resources\bin\Release\net6.0\Shared_Resources.deps.json
 C:\Users\balth\WebAPI\Shared_Resources\bin\Release\net6.0\Shared_Resources.dll
-C:\Users\balth\WebAPI\Shared_Resources\bin\Release\net6.0\Shared_Resources.pdb
 C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\Shared_Resources.csproj.AssemblyReference.cache
 C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\Shared_Resources.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\Shared_Resources.AssemblyInfoInputs.cache
@@ -8,5 +7,4 @@ C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\Shared_Resources.Assem
 C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\Shared_Resources.csproj.CoreCompileInputs.cache
 C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\Shared_Resources.dll
 C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\refint\Shared_Resources.dll
-C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\Shared_Resources.pdb
 C:\Users\balth\WebAPI\Shared_Resources\obj\Release\net6.0\ref\Shared_Resources.dll

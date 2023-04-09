@@ -1,5 +1,6 @@
 ﻿using Shared_Resources.Entities;
-
+using System;
+using System.Collections.Generic;
 namespace Shared_Resources.DTOs
 {
     public class DeckDTO

@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System;
 
 namespace Shared_Resources.Entities
 {
     public class Expedition
     {
-        [Key]
         public Guid Id { get; set; }
 
 
         public Guid GameId { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public Guid LeaderId { get; set; }
 

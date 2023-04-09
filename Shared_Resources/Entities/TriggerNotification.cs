@@ -2,20 +2,20 @@
 using Shared_Resources.DTOs;
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System;
+
 namespace Shared_Resources.Entities
 {
     public class TriggerNotification
     {
-        [Key]
+        //[Key]
         public Guid Id { get; set; }
         public Guid GameActionId { get; set; }
         public Guid PlayerId { get; set; }
         public bool IsReceived { get; set; }
         public DateTime Created { get; set; }
 
-        [Column(TypeName = "nvarchar(30)")]
+        //[Column(TypeName = "nvarchar(30)")]
         public NotificationType NotificationType { get; set; }
 
         public string? SerializedProperties { get; set; }

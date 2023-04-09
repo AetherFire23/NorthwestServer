@@ -1,16 +1,14 @@
-using Shared_Resources.GameTasks;
-using System;
+﻿using Shared_Resources.GameTasks;
 
 namespace WebAPI.GameTasks
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class GameTaskAttribute : Attribute
     {
-        public GameTaskCode TaskCode { get; }
-
-        public GameTaskAttribute(GameTaskCode taskCode)
+        public GameTaskCodes TaskCode;
+        public GameTaskAttribute(GameTaskCodes gt)
         {
-            TaskCode = taskCode;
+            TaskCode = gt;
         }
     }
 }

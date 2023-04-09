@@ -1,0 +1,4 @@
+C:\Users\balth\WebAPI\Shared_Resources\bin\Debug\net6.0\publish\Shared_Resources.dll
+C:\Users\balth\WebAPI\Shared_Resources\bin\Debug\net6.0\publish\Shared_Resources.deps.json
+C:\Users\balth\WebAPI\Shared_Resources\bin\Debug\net6.0\publish\Shared_Resources.dll.config
+C:\Users\balth\WebAPI\Shared_Resources\bin\Debug\net6.0\publish\Newtonsoft.Json.dll

@@ -8,15 +8,19 @@
 
   <ItemGroup>
     <Compile Remove="GameState Management\**" />
+    <Compile Remove="GameTasks_old\Stations\**" />
     <Compile Remove="Game_Actions\NewFolder\**" />
     <Compile Remove="Game_Settings\**" />
     <Content Remove="GameState Management\**" />
+    <Content Remove="GameTasks_old\Stations\**" />
     <Content Remove="Game_Actions\NewFolder\**" />
     <Content Remove="Game_Settings\**" />
     <EmbeddedResource Remove="GameState Management\**" />
+    <EmbeddedResource Remove="GameTasks_old\Stations\**" />
     <EmbeddedResource Remove="Game_Actions\NewFolder\**" />
     <EmbeddedResource Remove="Game_Settings\**" />
     <None Remove="GameState Management\**" />
+    <None Remove="GameTasks_old\Stations\**" />
     <None Remove="Game_Actions\NewFolder\**" />
     <None Remove="Game_Settings\**" />
   </ItemGroup>
@@ -47,7 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GameTasks\Stations\" />
+    <Folder Include="Scratches\" />
   </ItemGroup>
 
   <ItemGroup>

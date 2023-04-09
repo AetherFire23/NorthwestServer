@@ -1,5 +1,5 @@
 ﻿using Shared_Resources.Enums;
-using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace Shared_Resources.DTOs
 {

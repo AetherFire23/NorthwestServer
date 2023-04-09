@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
+using System.Reflection;
+using WebAPI.EntityConfigurations;
 using WebAPI.Game_Actions;
 using WebAPI.Temp_settomgs;
 
@@ -56,6 +59,40 @@ namespace WebAPI
                 .Entity<TriggerNotification>()
                 .Property(e => e.NotificationType)
                 .HasConversion(new EnumToStringConverter<NotificationType>());
+
+            modelBuilder
+                .Entity<Room>()
+                .Ignore(e => e.AdjacentRoomNames);
+
+            modelBuilder.Entity<TriggerNotification>()
+                .Property(e => e.IsReceived)
+                .HasConversion(
+                v => v.ToString(),
+                v => Convert.ToBoolean(v));
+
+
+
+
+            // DEMANDER A BEN PK TOUTE CASSE WTFFFF
+
+            //modelBuilder.Entity<Player>()
+            //    .Property(e => e.Profession)
+            //    .HasConversion(new EnumToStringConverter<RoleType>());
+
+
+            //modelBuilder.Entity<TriggerNotification>()
+            //     .Property(e => e.IsReceived)
+            //     .HasConversion(
+            //    v => v.ToString(),
+            //    v => Convert.ToBoolean(v));
+
+            //modelBuilder.Entity<Player>()
+            //    .Property(e => e.Profession)
+            //    .HasConversion(
+            //    v => v.ToString(),
+            //    v => (RoleType)Enum.Parse(typeof(RoleType), v));
+
+            // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

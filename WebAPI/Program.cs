@@ -9,6 +9,10 @@ using WebAPI.Interfaces;
 using Quartz;
 using WebAPI.Jobs;
 using WebAPI.Services;
+using Shared_Resources.GameTasks;
+using WebAPI.GameTasks;
+using System.Linq;
+using Shared_Resources.GameTasks;
 
 namespace WebAPI
 {
@@ -22,6 +26,21 @@ namespace WebAPI
             builder.Services.AddControllers();
 
             RegisterGameTaskTypes(builder);
+
+            // Now split API and gameTask stuff
+            var unityTasks = typeof(IGameTask).Assembly.GetTypes()
+                .Where(type =>
+                type.IsClass && !type.IsAbstract
+                && typeof(IGameTask).IsAssignableFrom(type)).ToList();
+
+            var webAPITaks = typeof(GameTaskAttribute).Assembly.GetTypes()
+                .Where(type =>
+                type.IsClass && !type.IsAbstract
+                && typeof(IGameTask).IsAssignableFrom(type)
+                && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null).ToList();
+
+
+
 
             builder.Services.AddQuartz(q =>
             {
@@ -125,7 +144,7 @@ namespace WebAPI
                     playerContextService.Database.EnsureDeleted(); // deocher our recommecner
                     playerContextService.Database.Migrate();
 
-                    
+
 
                 }
                 catch (Exception ex)
@@ -135,6 +154,8 @@ namespace WebAPI
                 }
                 var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
 
+
+                gameMakerService.InsertVeryDummyValues();
                 gameMakerService.CreateDummyGame();
 
             }
@@ -159,14 +180,27 @@ namespace WebAPI
 
         }
 
+        //private static void RegisterGameTaskTypes(WebApplicationBuilder builder)
+        //{
+        //    var types = typeof(IGameTask).Assembly.GetTypes()
+        //        .Where(type => type.IsClass && !type.IsAbstract
+        //            && typeof(IGameTask).IsAssignableFrom(type)
+        //            && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
+
+        //    foreach (var type in types)
+        //    {
+        //        builder.Services.AddTransient(type);
+        //    }
+        //}
+
         private static void RegisterGameTaskTypes(WebApplicationBuilder builder)
         {
-            var types = typeof(IGameTask).Assembly.GetTypes()
+            var apiTypes = typeof(Program).Assembly.GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract
-                    && typeof(IGameTask).IsAssignableFrom(type)
-                    && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
+                && typeof(IGameTask).IsAssignableFrom(type)
+                && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
 
-            foreach (var type in types)
+            foreach (var type in apiTypes)
             {
                 builder.Services.AddTransient(type);
             }

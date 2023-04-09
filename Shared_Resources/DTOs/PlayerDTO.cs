@@ -1,6 +1,7 @@
 ﻿using Shared_Resources.Entities;
 using Shared_Resources.Enums;
-
+using System;
+using System.Collections.Generic;
 namespace Shared_Resources.DTOs
 {
     public class PlayerDTO

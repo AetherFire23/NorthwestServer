@@ -1,6 +1,4 @@
-﻿
-
-using Shared_Resources.Models;
+﻿using Shared_Resources.Models;
 
 namespace WebAPI.Interfaces
 {
