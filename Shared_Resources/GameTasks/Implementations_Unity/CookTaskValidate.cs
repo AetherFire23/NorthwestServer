@@ -9,7 +9,8 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 {
     public class CookTaskValidate : IGameTask 
     {
-        public GameTaskEmittorTypes EmittorType { get; set; } = GameTaskEmittorTypes.Room;
+        public GameTaskProvider Provider { get; set; } = GameTaskProvider.Room;
+        bool IGameTask.RequiresPlayerTarget { get; set; } = false;
 
         public bool CanShow(GameState gameState)
         {

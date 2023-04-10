@@ -13,9 +13,8 @@ namespace Shared_Resources.GameTasks
     {
         public static List<Type> GetGameTaskTypes()
         {
-            var unityTasks = typeof(IGameTask).Assembly.GetTypes()
-                .Where(type =>
-                type.IsClass && !type.IsAbstract
+            var unityTasks = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(type => type.IsClass && !type.IsAbstract
                 && typeof(IGameTask).IsAssignableFrom(type)).ToList();
 
             return unityTasks;
@@ -24,7 +23,6 @@ namespace Shared_Resources.GameTasks
         public static List<IGameTask> CreateGameTaskInstances()
         {
             var types = GetGameTaskTypes();
-           // var a = Activator.CreateInstance(typeof(CookTaskValidate));
 
             var instantiated = types.Select(x => Activator.CreateInstance(x) as IGameTask);
 
@@ -34,7 +32,6 @@ namespace Shared_Resources.GameTasks
             }
 
             return instantiated.ToList();
-            // return null;
         }
     }
 }

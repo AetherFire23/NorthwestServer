@@ -4,6 +4,10 @@ using WebAPI.Interfaces;
 
 namespace WebAPI.Jobs
 {
+    /// <summary>
+    /// Handles the ticking of the games by seeking for all ongoing games
+    /// Then ticks them.
+    /// </summary>
     public class CycleJob : IJob
     {
         private readonly IGameRepository _gameRepository;

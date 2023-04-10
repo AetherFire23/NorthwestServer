@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared_Resources.GameTasks
 {
-    public enum GameTaskEmittorTypes
+    public enum GameTaskProvider
     {
         Room,
         Role,
