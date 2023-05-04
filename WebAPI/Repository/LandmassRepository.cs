@@ -52,19 +52,19 @@ namespace WebAPI.Repository
             };
         }
 
-        public LandmassCards GetCurrentLandmassDeckSetup(Guid gameId)
+        public LandmassRoomsDeck GetCurrentLandmassDeckSetup(Guid gameId)
         {
             var allCards = _playerContext.Cards.Where(x => x.GameId == gameId).ToList();
-            LandmassCards setup = new LandmassCards(allCards);
+            LandmassRoomsDeck setup = new LandmassRoomsDeck(allCards);
             return setup;
         }
 
-        public void SaveDecksSetup(LandmassCards decksSetup)
+        public void SaveDecksSetup(LandmassRoomsDeck decksSetup)
         {
             foreach (var card in decksSetup.AllCards)
             {
                 var oldCard = _playerContext.Cards.FirstOrDefault(x => x.Id == card.Id);
-                oldCard.Value = card.Value;
+                oldCard.CardImpact = card.CardImpact;
                 oldCard.IsDiscarded = card.IsDiscarded;
             }
             _playerContext.SaveChanges();

@@ -9,12 +9,14 @@ namespace WebAPI.Interfaces
         /// Initializes empty rooms with given gameId and adds it to the database.
         /// </summary>
         /// <param name="gameId"></param>
-        public void CreateNewRooms(Guid gameId);
-        public List<Room> GetRoomsInGame(Guid gameId);
-        public RoomDTO GetRoomDTO(Guid roomId);
-        public Room GetRoomFromName(Guid gameId, string roomName);
-        public void RemoveFromAllConnectedRooms(Guid roomId);
-        public List<Room> GetAllLandmassRooms(Guid gameId);
-        public List<Room> GetAllActiveLandmassRooms(Guid gameId);
+        Task<List<Room>> GetAllLandmassRoomsInGame(Guid gameId);
+        Task<List<Room>> GetAllActiveLandmassRooms(Guid gameId);
+        Task<Room> GetRoomById(Guid roomId);
+        Task RemoveFromAllConnectedRooms(Guid roomId);
+        Task<List<Room>> GetRoomsInGame(Guid gameId);
+        Task<Room> GetRoomFromName(Guid gameId, string roomName);
+        Task<RoomDTO> GetRoomDTOAsync(Guid roomId);
+        Task CreateNewRooms(Guid gameId);
+        Task<List<AdjacentRoom>> GetLandmassAdjacentRoomsAsync(Guid gameId);
     }
 }

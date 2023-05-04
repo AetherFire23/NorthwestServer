@@ -7,8 +7,8 @@ namespace Shared_Resources.Entities
     {
         //[Key]
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Text { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
         public Guid GameId { get; set; }
         public Guid RoomId { get; set; }
         public DateTime? Created { get; set; }

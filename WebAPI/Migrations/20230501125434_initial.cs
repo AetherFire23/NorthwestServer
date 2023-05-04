@@ -14,8 +14,10 @@ namespace WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AdjacentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AdjacentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsLandmassConnection = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,7 +31,7 @@ namespace WebAPI.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Value = table.Column<int>(type: "int", nullable: false),
+                    CardImpact = table.Column<int>(type: "int", nullable: false),
                     IsDiscarded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -248,12 +250,24 @@ namespace WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PrivateChatRooms",
+                name: "PrivateChatRoomParticipants",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PrivateChatRoomParticipants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PrivateChatRooms",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ChatRoomName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -281,7 +295,9 @@ namespace WebAPI.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoomType = table.Column<int>(type: "int", nullable: false),
                     IsLandmass = table.Column<bool>(type: "bit", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    X = table.Column<float>(type: "real", nullable: false),
+                    Y = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,12 +308,13 @@ namespace WebAPI.Migrations
                 name: "Skills",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SkillType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Skills", x => x.OwnerId);
+                    table.PrimaryKey("PK_Skills", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -310,7 +327,8 @@ namespace WebAPI.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SerializedProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsLandmass = table.Column<bool>(type: "bit", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    RoomName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -339,7 +357,7 @@ namespace WebAPI.Migrations
                     PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsReceived = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NotificationType = table.Column<string>(type: "nvarchar(30)", nullable: false),
+                    NotificationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SerializedProperties = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -409,6 +427,9 @@ namespace WebAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Players");
+
+            migrationBuilder.DropTable(
+                name: "PrivateChatRoomParticipants");
 
             migrationBuilder.DropTable(
                 name: "PrivateChatRooms");

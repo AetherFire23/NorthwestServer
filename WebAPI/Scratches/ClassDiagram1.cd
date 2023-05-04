@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Comment CommentText="Force Amount of rooms to be a strict number (ex. 7). Else it would create unnecessary dependencies between the LandmassInitializer and the CardService. &#xD;&#xA;&#xD;&#xA;The reason is that unused cards would need to be reset to their prior state, which would need to be saved, etc.  all this for marginally negligible benefits of having an unkown drawn layout.">
+    <Position X="7.542" Y="0.537" Height="1.64" Width="3.45" />
+  </Comment>
+  <Comment CommentText="Promise : Hands out landmassRoomNames&#xD;&#xA;">
+    <Position X="7.733" Y="3.18" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Promise: Hands out a layout with the correct roomNames">
+    <Position X="4.459" Y="5.865" Height="0.75" Width="2.346" />
+  </Comment>
+  <Comment CommentText="Promise : Hands out a list of Room and Connections based on the Layout.;&#xD;&#xA;Position x,y is important in room model !&#xD;&#xA;at worst, make a table of RoomPositions.">
+    <Position X="4.625" Y="7.052" Height="1.302" Width="3.429" />
+  </Comment>
+  <Comment CommentText="uses the correct models handed out by entitiesInitializer to replace the landmasses.">
+    <Position X="8.458" Y="6.25" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Not sure if reshuffling works..">
+    <Position X="1" Y="0.75" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Wipe the landmass to reintroduce the new rooms and connections.">
+    <Position X="8.75" Y="9.75" Height="0.75" Width="1.7" />
+  </Comment>
+  <Class Name="WebAPI.LandmassGetter">
+    <Position X="1" Y="5.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgACAABAAAAAAAA=</HashCode>
+      <FileName>Scratches\LandmassGetter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WebAPI.LandmassCardsRepository">
+    <Position X="4.75" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scratches\LandmassCardsRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WebAPI.LandmassEntitiesInitializer">
+    <Position X="1" Y="7" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAQAAAAAAAAAAAAAAgAAAAAAAAABAAAAAIAA=</HashCode>
+      <FileName>Scratches\LandmassEntitiesInitializer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WebAPI.LandmassCardsService">
+    <Position X="4.75" Y="2.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAABAAAAAAAABAAAAAAAAAAAFAAAAAAAAA=</HashCode>
+      <FileName>Scratches\LandmassCardsService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WebAPI.LandmassService2">
+    <Position X="4.5" Y="9.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAIAAAAABAAAAAAAAAAAAAAAAAAAAEAAAEAAAAA=</HashCode>
+      <FileName>Scratches\LandmassService2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

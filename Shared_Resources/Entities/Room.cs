@@ -1,4 +1,5 @@
-﻿using Shared_Resources.Interfaces;
+﻿using Shared_Resources.Enums;
+using Shared_Resources.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -12,11 +13,16 @@ namespace Shared_Resources.Entities
         public RoomType RoomType { get; set; }
         public bool IsLandmass { get; set; }
         public bool IsActive { get; set; }
-
-
-        // used to initialize adjacentRoom after extracting info from template
-        //[NotMapped]
         public List<string> AdjacentRoomNames { get; set; } = new List<string>();
+
+        public float X { get; set; }
+        public float Y { get; set; }
+
+        //NotMapped!
+        public CardImpact CardImpact { get; set; } = CardImpact.Neutral; // should be NotMapped in database since it is for initializing the landmass rooms
+
+
+        // public virtual List<Station> Stations { get; set; } = new List<Station>();
 
         //public List<AdjacentRoom> CreateRoomConnections()
         //{
@@ -33,5 +39,10 @@ namespace Shared_Resources.Entities
         //        }
         //    }).ToList();
         //}
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

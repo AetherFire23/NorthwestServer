@@ -51,8 +51,9 @@ namespace WebAPI.Repository
             {
                 notification.Retrieved = true;
             }
-            return notifications.ToList();
             _playerContext.SaveChanges();
+
+            return notifications.ToList();
         }
 
         public User GetUser(Guid userId)

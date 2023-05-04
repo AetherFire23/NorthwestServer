@@ -7,10 +7,10 @@ namespace WebAPI.Interfaces
     {
         public LandmassLayout GetRandomLandmassLayout();
 
-        public LandmassCards GetCurrentLandmassDeckSetup(Guid gameId);
+        public LandmassRoomsDeck GetCurrentLandmassDeckSetup(Guid gameId);
         public void SaveLandmassLayout(Guid gameId, LandmassLayout layout);
         public void SavePreviousLandmass(Guid gameId);
-        public void SaveDecksSetup(LandmassCards decksSetup);
+        public void SaveDecksSetup(LandmassRoomsDeck decksSetup);
 
     }
 }

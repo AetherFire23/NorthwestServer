@@ -5,8 +5,8 @@ namespace WebAPI.Interfaces
 {
     public interface IPlayerService
     {
-        public void TransferItem(Guid ownerId, Guid targetId, Guid itemId);
-        public void UpdatePosition(Player unityPlayerModel);
-        public ClientCallResult ChangeRoom(Guid playerId, string targetRoomName);
+        public Task TransferItem(Guid targetId, Guid itemId);
+        public Task UpdatePositionAsync(Player unityPlayerModel);
+        public Task<ClientCallResult> ChangeRoomAsync(Guid playerId, string targetRoomName);
     }
 }

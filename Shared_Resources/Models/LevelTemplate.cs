@@ -32,6 +32,8 @@
 
         public RoomTemplate Expedition1 { get; set; }
 
+        public RoomTemplate MyLandmassRoom { get; set; }
+
 
     }
 }

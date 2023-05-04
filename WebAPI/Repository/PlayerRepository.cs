@@ -31,17 +31,19 @@ public class PlayerRepository : IPlayerRepository
         return possiblePlayer;
     }
 
-    public Player GetPlayer(Guid id)
+    public async Task<Player> GetPlayerAsync(Guid id)
     {
-        return _playerContext.Players.First(queriedPlayer => queriedPlayer.Id == id);
+        var player = await _playerContext.Players.FirstAsync(queriedPlayer => queriedPlayer.Id == id);
+        return player;
     }
 
-    public Item GetItem(Guid itemId)
+    public async Task<Item> GetItemAsync(Guid itemId)
     {
-        return _playerContext.Items.First(x => x.Id == itemId);
+        var item = await _playerContext.Items.FirstAsync(x => x.Id == itemId);
+        return item;
     }
 
-    public List<PrivateInvitation> GetPlayerInvitations(Guid playerId)
+    public async Task<List<PrivateInvitation>> GetPlayerInvitations(Guid playerId)
     {
         var playerInvites = _playerContext.Invitations.Where(invite => invite.ToPlayerId == playerId).ToList();
         return playerInvites;
@@ -52,9 +54,9 @@ public class PlayerRepository : IPlayerRepository
         return Players.Where(player => player.GameId == gameId).ToList();
     }
 
-    public PlayerDTO MapPlayerDTO(Guid playerId)
+    public async Task<PlayerDTO> MapPlayerDTOAsync(Guid playerId)
     {
-        Player player = GetPlayer(playerId);
+        Player player = await GetPlayerAsync(playerId);
 
         List<Item> items = GetOwnedItems(playerId).ToList();
 
@@ -94,17 +96,18 @@ public class PlayerRepository : IPlayerRepository
         return _playerContext.Items.Where(item => item.OwnerId == ownerId).ToList();
     }
 
-    public List<TriggerNotificationDTO> GetTriggerNotifications(Guid playerId, DateTime? timeStamp)
+    public async Task<List<TriggerNotificationDTO>> GetTriggerNotificationsAsync(Guid playerId, DateTime? timeStamp)
     {
         List<TriggerNotification> notifications = new();
+
         if (timeStamp is null)
         {
-            notifications = _playerContext.TriggerNotifications.Where(x => x.PlayerId == playerId && !x.IsReceived).ToList();
+            notifications = await _playerContext.TriggerNotifications.Where(x => x.PlayerId == playerId && !x.IsReceived).ToListAsync();
         }
 
         else
         {
-            notifications = _playerContext.TriggerNotifications.Where(x => x.PlayerId == playerId && x.Created > timeStamp && !x.IsReceived).ToList();
+            notifications = await _playerContext.TriggerNotifications.Where(x => x.PlayerId == playerId && x.Created > timeStamp && !x.IsReceived).ToListAsync();
         }
 
         foreach (var notification in notifications)
@@ -113,7 +116,7 @@ public class PlayerRepository : IPlayerRepository
             _playerContext.TriggerNotifications.Update(notification);
         }
 
-        _playerContext.SaveChanges();
+        await _playerContext.SaveChangesAsync();
 
         return notifications.Select(x => x.ToDTO()).ToList();
     }
@@ -141,6 +144,7 @@ public class PlayerRepository : IPlayerRepository
 
             else
             {
+                // should encapsulate like RoomLogIsAccessibleTo(LogId, playerId)
                 var playersIdsWhoCanSeeLog = _playerContext.LogAccessPermission.Where(x => x.LogId == log.Id)
                     .Select(x => x.PlayerId);
 

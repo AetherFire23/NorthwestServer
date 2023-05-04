@@ -1,0 +1,161 @@
+
+The following files were specified on the command line:
+
+	C:\path\to\solution.sln
+
+These files could not be found and will not be loaded.
+Build started...
+1>------ Build started: Project: Shared_Resources, Configuration: Debug Any CPU ------
+1>Shared_Resources -> C:\Users\balth\WebAPI\Shared_Resources\bin\Debug\netstandard2.1\Shared_Resources.dll
+1>        1 file(s) copied.
+Time Elapsed: 00:00:00.0312022
+========== Finished ==========
+
+
+2>------ Build started: Project: WebAPI, Configuration: Debug Any CPU ------
+2>C:\Users\balth\WebAPI\WebAPI\Program.cs(13,7,13,23): warning CS0105: The using directive for 'WebAPI.GameTasks' appeared previously in this namespace
+2>C:\Users\balth\WebAPI\WebAPI\Program.cs(15,7,15,33): warning CS0105: The using directive for 'Shared_Resources.GameTasks' appeared previously in this namespace
+2>C:\Users\balth\WebAPI\WebAPI\TestFolder\RoomInfo.cs(8,23,8,27): warning CS8618: Non-nullable property 'Name' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\TestFolder\RoomInfo.cs(10,46,10,55): warning CS8618: Non-nullable property 'Neighbors' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Players' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Items' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Rooms' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Messages' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Skills' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'PrivateChatRooms' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Invitations' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'AdjacentRooms' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Stations' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'GameActions' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'TriggerNotifications' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Logs' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Users' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'MenuNotifications' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'FriendPairs' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Games' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'GameSetting' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'RoleSettings' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'TaskSettings' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'LogAccessPermission' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Expeditions' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Decks' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Cards' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\PlayerContext.cs(47,16,47,29): warning CS8618: Non-nullable property 'Landmass' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Game_Actions\RoomChangeInfo.cs(9,23,9,29): warning CS8618: Non-nullable property 'Player' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Game_Actions\RoomChangeInfo.cs(10,21,10,26): warning CS8618: Non-nullable property 'Room1' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Game_Actions\RoomChangeInfo.cs(11,21,11,26): warning CS8618: Non-nullable property 'Room2' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Game_Actions\GameAction.cs(18,23,18,32): warning CS8618: Non-nullable property 'CreatedBy' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Game_Actions\GameAction.cs(23,23,23,43): warning CS8618: Non-nullable property 'SerializedProperties' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\ValuesController.cs(20,41,20,56): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Jobs\CycleJob.cs(21,27,21,34): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\ValuesController.cs(24,60,24,75): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Temp_settomgs\TaskSetting.cs(10,23,10,43): warning CS8618: Non-nullable property 'SerializedProperties' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\ChatController.cs(27,59,27,73): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\TestFolder\LandmassLayout.cs(16,37,16,42): warning CS8618: Non-nullable property 'Cells' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\ChatController.cs(35,59,35,72): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(68,52,68,64): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\ChatController.cs(43,59,43,71): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(76,59,76,67): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\ChatController.cs(52,41,52,62): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(84,59,84,86): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Repository\StationRepository.cs(25,20,25,27): warning CS8603: Possible null reference return.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\ChatController.cs(60,59,60,77): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\ValuesController.cs(31,41,31,57): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(92,59,92,71): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(102,59,102,73): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Services\ChatService.cs(50,88,50,115): warning CS8604: Possible null reference argument for parameter 'value' in 'PrivateInvitationProperties? JsonConvert.DeserializeObject<PrivateInvitationProperties>(string value)'.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(123,59,123,69): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(131,59,131,75): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(139,41,139,63): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Repository\StationRepository.cs(64,35,64,97): warning CS8601: Possible null reference assignment.
+2>C:\Users\balth\WebAPI\WebAPI\Repository\RoomRepository.cs(31,20,31,24): warning CS8603: Possible null reference return.
+2>C:\Users\balth\WebAPI\WebAPI\Services\ChatService.cs(118,84,118,111): warning CS8604: Possible null reference argument for parameter 'value' in 'PrivateInvitationProperties? JsonConvert.DeserializeObject<PrivateInvitationProperties>(string value)'.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(149,41,149,54): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(178,41,178,57): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Repository\StationRepository.cs(99,32,99,44): warning CS8600: Converting null literal or possible null value to non-nullable type.
+2>C:\Users\balth\WebAPI\WebAPI\Repository\StationRepository.cs(103,46,103,55): warning CS8620: Argument of type 'List<Station?>' cannot be used for parameter 'entities' of type 'IEnumerable<Station>' in 'void DbSet<Station>.AddRange(IEnumerable<Station> entities)' due to differences in the nullability of reference types.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(198,41,198,52): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Services\LandmassService.cs(122,103,122,114): warning CS8600: Converting null literal or possible null value to non-nullable type.
+2>C:\Users\balth\WebAPI\WebAPI\Services\LandmassService.cs(126,84,126,95): warning CS8604: Possible null reference argument for parameter 'name' in 'Station IStationRepository.GetStationByName(Guid gameId, string name)'.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(224,52,224,62): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Controllers\TheCrewController.cs(237,41,237,50): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+2>C:\Users\balth\WebAPI\WebAPI\Repository\RoomRepository.cs(53,20,53,24): warning CS8603: Possible null reference return.
+2>C:\Users\balth\WebAPI\WebAPI\Repository\MainMenuRepository.cs(55,13,55,27): warning CS0162: Unreachable code detected
+2>C:\Users\balth\WebAPI\WebAPI\Services\LandmassService.cs(166,41,166,124): warning CS8600: Converting null literal or possible null value to non-nullable type.
+2>C:\Users\balth\WebAPI\WebAPI\TestFolder\RoomCell.cs(14,23,14,27): warning CS8618: Non-nullable property 'Name' must contain a non-null value when exiting constructor. Consider declaring the property as nullable.
+2>C:\Users\balth\WebAPI\WebAPI\Repository\RoomRepository.cs(92,30,92,45): warning CS8600: Converting null literal or possible null value to non-nullable type.
+2>WebAPI -> C:\Users\balth\WebAPI\WebAPI\bin\Debug\net6.0\WebAPI.dll
+2>Done building project "WebAPI.csproj".
+========== Build: 2 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+========== Build started at 8:52 PM and took 03.637 seconds ==========
+
+Build started...
+------ Build started: Project: UniTask, Configuration: Debug Any CPU ------
+------ Build started: Project: Zenject, Configuration: Debug Any CPU ------
+------ Build started: Project: UniTask.Linq, Configuration: Debug Any CPU ------
+------ Build started: Project: UniTask.Editor, Configuration: Debug Any CPU ------
+------ Build started: Project: Zenject-TestFramework, Configuration: Debug Any CPU ------
+------ Build started: Project: Zenject-Editor, Configuration: Debug Any CPU ------
+------ Build started: Project: UniTask.DOTween, Configuration: Debug Any CPU ------
+------ Build started: Project: Zenject-IntegrationTests, Configuration: Debug Any CPU ------
+------ Build started: Project: Zenject-PoolMonitor-Editor, Configuration: Debug Any CPU ------
+------ Build started: Project: Zenject-ReflectionBaking-Editor, Configuration: Debug Any CPU ------
+------ Build started: Project: Zenject-IntegrationTests-Editor, Configuration: Debug Any CPU ------
+------ Build started: Project: Zenject-UnitTests-Editor, Configuration: Debug Any CPU ------
+------ Build started: Project: UniTask.TextMeshPro, Configuration: Debug Any CPU ------
+------ Build started: Project: UniTask.Addressables, Configuration: Debug Any CPU ------
+------ Build started: Project: Assembly-CSharp, Configuration: Debug Any CPU ------
+C:\Users\balth\NorthWest\Assets\GameState Management\GameStateManager.cs(90,23): warning CS0642: Possible mistaken empty statement
+C:\Users\balth\NorthWest\Assets\Raycasts\NewRaycasts\NewRayCaster.cs(23,26): warning CS0168: The variable 'rayhits' is declared but never used
+C:\Users\balth\NorthWest\Assets\Raycasts\NewRaycasts\NewRayCaster.cs(42,26): warning CS0168: The variable 'rayhits' is declared but never used
+C:\Users\balth\NorthWest\Assets\HttpClient\ChatCalls.cs(24,48): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\HttpClient\ChatCalls.cs(45,48): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\HttpClient\ChatCalls.cs(55,48): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\Inventory\InventoryManagement.cs(135,25): warning CS4014: Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
+C:\Users\balth\NorthWest\Assets\Inventory\InventoryManagement.cs(146,25): warning CS4014: Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
+C:\Users\balth\NorthWest\Assets\Inventory\InventoryManagement.cs(83,24): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\MainMenu\MainMenuManager.cs(22,19): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\HttpClient\ClientCalls.cs(62,37): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\HttpClient\ClientCalls.cs(89,44): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\ChatManager2\ChatObjectsManager.cs(34,74): warning CS0618: 'GameObject.active' is obsolete: 'GameObject.active is obsolete. Use GameObject.SetActive(), GameObject.activeSelf or GameObject.activeInHierarchy.'
+C:\Users\balth\NorthWest\Assets\ChatManager2\ChatManager.cs(140,9): warning CS4014: Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
+C:\Users\balth\NorthWest\Assets\ChatManager2\ChatManager.cs(168,9): warning CS4014: Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
+C:\Users\balth\NorthWest\Assets\IceYeahManager.cs(11,9): warning CS4014: Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
+C:\Users\balth\NorthWest\Assets\IceYeahManager.cs(9,16): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\IceYeahManager.cs(14,19): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\PrivateInvitationEnqueuer.cs(40,13): warning CS0219: The variable 'i' is assigned but its value is never used
+C:\Users\balth\NorthWest\Assets\MainMenu\FriendsManager.cs(23,16): warning CS1998: This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
+C:\Users\balth\NorthWest\Assets\PrivateInvitationEnqueuer.cs(20,26): warning CS0649: Field 'PrivateInvitationEnqueuer._client' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Tasks_On_Players\Tasks_On_Player.cs(16,31): warning CS0649: Field 'Tasks_On_Player._gameState' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Big_Tick_Energy\GlobalTick.cs(28,43): warning CS0649: Field 'GlobalTick._gameState' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\ChatManager2\ChatManager.cs(19,39): warning CS0649: Field 'ChatManager._gamestate' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Inventory\InventoryManagement.cs(35,39): warning CS0649: Field 'InventoryManagement._gameState' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\ToolTips\ToolTipsManager.cs(18,30): warning CS0649: Field 'ToolTipsManager.input' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Game Tasks\TaskClickHandler.cs(12,26): warning CS0649: Field 'TaskClickHandler._roomManager' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Tasks_On_Players\Tasks_On_Player.cs(14,27): warning CS0649: Field 'Tasks_On_Player._rayCasts' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\ChatManager2\ChatManager.cs(21,34): warning CS0649: Field 'ChatManager._client' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\PrivateInvitationEnqueuer.cs(19,31): warning CS0649: Field 'PrivateInvitationEnqueuer._gameState' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\PrivateInvitationEnqueuer.cs(18,28): warning CS0649: Field 'PrivateInvitationEnqueuer._dialogs' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Inventory\InventoryManagement.cs(37,38): warning CS0649: Field 'InventoryManagement.input' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Inventory\InventoryManagement.cs(38,33): warning CS0649: Field 'InventoryManagement._globalTick' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Inventory\InventoryManagement.cs(36,35): warning CS0649: Field 'InventoryManagement._raycasts' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\PrivateInvitationEnqueuer.cs(17,25): warning CS0649: Field 'PrivateInvitationEnqueuer._tick' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\ChatManager2\ChatManager.cs(20,33): warning CS0649: Field 'ChatManager._tick' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\FullTasksPanel\FullTasksManager.cs(21,31): warning CS0649: Field 'FullTasksManager._gameStateManager' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Game_Logs\LogsManager.cs(26,25): warning CS0649: Field 'LogsManager._tick' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\ToolTips\ToolTipsManager.cs(17,27): warning CS0649: Field 'ToolTipsManager._newRayCaster' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\GameState Management\GameStateManager.cs(25,41): warning CS0649: Field 'GameStateManager.options' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Inventory\InventoryManagement.cs(39,34): warning CS0649: Field 'InventoryManagement._clientCalls' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Local_Player_Scripts\PlayerMovementScript.cs(19,35): warning CS0649: Field 'PlayerMovementScript._raycasts' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\ChatManager2\ChatManager.cs(18,41): warning CS0649: Field 'ChatManager._chatObjectsManager' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\CycleChangeEnqueuer.cs(15,25): warning CS0649: Field 'CycleChangeEnqueuer._tick' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\CycleChangeEnqueuer.cs(17,31): warning CS0649: Field 'CycleChangeEnqueuer._gameState' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Game_Logs\LogsManager.cs(25,31): warning CS0649: Field 'LogsManager._gameState' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\CycleChangeEnqueuer.cs(16,28): warning CS0649: Field 'CycleChangeEnqueuer._dialogs' is never assigned to, and will always have its default value null
+C:\Users\balth\NorthWest\Assets\Local_Player_Scripts\CameraController.cs(20,18): warning CS0414: The field 'CameraController._mustMove' is assigned but its value is never used
+C:\Users\balth\NorthWest\Assets\GameState Management\GameStateManager.cs(44,22): warning CS0414: The field 'GameStateManager._initialized' is assigned but its value is never used
+C:\Users\balth\NorthWest\Assets\MainMenu\MainMenuManager.cs(17,20): warning CS0414: The field 'MainMenuManager.MainSceneName' is assigned but its value is never used
+C:\Users\balth\NorthWest\Assets\ToolTips\ToolTipResizer.cs(18,10): warning CS0414: The field 'ToolTipResizer.initialized' is assigned but its value is never used
+========== Build: 15 succeeded or up-to-date, 0 failed, 0 skipped ==========
+========== Build started at 9:10 PM and took 04.105 seconds ==========
+

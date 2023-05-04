@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
@@ -19,9 +20,9 @@ namespace WebAPI.Repository
             _playerContext = playerContext;
         }
 
-        public Station GetStationByName(Guid gameId, string name)
+        public async Task<Station> GetStationByName(Guid gameId, string name)
         {
-            var station = _playerContext.Stations.FirstOrDefault(s => s.GameId == gameId && s.Name == name);
+            var station = await _playerContext.Stations.FirstAsync(s => s.GameId == gameId && s.Name == name);
             return station;
         }
 
@@ -31,9 +32,9 @@ namespace WebAPI.Repository
             return stations;
         }
 
-        public StationDTO RetrieveStation<T>(Guid playerId, string stationName)
+        public async Task<StationDTO> RetrieveStationAsync<T>(Guid playerId, string stationName) where T : new()
         {
-            var player = _playerRepository.GetPlayer(playerId);
+            var player = await _playerRepository.GetPlayerAsync(playerId);
             var station = _playerContext.Stations.First(x => x.GameId == player.GameId && x.Name == stationName);
             var stationDTO = CreateDTO<T>(station);
             return stationDTO;
@@ -53,7 +54,7 @@ namespace WebAPI.Repository
             return station;
         }
 
-        private StationDTO CreateDTO<T>(Station station) // From Db
+        private StationDTO CreateDTO<T>(Station station) where T : new() // From Db
         {
             return new StationDTO()
             {
@@ -61,65 +62,19 @@ namespace WebAPI.Repository
                 GameId = station.GameId,
                 GameTaskCode = station.GameTaskCode,
                 Name = station.Name,
-                ExtraProperties = JsonConvert.DeserializeObject<T>(station.SerializedProperties),
+                ExtraProperties = JsonConvert.DeserializeObject<T>(station.SerializedProperties) ?? new T(),
             };
         }
 
-        public StationTemplate CreateAndAddStationsToDb(Guid gameId)
+        // should create the same template as with the rooms...
+        public async Task CreateAndAddStationsToDb(Guid gameId) // is template
         {
-            var cookstation = new Station()
-            {
-                Name = "CookStation1",
-                Id = Guid.NewGuid(),
-                GameTaskCode = GameTaskCodes.Cook,
-                SerializedProperties = SerializedDefaultCookStation,
-                GameId = gameId
-            };
+            var allStations = StationsTemplate.ReadSerializedDefaultStations();
 
-            var CannonStation = new Station()
-            {
-                Name = "CannonStation",
-                Id = Guid.NewGuid(),
-                GameTaskCode = GameTaskCodes.Cook,
-                SerializedProperties = SerializedDefaultCannonProperty,
-                GameId = gameId
+            if (allStations.Any(x => x is null)) throw new Exception("One station was not initialized.");
 
-            };
-
-            var stationsTemplate = new StationTemplate()
-            {
-                CookStation1 = cookstation,
-                CannonStation = CannonStation
-            };
-
-            var stations = typeof(StationTemplate)
-                .GetProperties();
-            var stations2 = stations
-                .Select(property => property.GetValue(stationsTemplate))
-                .Select(obj => (Station)obj).ToList();
-
-            if (stations2.Any(x => x is null)) throw new Exception("One station was not initialized.");
-
-            _playerContext.Stations.AddRange(stations2);
-            _playerContext.SaveChanges();
-            return stationsTemplate;
+            _playerContext.Stations.AddRange(allStations);
+            await _playerContext.SaveChangesAsync();
         }
-
-        public static string SerializedDefaultCannonProperty = JsonConvert.SerializeObject(new CannonProperties()
-        {
-            State = State.Pristine,
-            Ammo = 5,
-        });
-
-        public static string SerializedDefaultCookStation = JsonConvert.SerializeObject(new CookStationProperties()
-        {
-            MoneyMade = 5,
-            State = State.Pristine,
-        });
-
-        public static string SerializedStation1DefaultProperty = JsonConvert.SerializeObject(new Station1Property()
-        {
-            SomeValue = 5,
-        });
     }
 }

@@ -2,7 +2,7 @@
 {
     public interface ILandmassService
     {
-        public void NextLandmass(Guid gameId);
+        public void SwitchToNextLandmass(Guid gameId);
 
     }
 }

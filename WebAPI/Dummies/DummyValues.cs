@@ -12,6 +12,7 @@ namespace WebAPI.Dummies
         public static Guid defaultGameGuid = new Guid("DE74B055-BA84-41A2-BAEA-4E380293E227");
         public static Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
         public static Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
+        public static Guid defaultPrivateChatRoomId = new Guid("fedfdb8cc0634d319e6e21cdf3d0790a");
 
         public static User RealFred = new User()
         {
@@ -101,5 +102,68 @@ namespace WebAPI.Dummies
             IsCreated = false,
             LeaderId = Guid.Empty,
         };
+
+        public static Message Message1 = new Message()
+        {
+            Id = Guid.NewGuid(),
+            Created = DateTime.UtcNow,
+            GameId = defaultGameGuid,
+            Name = "The Master",
+            RoomId = defaultGameGuid,
+            Text = "I am god"
+        };
+
+        public static Message Message2 = new Message()
+        {
+            Id = Guid.NewGuid(),
+            Created = DateTime.UtcNow,
+            GameId = defaultGameGuid,
+            Name = "The Master",
+            RoomId = defaultPrivateChatRoomId,
+            Text = "I am in private room 2"
+        };
+
+        public static PrivateChatRoom PrivateChatRoom = new PrivateChatRoom()
+        {
+            Id = DummyValues.defaultPrivateChatRoomId,
+            ChatRoomName = "MyRoomName"
+        };
+
+        public static PrivateChatRoomParticipant PrivateChatRoomParticipant = new PrivateChatRoomParticipant()
+        {
+            Id = Guid.NewGuid(),
+            ParticipantId = defaultPlayer1Guid,
+            RoomId = DummyValues.defaultPrivateChatRoomId
+        };
+        public static Item Freditem = new Item()
+        {
+            Id = Guid.NewGuid(),
+            ItemType = ItemType.Wrench,
+            OwnerId = defaultPlayer1Guid
+        };
+        public static Item GetRandomItem(Guid ownerId)
+        {
+            return new Item()
+            {
+                Id = Guid.NewGuid(),
+                ItemType = ItemType.Wrench,
+                OwnerId = ownerId
+            };
+        }
+
+        public static Log SomeLog(Guid roomId)
+        {
+            var log = new Log()
+            {
+                Id = Guid.NewGuid(),
+                Created = DateTime.UtcNow,
+                CreatedBy = "MASterLolz",
+                EventText = "JE suis un lolzida",
+                IsPublic = true,
+                RoomId = roomId,
+                TriggeringPlayerId = defaultPlayer1Guid,
+            };
+            return log;
+        }
     }
 }

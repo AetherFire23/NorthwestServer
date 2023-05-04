@@ -5,21 +5,22 @@ using WebAPI.Interfaces;
 
 namespace WebAPI.GameTasks.Executions
 {
-    [GameTask(GameTaskCodes.Cook)]
-    public class CookTaskAPI : CookTaskValidate
+    [GameTask(GameTaskCodes.Cook)] // dedoublement des gameTaskCodes
+    public class CookTaskExecute : CookTaskBase
     {
         private const string _stationNameParam = "stationName";
 
         private readonly IStationRepository _stationRepo;
-        public CookTaskAPI(PlayerContext playerContext, IStationRepository stationRepository)
+        public CookTaskExecute(PlayerContext playerContext, IStationRepository stationRepository)
         {
             _stationRepo = stationRepository;
         }
 
-        public override void Execute(GameTaskContext context)
+        public override async Task Execute(GameTaskContext context)
         {
+            // ca pourrait tu renvoyer le JSON au complet de la room au pire ? 
             string roomName = context.Parameters[_stationNameParam];
-            var cookStation = _stationRepo.RetrieveStation<CookStationProperties>(context.Player.Id, roomName);
+            var cookStation = await _stationRepo.RetrieveStationAsync<CookStationProperties>(context.Player.Id, roomName);
 
             var properties = (CookStationProperties)cookStation.ExtraProperties;
 

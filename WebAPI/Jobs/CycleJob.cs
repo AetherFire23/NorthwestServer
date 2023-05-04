@@ -20,6 +20,7 @@ namespace WebAPI.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
+            await Task.Delay(1);
             var tickableGames = _gameRepository.GetTickableGames();
             if (tickableGames.Count == 0)
             {

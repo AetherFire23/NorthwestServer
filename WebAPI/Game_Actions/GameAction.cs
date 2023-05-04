@@ -15,11 +15,11 @@ namespace WebAPI.Game_Actions
 
         public DateTime? Created { get; set; }
 
-        public string CreatedBy { get; set; }
+        public string CreatedBy { get; set; } = string.Empty;
 
         [Column(TypeName = "nvarchar(20)")]
         public GameActionType GameActionType { get; set; }
 
-        public string SerializedProperties { get; set; }
+        public string SerializedProperties { get; set; } = string.Empty;
     }
 }

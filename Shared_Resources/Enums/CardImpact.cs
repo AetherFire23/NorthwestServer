@@ -1,6 +1,6 @@
 ﻿namespace Shared_Resources.Enums
 {
-    public enum CardValue
+    public enum CardImpact
     {
         Positive,
         Negative,

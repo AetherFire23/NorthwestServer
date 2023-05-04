@@ -18,7 +18,7 @@ namespace WebAPI
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Skill> Skills { get; set; }
-        public DbSet<PrivateChatRoomParticipant> PrivateChatRooms { get; set; }
+        public DbSet<PrivateChatRoomParticipant> PrivateChatRoomParticipants { get; set; }
         public DbSet<PrivateInvitation> Invitations { get; set; }
         public DbSet<AdjacentRoom> AdjacentRooms { get; set; }
         public DbSet<Station> Stations { get; set; }
@@ -35,6 +35,7 @@ namespace WebAPI
         public DbSet<TaskSetting> TaskSettings { get; set; }
 
         public DbSet<LogAccessPermissions> LogAccessPermission { get; set; }
+        public DbSet<PrivateChatRoom> PrivateChatRooms { get; set; }
 
         public DbSet<Expedition> Expeditions { get; set; }
 
@@ -64,13 +65,11 @@ namespace WebAPI
                 .Entity<Room>()
                 .Ignore(e => e.AdjacentRoomNames);
 
-            modelBuilder.Entity<TriggerNotification>()
-                .Property(e => e.IsReceived)
-                .HasConversion(
-                v => v.ToString(),
-                v => Convert.ToBoolean(v));
+            modelBuilder
+                .Entity<Room>()
+                .Ignore(e => e.CardImpact);
 
-
+            //modelBuilder.Entity<Room>()
 
 
             // DEMANDER A BEN PK TOUTE CASSE WTFFFF

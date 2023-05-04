@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using WebAPI.Dummies;
 using WebAPI.Interfaces;
 using WebAPI.Repository;
+using WebAPI.Scratches;
 
 namespace WebAPI.Services
 {
@@ -16,58 +17,24 @@ namespace WebAPI.Services
         private readonly IRoomRepository _roomRepository;
         private readonly IStationRepository _stationRepository;
         private readonly PlayerContext _playerContext;
-        private readonly ILandmassService _landmassService;
+        private readonly ILandmassService2 _landmassService;
+        private readonly ILandmassCardsService _landmassCardsService;
 
         public GameMakerService(PlayerContext playerContext,
             IGameMakerRepository gameMakerRepository,
             IRoomRepository roomRepository,
             IStationRepository stationRepository,
-            ILandmassService landmassService)
+            ILandmassService2 landmassService, ILandmassCardsService landmassCardsService)
         {
             _gameMakerRepository = gameMakerRepository;
             _roomRepository = roomRepository;
             _stationRepository = stationRepository;
             _playerContext = playerContext;
             _landmassService = landmassService;
+            _landmassCardsService = landmassCardsService;
         }
 
-        public void CreateGame(NewGameInfo newGameInfo)
-        {
-            Guid gameGuid = Guid.NewGuid();
-
-            Game newGame = new Game()
-            {
-                Active = true,
-                Id = gameGuid,
-                NextTick = DateTime.UtcNow.AddSeconds(CycleManagerService.TimeBetweenTicksInSeconds),
-            };
-
-            newGameInfo.Game = newGame;
-
-            _playerContext.Games.Add(newGame);
-            _roomRepository.CreateNewRooms(gameGuid);
-
-            // Need to initialize rooms before players, because player construction requires a GameRoomId.
-            InitializePlayers(newGameInfo);
-            InitializeItems(newGameInfo);
-
-            // Stations are tied to rooms, currently, only in services that interact with them in a hardcoded way. - So stations can be created independently of rooms
-            _stationRepository.CreateAndAddStationsToDb(gameGuid);
-
-            //
-            //InitializeSerializedLandmass(newGameInfo);
-            //InitializeLandmassLayoutAndRooms(newGameInfo);
-
-            _playerContext.SaveChanges();
-        }
-
-        public void InsertVeryDummyValues()
-        {
-            _playerContext.TriggerNotifications.Add(DummyValues.TriggerNotification1);
-            _playerContext.SaveChanges();
-        }
-
-        public void CreateDummyGame()
+        public async Task CreateDummyGame()
         {
             NewGameInfo info = new NewGameInfo()
             {
@@ -94,28 +61,55 @@ namespace WebAPI.Services
                     },
                 },
             };
-            CreateGame(info);
+            await CreateGame(info);
         }
 
-        public void InitializeSerializedLandmass(NewGameInfo infos)
+        public async Task CreateGame(NewGameInfo newGameInfo)
         {
-            var newLandmass = new Landmass()
+            Guid gameId = DummyValues.Game.Id;
+
+            Game newGame = new Game()
             {
-                Id = Guid.NewGuid(),
-                GameId = infos.Game.Id,
-                SerializedLandmassLayout = string.Empty,
+                Active = true,
+                Id = gameId,
+                NextTick = DateTime.UtcNow.AddSeconds(CycleManagerService.TimeBetweenTicksInSeconds),
             };
-            _playerContext.Landmass.Add(newLandmass);
+
+            newGameInfo.Game = newGame;
+
+            _playerContext.Games.Add(newGame);
+            await _playerContext.SaveChangesAsync();
+
+            // Need to initialize rooms before players, because player construction requires a GameRoomId.
+
+            await _roomRepository.CreateNewRooms(gameId);
+            await InitializePlayers(newGameInfo);
+            await InitializeItems(newGameInfo);
+            await _landmassCardsService.InitializeLandmassCards(newGameInfo.Game.Id);
+
+            // Stations are tied to rooms, currently, only in services that interact with them in a hardcoded way. - So stations can be created independently of rooms
+            await _stationRepository.CreateAndAddStationsToDb(gameId);
+            await _landmassService.AdvanceToNextLandmass(gameId);
+            await _playerContext.SaveChangesAsync();
+        }
+
+        public void InsertVeryDummyValues()
+        {
+            _playerContext.TriggerNotifications.Add(DummyValues.TriggerNotification1);
+            _playerContext.Messages.Add(DummyValues.Message1);
+            _playerContext.Messages.Add(DummyValues.Message2);
+            _playerContext.PrivateChatRooms.Add(DummyValues.PrivateChatRoom);
+            _playerContext.PrivateChatRoomParticipants.Add(DummyValues.PrivateChatRoomParticipant);
+            _playerContext.Items.Add(DummyValues.Freditem);
+
             _playerContext.SaveChanges();
         }
 
-        public void InitializePlayers(NewGameInfo info)
+        public async Task InitializePlayers(NewGameInfo info)
         {
-            /* 
-              Will need to clarify what gets initialized before what.
+            /* Will need to clarify what gets initialized before what.
               for example, class cannot depend on starting room(for knowing which bonuses is applying), and starting room also depend on class. One needs to be
-              created before the other. 
-            */
+              created before the other. */
             foreach (var user in info.Users)
             {
                 PlayerSelections selection = info.RoleChoices.First(x => x.UserId == user.Id);
@@ -128,7 +122,7 @@ namespace WebAPI.Services
                     GameId = info.Game.Id,
                     HealthPoints = 0,
                     Name = selection.Name,
-                    Profession = RoleType.Commander,
+                    Profession = info.RoleChoices.First(x => x.UserId == user.Id).RoleType,
                     X = 0f,
                     Y = 0f,
                     Z = 0f,
@@ -137,7 +131,7 @@ namespace WebAPI.Services
                 InitializePlayerRoleSettings(newPlayer);
 
                 //Starting room might change according to some variables. 
-                Guid roomId = GetStartingRoomId(newPlayer, info);
+                Guid roomId = await GetStartingRoomId(newPlayer, info);
                 newPlayer.CurrentGameRoomId = roomId;
                 _playerContext.Players.Add(newPlayer);
             }
@@ -155,79 +149,30 @@ namespace WebAPI.Services
             throw new Exception("Selected Profession has no settings defined.");
         }
 
-        public Guid GetStartingRoomId(Player player, NewGameInfo info)
+        public async Task<Guid> GetStartingRoomId(Player player, NewGameInfo info)
         {
-            var rooms = _roomRepository.GetRoomsInGame(info.Game.Id);
+            var rooms = await _roomRepository.GetRoomsInGame(info.Game.Id);
             // some code that sets the startRoomId.
-            return rooms.First().Id;
+            var firstNotLandmass = rooms.First(x => !x.IsLandmass).Id;
+            return firstNotLandmass;
         }
 
-        public void InitializeItems(NewGameInfo info)
+        public async Task InitializeItems(NewGameInfo info)
         {
-            List<Room> rooms = _roomRepository.GetRoomsInGame(info.Game.Id);
+            List<Room> rooms = await _roomRepository.GetRoomsInGame(info.Game.Id);
 
             var newItem = DummyValues.Item;
             newItem.OwnerId = rooms.First().Id;
+            Item roomItem = new Item()
+            {
+                Id = Guid.NewGuid(),
+                ItemType = ItemType.Hose,
+                OwnerId = rooms.First(x => !x.IsLandmass).Id,
+            };
+            _playerContext.Items.Add(roomItem);
             _playerContext.Items.Add(newItem);
-            _playerContext.SaveChanges();
-            // dummy value :
-
-            // will need to know which room does what.
-            //foreach (var room in rooms)
-            //{
-            //    switch (room.Name)
-            //    {
-            //        case "Kitchen1":
-            //            {
-            //                break;
-            //            }
-            //        default: { throw new Exception($"{room.Name} has not been found while initializing items."); };
-            //    }
-            //}
-        }
-
-        public void InitializeLandmassLayoutAndRooms(NewGameInfo info)
-        {
-            this.InitializeLandmassCards(info);
-            _landmassService.NextLandmass(info.Game.Id);
-        }
-
-        private void InitializeLandmassCards(NewGameInfo infos)
-        {
-            // disons, pour l'instant,
-            // 1 carte bonne,
-            // 1 carte neutral,
-            // 1 carte mauvaise
-            Card goodCard = new Card()
-            {
-                Id = Guid.NewGuid(),
-                IsDiscarded = false,
-                GameId = infos.Game.Id,
-                Name = "Expedition1",
-                Value = CardValue.Positive
-            };
-
-            Card neutralCard = new Card()
-            {
-                Id = Guid.NewGuid(),
-                IsDiscarded = false,
-                GameId = infos.Game.Id,
-                Name = "Kitchen1",
-                Value = CardValue.Neutral
-            };
-
-            Card badCard = new Card()
-            {
-                Id = Guid.NewGuid(),
-                IsDiscarded = false,
-                GameId = infos.Game.Id,
-                Name = "EntryHall",
-                Value = CardValue.Negative
-            };
-
-            _playerContext.Cards.Add(goodCard);
-            _playerContext.Cards.Add(neutralCard);
-            _playerContext.Cards.Add(badCard);
+            _playerContext.Items.Add(DummyValues.GetRandomItem(newItem.OwnerId));
+            _playerContext.Items.Add(DummyValues.GetRandomItem(newItem.OwnerId));
             _playerContext.SaveChanges();
         }
     }

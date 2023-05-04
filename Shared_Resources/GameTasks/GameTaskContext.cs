@@ -11,7 +11,7 @@ namespace Shared_Resources.GameTasks
     public class GameTaskContext
     {
         public GameState GameState { get; set; }
-        public Dictionary<string, string> Parameters { get; set; } // devrait etre apreil partout donc utiliser : object Params
+        public Dictionary<string, string> Parameters { get; set; } = new Dictionary<string, string>();// devrait etre apreil partout donc utiliser : object Params
         public PlayerDTO Player => GameState.PlayerDTO;
     }
 }

@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         [Route("CreateChatroom")] // used
         public async Task<ActionResult<ClientCallResult>> CreateChatroom(string playerGuid, string newRoomGuid)
         {
-            ClientCallResult result = _chatService.CreateChatroom(playerGuid, newRoomGuid);
+            ClientCallResult result = await _chatService.CreateChatroomAsync(playerGuid, newRoomGuid);
             return Ok(result);
         }
 
@@ -34,7 +34,7 @@ namespace WebAPI.Controllers
         [Route("LeaveChatRoom")] // used 
         public async Task<ActionResult<ClientCallResult>> LeaveChatRoom(Guid playerId, Guid roomToLeave) // va dependre de comment je manage les data
         {
-            ClientCallResult result = _chatService.LeaveChatRoom(playerId, roomToLeave);
+            ClientCallResult result = await _chatService.LeaveChatRoomAsync(playerId, roomToLeave);
             return Ok(result);
         }
 
@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         [Route("InviteToRoom")]
         public async Task<ActionResult<ClientCallResult>> InviteToRoom(Guid fromId, Guid targetPlayer, Guid targetRoomId) 
         {
-            _chatService.InviteToRoom(fromId, targetPlayer, targetRoomId);
+            await _chatService.InviteToRoomAsync(fromId, targetPlayer, targetRoomId);
             // demander a ben pour quand jai besoin de props + la base class
             return Ok(ClientCallResult.Success);
         }
@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
         [Route("PutNewMessageToServer")]
         public async Task<ActionResult> PutNewMessageToServer(string guid, string roomId, string receivedMessage)
         {
-            _chatService.PutNewMessageToServer(guid, roomId, receivedMessage);
+            await _chatService.PutNewMessageToServerAsync(guid, roomId, receivedMessage);
             return Ok();
         }
 
@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
         [Route("SendInviteResponse")]
         public async Task<ActionResult<ClientCallResult>> SendInviteResponse(Guid triggerId, bool isAccepted)
         {
-            _chatService.SendInviteResponse(triggerId, isAccepted);
+            await _chatService.SendInviteResponse(triggerId, isAccepted);
             return ClientCallResult.Success;
         }
     }

@@ -1,15 +1,30 @@
-﻿using Shared_Resources.Entities;
+﻿using Shared_Resources.Constants;
+using Shared_Resources.Entities;
+using Shared_Resources.Interfaces;
 using System;
 using System.Collections.Generic;
 namespace Shared_Resources.DTOs
 {
-    public class RoomDTO
+    public class RoomDTO : ITaskParameter
     {
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
-        public string Name { get; set; }
-        public List<Item> Items { get; set; }
-        public List<Player> Players { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public List<Item> Items { get; set; } = new List<Item>();
+        public List<Player> Players { get; set; } = new List<Player>();
         public RoomType RoomType { get; set; }
+        public List<Station> Stations { get; set; } = new List<Station>();
+
+        public KeyValuePair<string, string> GetKeyValuePairParameter(int index)
+        {
+            var name = $"{TaskTargetParameterization.RoomNamePrefix}{index}";
+            var kvp = new KeyValuePair<string, string>(name, this.Name);
+            return kvp;
+        }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

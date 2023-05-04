@@ -3,10 +3,12 @@ using Shared_Resources.DTOs;
 using Shared_Resources.Enums;
 using Shared_Resources.Interfaces;
 using System;
+using System.Collections.Generic;
+using Shared_Resources.Constants;
 
 namespace Shared_Resources.Entities
 {
-    public class Player : IEntity
+    public class Player : IEntity, ITaskParameter
     {
         public Guid Id { get; set; }
 
@@ -48,6 +50,17 @@ namespace Shared_Resources.Entities
             };
         }
 
+        public KeyValuePair<string, string> GetKeyValuePairParameter(int index)
+        {
+            var prefix = $"{TaskTargetParameterization.PlayerIdPrefix}{index}";
+            var kvp = new KeyValuePair<string, string>(prefix, this.Id.ToString());
+            return kvp;
+        }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }
 

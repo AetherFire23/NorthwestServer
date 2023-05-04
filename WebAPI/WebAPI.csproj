@@ -51,11 +51,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Scratches\" />
+    <ProjectReference Include="..\Shared_Resources\Shared_Resources.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared_Resources\Shared_Resources.csproj" />
+    <Folder Include="GameInitialization_Scratch\" />
   </ItemGroup>
 
 </Project>

@@ -11,9 +11,9 @@ namespace Shared_Resources.DTOs
         public Guid CurrentChatRoomId { get; set; }
         public Guid CurrentGameRoomId { get; set; }
         public RoleType Profession { get; set; }
-        public List<Item> Items { get; set; }
-        public List<SkillType> Skills { get; set; }
-        public string Name { get; set; }
+        public List<Item> Items { get; set; } = new List<Item>();
+        public List<SkillType> Skills { get; set; } = new List<SkillType>();
+        public string Name { get; set; } = string.Empty;
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }

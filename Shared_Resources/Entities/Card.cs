@@ -9,7 +9,12 @@ namespace Shared_Resources.Entities
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
         public string Name { get; set; } = string.Empty;
-        public CardValue Value { get; set; }
+        public CardImpact CardImpact { get; set; }
         public bool IsDiscarded { get; set; }
+
+        public override string ToString()
+        {
+            return $"Card:{this.Name}";
+        }
     }
 }

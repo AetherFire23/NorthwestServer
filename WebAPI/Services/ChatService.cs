@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
@@ -15,7 +16,7 @@ namespace WebAPI.Services
             _playerContext = playerContext;
             _playerRepository = playerRepository;
         }
-        public ClientCallResult CreateChatroom(string playerGuid, string newRoomGuid)
+        public async Task<ClientCallResult> CreateChatroomAsync(string playerGuid, string newRoomGuid)
         {
             Guid playerid = new Guid(playerGuid);
             Guid newRoomid = new Guid(newRoomGuid);
@@ -27,47 +28,51 @@ namespace WebAPI.Services
                 RoomId = newRoomid
             };
 
-            _playerContext.PrivateChatRooms.Add(pair);
-            _playerContext.SaveChanges();
+            _playerContext.PrivateChatRoomParticipants.Add(pair);
+            await _playerContext.SaveChangesAsync();
 
             return ClientCallResult.Success;
         }
 
-        public ClientCallResult LeaveChatRoom(Guid playerId, Guid roomToLeave)
+        public async Task<ClientCallResult> LeaveChatRoomAsync(Guid playerId, Guid roomToLeave)
         {
-            var t = _playerContext.PrivateChatRooms.First(x => x.RoomId == roomToLeave && x.ParticipantId == playerId);
-            _playerContext.PrivateChatRooms.Remove(t);
-            _playerContext.SaveChanges();
+            var t = await _playerContext.PrivateChatRoomParticipants.FirstAsync(x => x.RoomId == roomToLeave && x.ParticipantId == playerId);
+            _playerContext.PrivateChatRoomParticipants.Remove(t);
+            await _playerContext.SaveChangesAsync();
             return ClientCallResult.Success;
         }
 
-        public ClientCallResult InviteToRoom(Guid fromId, Guid targetPlayer, Guid targetRoomId)
+        public async Task<ClientCallResult> InviteToRoomAsync(Guid fromId, Guid targetPlayer, Guid targetRoomId)
         {
             var invites = _playerRepository.GetAllTriggersOfType(targetPlayer, NotificationType.PrivInv);
 
             foreach (var invite in invites)
             {
                 var props = JsonConvert.DeserializeObject<PrivateInvitationProperties>(invite.SerializedProperties);
-                bool inviteExists = props.FromPlayerId == fromId && invite.PlayerId == targetPlayer && props.RoomId == targetRoomId;
-                if (inviteExists)
-                {
-                    var result = new ClientCallResult()
-                    {
-                        IsSuccessful = false,
-                        Message = "Invite already exists"
-                    };
+                bool inviteExists = props.FromPlayerId == fromId
+                                    && invite.PlayerId == targetPlayer
+                                    && props.RoomId == targetRoomId;
 
-                    return result;
-                }
+                if (!inviteExists) continue;
+                var result = new ClientCallResult()
+                {
+                    IsSuccessful = false,
+                    Message = "Invite already exists"
+                };
+
+                return result;
             }
+
+            var fromPlayer = await _playerRepository.GetPlayerAsync(fromId);
+            var targetPlayerEnt = await _playerRepository.GetPlayerAsync(targetPlayer);
 
             var invitationProperties = new PrivateInvitationProperties()
             {
                 FromPlayerId = fromId,
                 IsAccepted = false,
-                FromPlayerName = _playerRepository.GetPlayer(fromId).Name,
+                FromPlayerName = fromPlayer.Name,
                 RoomId = targetRoomId,  // ca prend la roomId 
-                ToPlayerName = _playerRepository.GetPlayer(targetPlayer).Name,
+                ToPlayerName = targetPlayerEnt.Name,
             };
 
             var trigger = new TriggerNotification()
@@ -83,14 +88,14 @@ namespace WebAPI.Services
 
             _playerContext.TriggerNotifications.Add(trigger);
 
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
 
             return ClientCallResult.Success;
         }
 
-        public void PutNewMessageToServer(string guid, string roomId, string receivedMessage)
+        public async Task PutNewMessageToServerAsync(string guid, string roomId, string receivedMessage)
         {
-            var player = _playerRepository.GetPlayer(new Guid(guid));
+            var player = await _playerRepository.GetPlayerAsync(new Guid(guid));
 
             var message = new Message()
             {
@@ -103,10 +108,10 @@ namespace WebAPI.Services
             };
 
             _playerContext.Messages.Add(message);
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
         }
 
-        public ClientCallResult SendInviteResponse(Guid triggerId, bool isAccepted)
+        public async Task<ClientCallResult> SendInviteResponse(Guid triggerId, bool isAccepted)
         {
             if (!isAccepted)
             {
@@ -123,9 +128,9 @@ namespace WebAPI.Services
                 RoomId = props.RoomId,
             };
 
-            _playerContext.PrivateChatRooms.Add(newPair);
+            _playerContext.PrivateChatRoomParticipants.Add(newPair);
 
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
             return ClientCallResult.Success;
         }
     }

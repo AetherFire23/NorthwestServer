@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
         [Route("GetGameState")]
         public async Task<ActionResult<GameState>> GetGameState(Guid playerId, DateTime? lastTimeStamp)
         {
-            var gameState = _gameStateRepository.GetPlayerGameState(playerId, lastTimeStamp);
+            var gameState = await _gameStateRepository.GetPlayerGameStateAsync(playerId, lastTimeStamp);
             return Ok(gameState);
         }
 
@@ -75,7 +75,7 @@ namespace WebAPI.Controllers
         [Route("TryExecuteGameTask")]
         public async Task<ActionResult<ClientCallResult>> GameTask(Guid playerId, GameTaskCodes taskCode, [FromBody] Dictionary<string, string> parameters)
         {
-            ClientCallResult result = _gameTaskService.ExecuteGameTask(playerId, taskCode, parameters);
+            ClientCallResult result = await _gameTaskService.ExecuteGameTask(playerId, taskCode, parameters);
             return Ok(result);
         }
 
@@ -83,25 +83,23 @@ namespace WebAPI.Controllers
         [Route("UpdatePositionByPlayerModel")]
         public async Task<ActionResult<ClientCallResult>> UpdatePositionByPlayerModel([FromBody] Player unityPlayerModel) // va dependre de comment je manage les data
         {
-            _playerService.UpdatePosition(unityPlayerModel);
+            await _playerService.UpdatePositionAsync(unityPlayerModel);
             return Ok();
         }
 
         [HttpPut]
         [Route("TransferItem")] // me sers meme pas du ownerId
-        public async Task<ActionResult<ClientCallResult>> TransferItem(Guid ownerId, Guid targetId, Guid itemId) // pourrait devenir une method dans le service
+        public async Task<ActionResult<ClientCallResult>> TransferItem(Guid targetId, Guid itemId) // pourrait devenir une method dans le service
         {
-            _playerService.TransferItem(ownerId, targetId, itemId);
+            await _playerService.TransferItem(targetId, itemId);
             return Ok();
         }
 
-
-        // jva toute deleter
         [HttpPut]
         [Route("InitiateExpedition")]
         public async Task<ActionResult<ClientCallResult>> JoinExpedition(Guid playerId, string expeditionName)
         {
-            var player = _playerRepository.GetPlayer(playerId);
+            var player = await _playerRepository.GetPlayerAsync(playerId);
             var expedition = _playerContext.Expeditions.First(x => x.Name == expeditionName && player.GameId == x.GameId);
 
             if (expedition.IsCreated)
@@ -122,7 +120,7 @@ namespace WebAPI.Controllers
         [Route("ChangeRoom")]
         public async Task<ActionResult<ClientCallResult>> ChangeRoom(Guid playerId, string targetRoomName)
         {
-            var result = _playerService.ChangeRoom(playerId, targetRoomName);
+            var result = await _playerService.ChangeRoomAsync(playerId, targetRoomName);
             return Ok(result);
         }
 
@@ -140,7 +138,7 @@ namespace WebAPI.Controllers
         {
 
 
-            _gameMakerService.CreateDummyGame();
+            await _gameMakerService.CreateDummyGame();
             return Ok();
         }
 
@@ -148,7 +146,7 @@ namespace WebAPI.Controllers
         [Route("1-CreateNewGame")]
         public async Task<ActionResult> CreateNewGame()
         {
-            _roomRepository.CreateNewRooms(DummyValues.defaultGameGuid);
+            await _roomRepository.CreateNewRooms(DummyValues.defaultGameGuid);
 
             _playerContext.Games.Add(DummyValues.Game);
 

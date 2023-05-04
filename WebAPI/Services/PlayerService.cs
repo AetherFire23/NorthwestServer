@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using WebAPI.Game_Actions;
@@ -18,31 +19,31 @@ namespace WebAPI.Services
             _gameActionsRepository = gameActionsRepository;
         }
 
-        public void TransferItem(Guid ownerId, Guid targetId, Guid itemId)
+        public async Task TransferItem(Guid targetId, Guid itemId)
         {
-            Item item = _playerRepository.GetItem(itemId);
+            Item item = await _playerRepository.GetItemAsync(itemId);
             item.OwnerId = targetId;
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
         }
 
-        public void UpdatePosition(Player UnityPlayerModel)
+        public async Task UpdatePositionAsync(Player UnityPlayerModel)
         {
-            Player player = _playerRepository.GetPlayer(UnityPlayerModel.Id);
+            Player player = await _playerRepository.GetPlayerAsync(UnityPlayerModel.Id);
             player.X = UnityPlayerModel.X;
             player.Y = UnityPlayerModel.Y;
             player.Z = UnityPlayerModel.Z;
             _playerContext.SaveChanges();
         }
 
-        public ClientCallResult ChangeRoom(Guid playerId, string targetRoomName)
+        public async Task<ClientCallResult> ChangeRoomAsync(Guid playerId, string targetRoomName)
         {
-            var player = _playerRepository.GetPlayer(playerId);
+            var player = await _playerRepository.GetPlayerAsync(playerId);
 
-            var currentRoom = _playerContext.Rooms.First(x => x.Id == player.CurrentGameRoomId);
+            var currentRoom = await _playerContext.Rooms.FirstAsync(x => x.Id == player.CurrentGameRoomId);
 
-            var targetRoom = _playerContext.Rooms.First(x => x.Name == targetRoomName); // devrait pas etre avec le gameid aussi?
+            var targetRoom = await _playerContext.Rooms.FirstAsync(x => x.Name == targetRoomName); // devrait pas etre avec le gameid aussi?
 
-            bool connectionExists = _playerContext.AdjacentRooms.FirstOrDefault(x => x.RoomId == currentRoom.Id && x.AdjacentId == targetRoom.Id) is not null;
+            bool connectionExists = await _playerContext.AdjacentRooms.FirstOrDefaultAsync(x => x.RoomId == currentRoom.Id && x.AdjacentId == targetRoom.Id) is not null;
 
             if (connectionExists)
             {
@@ -54,7 +55,15 @@ namespace WebAPI.Services
                 return ClientCallResult.Success;
             }
 
-            return ClientCallResult.Failure;
+            // else fail
+            string message = $"Connection between {currentRoom.Name} and {targetRoom.Name} did not exist";
+
+
+            return new ClientCallResult()
+            {
+                Message = message,
+                IsSuccessful = false,
+            };
         }
     }
 }

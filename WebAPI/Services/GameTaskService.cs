@@ -18,9 +18,9 @@ namespace WebAPI.Services
             _serviceProvider = serviceProvider;
         }
 
-        public ClientCallResult ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, Dictionary<string, string> parameters)
+        public async Task<ClientCallResult> ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, Dictionary<string, string> parameters)
         {
-            var gameState = _gameStateRepository.GetPlayerGameState(playerId, null);
+            var gameState = await _gameStateRepository.GetPlayerGameStateAsync(playerId, null);
             if (gameState == null)
             {
                 return ClientCallResult.Failure;
@@ -33,7 +33,7 @@ namespace WebAPI.Services
             };
 
             Type gameTaskType = GameTaskTypeSelector.GetGameTaskType(taskCode);
-            var gameTask = _serviceProvider.GetService(gameTaskType) as IGameTask;
+            var gameTask = _serviceProvider.GetService(gameTaskType) as GameTaskBase;
 
             var result = gameTask.Validate(context);
             if (!result.IsValid)
@@ -41,7 +41,7 @@ namespace WebAPI.Services
                 return ClientCallResult.Failure;
             }
 
-            gameTask.Execute(context);
+            await gameTask.Execute(context);
             return ClientCallResult.Success;
         }
     }

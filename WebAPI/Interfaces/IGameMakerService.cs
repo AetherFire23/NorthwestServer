@@ -2,8 +2,7 @@
 {
     public interface IGameMakerService
     {
-
-        public void CreateDummyGame();
+        public Task CreateDummyGame();
         public void InsertVeryDummyValues();
     }
 }

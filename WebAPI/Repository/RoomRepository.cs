@@ -1,6 +1,8 @@
-﻿using Shared_Resources.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
+using System.Reflection.Metadata.Ecma335;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Repository
@@ -13,54 +15,52 @@ namespace WebAPI.Repository
             _playerContext = playerContext;
         }
 
-        public List<Room> GetAllLandmassRooms(Guid gameId)
+        public async Task<List<Room>> GetAllLandmassRoomsInGame(Guid gameId)
         {
-            var rooms = _playerContext.Rooms.Where(r => r.IsLandmass && r.GameId == gameId).ToList();
+            var rooms = await _playerContext.Rooms.Where(r => r.IsLandmass && r.GameId == gameId).ToListAsync();
             return rooms;
         }
 
-        public List<Room> GetAllActiveLandmassRooms(Guid gameId)
+        public async Task<List<Room>> GetAllActiveLandmassRooms(Guid gameId)
         {
-            var rooms = _playerContext.Rooms.Where(r => r.IsActive && r.IsActive && r.GameId == gameId).ToList();
+            var rooms = await _playerContext.Rooms.Where(r => r.IsActive && r.IsLandmass && r.GameId == gameId).ToListAsync();
             return rooms;
         }
 
-        public Room GetRoomById(Guid roomId)
+        public async Task<Room> GetRoomById(Guid roomId)
         {
-            var room = _playerContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+            var room = await _playerContext.Rooms.FirstAsync(r => r.Id == roomId);
             return room;
         }
 
-
-        public void RemoveFromAllConnectedRooms(Guid roomId)
+        public async Task RemoveFromAllConnectedRooms(Guid roomId)
         {
-            var connections = _playerContext.AdjacentRooms.Where(x => x.RoomId == roomId || x.AdjacentId == roomId).ToList();
+            var connections = await _playerContext.AdjacentRooms.Where(x => x.RoomId == roomId || x.AdjacentId == roomId).ToListAsync();
             _playerContext.RemoveRange(connections);
-            if (connections is null) return;
-
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
         }
 
-        public List<Room> GetRoomsInGame(Guid gameId)
+        public async Task<List<Room>> GetRoomsInGame(Guid gameId)
         {
-            var rooms = _playerContext.Rooms.Where(x => x.GameId == gameId).ToList();
+            var rooms = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
             return rooms;
         }
 
-        public Room GetRoomFromName(Guid gameId, string roomName)
+        public async Task<Room> GetRoomFromName(Guid gameId, string roomName)
         {
-            var room = _playerContext.Rooms.FirstOrDefault(r => r.Name == roomName);
+            var room = await _playerContext.Rooms.FirstAsync(r => r.GameId == gameId && r.Name == roomName);
             return room;
         }
 
-        public RoomDTO GetRoomDTO(Guid roomId)
+
+        public async Task<RoomDTO> GetRoomDTOAsync(Guid roomId)
         {
-            Room requestedRoom = GetRoomById(roomId);
+            var requestedRoom = await GetRoomById(roomId);
 
+            var playersInRoom = await _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToListAsync();
 
-            var playersInRoom = _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToList();
-
-            var items = _playerContext.Items.Where(item => item.OwnerId == roomId).ToList();
+            var items = await _playerContext.Items.Where(item => item.OwnerId == roomId).ToListAsync();
+            var stations = await _playerContext.Stations.Where(x => x.RoomName == requestedRoom.Name).ToListAsync();
 
             RoomDTO roomDTO = new RoomDTO()
             {
@@ -70,6 +70,7 @@ namespace WebAPI.Repository
                 Players = playersInRoom,
                 Name = requestedRoom.Name,
                 GameId = requestedRoom.GameId,
+                Stations = stations
             };
 
             return roomDTO;
@@ -78,118 +79,19 @@ namespace WebAPI.Repository
         /// <summary>
         /// Initializes level with the given gameId
         /// </summary>
-        /// <param name="gameId"></param>
-        public void CreateNewRooms(Guid gameId)
+        public async Task CreateNewRooms(Guid gameId)
         {
-            //  Guid kitchen1ID = new Guid("c4ac05eb-8ad5-4320-8843-cb41a6906bc6");
-            Guid kitchen2ID = new Guid("bf3accf0-a319-48c5-8c64-2a045d4b16e5");
-            Guid entryHallID = new Guid("80998e1e-15ba-46bb-a1a8-b8b8c89c7004");
-            var levelTemplate = BuildLevelTemplate();
+            Tuple<List<Room>, List<AdjacentRoom>> roomsAndConnections = DefaultRoomFactory.CreateAndInitializeNewRoomsAndConnections(gameId);
 
-            // Get default rooms 
-            var defaultRooms = typeof(LevelTemplate).GetProperties()
-                .Select(x => x.GetValue(levelTemplate))
-                .Select(x => (RoomTemplate)x).ToList();
-
-
-            // Initialize new Rooms 
-            List<Room> newRooms = new List<Room>();
-            for (int i = 0; i < defaultRooms.Count; i++)
-            {
-                var defaultRoom = defaultRooms[i];
-                Room newDbRoom = new Room()
-                {
-                    Id = Guid.NewGuid(),
-                    GameId = gameId,
-                    Name = defaultRoom.Name,
-                    RoomType = defaultRoom.RoomType,
-                    IsLandmass = false,
-                };
-                newRooms.Add(newDbRoom);
-            }
-
-
-            // Pas integrated ici
-            List<Room> newRooms2 = defaultRooms.Select(r => r.ToRoom()).ToList();
-
-            // For each new room made, initialize its connections
-            var adjacentRooms2 = newRooms2.Select(room => room.AdjacentRoomNames.Select(adjacentName =>
-                new AdjacentRoom()
-                {
-                    Id = Guid.NewGuid(),
-                    RoomId = room.Id,
-                    AdjacentId = newRooms2.Single(x => x.Name.Equals(adjacentName)).Id,
-                })).SelectMany(x => x);
-
-
-
-
-            // techniquement plus efficace I guess mais c<est degueulasse
-            // Create room connections : la premier join sert à faire correspondre la salle par defaut + la salle a initialiser.
-            //                           Le deuxième join sert à faire correspondre le nom adjacent de la pièce à la pièce initée (impossible d'obtenir l'ID de la pièce par défaut).
-            List<AdjacentRoom> adjacentRooms = newRooms.Join(defaultRooms,
-                nr1 => nr1.Name,
-                dr1 => dr1.Name,
-                (nr1, dr1) => dr1.AdjacentNames.Join(newRooms,
-                dr => dr,
-                nr => nr.Name,
-                (dr, nr) => new AdjacentRoom()
-                {
-                    Id = Guid.NewGuid(),
-                    RoomId = nr1.Id,
-                    AdjacentId = nr.Id
-                })).SelectMany(x => x).ToList();
-
-
-            _playerContext.Rooms.AddRange(newRooms);
-            _playerContext.AdjacentRooms.AddRange(adjacentRooms);
-
-            _playerContext.SaveChanges(); // saved ! 
+            await _playerContext.Rooms.AddRangeAsync(roomsAndConnections.Item1);
+            await _playerContext.AdjacentRooms.AddRangeAsync(roomsAndConnections.Item2);
+            await _playerContext.SaveChangesAsync();
         }
 
-        private LevelTemplate BuildLevelTemplate()
+        public async Task<List<AdjacentRoom>> GetLandmassAdjacentRoomsAsync(Guid gameId)
         {
-            LevelTemplate levelTemplate = new()
-            {
-                EntryHall = new RoomTemplate()
-                {
-                    Id = Guid.Empty,
-                    Name = nameof(LevelTemplate.EntryHall),
-                    AdjacentNames = new List<string>()
-                    {
-                        nameof(LevelTemplate.Kitchen1),
-                    },
-                    RoomType = RoomType.Start
-                },
-
-                Kitchen1 = new RoomTemplate()
-                {
-                    Id = Guid.Empty,
-                    Name = nameof(LevelTemplate.Kitchen1),
-                    AdjacentNames = new List<string>()
-                    {
-                        nameof(LevelTemplate.EntryHall),
-                        nameof(LevelTemplate.Expedition1),
-
-                    },
-                    RoomType = RoomType.Second
-                },
-
-                Expedition1 = new RoomTemplate()
-                {
-                    Id = Guid.Empty,
-                    Name = nameof(LevelTemplate.Expedition1),
-                    AdjacentNames = new List<string>()
-                    {
-                        nameof(LevelTemplate.Kitchen1),
-                    },
-                    RoomType = RoomType.Start
-                },
-
-
-
-            };
-            return levelTemplate;
+            var adjacentRooms = await _playerContext.AdjacentRooms.Where(x => x.GameId == gameId && x.IsLandmassConnection).ToListAsync();
+            return adjacentRooms;
         }
     }
 }

@@ -10,16 +10,32 @@ using Quartz;
 using WebAPI.Jobs;
 using WebAPI.Services;
 using Shared_Resources.GameTasks;
-using WebAPI.GameTasks;
 using System.Linq;
-using Shared_Resources.GameTasks;
+using WebAPI.Dummies;
+using Shared_Resources.Constants;
+using Shared_Resources.Models;
+using WebAPI.Scratches;
 
 namespace WebAPI
 {
     public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+            // Initialize the rooms template
+            RoomTemplate2.InitializeDefaultReflectedRooms(); // could abstract those 2 if I wanted to waste my fucking time
+            StationsTemplate.InitializeDefaultReflectedStations();
+
+            // reflection is incoming for registering roleStrategies
+
+
+
+
+
+
+
+
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -27,7 +43,7 @@ namespace WebAPI
 
             RegisterGameTaskTypes(builder);
 
-            // Now split API and gameTask stuff
+            // Now split API and gameTask stuff // think its not useful
             var unityTasks = typeof(IGameTask).Assembly.GetTypes()
                 .Where(type =>
                 type.IsClass && !type.IsAbstract
@@ -98,7 +114,13 @@ namespace WebAPI
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IGameMakerRepository, GameMakerRepository>();
             builder.Services.AddScoped<ILandmassRepository, LandmassRepository>();
-            builder.Services.AddScoped<ILandmassService, LandmassService>();
+
+            //landmasses
+            builder.Services.AddScoped<ILandmassService2, LandmassService2>();
+            builder.Services.AddScoped<ILandmassCardsRepository, LandmassCardsRepository>();
+            builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
+
+
 
             // Configure Automapper
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -136,11 +158,11 @@ namespace WebAPI
             //Migration
             using (var scope = app.Services.CreateScope())
             {
+                var playerContextService = scope.ServiceProvider.GetService<PlayerContext>();
 
                 try
                 {
                     // this deletes and recreates the whole databse when it is launched.
-                    var playerContextService = scope.ServiceProvider.GetService<PlayerContext>();
                     playerContextService.Database.EnsureDeleted(); // deocher our recommecner
                     playerContextService.Database.Migrate();
 
@@ -153,10 +175,22 @@ namespace WebAPI
                     logger.LogError(ex, "An error occurred");
                 }
                 var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
+                ILandmassService2? landmassService2 = scope.ServiceProvider.GetService<ILandmassService2>();
+                var landmassCardService = scope.ServiceProvider.GetService<ILandmassCardsService>();
 
-
+                await gameMakerService.CreateDummyGame();
                 gameMakerService.InsertVeryDummyValues();
-                gameMakerService.CreateDummyGame();
+
+                // some other very dummy values
+                var p = playerContextService.Players.FirstOrDefault(x => x.Id == DummyValues.defaultPlayer1Guid);
+                playerContextService.Logs.Add(DummyValues.SomeLog(p.CurrentGameRoomId));
+
+                // real scratch
+                // landmassCardService.InitializeLandmassCards(p.GameId).Wait();
+                // landmassService2.AdvanceToNextLandmass(p.GameId).Wait();
+
+
+                playerContextService.SaveChanges();
 
             }
 

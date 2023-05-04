@@ -9,13 +9,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>False</Optimize>
   </PropertyGroup>
 	
 	
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>True</Optimize>
   </PropertyGroup>
 

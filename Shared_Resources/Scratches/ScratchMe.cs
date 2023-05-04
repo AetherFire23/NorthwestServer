@@ -8,7 +8,7 @@ namespace Shared_Resources.Scratches
     {
         public static void SlideInMe()
         {
-            string s = "sexe";
+           // string s = "sexe";
         }
     }
 }

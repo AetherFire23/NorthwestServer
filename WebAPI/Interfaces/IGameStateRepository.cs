@@ -6,8 +6,8 @@ namespace WebAPI.Interfaces
 {
     public interface IGameStateRepository
     {
-        public GameState GetPlayerGameState(Guid playerId, DateTime? lastTimeStamp);
-        public List<Message> GetNewMessages(DateTime? lastTimeStamp, Guid gameId);
+        public Task<GameState> GetPlayerGameStateAsync(Guid playerId, DateTime? lastTimeStamp);
+        public Task<List<Message>> GetNewMessagesAsync(DateTime? lastTimeStamp, Guid gameId);
         public List<Message> GetMessagesFromGameId(Guid gameId);
         public List<Message> GetMessagesAfterTimeStamp(DateTime? timeStamp, Guid gameId);
     }
