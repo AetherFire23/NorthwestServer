@@ -18,13 +18,14 @@ namespace WebAPI.GameTasks.Executions
 
         public override async Task Execute(GameTaskContext context)
         {
+            int i = 0;
             // ca pourrait tu renvoyer le JSON au complet de la room au pire ? 
-            string roomName = context.Parameters[_stationNameParam];
-            var cookStation = await _stationRepo.RetrieveStationAsync<CookStationProperties>(context.Player.Id, roomName);
+            //string roomName = context.Parameters[_stationNameParam];
+            //var cookStation = await _stationRepo.RetrieveStationAsync<CookStationProperties>(context.Player.Id, roomName);
 
-            var properties = (CookStationProperties)cookStation.ExtraProperties;
+            //var properties = (CookStationProperties)cookStation.ExtraProperties;
 
-            _stationRepo.SaveStation(cookStation);
+            //_stationRepo.SaveStation(cookStation);
         }
     }
 }

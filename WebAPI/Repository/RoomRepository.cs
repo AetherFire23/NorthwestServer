@@ -70,7 +70,10 @@ namespace WebAPI.Repository
                 Players = playersInRoom,
                 Name = requestedRoom.Name,
                 GameId = requestedRoom.GameId,
-                Stations = stations
+                Stations = stations,
+                IsLandmass = requestedRoom.IsLandmass,
+                X = requestedRoom.X,
+                Y = requestedRoom.Y,
             };
 
             return roomDTO;

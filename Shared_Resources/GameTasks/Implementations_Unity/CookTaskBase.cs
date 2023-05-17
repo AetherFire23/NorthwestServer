@@ -19,7 +19,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         public override bool CanShow(GameState gameState)
         {
             string currentRoomName = gameState.Room.Name;
-            bool correctRoom = currentRoomName.Equals("Kitchen1") || currentRoomName.Equals("EntryHall");
+            bool correctRoom = currentRoomName.Equals("Kitchen1"); //|| currentRoomName.Equals("EntryHall");
             return correctRoom;
         }
 
@@ -41,19 +41,18 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         // renvoie un dictionnaire parce que je me force a sorter les types 
         public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
         {
-            var chckList = new CheckListsBuilder();
+            var targetPrompts = new CheckListsBuilder();
             List<DTOs.RoomDTO> rooms = gameState.Rooms;
             List<Player> players = gameState.Players;
 
-            chckList.CreateCheckListPrompt(rooms)
+            targetPrompts.CreateCheckListPrompt(rooms)
+                .SetExactAmount(3);
+
+            targetPrompts.CreateCheckListPrompt(players)
                 .SetMinimumTargetCount(1)
                 .SetMaximumTargetCount(1);
 
-            chckList.CreateCheckListPrompt(players)
-                .SetMinimumTargetCount(1)
-                .SetMaximumTargetCount(1);
-
-            return chckList;
+            return targetPrompts;
         }
 
         public Dictionary<string, string> GetTaskParameters(GameState gameState)

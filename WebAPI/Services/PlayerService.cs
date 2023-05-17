@@ -56,7 +56,7 @@ namespace WebAPI.Services
             }
 
             // else fail
-            string message = $"Connection between {currentRoom.Name} and {targetRoom.Name} did not exist";
+            string message = $"Connection between {currentRoom.Name} and {targetRoom.Name} did not exist. If room is intended to be destroyed, use .IsBlockedConnection";
 
 
             return new ClientCallResult()

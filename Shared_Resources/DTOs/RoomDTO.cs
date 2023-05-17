@@ -14,6 +14,10 @@ namespace Shared_Resources.DTOs
         public List<Player> Players { get; set; } = new List<Player>();
         public RoomType RoomType { get; set; }
         public List<Station> Stations { get; set; } = new List<Station>();
+        public bool IsLandmass { get; set; }
+
+        public float X { get; set; }
+        public float Y { get; set; }
 
         public KeyValuePair<string, string> GetKeyValuePairParameter(int index)
         {

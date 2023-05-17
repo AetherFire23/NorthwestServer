@@ -96,7 +96,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("InitiateExpedition")]
+        [Route("InitiateExpedition")] // should be legacy I think
         public async Task<ActionResult<ClientCallResult>> JoinExpedition(Guid playerId, string expeditionName)
         {
             var player = await _playerRepository.GetPlayerAsync(playerId);
@@ -129,111 +129,6 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
         {
             var t = _mainMenuRepository.GetMainMenuState(userId);
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("1-CreateNewGameDummyGame")]
-        public async Task<ActionResult> CreateNewGameDummyGame()
-        {
-
-
-            await _gameMakerService.CreateDummyGame();
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("1-CreateNewGame")]
-        public async Task<ActionResult> CreateNewGame()
-        {
-            await _roomRepository.CreateNewRooms(DummyValues.defaultGameGuid);
-
-            _playerContext.Games.Add(DummyValues.Game);
-
-            var f = DummyValues.Fred;
-            var b = DummyValues.Ben;
-
-            f.CurrentGameRoomId = _playerContext.Rooms.First().Id;
-            b.CurrentGameRoomId = _playerContext.Rooms.First().Id;
-            _playerContext.Players.Add(f);
-
-            _playerContext.Players.Add(b);
-
-            _playerContext.Items.Add(DummyValues.Item);
-
-            _playerContext.Stations.Add(DummyValues.Station);
-
-            _playerContext.Expeditions.Add(DummyValues.Expedition1);
-
-            _playerContext.SaveChanges();
-            return Ok();
-        }
-
-
-
-        [HttpPut]
-        [Route("2-AddDefaultValues")]
-        public async Task<ActionResult> AddDefaultValues()
-        {
-            Guid defaultGameGuid = new Guid("DE74B055-BA84-41A2-BAEA-4E380293E227");
-
-            Message sampleMessage = new Message()
-            {
-                Id = Guid.NewGuid(),
-                Created = DateTime.Now,
-                GameId = defaultGameGuid,
-                RoomId = defaultGameGuid,
-                Name = "Fred",
-                Text = "Testoman!"
-            };
-            _playerContext.Messages.Add(sampleMessage);
-            _playerContext.SaveChanges();
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("3-AddSettings")]
-        public async Task<ActionResult> AddSettings()
-        {
-            var cookSetting = new TaskSetting()
-            {
-                Id = Guid.NewGuid(),
-                TaskCode = GameTaskCodes.Cook,
-                SerializedProperties = JsonConvert.SerializeObject(new CookSettingProperties())
-            };
-
-            _playerContext.TaskSettings.Add(cookSetting);
-
-            var CleanSetting = new TaskSetting()
-            {
-                Id = Guid.NewGuid(),
-                TaskCode = GameTaskCodes.Cook,
-                SerializedProperties = JsonConvert.SerializeObject(new CleanSettingProperties())
-            };
-            _playerContext.TaskSettings.Add(CleanSetting);
-
-            _playerContext.SaveChanges();
-            return Ok();
-        }
-
-
-        [HttpPut]
-        [Route("Yeah")]
-        public async Task<ActionResult<DestMappa>> TEstMapper()
-        {
-            var src = new SourceMappa()
-            {
-                Name = "Fred",
-                Same = 3
-            };
-            var test = _mapper.Map<DestMappa>(src);
-            return Ok(test);
-        }
-
-        [HttpPut]
-        [Route("unitTestTest")]
-        public async Task<ActionResult> TestXUnit()
-        {
             return Ok();
         }
     }

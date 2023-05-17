@@ -27,7 +27,7 @@ namespace WebAPI
         public async Task AdvanceToNextLandmass(Guid gameId) // entry point for switching landmasses
         {
             var roomNames = await _landmassCardsService.DrawNextLandmassRoomNames(gameId);
-            LandmassLayout layout = LandmassGetter.CreateNewLandmassLayout(roomNames); // attention : 8 rooms ici ! 
+            LandmassLayout layout = LandmassGetter.CreateNewLandmassLayoutAndInsertNames(roomNames); // attention : 8 rooms ici ! 
             Tuple<List<Room>, List<AdjacentRoom>> s = LandmassEntitiesInitializer.CreateNewDefaultLandmassRoomsAndConnections(layout, gameId);
 
             await WipeLandmassRoomsAndConnections(gameId);

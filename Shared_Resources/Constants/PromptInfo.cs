@@ -7,6 +7,7 @@ using System.Text;
 namespace Shared_Resources.Constants
 {
     // Just let the task validation break for now if the parameters are incorrect.
+    // So PromptInfo is 
     public class PromptInfo
     {
         public List<ITaskParameter> PromptedObjects { get; private set; } = new List<ITaskParameter>();
@@ -20,7 +21,7 @@ namespace Shared_Resources.Constants
         public bool IsExactAmount => ExactTargetAmount != 0;
         public bool IsMultipleChecks => MaximumSelectionAmount > 1 || ExactTargetAmount > 1;
         public int MaximumChecks => IsExactAmount ? ExactTargetAmount : MaximumSelectionAmount;
-
+        public int MinimumChecks => IsExactAmount ? ExactTargetAmount : MinimumSelection;
         private const int _defaultMinimumValue = 1;
         private const int _defaultMaximumValue = 99;
 
@@ -45,6 +46,8 @@ namespace Shared_Resources.Constants
 
         public PromptInfo SetMaximumTargetCount(int max)
         {
+            if (this.MinimumSelection > max) throw new Exception($"Minimum value cannot be higher than maximum");
+
             MaximumSelectionAmount = max;
             return this;
         }

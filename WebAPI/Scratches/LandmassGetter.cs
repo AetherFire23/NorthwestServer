@@ -26,7 +26,7 @@ namespace WebAPI
             return randomLayout;
         }
 
-        public static LandmassLayout CreateNewLandmassLayout(List<string> drawnRoomNames)
+        public static LandmassLayout CreateNewLandmassLayoutAndInsertNames(List<string> drawnRoomNames)
         {
             LandmassLayout layout = GetRandomLandmassLayout();
             for (int i = 0; i < drawnRoomNames.Count; i++)

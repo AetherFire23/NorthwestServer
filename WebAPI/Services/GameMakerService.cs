@@ -139,7 +139,6 @@ namespace WebAPI.Services
 
         public void InitializePlayerRoleSettings(Player player)
         {
-            // modify bonuses/skills  from classes 
             switch (player.Profession)
             {
                 case RoleType.Commander: return;
@@ -157,12 +156,12 @@ namespace WebAPI.Services
             return firstNotLandmass;
         }
 
-        public async Task InitializeItems(NewGameInfo info)
+        public async Task InitializeItems(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
         {
             List<Room> rooms = await _roomRepository.GetRoomsInGame(info.Game.Id);
 
             var newItem = DummyValues.Item;
-            newItem.OwnerId = rooms.First().Id;
+            newItem.OwnerId = rooms.First(x=> !x.IsLandmass).Id;
             Item roomItem = new Item()
             {
                 Id = Guid.NewGuid(),

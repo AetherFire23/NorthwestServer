@@ -7,6 +7,7 @@ namespace WebAPI.GameTasks
 {
     public static class GameTaskTypeSelector
     {
+        // ah holy shit javais pas realize que le execution au start du program se passait sur les static functions
         private static readonly IReadOnlyDictionary<GameTaskCodes, Type> _gameTasksMap = CreateTaskTypesMap();
 
         public static Type GetGameTaskType(GameTaskCodes taskCode)

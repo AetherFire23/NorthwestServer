@@ -20,6 +20,7 @@ namespace Shared_Resources.Models
             AdjacentRoomNames = new List<string>
             {
                 nameof(EntryHall),
+                nameof(Kitchen1),
             },
             RoomType = RoomType.Start,
             IsActive = true,
@@ -31,7 +32,11 @@ namespace Shared_Resources.Models
             Id = Guid.Empty,
             GameId = Guid.Empty,
             Name = nameof(EntryHall),
-            AdjacentRoomNames = new List<string> { nameof(Kitchen) },
+            AdjacentRoomNames = new List<string> 
+            {
+                nameof(Kitchen),
+                nameof(Kitchen1),
+            },
             RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = false,
@@ -42,7 +47,11 @@ namespace Shared_Resources.Models
             Id = Guid.Empty,
             GameId = Guid.Empty,
             Name = nameof(Kitchen1),
-            AdjacentRoomNames = new List<string> { nameof(Kitchen) },
+            AdjacentRoomNames = new List<string> 
+            { 
+                nameof(Kitchen),
+                nameof(EntryHall),
+            },
             RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = false,

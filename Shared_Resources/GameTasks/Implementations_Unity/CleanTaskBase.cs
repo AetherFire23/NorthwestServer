@@ -12,12 +12,11 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     {
         public override GameTaskCodes Code => GameTaskCodes.Clean;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Room;
+        public override GameTaskProvider Provider => GameTaskProvider.Player;
 
         public override bool CanShow(GameState gameState)
         {
-            bool isInKitchen1 = gameState.Room.Name.Equals("Kitchen1");
-            return isInKitchen1;
+            return true;
         }
 
         public override Task Execute(GameTaskContext context)

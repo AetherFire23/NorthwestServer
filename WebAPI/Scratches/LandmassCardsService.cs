@@ -27,7 +27,8 @@ namespace WebAPI
             List<Card> landmassCards = await _landmassCardsRepository.GetLandmassCards(gameId);
             List<Card> drawnCards = new List<Card>();
 
-            while (drawnCards.Count < 7)
+            // would need layouts of different room count to work 
+            while (drawnCards.Count < 7) // warning  : is absolutely not generic since amount of cards needs to match amount of rooms.
             {
                 if (landmassCards.All(x => x.IsDiscarded))
                 {
