@@ -8,6 +8,7 @@ using WebAPI.Dummies;
 using WebAPI.Interfaces;
 using WebAPI.Repository;
 using WebAPI.Scratches;
+using WebAPI.Strategies;
 
 namespace WebAPI.Services
 {
@@ -19,12 +20,12 @@ namespace WebAPI.Services
         private readonly PlayerContext _playerContext;
         private readonly ILandmassService2 _landmassService;
         private readonly ILandmassCardsService _landmassCardsService;
-
+        private readonly IServiceProvider _serviceProvider;
         public GameMakerService(PlayerContext playerContext,
             IGameMakerRepository gameMakerRepository,
             IRoomRepository roomRepository,
             IStationRepository stationRepository,
-            ILandmassService2 landmassService, ILandmassCardsService landmassCardsService)
+            ILandmassService2 landmassService, ILandmassCardsService landmassCardsService, IServiceProvider serviceProvider)
         {
             _gameMakerRepository = gameMakerRepository;
             _roomRepository = roomRepository;
@@ -32,6 +33,7 @@ namespace WebAPI.Services
             _playerContext = playerContext;
             _landmassService = landmassService;
             _landmassCardsService = landmassCardsService;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task CreateDummyGame()
@@ -84,7 +86,7 @@ namespace WebAPI.Services
 
             await _roomRepository.CreateNewRooms(gameId);
             await InitializePlayers(newGameInfo);
-            await InitializeItems(newGameInfo);
+            await InitializeItemsAsync(newGameInfo);
             await _landmassCardsService.InitializeLandmassCards(newGameInfo.Game.Id);
 
             // Stations are tied to rooms, currently, only in services that interact with them in a hardcoded way. - So stations can be created independently of rooms
@@ -128,7 +130,7 @@ namespace WebAPI.Services
                     Z = 0f,
                 };
 
-                InitializePlayerRoleSettings(newPlayer);
+                await InitializePlayerRoleSettings(newPlayer);
 
                 //Starting room might change according to some variables. 
                 Guid roomId = await GetStartingRoomId(newPlayer, info);
@@ -137,18 +139,13 @@ namespace WebAPI.Services
             }
         }
 
-        public void InitializePlayerRoleSettings(Player player)
+        public async Task InitializePlayerRoleSettings(Player player)
         {
-            switch (player.Profession)
-            {
-                case RoleType.Commander: return;
-                case RoleType.Medic: return;
-                case RoleType.Engineer: return;
-            }
-            throw new Exception("Selected Profession has no settings defined.");
+            var roleStrategy = GetRoleStrategy(player.Profession);
+            await roleStrategy.InitializePlayerFromRoleAsync(player);
         }
 
-        public async Task<Guid> GetStartingRoomId(Player player, NewGameInfo info)
+        public async Task<Guid> GetStartingRoomId(Player player, NewGameInfo info) // based on Role ?
         {
             var rooms = await _roomRepository.GetRoomsInGame(info.Game.Id);
             // some code that sets the startRoomId.
@@ -156,12 +153,12 @@ namespace WebAPI.Services
             return firstNotLandmass;
         }
 
-        public async Task InitializeItems(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
+        public async Task InitializeItemsAsync(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
         {
             List<Room> rooms = await _roomRepository.GetRoomsInGame(info.Game.Id);
 
             var newItem = DummyValues.Item;
-            newItem.OwnerId = rooms.First(x=> !x.IsLandmass).Id;
+            newItem.OwnerId = rooms.First(x => !x.IsLandmass).Id;
             Item roomItem = new Item()
             {
                 Id = Guid.NewGuid(),
@@ -172,7 +169,14 @@ namespace WebAPI.Services
             _playerContext.Items.Add(newItem);
             _playerContext.Items.Add(DummyValues.GetRandomItem(newItem.OwnerId));
             _playerContext.Items.Add(DummyValues.GetRandomItem(newItem.OwnerId));
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
+        }
+
+        public IRoleInitializationStrategy GetRoleStrategy(RoleType role)
+        {
+            var strategType = StrategyMapper.GetStrategyTypeByRole(role);
+            var strategy = _serviceProvider.GetService(strategType) as IRoleInitializationStrategy;
+            return strategy;
         }
     }
 }

@@ -4,6 +4,6 @@ namespace WebAPI.Strategies
 {
     public interface IRoleInitializationStrategy
     {
-        Task InitializePlayerFromRole(PlayerContext context, Player player);
+        Task InitializePlayerFromRoleAsync(Player player);
     }
 }

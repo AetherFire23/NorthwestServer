@@ -19,8 +19,8 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         public override bool CanShow(GameState gameState)
         {
             string currentRoomName = gameState.Room.Name;
-            bool correctRoom = currentRoomName.Equals("Kitchen1"); //|| currentRoomName.Equals("EntryHall");
-            return correctRoom;
+            bool isPlayerInCorrectRoom = currentRoomName.Equals("Kitchen1"); //|| currentRoomName.Equals("EntryHall");
+            return isPlayerInCorrectRoom;
         }
 
         public override GameTaskValidationResult Validate(GameTaskContext context)

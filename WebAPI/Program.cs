@@ -15,6 +15,8 @@ using WebAPI.Dummies;
 using Shared_Resources.Constants;
 using Shared_Resources.Models;
 using WebAPI.Scratches;
+using WebAPI.Strategies;
+using Shared_Resources.Enums;
 
 namespace WebAPI
 {
@@ -42,6 +44,7 @@ namespace WebAPI
             builder.Services.AddControllers();
 
             RegisterGameTaskTypes(builder);
+            StrategyMapper.RegisterRoleStrategies(builder);
 
             // Now split API and gameTask stuff // think its not useful
             var unityTasks = typeof(IGameTask).Assembly.GetTypes()
@@ -174,6 +177,9 @@ namespace WebAPI
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred");
                 }
+
+
+
                 var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
                 ILandmassService2? landmassService2 = scope.ServiceProvider.GetService<ILandmassService2>();
                 var landmassCardService = scope.ServiceProvider.GetService<ILandmassCardsService>();
@@ -185,6 +191,10 @@ namespace WebAPI
                 var p = playerContextService.Players.FirstOrDefault(x => x.Id == DummyValues.defaultPlayer1Guid);
                 playerContextService.Logs.Add(DummyValues.SomeLog(p.CurrentGameRoomId));
 
+                var t = scope.ServiceProvider.GetService<MedicRoleStrategyService>();
+
+                var sz2 = StrategyMapper.GetStrategyTypeByRole(RoleType.Medic);
+                var sz3 = StrategyMapper.GetStrategyTypeByRole(RoleType.Commander);
                 // real scratch
                 // landmassCardService.InitializeLandmassCards(p.GameId).Wait();
                 // landmassService2.AdvanceToNextLandmass(p.GameId).Wait();

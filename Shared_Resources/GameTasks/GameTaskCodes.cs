@@ -9,6 +9,7 @@ namespace Shared_Resources.GameTasks
     public enum GameTaskCodes
     {
         Cook,
-        Clean
+        Clean,
+        Kill
     }
 }
