@@ -13,7 +13,7 @@ namespace WebAPI.Interfaces
         Task<List<Room>> GetAllActiveLandmassRooms(Guid gameId);
         Task<Room> GetRoomById(Guid roomId);
         Task RemoveFromAllConnectedRooms(Guid roomId);
-        Task<List<Room>> GetRoomsInGame(Guid gameId);
+        Task<List<Room>> GetRoomsInGamesync(Guid gameId);
         Task<Room> GetRoomFromName(Guid gameId, string roomName);
         Task<RoomDTO> GetRoomDTOAsync(Guid roomId);
         Task CreateNewRooms(Guid gameId);

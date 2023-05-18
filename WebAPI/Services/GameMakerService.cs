@@ -63,10 +63,10 @@ namespace WebAPI.Services
                     },
                 },
             };
-            await CreateGame(info);
+            await CreateGameAsync(info);
         }
 
-        public async Task CreateGame(NewGameInfo newGameInfo)
+        public async Task CreateGameAsync(NewGameInfo newGameInfo)
         {
             Guid gameId = DummyValues.Game.Id;
 
@@ -85,7 +85,7 @@ namespace WebAPI.Services
             // Need to initialize rooms before players, because player construction requires a GameRoomId.
 
             await _roomRepository.CreateNewRooms(gameId);
-            await InitializePlayers(newGameInfo);
+            await InitializePlayersAsync(newGameInfo);
             await InitializeItemsAsync(newGameInfo);
             await _landmassCardsService.InitializeLandmassCards(newGameInfo.Game.Id);
 
@@ -107,7 +107,7 @@ namespace WebAPI.Services
             _playerContext.SaveChanges();
         }
 
-        public async Task InitializePlayers(NewGameInfo info)
+        public async Task InitializePlayersAsync(NewGameInfo info)
         {
             /* Will need to clarify what gets initialized before what.
               for example, class cannot depend on starting room(for knowing which bonuses is applying), and starting room also depend on class. One needs to be
@@ -141,13 +141,13 @@ namespace WebAPI.Services
 
         public async Task InitializePlayerRoleSettings(Player player)
         {
-            var roleStrategy = GetRoleStrategy(player.Profession);
+            var roleStrategy = ResolveRoleStrategy(player.Profession);
             await roleStrategy.InitializePlayerFromRoleAsync(player);
         }
 
         public async Task<Guid> GetStartingRoomId(Player player, NewGameInfo info) // based on Role ?
         {
-            var rooms = await _roomRepository.GetRoomsInGame(info.Game.Id);
+            var rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
             // some code that sets the startRoomId.
             var firstNotLandmass = rooms.First(x => !x.IsLandmass).Id;
             return firstNotLandmass;
@@ -155,7 +155,7 @@ namespace WebAPI.Services
 
         public async Task InitializeItemsAsync(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
         {
-            List<Room> rooms = await _roomRepository.GetRoomsInGame(info.Game.Id);
+            List<Room> rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
 
             var newItem = DummyValues.Item;
             newItem.OwnerId = rooms.First(x => !x.IsLandmass).Id;
@@ -172,7 +172,7 @@ namespace WebAPI.Services
             await _playerContext.SaveChangesAsync();
         }
 
-        public IRoleInitializationStrategy GetRoleStrategy(RoleType role)
+        public IRoleInitializationStrategy ResolveRoleStrategy(RoleType role)
         {
             var strategType = StrategyMapper.GetStrategyTypeByRole(role);
             var strategy = _serviceProvider.GetService(strategType) as IRoleInitializationStrategy;

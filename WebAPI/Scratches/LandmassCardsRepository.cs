@@ -17,7 +17,7 @@ namespace WebAPI
             _playerContext = playerContext;
         }
 
-        public async Task<List<Card>> GetLandmassCards(Guid gameId)
+        public async Task<List<Card>> GetLandmassCardsAsync(Guid gameId)
         {
             var cards = await _playerContext.Cards.Where(x => x.GameId == gameId).ToListAsync();
             return cards;

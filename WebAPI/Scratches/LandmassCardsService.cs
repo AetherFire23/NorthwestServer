@@ -24,17 +24,18 @@ namespace WebAPI
         public async Task<List<string>> DrawNextLandmassRoomNames(Guid gameId)
         {
             // Draw 7 cards, reshuffle if empty...
-            List<Card> landmassCards = await _landmassCardsRepository.GetLandmassCards(gameId);
+            List<Card> landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
             List<Card> drawnCards = new List<Card>();
 
             // would need layouts of different room count to work 
             while (drawnCards.Count < 7) // warning  : is absolutely not generic since amount of cards needs to match amount of rooms.
             {
+
                 if (landmassCards.All(x => x.IsDiscarded))
                 {
                     // When reshuffling, I dont know if landmassCards are updated...
-                    await ReshuffleLandmassCards(gameId, drawnCards);
-                    landmassCards = await _landmassCardsRepository.GetLandmassCards(gameId);
+                    await ReshuffleLandmassCardsExceptDrawnCards(gameId, drawnCards);
+                    landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
                     continue;
                 }
 
@@ -64,13 +65,13 @@ namespace WebAPI
             })
             .ToList();
 
-            _playerContext.AddRange(defaultLandmassCards);
-            _playerContext.SaveChanges();
+            await _playerContext.AddRangeAsync(defaultLandmassCards);
+            await _playerContext.SaveChangesAsync();
         }
 
-        private async Task ReshuffleLandmassCards(Guid gameId, List<Card> cardsCurrentlyBeingDrawn)
+        private async Task ReshuffleLandmassCardsExceptDrawnCards(Guid gameId, List<Card> cardsCurrentlyBeingDrawn)
         {
-            var landmassCards = await _landmassCardsRepository.GetLandmassCards(gameId);
+            var landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
             if (landmassCards.Where(x => !x.IsDiscarded).Count() > 0) throw new Exception("Must shuffle cards only when there are no valid cards left");
 
             foreach (var card in landmassCards)
@@ -81,7 +82,7 @@ namespace WebAPI
                 card.IsDiscarded = false;
             }
 
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
         }
     }
 }

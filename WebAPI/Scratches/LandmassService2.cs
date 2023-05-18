@@ -29,19 +29,20 @@ namespace WebAPI
             var roomNames = await _landmassCardsService.DrawNextLandmassRoomNames(gameId);
             LandmassLayout layout = LandmassGetter.CreateNewLandmassLayoutAndInsertNames(roomNames); // attention : 8 rooms ici ! 
             Tuple<List<Room>, List<AdjacentRoom>> s = LandmassEntitiesInitializer.CreateNewDefaultLandmassRoomsAndConnections(layout, gameId);
+            // ligne ici pour initializer les stations des landmasses I guess
 
             await WipeLandmassRoomsAndConnections(gameId);
-            _playerContext.Rooms.AddRange(s.Item1);
-            _playerContext.AdjacentRooms.AddRange(s.Item2);
-            _playerContext.SaveChanges();
+            await _playerContext.Rooms.AddRangeAsync(s.Item1);
+            await _playerContext.AdjacentRooms.AddRangeAsync(s.Item2);
+            await _playerContext.SaveChangesAsync();
         }
 
         private async Task WipeLandmassRoomsAndConnections(Guid gameId) // faudra y penser
         {
-            // risque de probleme quand je vais deleter si ya un gamestate qui se fait. en tout cas.
+            // risque de probleme quand je vais deleter si ya un gamestate qui est recupere fait. en tout cas.
             var landmassRooms = await _roomRepository.GetAllLandmassRoomsInGame(gameId);
             var connections = await _roomRepository.GetLandmassAdjacentRoomsAsync(gameId);
-
+            
             _playerContext.Rooms.RemoveRange(landmassRooms);
             _playerContext.AdjacentRooms.RemoveRange(connections);
             // do not saveChanges since conflict is unlikely, probably solves the gameState problem also.

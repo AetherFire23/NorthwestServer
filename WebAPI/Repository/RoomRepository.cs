@@ -40,7 +40,7 @@ namespace WebAPI.Repository
             await _playerContext.SaveChangesAsync();
         }
 
-        public async Task<List<Room>> GetRoomsInGame(Guid gameId)
+        public async Task<List<Room>> GetRoomsInGamesync(Guid gameId)
         {
             var rooms = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
             return rooms;
