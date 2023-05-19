@@ -426,6 +426,47 @@ namespace WebAPI.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("Shared_Resources.Entities.ShipState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AdvancementInKilometers")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Cans")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Coal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeviationInDegrees")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Flour")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Gunpowder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HullInPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Iron")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wood")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShipStates");
+                });
+
             modelBuilder.Entity("Shared_Resources.Entities.Skill", b =>
                 {
                     b.Property<Guid>("Id")

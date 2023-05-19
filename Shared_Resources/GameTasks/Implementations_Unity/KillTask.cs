@@ -13,14 +13,9 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 
         public override GameTaskProvider Provider => GameTaskProvider.Player;
 
-        public override bool CanShow(GameState gameState)
+        public override bool Requires(GameState gameState)
         {
             return gameState.PlayerDTO.Items.Exists(item => item.ItemType.Equals(ItemType.Wrench));
-        }
-
-        public override Task Execute(GameTaskContext context)
-        {
-            throw new NotImplementedException();
         }
 
         public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
@@ -31,6 +26,11 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
             targets.CreateCheckListPrompt(rooms).SetExactAmount(1);
 
             return targets;
+        }
+
+        public override Task Execute(GameTaskContext context)
+        {
+            throw new NotImplementedException();
         }
 
         public override GameTaskValidationResult Validate(GameTaskContext context)

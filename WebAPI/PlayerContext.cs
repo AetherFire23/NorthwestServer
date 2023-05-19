@@ -29,20 +29,16 @@ namespace WebAPI
         public DbSet<MenuNotification> MenuNotifications { get; set; }
         public DbSet<FriendPair> FriendPairs { get; set; }
         public DbSet<Game> Games { get; set; }
-
         public DbSet<GameSetting> GameSetting { get; set; }
         public DbSet<RoleSetting> RoleSettings { get; set; }
         public DbSet<TaskSetting> TaskSettings { get; set; }
-
         public DbSet<LogAccessPermissions> LogAccessPermission { get; set; }
         public DbSet<PrivateChatRoom> PrivateChatRooms { get; set; }
-
         public DbSet<Expedition> Expeditions { get; set; }
-
         public DbSet<Deck> Decks { get; set; }
         public DbSet<Card> Cards { get; set; }
-
         public DbSet<Landmass> Landmass { get; set; }
+        public DbSet<ShipState> ShipStates { get; set; }
 
         //There is constructor injection. This must exist to be configurable in Program.cs
         public PlayerContext(DbContextOptions<PlayerContext> options) : base(options)

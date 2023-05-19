@@ -21,11 +21,16 @@ namespace WebAPI.Services
         private readonly ILandmassService2 _landmassService;
         private readonly ILandmassCardsService _landmassCardsService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IShipStasusesService _shipStasusesService;
+
         public GameMakerService(PlayerContext playerContext,
             IGameMakerRepository gameMakerRepository,
             IRoomRepository roomRepository,
             IStationRepository stationRepository,
-            ILandmassService2 landmassService, ILandmassCardsService landmassCardsService, IServiceProvider serviceProvider)
+            ILandmassService2 landmassService,
+            ILandmassCardsService landmassCardsService,
+            IServiceProvider serviceProvider,
+            IShipStasusesService shipStasusesService)
         {
             _gameMakerRepository = gameMakerRepository;
             _roomRepository = roomRepository;
@@ -34,6 +39,7 @@ namespace WebAPI.Services
             _landmassService = landmassService;
             _landmassCardsService = landmassCardsService;
             _serviceProvider = serviceProvider;
+            _shipStasusesService = shipStasusesService;
         }
 
         public async Task CreateDummyGame()
@@ -79,12 +85,13 @@ namespace WebAPI.Services
 
             newGameInfo.Game = newGame;
 
-            _playerContext.Games.Add(newGame);
+            await _playerContext.Games.AddAsync(newGame);
             await _playerContext.SaveChangesAsync();
 
             // Need to initialize rooms before players, because player construction requires a GameRoomId.
 
             await _roomRepository.CreateNewRooms(gameId);
+            await _shipStasusesService.InitializeShipStatusesAndResources(newGameInfo.Game.Id);
             await InitializePlayersAsync(newGameInfo);
             await InitializeItemsAsync(newGameInfo);
             await _landmassCardsService.InitializeLandmassCards(newGameInfo.Game.Id);

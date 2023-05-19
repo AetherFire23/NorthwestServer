@@ -80,5 +80,11 @@ namespace Shared_Resources.Constants
             var objects = this.PromptedObjects.Select(x => x as object).ToList();
             return objects;
         }
+
+        public void FilterFromLastPrompt(Func<bool, object> predicate)
+        {
+            // use this inside of NorthWest to configure conditionals. 
+            // since taskBuilder inside unity has access to gamesate, can compare the objects to any state.
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 
         public override GameTaskProvider Provider => GameTaskProvider.Player;
 
-        public override bool CanShow(GameState gameState)
+        public override bool Requires(GameState gameState)
         {
             return true;
         }

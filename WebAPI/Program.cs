@@ -103,6 +103,7 @@ namespace WebAPI
             builder.Services.AddScoped<IGameStateService, GameStateService>();
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IGameMakerService, GameMakerService>();
+            builder.Services.AddScoped<IShipStasusesService, ShipStatusesService>();
 
 
 
@@ -117,6 +118,7 @@ namespace WebAPI
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IGameMakerRepository, GameMakerRepository>();
             builder.Services.AddScoped<ILandmassRepository, LandmassRepository>();
+            builder.Services.AddScoped<IShipStatusesRepository, ShipStatusesRepository>();
 
             //landmasses
             builder.Services.AddScoped<ILandmassService2, LandmassService2>();

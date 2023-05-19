@@ -9,7 +9,7 @@ namespace Shared_Resources.DTOs
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
         public GameTaskCodes GameTaskCode { get; set; }
-        public string Name { get; set; }
-        public object ExtraProperties { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public object ExtraProperties { get; set; } = string.Empty;
     }
 }

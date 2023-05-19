@@ -22,7 +22,7 @@ namespace Shared_Resources.GameTasks
         public abstract GameTaskCodes Code { get; }
 
         public abstract GameTaskProvider Provider { get; }
-        public abstract bool CanShow(GameState gameState);
+        public abstract bool Requires(GameState gameState);
         public abstract Task Execute(GameTaskContext context);
         public abstract CheckListsBuilder GetValidTargetPrompts(GameState gameState);
         public abstract GameTaskValidationResult Validate(GameTaskContext context);

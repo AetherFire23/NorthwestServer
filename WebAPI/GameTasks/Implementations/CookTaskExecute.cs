@@ -5,10 +5,11 @@ using WebAPI.Interfaces;
 
 namespace WebAPI.GameTasks.Executions
 {
-    [GameTask(GameTaskCodes.Cook)] // dedoublement des gameTaskCodes
+    [GameTask(GameTaskCodes.Cook)]
     public class CookTaskExecute : CookTaskBase
     {
         private const string _stationNameParam = "stationName";
+        private const int _stationCost = 3;
 
         private readonly IStationRepository _stationRepo;
         public CookTaskExecute(PlayerContext playerContext, IStationRepository stationRepository)

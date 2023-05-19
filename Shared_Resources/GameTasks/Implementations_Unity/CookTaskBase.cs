@@ -16,7 +16,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         public override GameTaskProvider Provider { get; } = GameTaskProvider.Room;
         public override GameTaskCodes Code { get; } = GameTaskCodes.Cook;
 
-        public override bool CanShow(GameState gameState)
+        public override bool Requires(GameState gameState)
         {
             string currentRoomName = gameState.Room.Name;
             bool isPlayerInCorrectRoom = currentRoomName.Equals("Kitchen1"); //|| currentRoomName.Equals("EntryHall");
