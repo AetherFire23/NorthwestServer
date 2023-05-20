@@ -12,7 +12,7 @@ using WebAPI;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20230520205831_initial")]
+    [Migration("20230520211115_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -485,6 +485,9 @@ namespace WebAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Iron")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpeedInKilometers")
                         .HasColumnType("int");
 
                     b.Property<int>("Wood")

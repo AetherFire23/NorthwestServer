@@ -485,6 +485,9 @@ namespace WebAPI.Migrations
                     b.Property<int>("Iron")
                         .HasColumnType("int");
 
+                    b.Property<int>("SpeedInKilometers")
+                        .HasColumnType("int");
+
                     b.Property<int>("Wood")
                         .HasColumnType("int");
 

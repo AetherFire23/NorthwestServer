@@ -21,7 +21,7 @@ namespace WebAPI.Services
         private readonly ILandmassService2 _landmassService;
         private readonly ILandmassCardsService _landmassCardsService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IShipStasusesService _shipStasusesService;
+        private readonly IShipService _shipStasusesService;
 
         public GameMakerService(PlayerContext playerContext,
             IGameMakerRepository gameMakerRepository,
@@ -30,7 +30,7 @@ namespace WebAPI.Services
             ILandmassService2 landmassService,
             ILandmassCardsService landmassCardsService,
             IServiceProvider serviceProvider,
-            IShipStasusesService shipStasusesService)
+            IShipService shipStasusesService)
         {
             _gameMakerRepository = gameMakerRepository;
             _roomRepository = roomRepository;
@@ -69,6 +69,7 @@ namespace WebAPI.Services
                     },
                 },
             };
+
             await CreateGameAsync(info);
         }
 
@@ -152,30 +153,26 @@ namespace WebAPI.Services
             await roleStrategy.InitializePlayerFromRoleAsync(player);
         }
 
-        //public async Task<Guid> GetStartingRoomId(Player player, NewGameInfo info) // based on Role ?
-        //{
-        //    var rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
-        //    // some code that sets the startRoomId.
-        //    var firstNotLandmass = rooms.First(x => !x.IsLandmass).Id;
-        //    return firstNotLandmass;
-        //}
-
         public async Task InitializeItemsAsync(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
         {
             List<Room> rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
 
-            var newItem = DummyValues.Item;
-            newItem.OwnerId = rooms.First(x => !x.IsLandmass).Id;
-            Item roomItem = new Item()
+            var item2 = new Item()
             {
                 Id = Guid.NewGuid(),
                 ItemType = ItemType.Hose,
-                OwnerId = rooms.First(x => !x.IsLandmass).Id,
+                OwnerId = rooms.First(x => x.Name == nameof(RoomTemplate2.CrowsNest)).Id,
             };
-            _playerContext.Items.Add(roomItem);
-            _playerContext.Items.Add(newItem);
-            _playerContext.Items.Add(DummyValues.GetRandomItem(newItem.OwnerId));
-            _playerContext.Items.Add(DummyValues.GetRandomItem(newItem.OwnerId));
+
+            var item3 = new Item()
+            {
+                Id = Guid.NewGuid(),
+                ItemType = ItemType.Hose,
+                OwnerId = rooms.First(x => x.Name == nameof(RoomTemplate2.CrowsNest)).Id,
+            };
+            await _playerContext.Items.AddAsync(item2);
+            await _playerContext.Items.AddAsync(item3);
+
             await _playerContext.SaveChangesAsync();
         }
 

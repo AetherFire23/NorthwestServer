@@ -80,10 +80,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut] // put = update, post = creation
-        [Route("UpdatePositionByPlayerModel")]
-        public async Task<ActionResult<ClientCallResult>> UpdatePositionByPlayerModel([FromBody] Player unityPlayerModel) // va dependre de comment je manage les data
+        [Route("UpdatePositionById")]
+        public async Task<ActionResult<ClientCallResult>> UpdatePositionByPlayerModel(Guid playerId, float x, float y) // va dependre de comment je manage les data
         {
-            await _playerService.UpdatePositionAsync(unityPlayerModel);
+            await _playerService.UpdatePositionAsync(playerId, x, y);
             return Ok();
         }
 
@@ -129,6 +129,19 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
         {
             var t = _mainMenuRepository.GetMainMenuState(userId);
+            return Ok();
+        }
+
+
+        [HttpPut]
+        [Route("CHangbenPosition")]
+        public async Task<ActionResult> ChangeBen(float x, float y)
+        {
+            var player = await _playerRepository.GetPlayerAsync(new Guid("B3543B2E-CD81-479F-B99E-D11A8AAB37A0"));
+
+            player.X = x;
+            player.Y = y;
+            await _playerContext.SaveChangesAsync();
             return Ok();
         }
     }

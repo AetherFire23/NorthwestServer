@@ -3,16 +3,20 @@ using WebAPI.Interfaces;
 
 namespace WebAPI.Services
 {
-    public class ShipStatusesService : IShipStasusesService
+    public class ShipService : IShipService
     {
         private readonly PlayerContext _playerContext;
-        public ShipStatusesService(PlayerContext playerContext)
+        private readonly IShipRepository _shipRepository;
+        public ShipService(PlayerContext playerContext,
+            IShipRepository shipRepository)
         {
             _playerContext = playerContext;
+            _shipRepository = shipRepository;
         }
 
         public async Task InitializeShipStatusesAndResources(Guid gameId)
         {
+            // rajouter une varialbe Speed I guess ^^
             var shipStatus = new ShipState()
             {
                 Id = Guid.NewGuid(),
@@ -23,6 +27,8 @@ namespace WebAPI.Services
                 AdvancementInKilometersConfirmed = 0,
                 AdvancementInKilometersExpected = 0,
 
+                SpeedInKilometers = 10,
+
                 Cans = 10,
                 Coal = 10,
                 Flour = 10,
@@ -32,6 +38,26 @@ namespace WebAPI.Services
             };
 
             await _playerContext.ShipStates.AddAsync(shipStatus);
+            await _playerContext.SaveChangesAsync();
+        }
+
+
+        public async Task TickShipAdvancement(Guid gameId)
+        {
+            var shipState = await _shipRepository.GetShipStateAsync(gameId);
+            if(shipState.HullInPercentage < 75)
+            {
+                shipState.SpeedInKilometers -= 1; // placeHolder
+            }
+
+            // Advancement should be checked elsehwere since 
+            // its a winning condition
+
+            if (shipState.DeviationInDegrees != 0)
+            {
+                // math formula to calculate expected vs real
+            }
+
             await _playerContext.SaveChangesAsync();
         }
     }

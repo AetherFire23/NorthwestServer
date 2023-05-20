@@ -1,6 +1,6 @@
 ﻿namespace WebAPI.Interfaces
 {
-    public interface IShipStasusesService
+    public interface IShipService
     {
         Task InitializeShipStatusesAndResources(Guid gameId);
     }

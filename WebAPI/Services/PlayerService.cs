@@ -26,13 +26,12 @@ namespace WebAPI.Services
             await _playerContext.SaveChangesAsync();
         }
 
-        public async Task UpdatePositionAsync(Player UnityPlayerModel)
+        public async Task UpdatePositionAsync(Guid playerId, float x, float y)
         {
-            Player player = await _playerRepository.GetPlayerAsync(UnityPlayerModel.Id);
-            player.X = UnityPlayerModel.X;
-            player.Y = UnityPlayerModel.Y;
-            player.Z = UnityPlayerModel.Z;
-            _playerContext.SaveChanges();
+            Player player = await _playerRepository.GetPlayerAsync(playerId);
+            player.X = x;
+            player.Y = y;
+            await _playerContext.SaveChangesAsync();
         }
 
         public async Task<ClientCallResult> ChangeRoomAsync(Guid playerId, string targetRoomName)

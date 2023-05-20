@@ -7,10 +7,10 @@ using WebAPI.Interfaces;
 
 namespace WebAPI.Repository
 {
-    public class ShipStatusesRepository : IShipStatusesRepository
+    public class ShipRepository : IShipRepository
     {
         private readonly PlayerContext _playerContext;
-        public ShipStatusesRepository(PlayerContext playerContext)
+        public ShipRepository(PlayerContext playerContext)
         {
             _playerContext = playerContext;
         }

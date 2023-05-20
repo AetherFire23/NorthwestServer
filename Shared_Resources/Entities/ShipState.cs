@@ -15,6 +15,8 @@ namespace Shared_Resources.Entities
         public int AdvancementInKilometersConfirmed { get; set; }
         public int DeviationInDegrees { get; set; }
 
+        public int SpeedInKilometers { get; set; }
+
         // resources
         public int Cans { get; set; }
         public int Flour { get; set; }

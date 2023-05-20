@@ -329,6 +329,7 @@ namespace WebAPI.Migrations
                     AdvancementInKilometersExpected = table.Column<int>(type: "int", nullable: false),
                     AdvancementInKilometersConfirmed = table.Column<int>(type: "int", nullable: false),
                     DeviationInDegrees = table.Column<int>(type: "int", nullable: false),
+                    SpeedInKilometers = table.Column<int>(type: "int", nullable: false),
                     Cans = table.Column<int>(type: "int", nullable: false),
                     Flour = table.Column<int>(type: "int", nullable: false),
                     Coal = table.Column<int>(type: "int", nullable: false),

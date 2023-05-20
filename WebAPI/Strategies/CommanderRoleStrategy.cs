@@ -25,6 +25,15 @@ namespace WebAPI.Strategies
             var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomTemplate2.Galley));
             player.CurrentGameRoomId = room.Id;
 
+            var item = new Item()
+            {
+                Id = Guid.NewGuid(),
+                ItemType = ItemType.Wrench,
+                OwnerId = player.Id,
+            };
+
+            await _playerContext.Items.AddAsync(item);
+
             await _playerContext.SaveChangesAsync();
         }
 
@@ -33,7 +42,7 @@ namespace WebAPI.Strategies
             // Ticker pour chaque skill ? 
         }
 
-        
-        
+
+
     }
 }
