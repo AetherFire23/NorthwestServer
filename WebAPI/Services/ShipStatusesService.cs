@@ -17,9 +17,11 @@ namespace WebAPI.Services
             {
                 Id = Guid.NewGuid(),
                 GameId = gameId,
-                HullInPercentage = 100,
+                HullInPercentage = 0,
                 DeviationInDegrees = 0,
-                AdvancementInKilometers = 0,
+                AdvancementInKilometersReal = 0,
+                AdvancementInKilometersConfirmed = 0,
+                AdvancementInKilometersExpected = 0,
 
                 Cans = 10,
                 Coal = 10,

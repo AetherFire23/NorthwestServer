@@ -305,13 +305,29 @@ namespace WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Season",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Current = table.Column<int>(type: "int", nullable: false),
+                    Frozen = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Season", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ShipStates",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HullInPercentage = table.Column<int>(type: "int", nullable: false),
-                    AdvancementInKilometers = table.Column<int>(type: "int", nullable: false),
+                    AdvancementInKilometersReal = table.Column<int>(type: "int", nullable: false),
+                    AdvancementInKilometersExpected = table.Column<int>(type: "int", nullable: false),
+                    AdvancementInKilometersConfirmed = table.Column<int>(type: "int", nullable: false),
                     DeviationInDegrees = table.Column<int>(type: "int", nullable: false),
                     Cans = table.Column<int>(type: "int", nullable: false),
                     Flour = table.Column<int>(type: "int", nullable: false),
@@ -353,6 +369,18 @@ namespace WebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Stations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Statuses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Effect = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Statuses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -461,6 +489,9 @@ namespace WebAPI.Migrations
                 name: "Rooms");
 
             migrationBuilder.DropTable(
+                name: "Season");
+
+            migrationBuilder.DropTable(
                 name: "ShipStates");
 
             migrationBuilder.DropTable(
@@ -468,6 +499,9 @@ namespace WebAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Stations");
+
+            migrationBuilder.DropTable(
+                name: "Statuses");
 
             migrationBuilder.DropTable(
                 name: "TaskSettings");

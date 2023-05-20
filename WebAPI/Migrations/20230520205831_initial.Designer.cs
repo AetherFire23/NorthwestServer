@@ -12,7 +12,7 @@ using WebAPI;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20230520181046_initial")]
+    [Migration("20230520205831_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -428,13 +428,39 @@ namespace WebAPI.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("Shared_Resources.Entities.Season", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Current")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Frozen")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Season");
+                });
+
             modelBuilder.Entity("Shared_Resources.Entities.ShipState", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AdvancementInKilometers")
+                    b.Property<int>("AdvancementInKilometersConfirmed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdvancementInKilometersExpected")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdvancementInKilometersReal")
                         .HasColumnType("int");
 
                     b.Property<int>("Cans")
@@ -516,6 +542,20 @@ namespace WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stations");
+                });
+
+            modelBuilder.Entity("Shared_Resources.Entities.Status", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Effect")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
                 });
 
             modelBuilder.Entity("Shared_Resources.Entities.TriggerNotification", b =>

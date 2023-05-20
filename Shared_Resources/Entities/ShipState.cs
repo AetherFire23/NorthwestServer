@@ -9,7 +9,10 @@ namespace Shared_Resources.Entities
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
         public int HullInPercentage { get; set; }
-        public int AdvancementInKilometers { get; set; }
+
+        public int AdvancementInKilometersReal { get; set; } // secret
+        public int AdvancementInKilometersExpected { get; set; }
+        public int AdvancementInKilometersConfirmed { get; set; }
         public int DeviationInDegrees { get; set; }
 
         // resources

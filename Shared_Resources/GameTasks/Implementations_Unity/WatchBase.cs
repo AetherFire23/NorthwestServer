@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shared_Resources.GameTasks.Implementations_Unity
 {
-    public class Watch : GameTaskBase
+    public class WatchBase : GameTaskBase
     {
         public override GameTaskCodes Code => GameTaskCodes.Watch;
 
@@ -21,6 +21,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
         {
             var checkList = new CheckListsBuilder();
+
             return checkList;
         }
 
