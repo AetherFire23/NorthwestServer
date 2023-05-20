@@ -1,22 +1,29 @@
 ﻿using Shared_Resources.Constants;
+using Shared_Resources.Entities;
+using Shared_Resources.Enums;
 using Shared_Resources.Models;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared_Resources.GameTasks.Implementations_Unity
 {
-    public class CleanTaskBase : GameTaskBase
+    public class FireCannon : GameTaskBase
     {
-        public override GameTaskCodes Code => GameTaskCodes.Clean;
-
-        public override GameTaskProvider Provider => GameTaskProvider.Player;
+        // could add reflection check to see if I have forgotten to set a taskCode/ provider
+        public override GameTaskProvider Provider { get; } = GameTaskProvider.Room;
+        public override GameTaskCodes Code { get; } = GameTaskCodes.FireCannon;
 
         public override bool Requires(GameState gameState)
         {
             return true;
+        }
+
+        public override GameTaskValidationResult Validate(GameTaskContext context)
+        {
+            return new GameTaskValidationResult();
         }
 
         public override Task Execute(GameTaskContext context)
@@ -24,14 +31,10 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
             throw new NotImplementedException();
         }
 
+        // renvoie un dictionnaire parce que je me force a sorter les types 
         public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
         {
             return new CheckListsBuilder();
-        }
-
-        public override GameTaskValidationResult Validate(GameTaskContext context)
-        {
-            return new GameTaskValidationResult();
         }
     }
 }

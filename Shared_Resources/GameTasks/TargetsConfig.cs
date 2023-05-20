@@ -7,7 +7,7 @@ namespace Shared_Resources.GameTasks
 {
     public class TargetsConfig
     {
-        public GameTaskCodes TaskCode { get; set; } = GameTaskCodes.Cook;
+        public GameTaskCodes TaskCode { get; set; } = GameTaskCodes.ChargeCannon;
         public PlayerTargetRequirement PlayerTarget { get; set; } = PlayerTargetRequirement.None;
         public RoomTargetRequirement RoomTarget { get; set; } = RoomTargetRequirement.None;
         public SpecialDialogRequirement SpecialDialog { get; set; } = SpecialDialogRequirement.None;

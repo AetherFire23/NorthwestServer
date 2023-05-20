@@ -8,8 +8,8 @@ using WebAPI.Interfaces;
 
 namespace WebAPI.GameTasks.Executions
 {
-    [GameTask(GameTaskCodes.Cook)]
-    public class CookTaskExecute : CookTaskBase
+    [GameTask(GameTaskCodes.ChargeCannon)]
+    public class CookTaskExecute : FireCannon
     {
         private const string _stationNameParam = "stationName";
         private const int _stationCost = 3;

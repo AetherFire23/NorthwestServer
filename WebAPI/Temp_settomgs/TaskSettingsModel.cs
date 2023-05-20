@@ -6,7 +6,7 @@ namespace WebAPI.Temp_settomgs
     {
         public TaskSetting CookSetting = new TaskSetting()
         {
-            TaskCode = GameTaskCodes.Cook,
+            TaskCode = GameTaskCodes.ChargeCannon,
         };
     }
 }

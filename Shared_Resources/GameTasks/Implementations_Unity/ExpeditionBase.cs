@@ -7,25 +7,21 @@ using System.Threading.Tasks;
 
 namespace Shared_Resources.GameTasks.Implementations_Unity
 {
-    public class KillTask : GameTaskBase
+    public class ExpeditionBase : GameTaskBase
     {
-        public override GameTaskCodes Code => GameTaskCodes.Kill;
+        public override GameTaskCodes Code => GameTaskCodes.Expedition;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Player;
+        public override GameTaskProvider Provider => GameTaskProvider.Room;
 
         public override bool Requires(GameState gameState)
         {
-            return gameState.PlayerDTO.Items.Exists(item => item.ItemType.Equals(ItemType.Wrench));
+            return true;
         }
 
         public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
         {
-            var targets = new CheckListsBuilder();
-
-            var rooms = gameState.Rooms;
-            targets.CreateCheckListPrompt(rooms).SetExactAmount(1);
-
-            return targets;
+            var checkList = new CheckListsBuilder();
+            return checkList;
         }
 
         public override Task Execute(GameTaskContext context)
