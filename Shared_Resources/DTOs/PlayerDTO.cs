@@ -12,7 +12,7 @@ namespace Shared_Resources.DTOs
         public Guid CurrentGameRoomId { get; set; }
         public RoleType Profession { get; set; }
         public List<Item> Items { get; set; } = new List<Item>();
-        public List<SkillType> Skills { get; set; } = new List<SkillType>();
+        public List<Enums.SkillEnum> Skills { get; set; } = new List<Enums.SkillEnum>();
         public string Name { get; set; } = string.Empty;
         public float X { get; set; }
         public float Y { get; set; }

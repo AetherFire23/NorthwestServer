@@ -45,48 +45,38 @@ namespace WebAPI
 
             RegisterGameTaskTypes(builder);
             StrategyMapper.RegisterRoleStrategies(builder);
+            SkillStrategyMapper.RegisterSkillStrategies(builder);
 
-            // Now split API and gameTask stuff // think its not useful
-            var unityTasks = typeof(IGameTask).Assembly.GetTypes()
-                .Where(type =>
-                type.IsClass && !type.IsAbstract
-                && typeof(IGameTask).IsAssignableFrom(type)).ToList();
+            var test = SkillStrategyMapper.GetStrategyTypeBySkill(SkillEnum.ShootLaser);
 
-            var webAPITaks = typeof(GameTaskAttribute).Assembly.GetTypes()
-                .Where(type =>
-                type.IsClass && !type.IsAbstract
-                && typeof(IGameTask).IsAssignableFrom(type)
-                && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null).ToList();
+            ConfigureQuartz(builder);
 
+            //builder.Services.AddQuartz(q =>
+            //{
+            //    q.SchedulerId = "Scheduler-Core";
 
+            //    q.UseMicrosoftDependencyInjectionJobFactory();
 
-
-            builder.Services.AddQuartz(q =>
-            {
-                q.SchedulerId = "Scheduler-Core";
-
-                q.UseMicrosoftDependencyInjectionJobFactory();
-
-                q.UseSimpleTypeLoader();
-                q.UseInMemoryStore();
-                q.UseDefaultThreadPool(tp =>
-                {
-                    tp.MaxConcurrency = 10;
-                });
+            //    q.UseSimpleTypeLoader();
+            //    q.UseInMemoryStore();
+            //    q.UseDefaultThreadPool(tp =>
+            //    {
+            //        tp.MaxConcurrency = 10;
+            //    });
 
 
-                q.ScheduleJob<CycleJob>(trigger => trigger
-                    .WithIdentity("Combined Configuration Trigger")
-                    .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
-                    .WithDescription("my awesome trigger configured for a job with single call"));
+            //    q.ScheduleJob<CycleJob>(trigger => trigger
+            //        .WithIdentity("Combined Configuration Trigger")
+            //        .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
+            //        .WithDescription("my awesome trigger configured for a job with single call"));
 
-            });
+            //});
 
-            builder.Services.AddQuartzServer(options =>
-            {
-                // when shutting down we want jobs to complete gracefully
-                options.WaitForJobsToComplete = true;
-            });
+            //builder.Services.AddQuartzServer(options =>
+            //{
+            //    // when shutting down we want jobs to complete gracefully
+            //    options.WaitForJobsToComplete = true;
+            //});
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -226,19 +216,6 @@ namespace WebAPI
 
         }
 
-        //private static void RegisterGameTaskTypes(WebApplicationBuilder builder)
-        //{
-        //    var types = typeof(IGameTask).Assembly.GetTypes()
-        //        .Where(type => type.IsClass && !type.IsAbstract
-        //            && typeof(IGameTask).IsAssignableFrom(type)
-        //            && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
-
-        //    foreach (var type in types)
-        //    {
-        //        builder.Services.AddTransient(type);
-        //    }
-        //}
-
         private static void RegisterGameTaskTypes(WebApplicationBuilder builder)
         {
             var apiTypes = typeof(Program).Assembly.GetTypes()
@@ -250,6 +227,45 @@ namespace WebAPI
             {
                 builder.Services.AddTransient(type);
             }
+        }
+
+        private static void ConfigureQuartz(WebApplicationBuilder builder)
+        {
+             builder.Services.AddQuartz(q =>
+            {
+                q.SchedulerId = "Scheduler-Core";
+
+                q.UseMicrosoftDependencyInjectionJobFactory();
+
+                q.UseSimpleTypeLoader();
+                q.UseInMemoryStore();
+                q.UseDefaultThreadPool(tp =>
+                {
+                    tp.MaxConcurrency = 10;
+                });
+
+
+                q.ScheduleJob<CycleJob>(trigger => trigger
+                    .WithIdentity("Combined Configuration Trigger")
+                    .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
+                    .WithDescription("my awesome trigger configured for a job with single call"));
+
+                //q.ScheduleJob<CycleJob>(trigger => trigger
+                //    .WithIdentity("Combined Configuration Trigger")
+                //    .StartNow()
+                //        .WithSimpleSchedule(x => x
+                //        .WithIntervalInSeconds(5)  // Run every 5 seconds
+                //        .RepeatForever())          // Repeat indefinitely
+                //    .WithDescription("my awesome trigger configured for a job with single call"));
+
+            });
+
+            builder.Services.AddQuartzServer(options =>
+            {
+                // when shutting down we want jobs to complete gracefully
+                options.WaitForJobsToComplete = true;
+            });
+
         }
     }
 }

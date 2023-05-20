@@ -25,7 +25,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 
         public override GameTaskValidationResult Validate(GameTaskContext context)
         {
-            if (context.GameState.Room.Name != nameof(LevelTemplate.Kitchen1))
+            if (context.GameState.Room.Name != nameof(RoomTemplate2.Galley))
             {
                 return new GameTaskValidationResult("");
             }

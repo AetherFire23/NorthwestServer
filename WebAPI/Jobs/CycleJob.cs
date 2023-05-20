@@ -18,11 +18,11 @@ namespace WebAPI.Jobs
             _gameRepository = gameRepository;
         }
 
-        public async Task Execute(IJobExecutionContext context)
-        {
+        public async Task Execute(IJobExecutionContext context) // en ce moment tough de pouvoir faire teser 
+        { 
             await Task.Delay(1);
-            var tickableGames = _gameRepository.GetTickableGames();
-            if (tickableGames.Count == 0)
+            var tickableGames = await _gameRepository.GetTickableGames();
+            if (!tickableGames.Any())
             {
                 Console.WriteLine("No games to tick.");
                 return;
@@ -30,7 +30,7 @@ namespace WebAPI.Jobs
 
             foreach (var game in tickableGames)
             {
-                _cycleManager.TickGame(game.Id);
+                await _cycleManager.TickGame(game.Id);
             }
         }
     }

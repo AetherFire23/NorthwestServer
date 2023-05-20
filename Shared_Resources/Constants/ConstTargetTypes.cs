@@ -14,7 +14,7 @@ namespace Shared_Resources.Constants
         public static Type PlayerType { get; set; } = typeof(Player);
         public static Type RoomType { get; set; } = typeof(RoomDTO);
         public static Type ItemType { get; set; } = typeof(Item);
-        public static Type SKillType { get; set; } = typeof(SkillType);
+        public static Type SKillType { get; set; } = typeof(Enums.SkillEnum);
 
 
         public static Dictionary<Type, List<object>> GetSortedTargetTypes()

@@ -1,8 +1,9 @@
 ﻿namespace Shared_Resources.Enums
 {
-    public enum SkillType
+    public enum SkillEnum
     {
         CookBonus,
         AttackBonus,
+        ShootLaser,
     }
 }

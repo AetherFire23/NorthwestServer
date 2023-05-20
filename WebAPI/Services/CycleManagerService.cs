@@ -2,28 +2,36 @@
 using Shared_Resources.Enums;
 using WebAPI.Game_Actions;
 using WebAPI.Interfaces;
+using WebAPI.Strategies;
+using WebAPI.UniversalSkills;
 
 namespace WebAPI.Services
 {
     public class CycleManagerService : ICycleManagerService
     {
-        public static int TimeBetweenTicksInSeconds = 5;
+        public static int TimeBetweenTicksInSeconds = 8;
         private readonly PlayerContext _playerContext;
         private readonly IGameRepository _gameRepository;
         private readonly IPlayerRepository _playerRepository;
-        public CycleManagerService(PlayerContext playerContext, IGameRepository gameRepository, IPlayerRepository playerRepository)
+        private readonly IServiceProvider _serviceProvider;
+        public CycleManagerService(PlayerContext playerContext,
+            IGameRepository gameRepository,
+            IPlayerRepository playerRepository,
+            IServiceProvider serviceProvider)
         {
             _playerContext = playerContext;
             _gameRepository = gameRepository;
             _playerRepository = playerRepository;
+            _serviceProvider = serviceProvider;
         }
 
-        public void TickGame(Guid gameId)
+        public async Task TickGame(Guid gameId)
         {
-            var game = _gameRepository.GetGame(gameId);
+            var game = await _gameRepository.GetGame(gameId);
 
-            var playersInGame = _playerRepository.GetPlayersInGame(gameId);
-            foreach (var player in playersInGame)
+            var playersInGame = await _playerRepository.GetPlayersInGameAsync(gameId);
+
+            foreach (var player in playersInGame) // faudrait plus genre TickPlayers 
             {
                 player.ActionPoints += 1;
                 player.HealthPoints += 1;
@@ -35,19 +43,8 @@ namespace WebAPI.Services
                     GameId = gameId,
                     GameActionType = GameActionType.CycleTick,
                     SerializedProperties = String.Empty,
-                    
-                };
-                var notif = new TriggerNotification()
-                {
-                    Id = Guid.NewGuid(),
-                    Created = DateTime.UtcNow,
-                    IsReceived = false,
-                    GameActionId = ga.Id,
-                    NotificationType = NotificationType.CycleChanged,
-                    PlayerId = player.Id,
-                    SerializedProperties = String.Empty,
-                };
 
+                };
                 Log log = new Log()
                 {
                     Id = Guid.NewGuid(),
@@ -57,18 +54,36 @@ namespace WebAPI.Services
                     TriggeringPlayerId = gameId,
                     IsPublic = true,
                     RoomId = Guid.Empty,
-                    
+
                 };
 
-                _playerContext.Logs.Add(log);
-                _playerContext.GameActions.Add(ga);
-                _playerContext.TriggerNotifications.Add(notif);
+                await _playerContext.Logs.AddAsync(log);
+                await _playerContext.GameActions.AddAsync(ga);
             }
 
             game.NextTick = DateTime.UtcNow.AddSeconds(TimeBetweenTicksInSeconds);
 
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
             Console.WriteLine("Game Has ticked");
+        }
+
+        public async Task TickUniversalSKills(Guid gameId) // pretty much ready-togo
+        {
+            var universalSkillTypes = SkillStrategyMapper.GetAllUniversalSkillTypes();
+            var universalSkills = universalSkillTypes.Select(x => _serviceProvider.GetService(x) as IUniversalSkill).ToList();
+
+            var players = await _playerRepository.GetPlayersInGameAsync(gameId);
+
+            foreach (var player in players)
+            {
+                foreach (var universalSkill in universalSkills)
+                {
+                    var canTickSkill = await universalSkill.CanApplySkillEffect(player);
+                    if (!canTickSkill) continue;
+
+                    await universalSkill.ApplyTickEffect(player);
+                }
+            }
         }
     }
 }

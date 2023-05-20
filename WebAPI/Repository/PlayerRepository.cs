@@ -49,9 +49,10 @@ public class PlayerRepository : IPlayerRepository
         return playerInvites;
     }
 
-    public List<Player> GetPlayersInGame(Guid gameId)
+    public async Task<List<Player>> GetPlayersInGameAsync(Guid gameId)
     {
-        return Players.Where(player => player.GameId == gameId).ToList();
+        var allPlayers = await Players.Where(player => player.GameId == gameId).ToListAsync();
+        return allPlayers;
     }
 
     public async Task<PlayerDTO> MapPlayerDTOAsync(Guid playerId)
@@ -60,7 +61,7 @@ public class PlayerRepository : IPlayerRepository
 
         List<Item> items = GetOwnedItems(playerId).ToList();
 
-        List<SkillType> skillsOwned = GetOwnedSkills(playerId);
+        List<Shared_Resources.Enums.SkillEnum> skillsOwned = GetOwnedSkills(playerId);
 
         PlayerDTO playerDTO = new PlayerDTO()
         {
@@ -85,7 +86,7 @@ public class PlayerRepository : IPlayerRepository
         return playerDTO;
     }
 
-    public List<SkillType> GetOwnedSkills(Guid ownerId)
+    public List<Shared_Resources.Enums.SkillEnum> GetOwnedSkills(Guid ownerId)
     {
         return _playerContext.Skills.Where(s => s.OwnerId == ownerId)
             .Select(s => s.SkillType).ToList();
@@ -127,7 +128,7 @@ public class PlayerRepository : IPlayerRepository
         return triggersOfType;
     }
 
-    public async Task<List<Log>> GetAccessibleLogs(Guid playerId, Guid gameId,DateTime? lastTimeStamp)
+    public async Task<List<Log>> GetAccessibleLogs(Guid playerId, Guid gameId, DateTime? lastTimeStamp)
     { // ne prend pas en compte le gameId haha
         var logs = new List<Log>();
 

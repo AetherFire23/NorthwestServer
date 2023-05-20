@@ -5,7 +5,7 @@ namespace WebAPI.Interfaces
 {
     public interface IGameRepository
     {
-        public List<Game> GetTickableGames();
-        public Game GetGame(Guid id);
+        Task<Game> GetGame(Guid id);
+        Task<List<Game>> GetTickableGames();
     }
 }

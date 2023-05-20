@@ -1,4 +1,5 @@
-﻿using Quartz.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using Quartz.Core;
 using Shared_Resources.Entities;
 using System.Security.Policy;
 using WebAPI.Interfaces;
@@ -13,16 +14,16 @@ namespace WebAPI.Repository
             _playerContext = playerContext;
         }
 
-        public List<Game> GetTickableGames()
+        public async Task<List<Game>> GetTickableGames()
         {
             var currentDate = DateTime.UtcNow;
-            var games = _playerContext.Games.Where(x => x.NextTick < currentDate && x.Active).ToList();
+            var games = await _playerContext.Games.Where(x => x.NextTick < currentDate && x.Active).ToListAsync();
             return games;
         }
 
-        public Game GetGame(Guid id)
+        public async Task<Game> GetGame(Guid id)
         {
-            var game = _playerContext.Games.First(x => x.Id == id);
+            var game = await _playerContext.Games.FirstAsync(x => x.Id == id);
             return game;
         }
     }

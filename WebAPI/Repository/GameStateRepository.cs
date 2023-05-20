@@ -28,7 +28,7 @@ namespace WebAPI.Repository
 
             PlayerDTO playerDTO = await _playerRepository.MapPlayerDTOAsync(playerId);
             List<Message> newMessages = await GetNewMessagesAsync(lastTimeStamp, playerDTO.GameId);
-            List<Player> players = _playerRepository.GetPlayersInGame(playerDTO.GameId);
+            List<Player> players = await _playerRepository.GetPlayersInGameAsync(playerDTO.GameId);
             DateTime timeStamp = DateTime.UtcNow;
             List<PrivateChatRoomParticipant> chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
 

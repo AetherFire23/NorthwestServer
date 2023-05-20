@@ -27,5 +27,13 @@ namespace WebAPI.Strategies
 
             await _playerContext.SaveChangesAsync();
         }
+
+        public async Task TickPlayer(Guid playerId)
+        {
+            // Ticker pour chaque skill ? 
+        }
+
+        
+        
     }
 }
