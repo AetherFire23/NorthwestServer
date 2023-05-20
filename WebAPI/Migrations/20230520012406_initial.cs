@@ -294,7 +294,6 @@ namespace WebAPI.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoomType = table.Column<int>(type: "int", nullable: false),
                     IsLandmass = table.Column<bool>(type: "bit", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     X = table.Column<float>(type: "real", nullable: false),

@@ -2,6 +2,7 @@
 using Shared_Resources.Entities;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -9,53 +10,398 @@ using System.Text;
 
 namespace Shared_Resources.Models
 {
-    public static class RoomTemplate2
+    // TODO toute rentre ca public pour pas toute casser et pouvoir linker les tasks apres
+    public static class RoomTemplate2 // cest quoi deja les stairway haha
     {
         private static string DefaultSerializedRooms = string.Empty;
-        public static Room Kitchen { get; set; } = new Room()
+        public static Room CrowsNest { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
-            Name = nameof(Kitchen),
+            Name = nameof(CrowsNest),
             AdjacentRoomNames = new List<string>
             {
-                nameof(EntryHall),
-                nameof(Kitchen1),
+                nameof(MainDeck),
             },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = false,
         };
 
-        private static Room EntryHall { get; set; } = new Room()
+        private static Room MainDeck { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
-            Name = nameof(EntryHall),
+            Name = nameof(MainDeck),
             AdjacentRoomNames = new List<string>
             {
-                nameof(Kitchen),
-                nameof(Kitchen1),
+                nameof(CrowsNest),
+                nameof(ForeCastle),
+                nameof(FrontStairway),
+                nameof(CrowsNest),
+                nameof(QuarterDeck),
+                nameof(RearStairway),
             },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = false,
         };
 
-        private static Room Kitchen1 { get; set; } = new Room()
+        private static Room ForeCastle { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
-            Name = nameof(Kitchen1),
+            Name = nameof(ForeCastle),
             AdjacentRoomNames = new List<string>
             {
-                nameof(Kitchen),
-                nameof(EntryHall),
+                nameof(MainDeck),
             },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = false,
         };
+
+        private static Room ChartsRoom { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(ChartsRoom),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(FrontStairway),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room QuarterDeck { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(QuarterDeck),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(MainDeck),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room CaptainsQuarters { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(CaptainsQuarters),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(RearStairway),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room FrontStairway { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(FrontStairway),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(ChartsRoom),
+                nameof(MainDeck),
+                nameof(Mess),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room RearStairway { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(RearStairway),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof (MainDeck),
+                nameof (CaptainsQuarters),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room SickBay { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(SickBay),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof (Brig),
+                nameof (Mess),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room Brig { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Brig),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof (SickBay),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room Mess { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Mess),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof (SickBay),
+                nameof (CrewsQuarters),
+                nameof (FrontStairway),
+                nameof (MiddleCorridor),
+                nameof (Galley),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room MiddleCorridor { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(MiddleCorridor),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof (Mess),
+                nameof (OfficersQuarters),
+                nameof (LaundryRoom),
+                nameof (RearStairway),
+                nameof (LowerStairway),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room CrewsQuarters { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(CrewsQuarters),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof (Mess),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        public static Room Galley { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Galley),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof (Mess),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room Magazine { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Magazine),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(MiddleCorridor),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room OfficersQuarters { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(OfficersQuarters),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(MiddleCorridor),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room LaundryRoom { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(LaundryRoom),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(LaundryRoom),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room LowerStairway { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(LowerStairway),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(MiddleCorridor),
+                nameof(LowerCorridor),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room Armory { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Armory),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(LowerCorridor),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room EngineRoom { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(EngineRoom),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(EngineRoom),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room Workshop { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Workshop),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(LowerCorridor),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room BoilerRoom { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(BoilerRoom),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(LowerCorridor),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room Hold { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Hold),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(LowerCorridor),
+                nameof(Coal),
+                nameof(Food),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room Coal { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Coal),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(Hold),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room Food { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(Food),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(Hold),
+
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+        private static Room LowerCorridor { get; set; } = new Room()
+        {
+            Id = Guid.Empty,
+            GameId = Guid.Empty,
+            Name = nameof(LowerCorridor),
+            AdjacentRoomNames = new List<string>
+            {
+                nameof(LowerStairway),
+                nameof(Armory),
+                nameof(EngineRoom),
+                nameof(Workshop),
+                nameof(BoilerRoom),
+                nameof(Hold),
+            },
+            IsActive = true,
+            IsLandmass = false,
+        };
+
+
+        //private static Room MyRoom { get; set; } = new Room()
+        //{
+        //    Id = Guid.Empty,
+        //    GameId = Guid.Empty,
+        //    Name = nameof(MyRoom),
+        //    AdjacentRoomNames = new List<string>
+        //    {
+        //    },
+        //    RoomType = RoomType.Start,
+        //    IsActive = true,
+        //    IsLandmass = false,
+        //};
 
         // start of landmass rooms
         private static Room Cairn { get; set; } = new Room()
@@ -64,7 +410,6 @@ namespace Shared_Resources.Models
             GameId = Guid.Empty,
             Name = nameof(Cairn),
             AdjacentRoomNames = new List<string> { },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
@@ -75,7 +420,6 @@ namespace Shared_Resources.Models
             GameId = Guid.Empty,
             Name = nameof(Beach),
             AdjacentRoomNames = new List<string> { },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
@@ -86,7 +430,6 @@ namespace Shared_Resources.Models
             GameId = Guid.Empty,
             Name = nameof(Plain),
             AdjacentRoomNames = new List<string> { },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
@@ -97,7 +440,6 @@ namespace Shared_Resources.Models
             GameId = Guid.Empty,
             Name = nameof(Mountain),
             AdjacentRoomNames = new List<string> { },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
@@ -108,7 +450,6 @@ namespace Shared_Resources.Models
             GameId = Guid.Empty,
             Name = nameof(Village),
             AdjacentRoomNames = new List<string> { },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
@@ -119,7 +460,6 @@ namespace Shared_Resources.Models
             GameId = Guid.Empty,
             Name = nameof(HostileVillage),
             AdjacentRoomNames = new List<string> { },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
@@ -130,7 +470,6 @@ namespace Shared_Resources.Models
             GameId = Guid.Empty,
             Name = nameof(Ziboudga),
             AdjacentRoomNames = new List<string> { },
-            RoomType = RoomType.Start,
             IsActive = true,
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive

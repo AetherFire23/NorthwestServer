@@ -127,7 +127,6 @@ namespace WebAPI.Services
                     Id = user.Id, // users not saved yet in db, so can use user key as primary key. Will have to Guid.NewGuid() some day
                     ActionPoints = 0,
                     CurrentChatRoomId = user.Id,
-                    CurrentGameRoomId = user.Id,
                     GameId = info.Game.Id,
                     HealthPoints = 0,
                     Name = selection.Name,
@@ -140,9 +139,10 @@ namespace WebAPI.Services
                 await InitializePlayerRoleSettings(newPlayer);
 
                 //Starting room might change according to some variables. 
-                Guid roomId = await GetStartingRoomId(newPlayer, info);
-                newPlayer.CurrentGameRoomId = roomId;
-                _playerContext.Players.Add(newPlayer);
+                // Guid roomId = await GetStartingRoomId(newPlayer, info);
+                //newPlayer.CurrentGameRoomId = roomId;
+                await _playerContext.Players.AddAsync(newPlayer);
+                await _playerContext.SaveChangesAsync();
             }
         }
 
@@ -152,13 +152,13 @@ namespace WebAPI.Services
             await roleStrategy.InitializePlayerFromRoleAsync(player);
         }
 
-        public async Task<Guid> GetStartingRoomId(Player player, NewGameInfo info) // based on Role ?
-        {
-            var rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
-            // some code that sets the startRoomId.
-            var firstNotLandmass = rooms.First(x => !x.IsLandmass).Id;
-            return firstNotLandmass;
-        }
+        //public async Task<Guid> GetStartingRoomId(Player player, NewGameInfo info) // based on Role ?
+        //{
+        //    var rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
+        //    // some code that sets the startRoomId.
+        //    var firstNotLandmass = rooms.First(x => !x.IsLandmass).Id;
+        //    return firstNotLandmass;
+        //}
 
         public async Task InitializeItemsAsync(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
         {

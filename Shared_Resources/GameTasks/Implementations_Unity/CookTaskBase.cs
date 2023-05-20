@@ -19,7 +19,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         public override bool Requires(GameState gameState)
         {
             string currentRoomName = gameState.Room.Name;
-            bool isPlayerInCorrectRoom = currentRoomName.Equals("Kitchen1"); //|| currentRoomName.Equals("EntryHall");
+            bool isPlayerInCorrectRoom = currentRoomName.Equals(nameof(RoomTemplate2.Galley)); //|| currentRoomName.Equals("EntryHall");
             return isPlayerInCorrectRoom;
         }
 

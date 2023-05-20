@@ -12,7 +12,7 @@ using WebAPI;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20230520002347_initial")]
+    [Migration("20230520012406_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -416,9 +416,6 @@ namespace WebAPI.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RoomType")
-                        .HasColumnType("int");
 
                     b.Property<float>("X")
                         .HasColumnType("real");

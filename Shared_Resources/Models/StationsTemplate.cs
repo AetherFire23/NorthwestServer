@@ -20,7 +20,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(CookStation),
-            RoomName = nameof(RoomTemplate2.Kitchen),
+            RoomName = nameof(RoomTemplate2.CrowsNest),
             SerializedProperties = new CookStationProperties().ToJSON(),
         };
 

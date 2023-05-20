@@ -65,7 +65,6 @@ namespace WebAPI.Repository
             RoomDTO roomDTO = new RoomDTO()
             {
                 Id = requestedRoom.Id,
-                RoomType = requestedRoom.RoomType,
                 Items = items,
                 Players = playersInRoom,
                 Name = requestedRoom.Name,

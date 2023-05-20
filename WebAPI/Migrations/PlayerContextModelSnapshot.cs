@@ -415,9 +415,6 @@ namespace WebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomType")
-                        .HasColumnType("int");
-
                     b.Property<float>("X")
                         .HasColumnType("real");
 

@@ -22,7 +22,6 @@ namespace Shared_Resources.Models
                 IsActive = true,
                 IsLandmass = false,
                 Name = Name,
-                RoomType = RoomType,
                 AdjacentRoomNames = AdjacentNames
             };
             return newRoom;
