@@ -344,7 +344,6 @@ namespace WebAPI.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GameTaskCode = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SerializedProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsLandmass = table.Column<bool>(type: "bit", nullable: false),

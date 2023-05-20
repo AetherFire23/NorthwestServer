@@ -27,7 +27,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room MainDeck { get; set; } = new Room()
+        public static Room MainDeck { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -45,7 +45,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room ForeCastle { get; set; } = new Room()
+        public static Room ForeCastle { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -58,7 +58,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room ChartsRoom { get; set; } = new Room()
+        public static Room ChartsRoom { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -71,7 +71,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room QuarterDeck { get; set; } = new Room()
+        public static Room QuarterDeck { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -84,7 +84,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room CaptainsQuarters { get; set; } = new Room()
+        public static Room CaptainsQuarters { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -97,7 +97,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room FrontStairway { get; set; } = new Room()
+        public static Room FrontStairway { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -112,7 +112,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room RearStairway { get; set; } = new Room()
+        public static Room RearStairway { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -126,7 +126,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room SickBay { get; set; } = new Room()
+        public static Room SickBay { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -140,7 +140,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room Brig { get; set; } = new Room()
+        public static Room Brig { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -153,7 +153,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room Mess { get; set; } = new Room()
+        public static Room Mess { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -171,7 +171,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room MiddleCorridor { get; set; } = new Room()
+        public static Room MiddleCorridor { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -188,7 +188,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room CrewsQuarters { get; set; } = new Room()
+        public static Room CrewsQuarters { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -215,7 +215,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room Magazine { get; set; } = new Room()
+        public static Room Magazine { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -229,7 +229,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room OfficersQuarters { get; set; } = new Room()
+        public static Room OfficersQuarters { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -243,7 +243,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room LaundryRoom { get; set; } = new Room()
+        public static Room LaundryRoom { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -257,7 +257,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room LowerStairway { get; set; } = new Room()
+        public static Room LowerStairway { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -271,7 +271,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room Armory { get; set; } = new Room()
+        public static Room Armory { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -285,7 +285,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room EngineRoom { get; set; } = new Room()
+        public static Room EngineRoom { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -299,7 +299,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room Workshop { get; set; } = new Room()
+        public static Room Workshop { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -313,7 +313,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room BoilerRoom { get; set; } = new Room()
+        public static Room BoilerRoom { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -327,7 +327,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room Hold { get; set; } = new Room()
+        public static Room Hold { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -335,19 +335,19 @@ namespace Shared_Resources.Models
             AdjacentRoomNames = new List<string>
             {
                 nameof(LowerCorridor),
-                nameof(Coal),
-                nameof(Food),
+                nameof(CoalStore),
+                nameof(FoodStock),
 
             },
             IsActive = true,
             IsLandmass = false,
         };
 
-        private static Room Coal { get; set; } = new Room()
+        public static Room CoalStore { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
-            Name = nameof(Coal),
+            Name = nameof(CoalStore),
             AdjacentRoomNames = new List<string>
             {
                 nameof(Hold),
@@ -357,11 +357,11 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room Food { get; set; } = new Room()
+        public static Room FoodStock { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
-            Name = nameof(Food),
+            Name = nameof(FoodStock),
             AdjacentRoomNames = new List<string>
             {
                 nameof(Hold),
@@ -371,7 +371,7 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        private static Room LowerCorridor { get; set; } = new Room()
+        public static Room LowerCorridor { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -404,7 +404,7 @@ namespace Shared_Resources.Models
         //};
 
         // start of landmass rooms
-        private static Room Cairn { get; set; } = new Room()
+        public static Room Cairn { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -414,7 +414,7 @@ namespace Shared_Resources.Models
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
         };
-        private static Room Beach { get; set; } = new Room()
+        public static Room Beach { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -424,7 +424,7 @@ namespace Shared_Resources.Models
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
         };
-        private static Room Plain { get; set; } = new Room()
+        public static Room Plain { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -434,7 +434,7 @@ namespace Shared_Resources.Models
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
         };
-        private static Room Mountain { get; set; } = new Room()
+        public static Room Mountain { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -444,7 +444,7 @@ namespace Shared_Resources.Models
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
         };
-        private static Room Village { get; set; } = new Room()
+        public static Room Village { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -454,7 +454,7 @@ namespace Shared_Resources.Models
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
         };
-        private static Room HostileVillage { get; set; } = new Room()
+        public static Room HostileVillage { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -464,7 +464,7 @@ namespace Shared_Resources.Models
             IsLandmass = true,
             CardImpact = Enums.CardImpact.Positive
         };
-        private static Room Ziboudga { get; set; } = new Room()
+        public static Room Ziboudga { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,

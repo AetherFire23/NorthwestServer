@@ -58,39 +58,5 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 
             return targetPrompts;
         }
-
-        public Dictionary<string, string> GetTaskParameters(GameState gameState)
-        {
-            // should really make a class to handle dictionary parameterization
-            var station = gameState.Room.Stations.FirstOrDefault(x => x.GameTaskCode == GameTaskCodes.Cook);
-            var dictionary = new Dictionary<string, string>();
-            dictionary.Add("stationName", station.Id.ToString());
-            return dictionary;
-            // faut un dictionnaire pour mapper les stations I guess ? En tk whatever
-        }
-
-        //public Dictionary<Type, SelectableTargetOptions> ProduceDictionary(List<object> allTargets)
-        //{
-        //    var dictionary = ConstTargetTypes.GetSortedTargetTypes();
-
-        //    foreach (var target in allTargets)
-        //    {
-        //        var listOfKind = dictionary.GetValueOrDefault(target.GetType());
-
-        //        if (listOfKind is null) throw new Exception($"Unkown target type : {target.GetType()}");
-
-        //        listOfKind.Add(target);
-        //    }
-
-        //    return dictionary;
-        //}
-
-        //// faudrait-tu un auto-convert  ? 
-        //public KeyValuePair<Type, List<object>> GetValuePair<T>(Type type, List<T> someList) where T : class
-        //{
-        //    var objList = someList.Select(x => x as object).ToList();
-        //    var valuePair = new KeyValuePair<Type, List<object>>(type, objList);
-        //    return valuePair;
-        //}
     }
 }

@@ -10,7 +10,6 @@ namespace Shared_Resources.Entities
     {
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
-        public GameTaskCodes GameTaskCode { get; set; }
         public string Name { get; set; } = string.Empty;
         public string SerializedProperties { get; set; } = string.Empty;// code is in the gamestak to know in which class to convert this
         public bool IsLandmass { get; set; }

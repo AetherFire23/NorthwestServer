@@ -53,7 +53,6 @@ namespace WebAPI.Repository
             {
                 Id = station.Id,
                 GameId = station.GameId,
-                GameTaskCode = station.GameTaskCode,
                 Name = station.Name,
                 ExtraProperties = JsonConvert.DeserializeObject<T>(station.SerializedProperties) ?? new T(),
             };
