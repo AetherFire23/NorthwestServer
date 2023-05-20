@@ -1,6 +1,9 @@
-﻿using Shared_Resources.GameTasks;
+﻿using Shared_Resources.DTOs;
+using Shared_Resources.Entities;
+using Shared_Resources.GameTasks;
 using Shared_Resources.GameTasks.Implementations_Unity;
 using Shared_Resources.Models;
+using WebAPI.Game_Actions;
 using WebAPI.Interfaces;
 
 namespace WebAPI.GameTasks.Executions
@@ -12,21 +15,49 @@ namespace WebAPI.GameTasks.Executions
         private const int _stationCost = 3;
 
         private readonly IStationRepository _stationRepo;
+        private readonly PlayerContext _playerContext;
         public CookTaskExecute(PlayerContext playerContext, IStationRepository stationRepository)
         {
             _stationRepo = stationRepository;
+            _playerContext = playerContext;
         }
 
         public override async Task Execute(GameTaskContext context)
         {
             int i = 0;
-            // ca pourrait tu renvoyer le JSON au complet de la room au pire ? 
-            //string roomName = context.Parameters[_stationNameParam];
-            //var cookStation = await _stationRepo.RetrieveStationAsync<CookStationProperties>(context.Player.Id, roomName);
 
-            //var properties = (CookStationProperties)cookStation.ExtraProperties;
+            var cookStation = await _stationRepo.RetrieveStationAsync<CookStationProperties>(context.GameState.GameId, "CookStation");
+            var props = cookStation.ExtraProperties as CookStationProperties;
 
-            //_stationRepo.SaveStation(cookStation);
+            props.MoneyMade = 919191;
+
+            await _stationRepo.SaveStation(cookStation);
+
+            await _playerContext.SaveChangesAsync();
+        }
+
+        public async Task CreateLog(GameTaskContext gameTaskContext)
+        {
+            var gameAction = new GameAction()
+            {
+                GameActionType = Shared_Resources.Enums.GameActionType.Task,
+                GameId = gameTaskContext.GameState.GameId,
+                CreatedBy = gameTaskContext.Player.Name,
+            };
+
+            var log = new Log()
+            {
+                CreatedBy = gameTaskContext.Player.Name,
+                TriggeringPlayerId = gameTaskContext.Player.Id,
+                EventText = $"CookStation Was executed by {gameTaskContext.Player.Name}",
+                IsPublic = true,
+                RoomId = gameTaskContext.GameState.Room.Id,
+
+            };
+
+            await _playerContext.GameActions.AddAsync(gameAction);
+            await _playerContext.Logs.AddAsync(log);
+            _playerContext.SaveChangesAsync();
         }
     }
 }

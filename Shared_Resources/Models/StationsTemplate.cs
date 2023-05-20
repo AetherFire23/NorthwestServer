@@ -20,13 +20,13 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(CookStation),
-            RoomName = nameof(CookStation),
+            RoomName = nameof(RoomTemplate2.Kitchen),
             SerializedProperties = new CookStationProperties().ToJSON(),
         };
 
         private static List<Station> RetrieveReflectionStations()
         {
-            var reflectedStations = typeof(StationsTemplate).GetProperties(BindingFlags.Static | BindingFlags.NonPublic)
+            var reflectedStations = typeof(StationsTemplate).GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
                     .Where(x => x.PropertyType == typeof(Station))
                     .Select(x => (x.GetValue(null) as Station) ?? new Station()).ToList();
 

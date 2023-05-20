@@ -12,7 +12,7 @@ namespace Shared_Resources.Models
     public static class RoomTemplate2
     {
         private static string DefaultSerializedRooms = string.Empty;
-        private static Room Kitchen { get; set; } = new Room()
+        public static Room Kitchen { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
@@ -32,7 +32,7 @@ namespace Shared_Resources.Models
             Id = Guid.Empty,
             GameId = Guid.Empty,
             Name = nameof(EntryHall),
-            AdjacentRoomNames = new List<string> 
+            AdjacentRoomNames = new List<string>
             {
                 nameof(Kitchen),
                 nameof(Kitchen1),
@@ -47,8 +47,8 @@ namespace Shared_Resources.Models
             Id = Guid.Empty,
             GameId = Guid.Empty,
             Name = nameof(Kitchen1),
-            AdjacentRoomNames = new List<string> 
-            { 
+            AdjacentRoomNames = new List<string>
+            {
                 nameof(Kitchen),
                 nameof(EntryHall),
             },
@@ -151,7 +151,7 @@ namespace Shared_Resources.Models
 
         private static List<Room> RetrieveReflectedTemplateRooms()
         {
-            var reflectedRooms = typeof(RoomTemplate2).GetProperties(BindingFlags.Static | BindingFlags.NonPublic)
+            var reflectedRooms = typeof(RoomTemplate2).GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
                 .Where(x => x.PropertyType == typeof(Room))
                 .Select(x => x.GetValue(null) as Room).ToList();
 

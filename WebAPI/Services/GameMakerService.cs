@@ -90,7 +90,7 @@ namespace WebAPI.Services
 
             // Need to initialize rooms before players, because player construction requires a GameRoomId.
 
-            await _roomRepository.CreateNewRooms(gameId);
+            await _roomRepository.CreateNewRoomsAndConnections(gameId);
             await _shipStasusesService.InitializeShipStatusesAndResources(newGameInfo.Game.Id);
             await InitializePlayersAsync(newGameInfo);
             await InitializeItemsAsync(newGameInfo);

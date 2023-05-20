@@ -16,7 +16,7 @@ namespace WebAPI.Interfaces
         Task<List<Room>> GetRoomsInGamesync(Guid gameId);
         Task<Room> GetRoomFromName(Guid gameId, string roomName);
         Task<RoomDTO> GetRoomDTOAsync(Guid roomId);
-        Task CreateNewRooms(Guid gameId);
+        Task CreateNewRoomsAndConnections(Guid gameId);
         Task<List<AdjacentRoom>> GetLandmassAdjacentRoomsAsync(Guid gameId);
     }
 }

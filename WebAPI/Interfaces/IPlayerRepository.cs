@@ -18,6 +18,6 @@ public interface IPlayerRepository
     public Task<PlayerDTO> MapPlayerDTOAsync(Guid playerId);
     public Task<List<TriggerNotificationDTO>> GetTriggerNotificationsAsync(Guid playerId, DateTime? timeStamp);
     public List<TriggerNotification> GetAllTriggersOfType(Guid playerId, NotificationType notificationType);
-    public List<Log> GetAccessibleLogs(Guid playerId, DateTime? lastTimeStamp);
+    Task<List<Log>> GetAccessibleLogs(Guid playerId, Guid gameId, DateTime? lastTimeStamp);
 } 
 

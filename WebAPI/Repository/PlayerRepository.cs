@@ -127,13 +127,13 @@ public class PlayerRepository : IPlayerRepository
         return triggersOfType;
     }
 
-    public List<Log> GetAccessibleLogs(Guid playerId, DateTime? lastTimeStamp)
-    {
+    public async Task<List<Log>> GetAccessibleLogs(Guid playerId, Guid gameId,DateTime? lastTimeStamp)
+    { // ne prend pas en compte le gameId haha
         var logs = new List<Log>();
 
         var newServerLogs = lastTimeStamp is null
-            ? _playerContext.Logs
-            : _playerContext.Logs.Where(x => x.Created > lastTimeStamp);
+            ? await _playerContext.Logs.Where(x => x.GameId == gameId).ToListAsync()
+            : await _playerContext.Logs.Where(x => x.GameId == gameId && x.Created > lastTimeStamp).ToListAsync();
 
         foreach (var log in newServerLogs)
         {
@@ -145,7 +145,8 @@ public class PlayerRepository : IPlayerRepository
             else
             {
                 // should encapsulate like RoomLogIsAccessibleTo(LogId, playerId)
-                var playersIdsWhoCanSeeLog = _playerContext.LogAccessPermission.Where(x => x.LogId == log.Id)
+                var playersIdsWhoCanSeeLog = _playerContext.LogAccessPermission
+                    .Where(x => x.LogId == log.Id)
                     .Select(x => x.PlayerId);
 
                 bool canSeePrivateLog = playersIdsWhoCanSeeLog.Contains(playerId);

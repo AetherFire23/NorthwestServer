@@ -9,11 +9,11 @@ namespace WebAPI.Game_Actions
     public class GameAction
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public Guid GameId { get; set; }
 
-        public DateTime? Created { get; set; }
+        public DateTime? Created { get; set; } = DateTime.UtcNow;
 
         public string CreatedBy { get; set; } = string.Empty;
 

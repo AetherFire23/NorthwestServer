@@ -20,37 +20,30 @@ namespace WebAPI.Repository
             _playerContext = playerContext;
         }
 
-        public async Task<Station> GetStationByName(Guid gameId, string name)
+        public async Task<StationDTO> RetrieveStationAsync<T>(Guid stationId) where T : new()
         {
-            var station = await _playerContext.Stations.FirstAsync(s => s.GameId == gameId && s.Name == name);
-            return station;
+            var station = await _playerContext.Stations.FirstAsync(x => x.Id == stationId);
+            var stationDTO = CreateDTO<T>(station);
+            return stationDTO;
         }
-
-        public List<Station> GetAllActiveLandmassStations(Guid gameId)
+        public async Task<StationDTO> RetrieveStationAsync<T>(Guid gameId, string stationName) where T : new()
         {
-            var stations = _playerContext.Stations.Where(s => s.IsActive && s.GameId == gameId).ToList();
-            return stations;
-        }
-
-        public async Task<StationDTO> RetrieveStationAsync<T>(Guid playerId, string stationName) where T : new()
-        {
-            var player = await _playerRepository.GetPlayerAsync(playerId);
-            var station = _playerContext.Stations.First(x => x.GameId == player.GameId && x.Name == stationName);
+            var station = await _playerContext.Stations.FirstAsync(x => x.GameId == gameId && x.Name == stationName);
             var stationDTO = CreateDTO<T>(station);
             return stationDTO;
         }
 
-        public void SaveStation(StationDTO station)
+        public async Task SaveStation(StationDTO station)
         {
-            var currentStation = GetStation(station.Id);
+            var currentStation = await GetStation(station.Id);
             currentStation.SerializedProperties = JsonConvert.SerializeObject(station.ExtraProperties);
 
-            _playerContext.SaveChanges();
+            await _playerContext.SaveChangesAsync();
         }
 
-        private Station GetStation(Guid stationId) // call au contexte
+        private async Task<Station> GetStation(Guid stationId) // call au contexte
         {
-            var station = _playerContext.Stations.First(x => x.Id == stationId);
+            var station = await _playerContext.Stations.FirstAsync(x => x.Id == stationId);
             return station;
         }
 
@@ -73,7 +66,13 @@ namespace WebAPI.Repository
 
             if (allStations.Any(x => x is null)) throw new Exception("One station was not initialized.");
 
-            _playerContext.Stations.AddRange(allStations);
+            foreach (var station in allStations)
+            {
+                station.GameId = gameId;
+
+            }
+
+            await _playerContext.Stations.AddRangeAsync(allStations);
             await _playerContext.SaveChangesAsync();
         }
     }

@@ -82,7 +82,7 @@ namespace WebAPI.Repository
         /// <summary>
         /// Initializes level with the given gameId
         /// </summary>
-        public async Task CreateNewRooms(Guid gameId)
+        public async Task CreateNewRoomsAndConnections(Guid gameId)
         {
             Tuple<List<Room>, List<AdjacentRoom>> roomsAndConnections = DefaultRoomFactory.CreateAndInitializeNewRoomsAndConnections(gameId);
 

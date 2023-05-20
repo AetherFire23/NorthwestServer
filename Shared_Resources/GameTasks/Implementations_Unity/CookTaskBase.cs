@@ -52,6 +52,10 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
                 .SetMinimumTargetCount(1)
                 .SetMaximumTargetCount(1);
 
+            var stations = gameState.Stations;
+            targetPrompts.CreateCheckListPrompt(stations)
+                .SetExactAmount(1);
+
             return targetPrompts;
         }
 

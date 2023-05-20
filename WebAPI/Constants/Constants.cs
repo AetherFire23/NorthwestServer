@@ -4,7 +4,7 @@
     {
         public static Dictionary<string, string> StationsFromRoomName = new Dictionary<string, string>()
         {
-            {"Kitchen1", "CookStation1"},
+            {"Kitchen1", "CookStation"},
             {"EntryHall", "CannonStation"},
         };
     }

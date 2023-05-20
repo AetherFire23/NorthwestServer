@@ -38,19 +38,41 @@ namespace WebAPI.Services
         public async Task<ClientCallResult> ChangeRoomAsync(Guid playerId, string targetRoomName)
         {
             var player = await _playerRepository.GetPlayerAsync(playerId);
-
             var currentRoom = await _playerContext.Rooms.FirstAsync(x => x.Id == player.CurrentGameRoomId);
-
             var targetRoom = await _playerContext.Rooms.FirstAsync(x => x.Name == targetRoomName); // devrait pas etre avec le gameid aussi?
-
             bool connectionExists = await _playerContext.AdjacentRooms.FirstOrDefaultAsync(x => x.RoomId == currentRoom.Id && x.AdjacentId == targetRoom.Id) is not null;
 
-            if (connectionExists)
+            if (connectionExists) // should benefit from inversion 
             {
                 player.CurrentGameRoomId = targetRoom.Id;
-                _playerContext.SaveChanges();
+                await _playerContext.SaveChangesAsync();
 
-                _gameActionsRepository.ChangeRoomAction(player, currentRoom, targetRoom);
+                var gameAction = new GameAction()
+                {
+                    Id = Guid.NewGuid(),
+                    Created = DateTime.UtcNow,
+                    CreatedBy = player.Name,
+                    GameId = player.GameId,
+                    GameActionType = Shared_Resources.Enums.GameActionType.RoomChanged,
+                };
+
+                var log = new Log()
+                {
+                    Id = Guid.NewGuid(),
+                    Created = DateTime.UtcNow,
+                    CreatedBy = player.Name,
+                    EventText = "RROOM cCCAHNGE!",
+                    IsPublic = true,
+                    RoomId = targetRoom.Id,
+                    TriggeringPlayerId = player.Id,
+                    GameId = gameAction.GameId,
+                };
+
+                await _playerContext.AddAsync(gameAction);
+                await _playerContext.AddAsync(log);
+                await _playerContext.SaveChangesAsync();
+
+                //_gameActionsRepository.ChangeRoomAction(player, currentRoom, targetRoom);
 
                 return ClientCallResult.Success;
             }

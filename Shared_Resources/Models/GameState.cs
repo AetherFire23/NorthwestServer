@@ -18,6 +18,7 @@ namespace Shared_Resources.Models
         public DateTime? TimeStamp { get; set; }
         public string SerializedLayout { get; set; } = string.Empty;
         public List<PrivateChatRoom> PrivateChatRooms { get; set; } = new List<PrivateChatRoom>();
+        public List<Station> Stations { get; set; } = new List<Station>();
 
         public Guid GameId => this.PlayerDTO.GameId;
         public Guid PlayerUID => this.PlayerDTO.Id;

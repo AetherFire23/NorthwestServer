@@ -6,10 +6,9 @@ namespace WebAPI.Interfaces
 {
     public interface IStationRepository
     {
-        public Task<StationDTO> RetrieveStationAsync<T>(Guid playerId, string stationName) where T : new(); 
-        public void SaveStation(StationDTO station);
-        public Task CreateAndAddStationsToDb(Guid gameId);
-        public List<Station> GetAllActiveLandmassStations(Guid gameId);
-        public Task<Station> GetStationByName(Guid gameId, string name);
+        Task CreateAndAddStationsToDb(Guid gameId);
+        Task<StationDTO> RetrieveStationAsync<T>(Guid stationId) where T : new();
+        Task<StationDTO> RetrieveStationAsync<T>(Guid gameId, string stationName) where T : new();
+        Task SaveStation(StationDTO station);
     }
 }
