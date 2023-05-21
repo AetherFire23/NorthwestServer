@@ -15,7 +15,8 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 
         public override bool Requires(GameState gameState)
         {
-            return true;
+            bool isInValidRoom = gameState.Room.Name == nameof(RoomTemplate2.MainDeck);
+            return isInValidRoom;
         }
 
         public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)

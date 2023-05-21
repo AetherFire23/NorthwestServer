@@ -10,13 +10,19 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 {
     public class ChargeCannon : GameTaskBase
     {
-        public override GameTaskCodes Code => GameTaskCodes.FireCannon;
+        public override GameTaskCodes Code => GameTaskCodes.ChargeCannon;
 
         public override GameTaskProvider Provider => GameTaskProvider.Room;
 
         public override bool Requires(GameState gameState)
         {
-            return true;
+            List<string> validRoomsNames = new List<string>()
+            {
+                nameof(RoomTemplate2.QuarterDeck),
+                nameof(RoomTemplate2.Forecastle),
+            };
+            bool isInValidRoom = validRoomsNames.Contains(gameState.Room.Name);
+            return isInValidRoom;
         }
 
         public override Task Execute(GameTaskContext context)

@@ -18,7 +18,13 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 
         public override bool Requires(GameState gameState)
         {
-            return true;
+            List<string> validRoomsNames = new List<string>()
+            {
+                nameof(RoomTemplate2.QuarterDeck),
+                nameof(RoomTemplate2.Forecastle),
+            };
+            bool isInValidRoom = validRoomsNames.Contains(gameState.Room.Name);
+            return isInValidRoom;
         }
 
         public override GameTaskValidationResult Validate(GameTaskContext context)
