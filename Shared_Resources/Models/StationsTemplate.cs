@@ -133,7 +133,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(CannonForecastle),
-            RoomName = nameof(RoomTemplate2.ForeCastle),
+            RoomName = nameof(RoomTemplate2.Forecastle),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -144,7 +144,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Foremast),
-            RoomName = nameof(RoomTemplate2.ForeCastle),
+            RoomName = nameof(RoomTemplate2.Forecastle),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -155,7 +155,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Anchor),
-            RoomName = nameof(RoomTemplate2.ForeCastle),
+            RoomName = nameof(RoomTemplate2.Forecastle),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 

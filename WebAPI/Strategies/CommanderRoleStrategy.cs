@@ -22,7 +22,7 @@ namespace WebAPI.Strategies
 
         public async Task InitializePlayerFromRoleAsync(Player player) // not added to Db yet
         {
-            var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomTemplate2.Galley));
+            var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomTemplate2.MiddleCorridor));
             player.CurrentGameRoomId = room.Id;
 
             var item = new Item()

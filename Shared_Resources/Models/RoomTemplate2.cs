@@ -35,7 +35,7 @@ namespace Shared_Resources.Models
             AdjacentRoomNames = new List<string>
             {
                 nameof(CrowsNest),
-                nameof(ForeCastle),
+                nameof(Forecastle),
                 nameof(FrontStairway),
                 nameof(CrowsNest),
                 nameof(QuarterDeck),
@@ -45,11 +45,11 @@ namespace Shared_Resources.Models
             IsLandmass = false,
         };
 
-        public static Room ForeCastle { get; set; } = new Room()
+        public static Room Forecastle { get; set; } = new Room()
         {
             Id = Guid.Empty,
             GameId = Guid.Empty,
-            Name = nameof(ForeCastle),
+            Name = nameof(Forecastle),
             AdjacentRoomNames = new List<string>
             {
                 nameof(MainDeck),
@@ -121,6 +121,7 @@ namespace Shared_Resources.Models
             {
                 nameof (MainDeck),
                 nameof (CaptainsQuarters),
+                nameof (MiddleCorridor),
             },
             IsActive = true,
             IsLandmass = false,
@@ -183,6 +184,7 @@ namespace Shared_Resources.Models
                 nameof (LaundryRoom),
                 nameof (RearStairway),
                 nameof (LowerStairway),
+                nameof (Magazine),
             },
             IsActive = true,
             IsLandmass = false,
@@ -251,6 +253,7 @@ namespace Shared_Resources.Models
             AdjacentRoomNames = new List<string>
             {
                 nameof(LaundryRoom),
+                nameof(MiddleCorridor),
 
             },
             IsActive = true,
@@ -292,7 +295,7 @@ namespace Shared_Resources.Models
             Name = nameof(EngineRoom),
             AdjacentRoomNames = new List<string>
             {
-                nameof(EngineRoom),
+                nameof(BoilerRoom),
 
             },
             IsActive = true,
@@ -321,6 +324,7 @@ namespace Shared_Resources.Models
             AdjacentRoomNames = new List<string>
             {
                 nameof(LowerCorridor),
+                nameof(EngineRoom),
 
             },
             IsActive = true,
