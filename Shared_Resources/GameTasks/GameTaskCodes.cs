@@ -39,5 +39,7 @@ namespace Shared_Resources.GameTasks
 
         Lock,
         Unlock,
+
+        CraftTask,
     }
 }
