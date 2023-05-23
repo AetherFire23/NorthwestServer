@@ -44,6 +44,7 @@ namespace WebAPI.Services
 
         public async Task CreateDummyGame()
         {
+
             NewGameInfo info = new NewGameInfo()
             {
                 Users = new List<User>()
