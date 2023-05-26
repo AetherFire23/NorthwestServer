@@ -14,7 +14,7 @@ namespace WebAPI
     {
         public static Tuple<List<Room>, List<AdjacentRoom>> CreateNewDefaultLandmassRoomsAndConnections(LandmassLayout layout, Guid gameId)
         {
-            List<Room> defaultLandmassRooms = RoomTemplate2.ReadSerializedDefaultRooms().Where(x => x.IsLandmass).ToList();
+            List<Room> defaultLandmassRooms = RoomsTemplate.ReadSerializedDefaultRooms().Where(x => x.IsLandmass).ToList();
             InitializeIdsIntoLandmassRooms(defaultLandmassRooms, gameId);
             AddAjacentNamesIntoLandmassRooms(layout, defaultLandmassRooms);
             SetRoomPositionIntoLandmassRooms(layout, defaultLandmassRooms);

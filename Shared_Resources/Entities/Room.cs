@@ -2,10 +2,11 @@
 using Shared_Resources.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Shared_Resources.Entities
 {
-    public class Room : IEntity
+    public class Room : IEntity, IFormattable
     {
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
@@ -41,7 +42,12 @@ namespace Shared_Resources.Entities
 
         public override string ToString()
         {
-            return this.Name;
+            return ToString(null, CultureInfo.CurrentCulture);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return $"{this.Name}";
         }
     }
 }

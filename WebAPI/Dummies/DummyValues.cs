@@ -107,7 +107,7 @@ namespace WebAPI.Dummies
             Id = Guid.NewGuid(),
             Created = DateTime.UtcNow,
             GameId = defaultGameGuid,
-            Name = "The Master",
+            SenderName = "The Master",
             RoomId = defaultGameGuid,
             Text = "I am god"
         };
@@ -117,7 +117,7 @@ namespace WebAPI.Dummies
             Id = Guid.NewGuid(),
             Created = DateTime.UtcNow,
             GameId = defaultGameGuid,
-            Name = "The Master",
+            SenderName = "The Master",
             RoomId = defaultPrivateChatRoomId,
             Text = "I am in private room 2"
         };

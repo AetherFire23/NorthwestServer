@@ -12,18 +12,20 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     {
         public override GameTaskCodes Code => GameTaskCodes.RaiseSail;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Room;
+        public override GameTaskProvider Provider => GameTaskProvider.Sailing;
 
         public override bool Requires(GameState gameState)
         {
+            bool hasValidItem = gameState.PlayerDTO.Items.Exists(x => x.ItemType == ItemType.Wrench);
+
             List<string> validRoomsNames = new List<string>()
             {
-                nameof(RoomTemplate2.QuarterDeck),
-                nameof(RoomTemplate2.Forecastle),
-                nameof(RoomTemplate2.MainDeck),
+                nameof(RoomsTemplate.QuarterDeck),
+                nameof(RoomsTemplate.Forecastle),
+                nameof(RoomsTemplate.MainDeck),
             };
             bool isInValidRoom = validRoomsNames.Contains(gameState.Room.Name);
-            return isInValidRoom;
+            return isInValidRoom && hasValidItem;
         }
 
         public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)

@@ -11,9 +11,9 @@ namespace Shared_Resources.Constants
     {
         public List<PromptInfo> CheckLists = new List<PromptInfo>();
 
-        public PromptInfo CreateCheckListPrompt<T>(List<T> objects) where T : ITaskParameter
+        public PromptInfo CreateCheckListPrompt<T>(List<T> objects, string description) where T : ITaskParameter
         {
-            var info = new PromptInfo(objects.Select(x => x as ITaskParameter).ToList());
+            var info = new PromptInfo(objects.Select(x => x as ITaskParameter).ToList(), description);
             CheckLists.Add(info);
             return info;
         }

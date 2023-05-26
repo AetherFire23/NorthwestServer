@@ -10,6 +10,7 @@ namespace Shared_Resources.Constants
     // So PromptInfo is 
     public class PromptInfo
     {
+        public string Description { get; set; }
         public List<ITaskParameter> PromptedObjects { get; private set; } = new List<ITaskParameter>();
         public int MaximumSelectionAmount { get; private set; } = _defaultMaximumValue;
         public int MinimumSelection { get; private set; } = _defaultMinimumValue;
@@ -31,8 +32,9 @@ namespace Shared_Resources.Constants
         /// No configuration entails unlimited selections and makes the prompt required.
         /// </summary>
         /// <param name="targets"></param>
-        public PromptInfo(List<ITaskParameter> targets)
+        public PromptInfo(List<ITaskParameter> targets, string description)
         {
+            Description = description;
             PromptedObjects = targets;
         }
 
@@ -85,6 +87,8 @@ namespace Shared_Resources.Constants
         {
             // use this inside of NorthWest to configure conditionals. 
             // since taskBuilder inside unity has access to gamesate, can compare the objects to any state.
+
+
         }
     }
 }

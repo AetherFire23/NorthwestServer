@@ -22,14 +22,11 @@ namespace WebAPI.Repository
 
         public async Task<GameState> GetPlayerGameStateAsync(Guid playerId, DateTime? lastTimeStamp)
         {
-            //temp
-            //Player player = _playerContext.Players.FirstOrDefault(player => player.Id == playerId);
             Player player = await _playerRepository.GetPlayerAsync(playerId);
 
             PlayerDTO playerDTO = await _playerRepository.MapPlayerDTOAsync(playerId);
             List<Message> newMessages = await GetNewMessagesAsync(lastTimeStamp, playerDTO.GameId);
             List<Player> players = await _playerRepository.GetPlayersInGameAsync(playerDTO.GameId);
-            DateTime timeStamp = DateTime.UtcNow;
             List<PrivateChatRoomParticipant> chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
 
             //string serializedLayout = _playerContext.Landmass.First(l => l.GameId == playerDTO.GameId).SerializedLandmassLayout;
@@ -49,7 +46,7 @@ namespace WebAPI.Repository
                 TriggerNotifications = trigs,
                 NewMessages = newMessages,
                 Players = players,
-                TimeStamp = timeStamp,
+                TimeStamp = DateTime.UtcNow,
                 PrivateChatRoomParticipants = chatRoomParticipants,
                 Room = roomDTO,
                 Logs = logs,

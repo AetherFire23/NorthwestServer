@@ -12,7 +12,7 @@ namespace Shared_Resources.Models
     {
         public static Tuple<List<Room>, List<AdjacentRoom>> CreateAndInitializeNewRoomsAndConnections(Guid gameId)
         {
-            List<Room> defaultRooms = RoomTemplate2.ReadSerializedDefaultRooms();
+            List<Room> defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms();
             InitializeDefaultRoomIds(gameId, defaultRooms);
             List<AdjacentRoom> connections = CreateAndInitializeConnections(gameId, defaultRooms);
 

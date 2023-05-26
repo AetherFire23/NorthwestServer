@@ -10,6 +10,8 @@ namespace Shared_Resources.GameTasks
     {
         Room,
         Role,
-        Player
+        Player,
+
+        Sailing,
     }
 }

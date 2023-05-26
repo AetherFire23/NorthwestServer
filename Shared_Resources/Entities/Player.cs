@@ -5,10 +5,11 @@ using Shared_Resources.Interfaces;
 using System;
 using System.Collections.Generic;
 using Shared_Resources.Constants;
+using System.Globalization;
 
 namespace Shared_Resources.Entities
 {
-    public class Player : IEntity, ITaskParameter
+    public class Player : IEntity, ITaskParameter, IFormattable
     {
         public Guid Id { get; set; }
 
@@ -59,7 +60,13 @@ namespace Shared_Resources.Entities
 
         public override string ToString()
         {
-            return this.Name;
+            return ToString(null, CultureInfo.CurrentCulture);
+        }
+
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return $"{this.Name}";
         }
     }
 }

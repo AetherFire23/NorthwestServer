@@ -22,7 +22,7 @@ namespace WebAPI.Strategies
 
         public async Task InitializePlayerFromRoleAsync(Player player)
         {
-            var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomTemplate2.CrowsNest));
+            var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.CrowsNest));
             player.CurrentGameRoomId = room.Id;
 
             await _playerContext.SaveChangesAsync();

@@ -18,8 +18,8 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         {
             List<string> validRoomsNames = new List<string>()
             {
-                nameof(RoomTemplate2.QuarterDeck),
-                nameof(RoomTemplate2.Forecastle),
+                nameof(RoomsTemplate.QuarterDeck),
+                nameof(RoomsTemplate.Forecastle),
             };
             bool isInValidRoom = validRoomsNames.Contains(gameState.Room.Name);
             return isInValidRoom;

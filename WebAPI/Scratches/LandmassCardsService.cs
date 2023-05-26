@@ -53,7 +53,7 @@ namespace WebAPI
         // Initialize rooms from landmass cards.
         public async Task InitializeLandmassCards(Guid gameId)
         {
-            var defaultRooms = RoomTemplate2.ReadSerializedDefaultRooms().Where(x => x.IsLandmass).ToList();
+            var defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms().Where(x => x.IsLandmass).ToList();
 
             var defaultLandmassCards = defaultRooms.Select(x => new Card()
             {

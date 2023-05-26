@@ -44,7 +44,6 @@ namespace WebAPI.Services
 
         public async Task CreateDummyGame()
         {
-
             NewGameInfo info = new NewGameInfo()
             {
                 Users = new List<User>()
@@ -61,7 +60,6 @@ namespace WebAPI.Services
                            RoleType = RoleType.Commander,
                            Name = "BenPlayer"
                     },
-
                     new PlayerSelections() // fred
                     {
                            UserId = DummyValues.RealFred.Id,
@@ -91,7 +89,6 @@ namespace WebAPI.Services
             await _playerContext.SaveChangesAsync();
 
             // Need to initialize rooms before players, because player construction requires a GameRoomId.
-
             await _roomRepository.CreateNewRoomsAndConnections(gameId);
             await _shipStasusesService.InitializeShipStatusesAndResources(newGameInfo.Game.Id);
             await InitializePlayersAsync(newGameInfo);
@@ -112,6 +109,29 @@ namespace WebAPI.Services
             _playerContext.PrivateChatRooms.Add(DummyValues.PrivateChatRoom);
             _playerContext.PrivateChatRoomParticipants.Add(DummyValues.PrivateChatRoomParticipant);
             _playerContext.Items.Add(DummyValues.Freditem);
+
+            //List<Log> logs = Enumerable.Range(0, 1000).Select(x => new Log()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Created = DateTime.UtcNow,
+            //    IsPublic = true,
+            //    EventText = "I am very dumb value haha",
+            //    CreatedBy = "TheMaster",
+            //    GameId = DummyValues.defaultGameGuid,
+            //    TriggeringPlayerId = DummyValues.Fred.Id,
+            //    RoomId = Guid.NewGuid(),
+            //}).ToList() ?? new List<Log>();
+
+            //List<Message> stressMessages = Enumerable.Range(0, 1000).Select(x => new Message()
+            //{
+            //    RoomId = DummyValues.defaultGameGuid,
+            //    SenderName = "TheMaster",
+            //    Text = "Oh Yeah!",
+            //    GameId = DummyValues.defaultGameGuid,
+            //}).ToList();
+
+            //_playerContext.Messages.AddRange(stressMessages);
+            //_playerContext.Logs.AddRange(logs);
 
             _playerContext.SaveChanges();
         }
@@ -162,14 +182,14 @@ namespace WebAPI.Services
             {
                 Id = Guid.NewGuid(),
                 ItemType = ItemType.Hose,
-                OwnerId = rooms.First(x => x.Name == nameof(RoomTemplate2.CrowsNest)).Id,
+                OwnerId = rooms.First(x => x.Name == nameof(RoomsTemplate.CrowsNest)).Id,
             };
 
             var item3 = new Item()
             {
                 Id = Guid.NewGuid(),
                 ItemType = ItemType.Hose,
-                OwnerId = rooms.First(x => x.Name == nameof(RoomTemplate2.CrowsNest)).Id,
+                OwnerId = rooms.First(x => x.Name == nameof(RoomsTemplate.CrowsNest)).Id,
             };
             await _playerContext.Items.AddAsync(item2);
             await _playerContext.Items.AddAsync(item3);

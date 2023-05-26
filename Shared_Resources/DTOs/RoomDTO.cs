@@ -3,9 +3,11 @@ using Shared_Resources.Entities;
 using Shared_Resources.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+
 namespace Shared_Resources.DTOs
 {
-    public class RoomDTO : ITaskParameter
+    public class RoomDTO : ITaskParameter, IFormattable
     {
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
@@ -25,10 +27,14 @@ namespace Shared_Resources.DTOs
             var kvp = new KeyValuePair<string, string>(name, this.Name);
             return kvp;
         }
-
         public override string ToString()
         {
-            return this.Name;
+            return ToString(null, CultureInfo.CurrentCulture);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return $"{this.Name}";
         }
     }
 }

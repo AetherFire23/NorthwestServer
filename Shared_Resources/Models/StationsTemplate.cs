@@ -19,7 +19,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Wheel),
-            RoomName = nameof(RoomTemplate2.QuarterDeck),
+            RoomName = nameof(RoomsTemplate.QuarterDeck),
             SerializedProperties = string.Empty,
         };
 
@@ -30,7 +30,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Cannon),
-            RoomName = nameof(RoomTemplate2.QuarterDeck),
+            RoomName = nameof(RoomsTemplate.QuarterDeck),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -41,7 +41,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Mizzenmast),
-            RoomName = nameof(RoomTemplate2.QuarterDeck),
+            RoomName = nameof(RoomsTemplate.QuarterDeck),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -52,7 +52,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Bed),
-            RoomName = nameof(RoomTemplate2.CaptainsQuarters),
+            RoomName = nameof(RoomsTemplate.CaptainsQuarters),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -63,7 +63,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Locker),
-            RoomName = nameof(RoomTemplate2.CaptainsQuarters),
+            RoomName = nameof(RoomsTemplate.CaptainsQuarters),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -76,7 +76,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Watch),
-            RoomName = nameof(RoomTemplate2.CrowsNest),
+            RoomName = nameof(RoomsTemplate.CrowsNest),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -87,7 +87,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Mortar),
-            RoomName = nameof(RoomTemplate2.MainDeck),
+            RoomName = nameof(RoomsTemplate.MainDeck),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -98,7 +98,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Mainmast),
-            RoomName = nameof(RoomTemplate2.MainDeck),
+            RoomName = nameof(RoomsTemplate.MainDeck),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -109,7 +109,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Boat),
-            RoomName = nameof(RoomTemplate2.MainDeck),
+            RoomName = nameof(RoomsTemplate.MainDeck),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -120,11 +120,10 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Rail),
-            RoomName = nameof(RoomTemplate2.MainDeck),
+            RoomName = nameof(RoomsTemplate.MainDeck),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
-        //Forecastle
 
         public static Station CannonForecastle { get; set; } = new Station()
         {
@@ -133,7 +132,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(CannonForecastle),
-            RoomName = nameof(RoomTemplate2.Forecastle),
+            RoomName = nameof(RoomsTemplate.Forecastle),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -144,7 +143,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Foremast),
-            RoomName = nameof(RoomTemplate2.Forecastle),
+            RoomName = nameof(RoomsTemplate.Forecastle),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -155,7 +154,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Anchor),
-            RoomName = nameof(RoomTemplate2.Forecastle),
+            RoomName = nameof(RoomsTemplate.Forecastle),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -167,7 +166,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Stove),
-            RoomName = nameof(RoomTemplate2.Galley),
+            RoomName = nameof(RoomsTemplate.Galley),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -178,7 +177,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Cooler),
-            RoomName = nameof(RoomTemplate2.Galley),
+            RoomName = nameof(RoomsTemplate.Galley),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -189,7 +188,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Table),
-            RoomName = nameof(RoomTemplate2.Mess),
+            RoomName = nameof(RoomsTemplate.Mess),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -200,7 +199,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Bunks),
-            RoomName = nameof(RoomTemplate2.CrewsQuarters),
+            RoomName = nameof(RoomsTemplate.CrewsQuarters),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -211,7 +210,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Beds),
-            RoomName = nameof(RoomTemplate2.OfficersQuarters),
+            RoomName = nameof(RoomsTemplate.OfficersQuarters),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -222,7 +221,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Cell),
-            RoomName = nameof(RoomTemplate2.Brig),
+            RoomName = nameof(RoomsTemplate.Brig),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -233,7 +232,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Cabinet),
-            RoomName = nameof(RoomTemplate2.SickBay),
+            RoomName = nameof(RoomsTemplate.SickBay),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -244,7 +243,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Surgery),
-            RoomName = nameof(RoomTemplate2.SickBay),
+            RoomName = nameof(RoomsTemplate.SickBay),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -255,7 +254,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Laboratory),
-            RoomName = nameof(RoomTemplate2.SickBay),
+            RoomName = nameof(RoomsTemplate.SickBay),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -266,7 +265,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Gunpowder),
-            RoomName = nameof(RoomTemplate2.Magazine),
+            RoomName = nameof(RoomsTemplate.Magazine),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -280,7 +279,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(ScrapPile),
-            RoomName = nameof(RoomTemplate2.Hold),
+            RoomName = nameof(RoomsTemplate.Hold),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -292,7 +291,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Coal),
-            RoomName = nameof(RoomTemplate2.CoalStore),
+            RoomName = nameof(RoomsTemplate.CoalStore),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -304,7 +303,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Provisions),
-            RoomName = nameof(RoomTemplate2.FoodStock),
+            RoomName = nameof(RoomsTemplate.FoodStock),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -315,7 +314,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Workbench),
-            RoomName = nameof(RoomTemplate2.Workshop),
+            RoomName = nameof(RoomsTemplate.Workshop),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -326,7 +325,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Forge),
-            RoomName = nameof(RoomTemplate2.Workshop),
+            RoomName = nameof(RoomsTemplate.Workshop),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -337,7 +336,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(CarpentryArea),
-            RoomName = nameof(RoomTemplate2.Workshop),
+            RoomName = nameof(RoomsTemplate.Workshop),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -348,7 +347,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Boiler),
-            RoomName = nameof(RoomTemplate2.BoilerRoom),
+            RoomName = nameof(RoomsTemplate.BoilerRoom),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -359,7 +358,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(Engine),
-            RoomName = nameof(RoomTemplate2.EngineRoom),
+            RoomName = nameof(RoomsTemplate.EngineRoom),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -370,7 +369,7 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(FirearmsLocker),
-            RoomName = nameof(RoomTemplate2.Armory),
+            RoomName = nameof(RoomsTemplate.Armory),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
@@ -381,20 +380,20 @@ namespace Shared_Resources.Models
             IsActive = true,
             IsLandmass = false,
             Name = nameof(BladesLocker),
-            RoomName = nameof(RoomTemplate2.Armory),
+            RoomName = nameof(RoomsTemplate.Armory),
             SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
         };
 
-        //public static Station CookStation { get; set; } = new Station()
-        //{
-        //    Id = Guid.Empty,
-        //    GameId = Guid.Empty,
-        //    IsActive = true,
-        //    IsLandmass = false,
-        //    Name = nameof(CookStation),
-        //    RoomName = nameof(RoomTemplate2.),
-        //    SerializedProperties = string.Empty, // Will cause mega error if properties are not created.
-        //};
+        public static void dwdw()
+        {
+            var listRoosm = new List<Station>();
+            listRoosm.Add(StationsTemplate.Anchor);
+            listRoosm.Add(StationsTemplate.BladesLocker);
+            listRoosm.Add(StationsTemplate.Bed);
+            listRoosm.Add(StationsTemplate.Cabinet);
+            listRoosm.Add(StationsTemplate.Bunks);
+            listRoosm.Add(StationsTemplate.Gunpowder);
+        }
 
         private static List<Station> RetrieveReflectionStations()
         {

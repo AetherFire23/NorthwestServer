@@ -25,7 +25,7 @@ namespace WebAPI
         static async Task Main(string[] args)
         {
             // Initialize the rooms template
-            RoomTemplate2.InitializeDefaultReflectedRooms(); // could abstract those 2 if I wanted to waste my fucking time
+            RoomsTemplate.InitializeDefaultReflectedRooms(); // could abstract those 2 if I wanted to waste my fucking time
             StationsTemplate.InitializeDefaultReflectedStations();
 
             // reflection is incoming for registering roleStrategies

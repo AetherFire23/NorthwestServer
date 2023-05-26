@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using WebAPI.Game_Actions;
@@ -46,6 +47,18 @@ namespace WebAPI.Services
                 player.CurrentGameRoomId = targetRoom.Id;
                 await _playerContext.SaveChangesAsync();
 
+                var log = new Log()
+                {
+                    Id = Guid.NewGuid(),
+                    Created = DateTime.UtcNow,
+                    CreatedBy = player.Name,
+                    EventText = $"Player {player.Name}, who was in room {currentRoom.Name}, went into {targetRoom.Name}",
+                    IsPublic = true,
+                    RoomId = targetRoom.Id,
+                    TriggeringPlayerId = player.Id,
+                    GameId = player.GameId,
+                };
+
                 var gameAction = new GameAction()
                 {
                     Id = Guid.NewGuid(),
@@ -53,18 +66,7 @@ namespace WebAPI.Services
                     CreatedBy = player.Name,
                     GameId = player.GameId,
                     GameActionType = Shared_Resources.Enums.GameActionType.RoomChanged,
-                };
-
-                var log = new Log()
-                {
-                    Id = Guid.NewGuid(),
-                    Created = DateTime.UtcNow,
-                    CreatedBy = player.Name,
-                    EventText = "RROOM cCCAHNGE!",
-                    IsPublic = true,
-                    RoomId = targetRoom.Id,
-                    TriggeringPlayerId = player.Id,
-                    GameId = gameAction.GameId,
+                    SerializedProperties = JsonConvert.SerializeObject(log),
                 };
 
                 await _playerContext.AddAsync(gameAction);

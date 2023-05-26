@@ -102,7 +102,7 @@ namespace WebAPI.Services
                 Id = Guid.NewGuid(),
                 GameId = player.GameId,
                 Text = receivedMessage,
-                Name = player.Name,
+                SenderName = player.Name,
                 RoomId = new Guid(roomId),
                 Created = DateTime.UtcNow,
             };

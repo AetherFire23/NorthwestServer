@@ -15,7 +15,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 
         public override bool Requires(GameState gameState)
         {
-            bool isInValidRoom = gameState.Room.Name == nameof(RoomTemplate2.Forecastle);
+            bool isInValidRoom = gameState.Room.Name == nameof(RoomsTemplate.Forecastle);
 
             return isInValidRoom;
         }
