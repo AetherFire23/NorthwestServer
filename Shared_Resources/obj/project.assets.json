@@ -62,11 +62,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\balth\\WebAPI\\Shared_Resources\\Shared_Resources.csproj",
+      "projectUniqueName": "C:\\NorthWest_Source\\WebAPI\\Shared_Resources\\Shared_Resources.csproj",
       "projectName": "Shared_Resources",
-      "projectPath": "C:\\Users\\balth\\WebAPI\\Shared_Resources\\Shared_Resources.csproj",
+      "projectPath": "C:\\NorthWest_Source\\WebAPI\\Shared_Resources\\Shared_Resources.csproj",
       "packagesPath": "C:\\Users\\balth\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\balth\\WebAPI\\Shared_Resources\\obj\\",
+      "outputPath": "C:\\NorthWest_Source\\WebAPI\\Shared_Resources\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Users\\balth\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",

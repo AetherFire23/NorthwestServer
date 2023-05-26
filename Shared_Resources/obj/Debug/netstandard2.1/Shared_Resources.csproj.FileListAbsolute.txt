@@ -6,3 +6,11 @@ C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources
 C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.AssemblyInfo.cs
 C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.csproj.CoreCompileInputs.cache
 C:\Users\balth\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.dll
+C:\NorthWest_Source\WebAPI\Shared_Resources\bin\Debug\netstandard2.1\Shared_Resources.deps.json
+C:\NorthWest_Source\WebAPI\Shared_Resources\bin\Debug\netstandard2.1\Shared_Resources.dll
+C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.csproj.AssemblyReference.cache
+C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.GeneratedMSBuildEditorConfig.editorconfig
+C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.AssemblyInfoInputs.cache
+C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.AssemblyInfo.cs
+C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.csproj.CoreCompileInputs.cache
+C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.dll

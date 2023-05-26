@@ -13,6 +13,7 @@ namespace Shared_Resources.Constants
         public const string RoomNamePrefix = "roomName";
         public const string ItemIdPrefix = "itemId";
         public const string PlayerIdPrefix = "playerId";
+        public const int ss = 0;
         public static List<Guid> GetPlayerGuids(Dictionary<string, string> parameters)
         {
             var playerIds = parameters.Where(x => x.Key.Contains("playerId"))
