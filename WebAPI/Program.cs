@@ -14,7 +14,6 @@ using System.Linq;
 using WebAPI.Dummies;
 using Shared_Resources.Constants;
 using Shared_Resources.Models;
-using WebAPI.Scratches;
 using WebAPI.Strategies;
 using Shared_Resources.Enums;
 
@@ -44,7 +43,7 @@ namespace WebAPI
             builder.Services.AddControllers();
 
             RegisterGameTaskTypes(builder);
-            StrategyMapper.RegisterRoleStrategies(builder);
+            RoleStrategyMapper.RegisterRoleStrategies(builder);
             SkillStrategyMapper.RegisterSkillStrategies(builder);
 
             var test = SkillStrategyMapper.GetStrategyTypeBySkill(SkillEnum.ShootLaser);
@@ -95,8 +94,6 @@ namespace WebAPI
             builder.Services.AddScoped<IGameMakerService, GameMakerService>();
             builder.Services.AddScoped<IShipService, ShipService>();
 
-
-
             // Repos
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IMainMenuRepository, MainMenuRepository>();
@@ -111,7 +108,7 @@ namespace WebAPI
             builder.Services.AddScoped<IShipRepository, ShipRepository>();
 
             //landmasses
-            builder.Services.AddScoped<ILandmassService2, LandmassService2>();
+            builder.Services.AddScoped<ILandmassService, LandmassService>();
             builder.Services.AddScoped<ILandmassCardsRepository, LandmassCardsRepository>();
             builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
 
@@ -173,20 +170,17 @@ namespace WebAPI
 
 
                 var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
-                ILandmassService2? landmassService2 = scope.ServiceProvider.GetService<ILandmassService2>();
+                ILandmassService? landmassService2 = scope.ServiceProvider.GetService<ILandmassService>();
                 var landmassCardService = scope.ServiceProvider.GetService<ILandmassCardsService>();
 
                 await gameMakerService.CreateDummyGame();
                 gameMakerService.InsertVeryDummyValues();
 
                 // some other very dummy values
-                var p = playerContextService.Players.FirstOrDefault(x => x.Id == DummyValues.defaultPlayer1Guid);
-                playerContextService.Logs.Add(DummyValues.SomeLog(p.CurrentGameRoomId));
+                await landmassService2.AdvanceToNextLandmass(DummyValues.defaultGameGuid);
 
-                var t = scope.ServiceProvider.GetService<MedicRoleStrategyService>();
 
-                var sz2 = StrategyMapper.GetStrategyTypeByRole(RoleType.Medic);
-                var sz3 = StrategyMapper.GetStrategyTypeByRole(RoleType.Commander);
+
                 // real scratch
                 // landmassCardService.InitializeLandmassCards(p.GameId).Wait();
                 // landmassService2.AdvanceToNextLandmass(p.GameId).Wait();
@@ -231,34 +225,34 @@ namespace WebAPI
 
         private static void ConfigureQuartz(WebApplicationBuilder builder)
         {
-             builder.Services.AddQuartz(q =>
-            {
-                q.SchedulerId = "Scheduler-Core";
+            builder.Services.AddQuartz(q =>
+           {
+               q.SchedulerId = "Scheduler-Core";
 
-                q.UseMicrosoftDependencyInjectionJobFactory();
+               q.UseMicrosoftDependencyInjectionJobFactory();
 
-                q.UseSimpleTypeLoader();
-                q.UseInMemoryStore();
-                q.UseDefaultThreadPool(tp =>
-                {
-                    tp.MaxConcurrency = 10;
-                });
+               q.UseSimpleTypeLoader();
+               q.UseInMemoryStore();
+               q.UseDefaultThreadPool(tp =>
+               {
+                   tp.MaxConcurrency = 10;
+               });
 
 
-                q.ScheduleJob<CycleJob>(trigger => trigger
-                    .WithIdentity("Combined Configuration Trigger")
-                    .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
-                    .WithDescription("my awesome trigger configured for a job with single call"));
+               q.ScheduleJob<CycleJob>(trigger => trigger
+                   .WithIdentity("Combined Configuration Trigger")
+                   .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
+                   .WithDescription("my awesome trigger configured for a job with single call"));
 
-                //q.ScheduleJob<CycleJob>(trigger => trigger
-                //    .WithIdentity("Combined Configuration Trigger")
-                //    .StartNow()
-                //        .WithSimpleSchedule(x => x
-                //        .WithIntervalInSeconds(5)  // Run every 5 seconds
-                //        .RepeatForever())          // Repeat indefinitely
-                //    .WithDescription("my awesome trigger configured for a job with single call"));
+               //q.ScheduleJob<CycleJob>(trigger => trigger
+               //    .WithIdentity("Combined Configuration Trigger")
+               //    .StartNow()
+               //        .WithSimpleSchedule(x => x
+               //        .WithIntervalInSeconds(5)  // Run every 5 seconds
+               //        .RepeatForever())          // Repeat indefinitely
+               //    .WithDescription("my awesome trigger configured for a job with single call"));
 
-            });
+           });
 
             builder.Services.AddQuartzServer(options =>
             {

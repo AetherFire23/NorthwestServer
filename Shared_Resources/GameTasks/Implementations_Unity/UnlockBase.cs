@@ -2,6 +2,7 @@
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,18 +12,18 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     {
         public override GameTaskCodes Code => GameTaskCodes.Unlock;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Room;
+        public override GameTaskCategory Category => GameTaskCategory.Room;
 
-        public override bool Requires(GameState gameState)
+        public override bool HasRequiredConditions(GameState gameState)
         {
             bool isInValidRoom = gameState.Room.Name == nameof(RoomsTemplate.Brig);
             return isInValidRoom;
         }
 
-        public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
+        public override List<PromptInfo> GetCheckLists(GameState gameState)
         {
-            var checkList = new CheckListsBuilder();
-            return checkList;
+            var builder = new CheckListsBuilder();
+            return builder.CheckLists;
         }
 
         public override Task Execute(GameTaskContext context)

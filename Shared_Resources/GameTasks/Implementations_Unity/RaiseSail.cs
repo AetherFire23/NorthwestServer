@@ -12,9 +12,9 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     {
         public override GameTaskCodes Code => GameTaskCodes.RaiseSail;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Sailing;
+        public override GameTaskCategory Category => GameTaskCategory.Sailing;
 
-        public override bool Requires(GameState gameState)
+        public override bool HasRequiredConditions(GameState gameState)
         {
             bool hasValidItem = gameState.PlayerDTO.Items.Exists(x => x.ItemType == ItemType.Wrench);
 
@@ -28,10 +28,10 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
             return isInValidRoom && hasValidItem;
         }
 
-        public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
+        public override List<PromptInfo> GetCheckLists(GameState gameState)
         {
-            var checkList = new CheckListsBuilder();
-            return checkList;
+            var builder = new CheckListsBuilder();
+            return builder.CheckLists;
         }
 
         public override Task Execute(GameTaskContext context)

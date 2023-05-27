@@ -1,6 +1,5 @@
 ﻿namespace Shared_Resources.Models
 {
-
     public class ClientCallResult
     {
         // Successes do not concern http client but client-related actions instead.

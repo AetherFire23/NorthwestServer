@@ -12,11 +12,11 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     {
         public override GameTaskCodes Code => GameTaskCodes.RepairCannon;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Player;
+        public override GameTaskCategory Category => GameTaskCategory.Player;
 
 
 
-        public override bool Requires(GameState gameState)
+        public override bool HasRequiredConditions(GameState gameState)
         {
             List<string> validRoomsNames = new List<string>()
             {
@@ -27,10 +27,10 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
             return isInValidRoom;
         }
 
-        public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
+        public override List<PromptInfo> GetCheckLists(GameState gameState)
         {
-            var targets = new CheckListsBuilder();
-            return targets;
+            var builder = new CheckListsBuilder();
+            return builder.CheckLists;
         }
         public override GameTaskValidationResult Validate(GameTaskContext context)
         {

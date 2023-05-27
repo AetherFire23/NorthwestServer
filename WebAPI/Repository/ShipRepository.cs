@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
-using Shared_Resources.Enums;
-using System.Security.AccessControl;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Repository

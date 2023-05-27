@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shared_Resources.GameTasks;
 using Shared_Resources.Models;
+using Shared_Resources.Scratches;
 using System;
 using WebAPI.GameTasks;
 using WebAPI.Interfaces;
@@ -18,7 +19,7 @@ namespace WebAPI.Services
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<ClientCallResult> ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, Dictionary<string, string> parameters)
+        public async Task<ClientCallResult> ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, TaskParameters parameters)
         {
             var gameState = await _gameStateRepository.GetPlayerGameStateAsync(playerId, null);
             if (gameState == null)
@@ -29,10 +30,9 @@ namespace WebAPI.Services
             var context = new GameTaskContext
             {
                 GameState = gameState,
-                Parameters = parameters ?? new Dictionary<string, string>()
+                Parameters = parameters,
             };
 
-            // ca serait pas pire si ca crashait pas
             Type gameTaskType = GameTaskTypeSelector.GetGameTaskType(taskCode);
             var gameTask = _serviceProvider.GetService(gameTaskType) as GameTaskBase;
 

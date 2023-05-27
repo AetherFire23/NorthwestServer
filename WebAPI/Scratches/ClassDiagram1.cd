@@ -24,14 +24,14 @@
   <Class Name="WebAPI.LandmassGetter">
     <Position X="1" Y="5.25" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgACAABAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAAAAgACAAAAAAAAAAE=</HashCode>
       <FileName>Scratches\LandmassGetter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WebAPI.LandmassCardsRepository">
     <Position X="4.75" Y="0.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAEAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Scratches\LandmassCardsRepository.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -46,7 +46,7 @@
   <Class Name="WebAPI.LandmassCardsService">
     <Position X="4.75" Y="2.75" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACAABAAAAAAAABAAAAAAAAAAAFAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAACAABAAAAAAAABAAQAAAAAAAAEBAAAAAAAA=</HashCode>
       <FileName>Scratches\LandmassCardsService.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -57,7 +57,6 @@
       <HashCode>AAACAAIAAAAABAAAAAAAAAAAAAAAAAAAAEAAAEAAAAA=</HashCode>
       <FileName>Scratches\LandmassService2.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

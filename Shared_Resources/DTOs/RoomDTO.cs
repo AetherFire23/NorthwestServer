@@ -9,6 +9,8 @@ namespace Shared_Resources.DTOs
 {
     public class RoomDTO : ITaskParameter, IFormattable
     {
+        public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
+
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -20,7 +22,6 @@ namespace Shared_Resources.DTOs
 
         public float X { get; set; }
         public float Y { get; set; }
-
         public KeyValuePair<string, string> GetKeyValuePairParameter(int index)
         {
             var name = $"{TaskTargetParameterization.RoomNamePrefix}{index}";

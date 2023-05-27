@@ -11,25 +11,28 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     public class KraftTaskBase : GameTaskBase
     {
         public override GameTaskCodes Code => GameTaskCodes.CraftTask;
+        public override GameTaskCategory Category => GameTaskCategory.Room;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Room;
-
-        public override bool Requires(GameState gameState)
+        public override bool HasRequiredConditions(GameState gameState)
         {
-            var conditions = new List<bool>();
-            conditions.Add(gameState.Room.Name.Equals(nameof(RoomsTemplate.CaptainsQuarters)));
-            conditions.Add(gameState.PlayerDTO.Items.Count < 2);
-            return conditions.All(c => c is true);
+            // Pas de liste juste if, brackets et ||
+            bool isPlayerInCaptainsQuarters = gameState.Room.Name.Equals(nameof(RoomsTemplate.CaptainsQuarters));
+            bool isBelowMaximumItemCount = gameState.PlayerDTO.Items.Count < 2;
+            bool ohYeah = gameState.Room.Name.Equals(nameof(RoomsTemplate.CrowsNest));
+            return isBelowMaximumItemCount;
         }
 
-        public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
+        // return list of 
+        // rename PromptInfo to checklist
+        public override List<PromptInfo> GetCheckLists(GameState gameState)
         {
-            var checkList = new CheckListsBuilder();
+            var builder = new CheckListsBuilder();
 
             var rooms = gameState.Rooms.Where(x => x.IsLandmass).ToList();
-            checkList.CreateCheckListPrompt(rooms, "Changed it!")
-                .SetExactAmount(1);
-            return checkList;
+            builder.CreateCheckListPrompt(rooms, "Changed it!")
+                .SetMinimumTargetCount(2)
+                .SetMaximumTargetCount(5);
+            return builder.CheckLists;
         }
 
         public override Task Execute(GameTaskContext context)

@@ -8,6 +8,8 @@ namespace Shared_Resources.Entities
 {
     public class Station : ITaskParameter, IFormattable
     {
+        public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
+
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
         public string Name { get; set; } = string.Empty;

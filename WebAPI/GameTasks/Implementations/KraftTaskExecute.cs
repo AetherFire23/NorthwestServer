@@ -18,6 +18,7 @@ namespace WebAPI.GameTasks.Implementations
 
         public override async Task Execute(GameTaskContext context)
         {
+
             var item = new Item()
             {
                 Id = Guid.NewGuid(),

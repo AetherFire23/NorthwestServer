@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Shared_Resources.DTOs
 {
-    public class LandmassRoomsDeck
+    public class LandmassRoomsDeck // obsolet  I think
     {
         public List<Card> AllCards;
         public LandmassRoomsDeck(List<Card> allCards)
