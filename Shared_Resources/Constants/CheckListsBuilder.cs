@@ -1,9 +1,6 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.Interfaces;
-using System;
+﻿using Shared_Resources.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Shared_Resources.Constants
 {

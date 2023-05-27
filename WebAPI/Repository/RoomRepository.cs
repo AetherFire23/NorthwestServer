@@ -52,7 +52,6 @@ namespace WebAPI.Repository
             return room;
         }
 
-
         public async Task<RoomDTO> GetRoomDTOAsync(Guid roomId)
         {
             var requestedRoom = await GetRoomById(roomId);

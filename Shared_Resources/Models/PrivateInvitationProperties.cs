@@ -1,5 +1,4 @@
-﻿using Shared_Resources.Entities;
-using System;
+﻿using System;
 
 namespace Shared_Resources.Models
 {
@@ -10,7 +9,5 @@ namespace Shared_Resources.Models
         public string FromPlayerName { get; set; } = string.Empty;
         public string ToPlayerName { get; set; } = string.Empty;
         public bool IsAccepted { get; set; }
-
-    
     }
 }

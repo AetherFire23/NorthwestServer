@@ -1,5 +1,6 @@
 ﻿using Shared_Resources.Interfaces;
 using System;
+
 namespace Shared_Resources.Entities
 {
     public class AdjacentRoom : IEntity

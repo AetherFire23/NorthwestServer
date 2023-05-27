@@ -1,6 +1,4 @@
-﻿
-using Shared_Resources.Entities;
-using System;
+﻿using Shared_Resources.Entities;
 using System.Collections.Generic;
 namespace Shared_Resources.Models
 {

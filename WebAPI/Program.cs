@@ -14,7 +14,6 @@ using System.Linq;
 using WebAPI.Dummies;
 using Shared_Resources.Constants;
 using Shared_Resources.Models;
-using WebAPI.Scratches;
 using WebAPI.Strategies;
 using Shared_Resources.Enums;
 
@@ -111,7 +110,7 @@ namespace WebAPI
             builder.Services.AddScoped<IShipRepository, ShipRepository>();
 
             //landmasses
-            builder.Services.AddScoped<ILandmassService2, LandmassService2>();
+            builder.Services.AddScoped<ILandmassService, LandmassService>();
             builder.Services.AddScoped<ILandmassCardsRepository, LandmassCardsRepository>();
             builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
 
@@ -173,7 +172,7 @@ namespace WebAPI
 
 
                 var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
-                ILandmassService2? landmassService2 = scope.ServiceProvider.GetService<ILandmassService2>();
+                ILandmassService? landmassService2 = scope.ServiceProvider.GetService<ILandmassService>();
                 var landmassCardService = scope.ServiceProvider.GetService<ILandmassCardsService>();
 
                 await gameMakerService.CreateDummyGame();

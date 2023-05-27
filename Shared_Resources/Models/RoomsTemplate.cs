@@ -2,11 +2,8 @@
 using Shared_Resources.Entities;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Shared_Resources.Models
 {
@@ -481,7 +478,7 @@ namespace Shared_Resources.Models
 
         public static void InitializeDefaultReflectedRooms() // call at start of program
         {
-            List<Room> rooms = RetrieveReflectedTemplateRooms();
+            List<Room> rooms = DiscoverReflectedTemplateRooms();
             string json = JsonConvert.SerializeObject(rooms);
             RoomsTemplate.DefaultSerializedRooms = json;
         }
@@ -492,7 +489,7 @@ namespace Shared_Resources.Models
             return rooms;
         }
 
-        private static List<Room> RetrieveReflectedTemplateRooms()
+        private static List<Room> DiscoverReflectedTemplateRooms()
         {
             var reflectedRooms = typeof(RoomsTemplate).GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
                 .Where(x => x.PropertyType == typeof(Room))

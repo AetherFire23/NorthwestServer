@@ -7,7 +7,6 @@ using System.Security.Cryptography.X509Certificates;
 using WebAPI.Dummies;
 using WebAPI.Interfaces;
 using WebAPI.Repository;
-using WebAPI.Scratches;
 using WebAPI.Strategies;
 
 namespace WebAPI.Services
@@ -18,7 +17,7 @@ namespace WebAPI.Services
         private readonly IRoomRepository _roomRepository;
         private readonly IStationRepository _stationRepository;
         private readonly PlayerContext _playerContext;
-        private readonly ILandmassService2 _landmassService;
+        private readonly ILandmassService _landmassService;
         private readonly ILandmassCardsService _landmassCardsService;
         private readonly IServiceProvider _serviceProvider;
         private readonly IShipService _shipStasusesService;
@@ -27,7 +26,7 @@ namespace WebAPI.Services
             IGameMakerRepository gameMakerRepository,
             IRoomRepository roomRepository,
             IStationRepository stationRepository,
-            ILandmassService2 landmassService,
+            ILandmassService landmassService,
             ILandmassCardsService landmassCardsService,
             IServiceProvider serviceProvider,
             IShipService shipStasusesService)
@@ -191,9 +190,9 @@ namespace WebAPI.Services
                 ItemType = ItemType.Hose,
                 OwnerId = rooms.First(x => x.Name == nameof(RoomsTemplate.CrowsNest)).Id,
             };
+
             await _playerContext.Items.AddAsync(item2);
             await _playerContext.Items.AddAsync(item3);
-
             await _playerContext.SaveChangesAsync();
         }
 

@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-using Shared_Resources.Entities;
+﻿using Shared_Resources.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace Shared_Resources.Models
 {
@@ -29,7 +26,7 @@ namespace Shared_Resources.Models
             }
         }
 
-        public static List<AdjacentRoom> CreateAndInitializeConnections(Guid gameId, List<Room> initializedRooms, bool isLandmass = false) // landmass rooms connections are initialized elsewhere.
+        public static List<AdjacentRoom> CreateAndInitializeConnections(Guid gameId, List<Room> initializedRooms, bool isLandmass = false) // landmass rooms connections are initialized in RoomTemplate
         {
             if (initializedRooms.Any(x => x.Id == Guid.Empty || x.GameId == Guid.Empty)) throw new Exception("Rooms were not initializedCorrectly");
 

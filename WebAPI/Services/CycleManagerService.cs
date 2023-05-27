@@ -1,6 +1,4 @@
 ﻿using Shared_Resources.Entities;
-using Shared_Resources.Enums;
-using WebAPI.Game_Actions;
 using WebAPI.Interfaces;
 using WebAPI.Strategies;
 using WebAPI.UniversalSkills;
@@ -27,10 +25,10 @@ namespace WebAPI.Services
 
         public async Task TickGame(Guid gameId)
         {
-            var game = await _gameRepository.GetGame(gameId);
+            Game game = await _gameRepository.GetGame(gameId);
 
-            var playersInGame = await _playerRepository.GetPlayersInGameAsync(gameId);
-            await TickPlayerFromRoles(playersInGame);
+            List<Player> playersInGame = await _playerRepository.GetPlayersInGameAsync(gameId);
+            await TickPlayerRoles(playersInGame);
 
             game.NextTick = DateTime.UtcNow.AddSeconds(TimeBetweenTicksInSeconds);
 
@@ -40,10 +38,10 @@ namespace WebAPI.Services
 
         public async Task TickUniversalSKills(Guid gameId) // pretty much ready-togo
         {
-            var universalSkillTypes = SkillStrategyMapper.GetAllUniversalSkillTypes();
-            var universalSkills = universalSkillTypes.Select(x => _serviceProvider.GetService(x) as IUniversalSkill).ToList();
+            List<Type> universalSkillTypes = SkillStrategyMapper.GetAllUniversalSkillTypes();
+            List<IUniversalSkill?> universalSkills = universalSkillTypes.Select(x => _serviceProvider.GetService(x) as IUniversalSkill).ToList();
 
-            var players = await _playerRepository.GetPlayersInGameAsync(gameId);
+            List<Player> players = await _playerRepository.GetPlayersInGameAsync(gameId);
 
             foreach (var player in players)
             {
@@ -57,7 +55,7 @@ namespace WebAPI.Services
             }
         }
 
-        public async Task TickPlayerFromRoles(List<Player> playersInGame)
+        public async Task TickPlayerRoles(List<Player> playersInGame)
         {
             foreach (Player p in playersInGame)
             {

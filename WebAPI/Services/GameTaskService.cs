@@ -32,7 +32,6 @@ namespace WebAPI.Services
                 Parameters = parameters ?? new Dictionary<string, string>()
             };
 
-            // ca serait pas pire si ca crashait pas
             Type gameTaskType = GameTaskTypeSelector.GetGameTaskType(taskCode);
             var gameTask = _serviceProvider.GetService(gameTaskType) as GameTaskBase;
 
