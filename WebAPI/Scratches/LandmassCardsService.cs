@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WebAPI.Scratches;
+using WebAPI.TestFolder;
 using WebAPI.Utils;
 
 namespace WebAPI
@@ -21,7 +22,7 @@ namespace WebAPI
             _playerContext = playerContext;
         }
 
-        public async Task<List<string>> DrawNextLandmassRoomNames(Guid gameId)
+        public async Task<List<string>> DrawNextLandmassRoomNames(Guid gameId) // rajouter un parameter pour pouvoir 
         {
             // Draw 7 cards, reshuffle if empty...
             List<Card> landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
@@ -29,6 +30,35 @@ namespace WebAPI
 
             // would need layouts of different room count to work 
             while (drawnCards.Count < 7) // warning  : is absolutely not generic since amount of cards needs to match amount of rooms.
+            {
+
+                if (landmassCards.All(x => x.IsDiscarded))
+                {
+                    // When reshuffling, I dont know if landmassCards are updated...
+                    await ReshuffleLandmassCardsExceptDrawnCards(gameId, drawnCards);
+                    landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
+                    continue;
+                }
+
+                var freeCards = landmassCards.Where(x => !x.IsDiscarded).ToList();
+                var randomIndex = RandomHelper.random.Next(0, freeCards.Count);
+                Card randomCard = freeCards[randomIndex];
+                randomCard.IsDiscarded = true;
+                drawnCards.Add(randomCard);
+            }
+
+            var drawnRoomNames = drawnCards.Select(x => x.Name).ToList();
+            return drawnRoomNames;
+        }
+
+        public async Task<List<string>> DrawNextLandmassRoomNames2(Guid gameId, LandmassLayout layout) // rajouter un parameter pour pouvoir 
+        {
+            // Draw 7 cards, reshuffle if empty...
+            List<Card> landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
+            List<Card> drawnCards = new List<Card>();
+
+            // would need layouts of different room count to work 
+            while (drawnCards.Count < layout.AllRooms.Count) // warning  : is absolutely not generic since amount of cards needs to match amount of rooms.
             {
 
                 if (landmassCards.All(x => x.IsDiscarded))

@@ -199,7 +199,7 @@ namespace WebAPI.Services
 
         public IRoleInitializationStrategy ResolveRoleStrategy(RoleType role)
         {
-            var strategType = StrategyMapper.GetStrategyTypeByRole(role);
+            var strategType = RoleStrategyMapper.GetStrategyTypeByRole(role);
             var strategy = _serviceProvider.GetService(strategType) as IRoleInitializationStrategy;
             return strategy;
         }

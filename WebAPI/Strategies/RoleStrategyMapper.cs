@@ -7,7 +7,7 @@ using WebAPI.GameTasks;
 
 namespace WebAPI.Strategies
 {
-    public static class StrategyMapper
+    public static class RoleStrategyMapper
     {
         public static IReadOnlyDictionary<RoleType, Type> RoleStrategyTypeMap = CreateRoleStratMap();
 

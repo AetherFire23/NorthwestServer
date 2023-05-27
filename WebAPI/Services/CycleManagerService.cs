@@ -30,36 +30,7 @@ namespace WebAPI.Services
             var game = await _gameRepository.GetGame(gameId);
 
             var playersInGame = await _playerRepository.GetPlayersInGameAsync(gameId);
-
-            foreach (var player in playersInGame) // faudrait plus genre TickPlayers 
-            {
-                player.ActionPoints += 1;
-                player.HealthPoints += 1;
-                var ga = new GameAction()
-                {
-                    Id = Guid.NewGuid(),
-                    Created = DateTime.UtcNow,
-                    CreatedBy = "game",
-                    GameId = gameId,
-                    GameActionType = GameActionType.CycleTick,
-                    SerializedProperties = String.Empty,
-
-                };
-                Log log = new Log()
-                {
-                    Id = Guid.NewGuid(),
-                    Created = DateTime.UtcNow,
-                    CreatedBy = "Game",
-                    EventText = "A cycle has magnificently ticked.",
-                    TriggeringPlayerId = gameId,
-                    IsPublic = true,
-                    RoomId = Guid.Empty,
-
-                };
-
-                await _playerContext.Logs.AddAsync(log);
-                await _playerContext.GameActions.AddAsync(ga);
-            }
+            await TickPlayerFromRoles(playersInGame);
 
             game.NextTick = DateTime.UtcNow.AddSeconds(TimeBetweenTicksInSeconds);
 
@@ -83,6 +54,16 @@ namespace WebAPI.Services
 
                     await universalSkill.ApplyTickEffect(player);
                 }
+            }
+        }
+
+        public async Task TickPlayerFromRoles(List<Player> playersInGame)
+        {
+            foreach (Player p in playersInGame)
+            {
+                var roleManagerType = RoleStrategyMapper.GetStrategyTypeByRole(p.Profession);
+                var roleService = _serviceProvider.GetService(roleManagerType) as IRoleInitializationStrategy;
+                await roleService.TickPlayerFromRoleAsync(p);
             }
         }
     }

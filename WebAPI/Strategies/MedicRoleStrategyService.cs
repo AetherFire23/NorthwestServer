@@ -27,5 +27,10 @@ namespace WebAPI.Strategies
 
             await _playerContext.SaveChangesAsync();
         }
+
+        public async Task TickPlayerFromRoleAsync(Player player)
+        {
+
+        }
     }
 }

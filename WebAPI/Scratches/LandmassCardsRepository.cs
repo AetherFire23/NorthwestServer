@@ -22,6 +22,5 @@ namespace WebAPI
             var cards = await _playerContext.Cards.Where(x => x.GameId == gameId).ToListAsync();
             return cards;
         }
-
     }
 }

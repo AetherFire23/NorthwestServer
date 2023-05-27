@@ -37,5 +37,22 @@ namespace WebAPI
 
             return layout;
         }
+
+        public static LandmassLayout CreateNewLandmass()
+        {
+            LandmassLayout layout = GetRandomLandmassLayout();
+            return layout;
+        }
+
+        public static LandmassLayout InsertLandmassNamesInLayout(LandmassLayout layout, List<string> drawnRoomNames)
+        {
+            for (int i = 0; i < drawnRoomNames.Count; i++)
+            {
+                string name = drawnRoomNames.ElementAt(i);
+                layout.AllRooms.ElementAt(i).Name = name;
+            }
+
+            return layout;
+        }
     }
 }

@@ -42,7 +42,9 @@ namespace WebAPI.Strategies
             // Ticker pour chaque skill ? 
         }
 
+        public async Task TickPlayerFromRoleAsync(Player player)
+        {
 
-
+        }
     }
 }
