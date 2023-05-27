@@ -28,7 +28,7 @@
 			<ScriptDir>$(MSBuildThisFileDirectory)</ScriptDir>
 			<UnityPluginDir>$(ScriptDir)..\..\NorthWest\Assets\Plugins</UnityPluginDir>
 		</PropertyGroup>
-		<Exec Command="if not exist $(TargetPath) echo NorthWest project folder must be in the same folder as the WebAPI project folder &amp; exit 1" />
+		<Exec Command="if not exist $(UnityPluginDir) echo NorthWest project folder must be in the same folder as the WebAPI project folder &amp; exit 1" />
         <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(UnityPluginDir)&quot;" />
 
 	</Target>
