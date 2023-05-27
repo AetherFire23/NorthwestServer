@@ -23,10 +23,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Scratches\" />
-  </ItemGroup>
-
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<PropertyGroup>
 			<ScriptDir>$(MSBuildThisFileDirectory)</ScriptDir>

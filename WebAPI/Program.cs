@@ -94,8 +94,6 @@ namespace WebAPI
             builder.Services.AddScoped<IGameMakerService, GameMakerService>();
             builder.Services.AddScoped<IShipService, ShipService>();
 
-
-
             // Repos
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IMainMenuRepository, MainMenuRepository>();

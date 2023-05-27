@@ -12,9 +12,9 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     {
         public override GameTaskCodes Code => GameTaskCodes.RepairSail;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Room;
+        public override GameTaskCategory Category => GameTaskCategory.Room;
 
-        public override bool Requires(GameState gameState)
+        public override bool HasRequiredConditions(GameState gameState)
         {
             List<string> validRoomsNames = new List<string>()
             {
@@ -26,10 +26,10 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
             return isInValidRoom;
         }
 
-        public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
+        public override List<PromptInfo> GetCheckLists(GameState gameState)
         {
-            var checkList = new CheckListsBuilder();
-            return checkList;
+            var builder = new CheckListsBuilder();
+            return builder.CheckLists;
         }
 
         public override Task Execute(GameTaskContext context)

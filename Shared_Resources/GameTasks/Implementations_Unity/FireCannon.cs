@@ -13,10 +13,10 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     public class FireCannon : GameTaskBase
     {
         // could add reflection check to see if I have forgotten to set a taskCode/ provider
-        public override GameTaskProvider Provider { get; } = GameTaskProvider.Room;
+        public override GameTaskCategory Category { get; } = GameTaskCategory.Room;
         public override GameTaskCodes Code { get; } = GameTaskCodes.FireCannon;
 
-        public override bool Requires(GameState gameState)
+        public override bool HasRequiredConditions(GameState gameState)
         {
             List<string> validRoomsNames = new List<string>()
             {
@@ -38,9 +38,9 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         }
 
         // renvoie un dictionnaire parce que je me force a sorter les types 
-        public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
+        public override List<PromptInfo> GetCheckLists(GameState gameState)
         {
-            return new CheckListsBuilder();
+            return new CheckListsBuilder().CheckLists;
         }
     }
 }

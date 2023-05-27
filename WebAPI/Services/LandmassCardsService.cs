@@ -31,7 +31,6 @@ namespace WebAPI.Services
             // would need layouts of different room count to work 
             while (drawnCards.Count < 7) // warning  : is absolutely not generic since amount of cards needs to match amount of rooms.
             {
-
                 if (landmassCards.All(x => x.IsDiscarded))
                 {
                     // When reshuffling, I dont know if landmassCards are updated...

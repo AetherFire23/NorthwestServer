@@ -8,7 +8,7 @@ namespace Shared_Resources.Constants
     public class PromptInfo
     {
         public string Description { get; set; }
-        public List<ITaskParameter> PromptedObjects { get; private set; } = new List<ITaskParameter>();
+        public List<ITaskParameter> Targets { get; private set; } = new List<ITaskParameter>();
 
         // When ExactAmount
         public int ExactTargetAmount { get; private set; } = 0;
@@ -16,7 +16,6 @@ namespace Shared_Resources.Constants
         // When it is a range of values
         public int MinimumSelection { get; private set; } = _defaultMinimumValue;
         public int MaximumSelectionAmount { get; private set; } = _defaultMaximumValue;
-
         public bool IsOptionalSelection { get; private set; }
 
         // For making checklist in Unity
@@ -28,11 +27,11 @@ namespace Shared_Resources.Constants
         private const int _defaultMinimumValue = 1;
         private const int _defaultMaximumValue = 99;
 
-
+        // chaine de memes noms 
         public PromptInfo(List<ITaskParameter> targets, string description)
         {
             Description = description;
-            PromptedObjects = targets;
+            Targets = targets;
         }
 
         public PromptInfo SetMinimumTargetCount(int min)
@@ -53,9 +52,9 @@ namespace Shared_Resources.Constants
 
         public PromptInfo SetExactAmount(int exactAmount)
         {
-            if (MinimumSelection != _defaultMinimumValue || MaximumSelectionAmount != _defaultMaximumValue) 
+            if (MinimumSelection != _defaultMinimumValue || MaximumSelectionAmount != _defaultMaximumValue)
                 throw new Exception("Cannot set both exact amount and - or min-max value");
-            if (exactAmount.Equals(0)) 
+            if (exactAmount.Equals(0))
                 throw new Exception("Cannot set an exact amount of checks to 0");
 
             ExactTargetAmount = exactAmount;
@@ -70,7 +69,7 @@ namespace Shared_Resources.Constants
 
         public List<object> GetPromptsAsObjects()
         {
-            var objects = PromptedObjects.Cast<object>().ToList();
+            var objects = Targets.Cast<object>().ToList();
             return objects;
         }
 

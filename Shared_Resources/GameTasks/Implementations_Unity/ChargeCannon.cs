@@ -12,9 +12,9 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
     {
         public override GameTaskCodes Code => GameTaskCodes.ChargeCannon;
 
-        public override GameTaskProvider Provider => GameTaskProvider.Room;
+        public override GameTaskCategory Category => GameTaskCategory.Room;
 
-        public override bool Requires(GameState gameState)
+        public override bool HasRequiredConditions(GameState gameState)
         {
             List<string> validRoomsNames = new List<string>()
             {
@@ -30,9 +30,9 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
             throw new NotImplementedException();
         }
 
-        public override CheckListsBuilder GetValidTargetPrompts(GameState gameState)
+        public override List<PromptInfo> GetCheckLists(GameState gameState)
         {
-            return new CheckListsBuilder();
+            return new CheckListsBuilder().CheckLists;
         }
 
         public override GameTaskValidationResult Validate(GameTaskContext context)

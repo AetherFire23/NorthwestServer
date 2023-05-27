@@ -6,11 +6,14 @@ using System;
 using System.Collections.Generic;
 using Shared_Resources.Constants;
 using System.Globalization;
+using System.Reflection;
 
 namespace Shared_Resources.Entities
 {
     public class Player : IEntity, ITaskParameter, IFormattable
     {
+        public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
+
         public Guid Id { get; set; }
 
         public Guid GameId { get; set; }
@@ -51,12 +54,6 @@ namespace Shared_Resources.Entities
             };
         }
 
-        public KeyValuePair<string, string> GetKeyValuePairParameter(int index)
-        {
-            var prefix = $"{TaskTargetParameterization.PlayerIdPrefix}{index}";
-            var kvp = new KeyValuePair<string, string>(prefix, this.Id.ToString());
-            return kvp;
-        }
 
         public override string ToString()
         {

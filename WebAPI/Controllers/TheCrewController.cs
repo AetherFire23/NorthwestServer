@@ -10,6 +10,8 @@ using WebAPI.AutoMapper;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using Shared_Resources.GameTasks;
+using Shared_Resources.Scratches;
+using System.Reflection.Metadata.Ecma335;
 
 namespace WebAPI.Controllers
 {
@@ -73,9 +75,9 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("TryExecuteGameTask")]
-        public async Task<ActionResult<ClientCallResult>> GameTask(Guid playerId, GameTaskCodes taskCode, [FromBody] Dictionary<string, string> parameters)
+        public async Task<ActionResult<ClientCallResult>> GameTask(Guid playerId, GameTaskCodes taskCode, [FromBody] List<Tuple<string, string>> parameters)
         {
-            ClientCallResult result = await _gameTaskService.ExecuteGameTask(playerId, taskCode, parameters);
+            ClientCallResult result = await _gameTaskService.ExecuteGameTask(playerId, taskCode, new TaskParameters(parameters));
             return Ok(result);
         }
 
