@@ -1,10 +1,17 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "6NQvkaOmfD0AvoaV+oId7M4hzbTv+tgnGjU94PuOYW/PhetoymKafOhvzW8xY1TNFn30MC4Tp0QeAe6tlQFB7A==",
   "success": true,
   "projectFilePath": "C:\\NorthWest_Source\\WebAPI\\Shared_Resources\\Shared_Resources.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\balth\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
+=======
+  "dgSpecHash": "iqaoGwik7tamzROEmL5NiWx4kqkwp9yRuAsLKvIK1nNhGiOP4HeU2xeQwm0Uc+yZcq3OCgb+2T6z70q5Vte4oQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Fredd\\Desktop\\Coding\\WebAPI\\Shared_Resources\\Shared_Resources.csproj",
+  "expectedPackageFiles": [],
+>>>>>>> 36b29dbdf4a06266aeaa491df884810dfc564225
   "logs": []
 }
