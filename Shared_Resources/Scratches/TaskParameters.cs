@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared_Resources.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace Shared_Resources.Scratches
     {
         public TaskParameters()
         {
-                
+
         }
 
         public TaskParameters(List<(string ParamType, string Id)> list)

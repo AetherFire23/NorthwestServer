@@ -1,0 +1,27 @@
+# ASP.NET Core
+*.obj
+*.bin
+*.dll
+*.exe
+*.exe.config
+*.pdb
+*.user
+*.bak
+*.cache
+*.vspscc
+*.vspx
+*.dotCover
+*.resharper
+_UpgradeReport_Files/
+Backup*/
+[Tt]est[Rr]esult*/
+_UpgradeReport_Files/
+[Bb]in/
+[Oo]bj/
+
+# Entity Framework
+*/Migrations/*.cs
+*/Migrations/*.Designer.cs
+*/Migrations/*.resx
+*/Migrations/*.dbschema
+*/Migrations/ModelSnapshot.cs

@@ -39,40 +39,23 @@ namespace WebAPI.Services
                     continue;
                 }
 
-                var freeCards = landmassCards.Where(x => !x.IsDiscarded).ToList();
-                var randomIndex = RandomHelper.random.Next(0, freeCards.Count);
-                Card randomCard = freeCards[randomIndex];
-                randomCard.IsDiscarded = true;
-                drawnCards.Add(randomCard);
+
+                //  drawnCards.Add(randomCard);
             }
 
             var drawnRoomNames = drawnCards.Select(x => x.Name).ToList();
             return drawnRoomNames;
         }
 
-        public async Task<List<string>> DrawNextLandmassRoomNames2(Guid gameId, LandmassLayout layout) // rajouter un parameter pour pouvoir 
+        public async Task<List<string>> DrawNextLandmassRoomNames2(Guid gameId, LandmassLayout layout) 
         {
-            // Draw 7 cards, reshuffle if empty...
             List<Card> landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
             List<Card> drawnCards = new List<Card>();
 
-            // would need layouts of different room count to work 
-            while (drawnCards.Count < layout.AllRooms.Count) // warning  : is absolutely not generic since amount of cards needs to match amount of rooms.
+            while (drawnCards.Count < layout.AllRooms.Count)
             {
-
-                if (landmassCards.All(x => x.IsDiscarded))
-                {
-                    // When reshuffling, I dont know if landmassCards are updated...
-                    await ReshuffleLandmassCardsExceptDrawnCards(gameId, drawnCards);
-                    landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
-                    continue;
-                }
-
-                var freeCards = landmassCards.Where(x => !x.IsDiscarded).ToList();
-                var randomIndex = RandomHelper.random.Next(0, freeCards.Count);
-                Card randomCard = freeCards[randomIndex];
-                randomCard.IsDiscarded = true;
-                drawnCards.Add(randomCard);
+                await ReshuffleLandmassCardsIfNeededExceptDrawnCards(gameId, landmassCards, drawnCards);
+                drawnCards.Add(await DrawRandomCard(landmassCards));
             }
 
             var drawnRoomNames = drawnCards.Select(x => x.Name).ToList();
@@ -101,7 +84,7 @@ namespace WebAPI.Services
         private async Task ReshuffleLandmassCardsExceptDrawnCards(Guid gameId, List<Card> cardsCurrentlyBeingDrawn)
         {
             var landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
-            if (landmassCards.Where(x => !x.IsDiscarded).Count() > 0) throw new Exception("Must shuffle cards only when there are no valid cards left");
+            if (landmassCards.Any(x => !x.IsDiscarded)) throw new Exception("Must shuffle cards only when there are no valid cards left");
 
             foreach (var card in landmassCards)
             {
@@ -112,6 +95,26 @@ namespace WebAPI.Services
             }
 
             await _playerContext.SaveChangesAsync();
+        }
+
+        private async Task<Card> DrawRandomCard(List<Card> landmassCards)
+        {
+            var freeCards = landmassCards.Where(x => !x.IsDiscarded).ToList();
+            var randomIndex = RandomHelper.random.Next(0, freeCards.Count);
+            Card randomCard = freeCards[randomIndex];
+            randomCard.IsDiscarded = true;
+            return randomCard;
+        }
+
+        private async Task<List<Card>> ReshuffleLandmassCardsIfNeededExceptDrawnCards(Guid gameId, List<Card> landmassCards, List<Card> drawnCards)
+        {
+            if (landmassCards.All(x => x.IsDiscarded))
+            {
+                await ReshuffleLandmassCardsExceptDrawnCards(gameId, drawnCards);
+                landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
+            }
+
+            return landmassCards;
         }
     }
 }

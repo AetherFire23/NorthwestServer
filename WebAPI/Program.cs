@@ -10,9 +10,7 @@ using Quartz;
 using WebAPI.Jobs;
 using WebAPI.Services;
 using Shared_Resources.GameTasks;
-using System.Linq;
 using WebAPI.Dummies;
-using Shared_Resources.Constants;
 using Shared_Resources.Models;
 using WebAPI.Strategies;
 using Shared_Resources.Enums;
@@ -28,14 +26,6 @@ namespace WebAPI
             StationsTemplate.InitializeDefaultReflectedStations();
 
             // reflection is incoming for registering roleStrategies
-
-
-
-
-
-
-
-
 
             var builder = WebApplication.CreateBuilder(args);
 

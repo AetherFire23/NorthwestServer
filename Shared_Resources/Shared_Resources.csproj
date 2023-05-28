@@ -8,7 +8,6 @@
     <BaseOutputPath>bin\</BaseOutputPath>
   </PropertyGroup>
 
-<<<<<<< HEAD
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>embedded</DebugType>
     <Optimize>False</Optimize>
@@ -33,10 +32,5 @@
         <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(UnityPluginDir)&quot;" />
 
 	</Target>
-=======
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(TargetPath)&quot; &quot;C:\Users\Fredd\Desktop\Coding\NorthWest\Assets\Plugins&quot;" />
-  </Target>
->>>>>>> 36b29dbdf4a06266aeaa491df884810dfc564225
 
 </Project>
