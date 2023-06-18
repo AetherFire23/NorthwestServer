@@ -25,5 +25,11 @@ namespace Shared_Resources.Scratches
                 return kvp;
             }));
         }
+
+        public List<(string ParamType, string Id)> GetRooms()
+        {
+            var rooms = this.Where(x=> x.ParamType == typeof(RoomDTO).Name).ToList();
+            return rooms;
+        }
     }
 }

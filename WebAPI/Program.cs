@@ -213,6 +213,8 @@ namespace WebAPI
             }
         }
 
+
+        // use Hangfire instead (pablito)
         private static void ConfigureQuartz(WebApplicationBuilder builder)
         {
             builder.Services.AddQuartz(q =>
