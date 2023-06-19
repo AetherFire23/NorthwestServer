@@ -49,6 +49,9 @@ namespace WebAPI
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+
             modelBuilder
                 .Entity<GameAction>()
                 .Property(e => e.GameActionType)
@@ -66,30 +69,6 @@ namespace WebAPI
             modelBuilder
                 .Entity<Room>()
                 .Ignore(e => e.CardImpact);
-
-            //modelBuilder.Entity<Room>()
-
-
-            // DEMANDER A BEN PK TOUTE CASSE WTFFFF
-
-            //modelBuilder.Entity<Player>()
-            //    .Property(e => e.Profession)
-            //    .HasConversion(new EnumToStringConverter<RoleType>());
-
-
-            //modelBuilder.Entity<TriggerNotification>()
-            //     .Property(e => e.IsReceived)
-            //     .HasConversion(
-            //    v => v.ToString(),
-            //    v => Convert.ToBoolean(v));
-
-            //modelBuilder.Entity<Player>()
-            //    .Property(e => e.Profession)
-            //    .HasConversion(
-            //    v => v.ToString(),
-            //    v => (RoleType)Enum.Parse(typeof(RoleType), v));
-
-            // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

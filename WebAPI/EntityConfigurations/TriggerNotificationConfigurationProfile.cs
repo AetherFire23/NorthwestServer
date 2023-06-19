@@ -11,11 +11,6 @@ namespace WebAPI.EntityConfigurations
             builder.HasKey(e => e.Id);
             builder.Property(x => x.NotificationType)
                 .HasColumnType("nvarchar(30)");
-
-            //builder.Property(e => e.IsReceived)
-            //    .HasConversion(
-            //    v => v.ToString(),
-            //    v => bool.Parse(v));
         }
     }
 }
