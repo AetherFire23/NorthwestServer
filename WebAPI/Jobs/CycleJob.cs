@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Quartz;
+﻿using Quartz;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Jobs

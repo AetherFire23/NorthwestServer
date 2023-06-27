@@ -1,7 +1,5 @@
 ﻿using Shared_Resources.DTOs;
-using Shared_Resources.Interfaces;
 using Shared_Resources.Models;
-using System.Collections.Generic;
 using Shared_Resources.Scratches;
 
 namespace Shared_Resources.GameTasks

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using Shared_Resources.Enums;
+﻿using Shared_Resources.Enums;
 
 namespace WebAPI.UniversalSkills
 {

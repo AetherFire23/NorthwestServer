@@ -1,5 +1,4 @@
-﻿using Shared_Resources.Entities;
-using WebAPI.TestFolder;
+﻿using WebAPI.TestFolder;
 
 namespace WebAPI.Interfaces
 {

@@ -1,5 +1,5 @@
-﻿using Shared_Resources.Interfaces;
-using System;
+﻿using System;
+using Shared_Resources.Interfaces;
 
 namespace Shared_Resources.Entities
 {

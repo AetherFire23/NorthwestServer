@@ -1,12 +1,7 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.DTOs;
-using Shared_Resources.Enums;
+﻿using Shared_Resources.Enums;
 using Shared_Resources.Interfaces;
 using System;
-using System.Collections.Generic;
-using Shared_Resources.Constants;
 using System.Globalization;
-using System.Reflection;
 
 namespace Shared_Resources.Entities
 {

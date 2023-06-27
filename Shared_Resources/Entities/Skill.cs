@@ -1,7 +1,4 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.DTOs;
-using Shared_Resources.Enums;
-using System;
+﻿using System;
 
 namespace Shared_Resources.Entities
 {

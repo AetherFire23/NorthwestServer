@@ -1,6 +1,4 @@
-﻿using Shared_Resources.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 namespace Shared_Resources.Entities
 {
     public class LandmassInfo

@@ -6,7 +6,8 @@ using System.Globalization;
 
 namespace Shared_Resources.Entities
 {
-    public class Room : IEntity, IFormattable
+    
+    public class Room : IEntity, IFormattable 
     {
         public Guid Id { get; set; }
         public Guid GameId { get; set; }

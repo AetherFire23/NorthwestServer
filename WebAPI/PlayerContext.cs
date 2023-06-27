@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
-using System.Reflection;
-using WebAPI.EntityConfigurations;
 using WebAPI.Game_Actions;
 using WebAPI.Temp_settomgs;
 
@@ -25,7 +21,6 @@ namespace WebAPI
         public DbSet<GameAction> GameActions { get; set; }
         public DbSet<TriggerNotification> TriggerNotifications { get; set; }
         public DbSet<Log> Logs { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<MenuNotification> MenuNotifications { get; set; }
         public DbSet<FriendPair> FriendPairs { get; set; }
         public DbSet<Game> Games { get; set; }
@@ -47,11 +42,8 @@ namespace WebAPI
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder) // denis says fluent api is for advanced shit
         {
-           // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-
             modelBuilder
                 .Entity<GameAction>()
                 .Property(e => e.GameActionType)

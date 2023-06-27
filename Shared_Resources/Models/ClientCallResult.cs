@@ -1,13 +1,13 @@
 ﻿namespace Shared_Resources.Models
 {
-    public class ClientCallResult
+    public class ClientCallResult // lets try to make this generic some day
     {
         // Successes do not concern http client but client-related actions instead.
         // Therefore all ClientCallResult are successful HTTP requests, but not necessarily successful from the point of view of the client.
         // For example, if a client tries to add a new friend but it already exists.
         public bool IsSuccessful { get; set; }
-        public string Message { get; set; }
-        public object Content { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public object Content { get; set; } = new { };
 
         public static ClientCallResult Success => new ClientCallResult()
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using WebAPI.Interfaces;
@@ -8,59 +9,38 @@ namespace WebAPI.Repository
     public class MainMenuRepository : IMainMenuRepository
     {
         private readonly PlayerContext _playerContext;
-
-        public MainMenuRepository(PlayerContext playerContext)
+        private readonly IPlayerRepository _playerRepository;
+        public MainMenuRepository(PlayerContext playerContext, IPlayerRepository playerRepository)
         {
             _playerContext = playerContext;
+            _playerRepository = playerRepository;
         }
 
-        public MainMenuState GetMainMenuState(Guid UserId)
+        // presume logged in I could guess
+        public async Task<MainMenuState> GetMainMenuState(Guid playerId) // almost could pass in 
         {
-            var friends = GetFriends(UserId);
-            var notifications = GetMenuNotifications(UserId);
-            var menuState = new MainMenuState()
+            var player = await _playerRepository.GetPlayerAsync(playerId);
+
+            var mainMenuState = new MainMenuState
             {
-                Friends = friends,
-                Notifications = notifications
+                TimeStamp = DateTime.UtcNow,
             };
-            return menuState;
+
+            return mainMenuState;
         }
 
-        public List<User> GetFriends(Guid userId)
-        {
-            var friendPairs = _playerContext.FriendPairs.Where(x => x.Friend1 == userId || x.Friend2 == userId);
-            var friendIds = friendPairs.Select(x => x.Friend1 == userId ? x.Friend2 : x.Friend1);
+        //public async Task<List<MenuNotification>> GetMenuNotifications(Guid userId)
+        //{
+        //    var notifications = _playerContext.MenuNotifications.Where(x => x.ToId == userId
+        //    && x.Retrieved == false);
+        //    foreach (var notification in notifications)
+        //    {
+        //        notification.Retrieved = true;
+        //    }
+        //    await _playerContext.SaveChangesAsync();
 
-            var friends = _playerContext.Users.Join(friendIds,
-                x => x.Id,
-                y => y,
-                (x, y) => new User()
-                {
-                    Id = x.Id,
-                    Username = x.Username
-                }).ToList();
-
-            return friends;
-        }
-
-        public List<MenuNotification> GetMenuNotifications(Guid userId)
-        {
-            var notifications = _playerContext.MenuNotifications.Where(x => x.ToId == userId
-            && x.Retrieved == false);
-            foreach (var notification in notifications)
-            {
-                notification.Retrieved = true;
-            }
-            _playerContext.SaveChanges();
-
-            return notifications.ToList();
-        }
-
-        public User GetUser(Guid userId)
-        {
-            var user = _playerContext.Users.First(x => x.Id == userId);
-            return user;
-        }
+        //    return notifications.ToList();
+        //}
 
         public bool AreFriends(Guid user1, Guid user2) // more like service bu wahtever
         {

@@ -1,6 +1,4 @@
-﻿
-
-using Shared_Resources.Entities;
+﻿using Shared_Resources.Entities;
 using System.Collections.Generic;
 using System.Linq;
 

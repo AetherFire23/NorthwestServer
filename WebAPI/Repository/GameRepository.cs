@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Quartz.Core;
 using Shared_Resources.Entities;
-using System.Security.Policy;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Repository

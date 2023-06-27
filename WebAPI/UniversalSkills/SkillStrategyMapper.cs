@@ -1,9 +1,6 @@
 ﻿using Shared_Resources.Enums;
-using Shared_Resources.GameTasks;
 using System.Collections.Concurrent;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using WebAPI.GameTasks;
 using WebAPI.UniversalSkills;
 
 namespace WebAPI.Strategies

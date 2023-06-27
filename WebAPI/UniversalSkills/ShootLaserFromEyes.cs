@@ -1,6 +1,4 @@
-﻿using AutoMapper.Configuration.Conventions;
-using Shared_Resources.Entities;
-using Shared_Resources.Enums;
+﻿using Shared_Resources.Entities;
 
 namespace WebAPI.UniversalSkills
 {

@@ -1,5 +1,4 @@
-﻿
-namespace WebAPI.Interfaces
+﻿namespace WebAPI.Interfaces
 {
     public interface ICycleManagerService
     {

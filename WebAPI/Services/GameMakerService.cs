@@ -1,12 +1,9 @@
-﻿using Shared_Resources.Entities;
+﻿using Shared_Resources.DTOs;
+using Shared_Resources.Entities;
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
-using System.Data;
-using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
 using WebAPI.Dummies;
 using WebAPI.Interfaces;
-using WebAPI.Repository;
 using WebAPI.Strategies;
 
 namespace WebAPI.Services
@@ -45,7 +42,7 @@ namespace WebAPI.Services
         {
             NewGameInfo info = new NewGameInfo()
             {
-                Users = new List<User>()
+                Users = new List<UserDto>()
                 {
                     DummyValues.RealBen,
                     DummyValues.RealFred,

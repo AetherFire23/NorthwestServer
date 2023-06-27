@@ -6,6 +6,6 @@ namespace WebAPI.Interfaces
 {
     public interface IMainMenuRepository
     {
-        public MainMenuState GetMainMenuState(Guid UserId);
+        //public MainMenuState GetMainMenuState(Guid UserId);
     }
 }

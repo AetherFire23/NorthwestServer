@@ -1,17 +1,8 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Newtonsoft.Json;
-using WebAPI.Dummies;
-using WebAPI.GameTasks;
 using WebAPI.Interfaces;
-using WebAPI.Temp_settomgs;
-using WebAPI.AutoMapper;
-using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using Shared_Resources.GameTasks;
 using Shared_Resources.Scratches;
-using System.Reflection.Metadata.Ecma335;
 
 namespace WebAPI.Controllers
 {
@@ -20,49 +11,25 @@ namespace WebAPI.Controllers
     public class TheCrewController : ControllerBase
     {
         private readonly PlayerContext _playerContext;
-        private readonly ILogger<TheCrewController> _logger;
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameStateRepository _gameStateRepository;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IRoomRepository _roomRepository;
-        private readonly IGameActionsRepository _gameActionsRepository;
         private readonly IMainMenuRepository _mainMenuRepository;
         private readonly IPlayerService _playerService;
-        private readonly IGameStateService _gameStateService;
         private readonly IGameTaskService _gameTaskService;
-        private readonly IFriendService _friendService;
-        private readonly IGameMakerService _gameMakerService;
-        private readonly IMapper _mapper;
 
-        public TheCrewController(ILogger<TheCrewController> logger,
-            PlayerContext playerContext,
+        public TheCrewController(PlayerContext playerContext,
             IPlayerRepository playerRepository,
             IGameStateRepository gameStateRepository,
-            IServiceProvider serviceProvider,
-            IRoomRepository roomRepository,
-            IGameActionsRepository gameActionsRepository,
             IMainMenuRepository mainMenuRepository,
             IPlayerService playerService,
-            IGameStateService gameStateService,
-            IGameTaskService gameTaskService,
-            IFriendService friendService,
-            IGameMakerService gameMakerService,
-            IMapper mapper)
+            IGameTaskService gameTaskService)
         {
-            _logger = logger;
             _playerRepository = playerRepository;
             _playerContext = playerContext;
             _gameStateRepository = gameStateRepository;
-            _serviceProvider = serviceProvider;
-            _roomRepository = roomRepository;
-            _gameActionsRepository = gameActionsRepository;
             _mainMenuRepository = mainMenuRepository;
             _playerService = playerService;
-            _gameStateService = gameStateService;
             _gameTaskService = gameTaskService;
-            _friendService = friendService;
-            _gameMakerService = gameMakerService;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -112,9 +79,7 @@ namespace WebAPI.Controllers
             if (expedition.IsAvailableForCreation)
             {
                 // create ?
-
             }
-
             return ClientCallResult.Success;
         }
 
@@ -130,7 +95,7 @@ namespace WebAPI.Controllers
         [Route("GetMainMenuState")]
         public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
         {
-            var t = _mainMenuRepository.GetMainMenuState(userId);
+            //var t = _mainMenuRepository.GetMainMenuState(userId);
             return Ok();
         }
 

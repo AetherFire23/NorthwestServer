@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Shared_Resources.Models;
-using System.Security.AccessControl;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Controllers
