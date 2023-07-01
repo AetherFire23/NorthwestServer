@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared_Resources.Constants.Endpoints;
 using Shared_Resources.DTOs;
 using Shared_Resources.Enums;
+using Shared_Resources.Models;
 using Shared_Resources.Models.Requests;
 using WebAPI.Authentication;
 using WebAPI.Services;
@@ -9,7 +11,7 @@ using WebAPI.Services;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route(UserEndpoints.Users)]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -21,22 +23,32 @@ namespace WebAPI.Controllers
             _tokenManager = tokenManager;
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login([FromBody] LoginRequest request)
+        [HttpPost]
+        [Route(UserEndpoints.Login)]
+        public async Task<ActionResult<ClientCallResult>> Login([FromBody] LoginRequest request)
         {
             (bool Allowed, UserDto UserModel) canIssueUser = await _userService.AllowIssueTokenToUser(request);
 
             if (canIssueUser.Allowed)
             {
                 string token = _tokenManager.GenerateToken(canIssueUser.UserModel);
-                return Ok(new TokenUser()
+                var result = new ClientCallResult()
                 {
-                    User = canIssueUser.UserModel,
-                    Token = token,
-                });
+                    IsSuccessful = true,
+                    Content = token,
+                    Message = "Token issued !"
+                };
+                return Ok(result);
             }
 
-            return Unauthorized();
+            var unsuccessfulRequest = new ClientCallResult()
+            {
+                IsSuccessful = false,
+                Content = string.Empty,
+                Message = "User could not be authenticated"// for unity-sude
+            };
+
+            return Ok(unsuccessfulRequest);
         }
 
         // [Authorize(Roles = nameof(RoleName.Admin) + "," + nameof(RoleName.Manager))]

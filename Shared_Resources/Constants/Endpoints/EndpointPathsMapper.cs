@@ -39,11 +39,6 @@ namespace Shared_Resources.Constants.Endpoints
         public static KeyValuePair<Type, Dictionary<string, string>> CreateEndpointMappings(Type endpointType) // besoin de savoir cest quoi le path jusqua ce endpoint-la, dans le attribute i Guess ???
         {
             var controllerPath = endpointType.GetCustomAttribute<ControllerPathMapperAttribute>().ControllerName;
-
-            //var values = endpointType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic)
-            //    .Where(x => x != null)
-            //    .Select(x => x.GetValue(null) as string).ToList() ?? new List<string>();
-
             var endpointNames = endpointType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic)
                 .Where(x => x != null)
                 .Select(x => x.GetValue(null) as string).ToList() ?? new List<string>();

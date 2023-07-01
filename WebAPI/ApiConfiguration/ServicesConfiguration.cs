@@ -25,9 +25,9 @@ namespace WebAPI.ApiConfiguration
     {
         public static void ConfigureServices(WebApplicationBuilder builder)
         {
-            RegisterGameTaskTypes(builder);
+           RegisterGameTaskTypes(builder);
             RoleStrategyMapper.RegisterRoleStrategies(builder);
-            SkillStrategyMapper.RegisterSkillStrategies(builder);
+           SkillStrategyMapper.RegisterSkillStrategies(builder);
 
             ConfigureQuartz(builder);
 
