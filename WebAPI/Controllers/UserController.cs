@@ -51,7 +51,20 @@ namespace WebAPI.Controllers
             return Ok(unsuccessfulRequest);
         }
 
-        // [Authorize(Roles = nameof(RoleName.Admin) + "," + nameof(RoleName.Manager))]
+     //   just seed that shit first
+       //[HttpPost("register")]
+       // public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+       // {
+       //     var user = await _userService.CreateUser(request.Username, request.Password, request.Email).ConfigureAwait(false);
+       //     if (user != null)
+       //     {
+       //         string token = _tokenManager.GenerateToken(user);
+       //         return Ok(new { user, token });
+       //     }
+
+       //     return Unauthorized();
+       // }
+
 
         [Authorize(Roles = nameof(RoleName.PereNoel))]
         [HttpGet("test")]
@@ -63,19 +76,7 @@ namespace WebAPI.Controllers
         }
 
 
-        // just seed that shit first
-        //[HttpPost("register")]
-        //public async Task<IActionResult> Register([FromBody] RegisterRequest request)
-        //{
-        //    var user = await _userService.CreateUser(request.Username, request.Password, request.Email).ConfigureAwait(false);
-        //    if (user != null)
-        //    {
-        //        string token = _tokenManager.GenerateToken(user);
-        //        return Ok(new { user, token });
-        //    }
 
-        //    return Unauthorized();
-        //}
 
 
         //[HttpPost("token")]

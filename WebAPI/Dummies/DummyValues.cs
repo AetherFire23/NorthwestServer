@@ -3,6 +3,7 @@ using Shared_Resources.Entities;
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
 using Shared_Resources.DTOs;
+using Shared_Resources.Models.SSE;
 
 namespace WebAPI.Dummies
 {
@@ -12,6 +13,16 @@ namespace WebAPI.Dummies
         public static Guid defaultPlayer1Guid = new Guid("7E7B80A5-D7E2-4129-A4CD-59CF3C493F7F");
         public static Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
         public static Guid defaultPrivateChatRoomId = new Guid("fedfdb8cc0634d319e6e21cdf3d0790a");
+
+        public static SSEData<List<Player>> dummySSE = new SSEData<List<Player>>(EventType.DummyEvent, PlayerList);
+
+        public static List<Player> PlayerList = new List<Player>()
+        {
+            Ben,
+            Fred,
+        };
+
+
 
         public static UserDto RealFred = new UserDto()
         {

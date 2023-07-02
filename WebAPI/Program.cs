@@ -3,6 +3,11 @@ using Shared_Resources.Models;
 using WebAPI.ApiConfiguration;
 using Shared_Resources.Constants.Endpoints;
 using WebAPI.Conventions;
+using Shared_Resources.Models.SSE;
+using Shared_Resources.Enums;
+using Shared_Resources.Entities;
+using WebAPI.Dummies;
+using Newtonsoft.Json;
 
 namespace WebAPI
 {
@@ -10,6 +15,19 @@ namespace WebAPI
     {
         static async Task Main(string[] args) // techniquement je devrais tout move dans les petites classes
         {
+
+            List<Player> players = new List<Player>()
+            {
+                DummyValues.Fred,
+                DummyValues.Ben,
+            };
+            var sseData = new SSEData<List<Player>>(EventType.DummyEvent, players);
+            string toLine = sseData.ConvertToReadableLine();
+            var parsed = SSEClientData.ParseData(toLine);
+
+            var players2 = JsonConvert.DeserializeObject<List<Player>>(parsed.SerializedData);
+            
+
             var endp = EndpointPathsMapper.GetFullEndpoint(typeof(MainMenuEndpoints), MainMenuEndpoints.State);
 
 
