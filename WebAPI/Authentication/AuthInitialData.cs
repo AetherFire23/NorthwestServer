@@ -14,7 +14,7 @@ namespace WebAPI.Authentication
 
         public static Role PereNoel = new Role()
         {
-            Id = Guid.NewGuid(),
+            Id = new Guid("4e9ec37d-71d9-4e66-8970-45424db1eeb1"),
             RoleName = RoleName.PereNoel,
         };
 

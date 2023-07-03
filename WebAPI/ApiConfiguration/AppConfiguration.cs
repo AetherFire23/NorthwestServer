@@ -37,12 +37,8 @@ namespace WebAPI.ApiConfiguration
                     logger.LogError(ex, "An error occurred");
                 }
 
-                await authContext.Users.AddAsync(AuthInitialData.MyUser);
-                await authContext.Roles.AddAsync(AuthInitialData.PereNoel);
-                await authContext.UserRoles.AddAsync(AuthInitialData.MyUserRole);
 
-                await authContext.SaveChangesAsync();
-
+                await SeedRoles(authContext);
 
 
                 var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
@@ -65,6 +61,15 @@ namespace WebAPI.ApiConfiguration
                 playerContextService.SaveChanges();
 
             }
+        }
+
+        public static async Task SeedRoles(AuthenticationContext authContext)
+        {
+            await authContext.Users.AddAsync(AuthInitialData.MyUser);
+            await authContext.Roles.AddAsync(AuthInitialData.PereNoel);
+            await authContext.UserRoles.AddAsync(AuthInitialData.MyUserRole);
+
+            await authContext.SaveChangesAsync();
         }
     }
 }

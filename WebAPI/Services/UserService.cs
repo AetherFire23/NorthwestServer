@@ -1,7 +1,9 @@
 ﻿
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
+using Shared_Resources.Enums;
 using Shared_Resources.Models.Requests;
+using WebAPI.Authentication;
 using WebAPI.Repository.Users;
 
 namespace WebAPI.Services
@@ -28,6 +30,13 @@ namespace WebAPI.Services
             return (true, userDto);
         }
 
-       // public async Task<(bool isCreated, UserDto)>
+        public async Task<(bool IsCreated, UserDto UserModel)> AllowCreateUser(RegisterRequest request)
+        {
+            bool userExists = await _userRepository.IsUserExists(request.UserName, request.Email);
+            if (userExists) return (false, null);
+
+            UserDto user = await _userRepository.CreateUser(request);
+            return (true, user);
+        }
     }
 }

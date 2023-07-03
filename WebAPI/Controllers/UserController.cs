@@ -51,20 +51,29 @@ namespace WebAPI.Controllers
             return Ok(unsuccessfulRequest);
         }
 
-     //   just seed that shit first
-       //[HttpPost("register")]
-       // public async Task<IActionResult> Register([FromBody] RegisterRequest request)
-       // {
-       //     var user = await _userService.CreateUser(request.Username, request.Password, request.Email).ConfigureAwait(false);
-       //     if (user != null)
-       //     {
-       //         string token = _tokenManager.GenerateToken(user);
-       //         return Ok(new { user, token });
-       //     }
+        //   just seed that shit first
+        [HttpPost(UserEndpoints.Register)]
+        public async Task<ActionResult<ClientCallResult>> Register([FromBody] RegisterRequest request)
+        {
+            (bool IsCreated, UserDto Model) allowedUser = await _userService.AllowCreateUser(request);
 
-       //     return Unauthorized();
-       // }
+            if (allowedUser.IsCreated)
+            {
+                var result = new ClientCallResult()
+                {
+                    IsSuccessful = true,
+                    Content = allowedUser.Model,
+                };
+                return Ok(result);
+            }
 
+            
+            return Ok(new ClientCallResult()
+            {
+                IsSuccessful = false,
+                Message = "user authentication failed !"
+            });
+        }
 
         [Authorize(Roles = nameof(RoleName.PereNoel))]
         [HttpGet("test")]
@@ -74,48 +83,5 @@ namespace WebAPI.Controllers
             await Task.Delay(1);
             return Ok();
         }
-
-
-
-
-
-        //[HttpPost("token")]
-        //public async Task<IActionResult> GetUserFromToken([FromBody] TokenLoginRequest request)
-        //{
-        //    var validatedToken = _tokenManager.ValidateToken(request.Token);
-        //    if (validatedToken != null)
-        //    {
-        //        string? userId = validatedToken?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //        if (userId == null) return Unauthorized();
-
-        //        var user = await _userService.GetUserById(userId).ConfigureAwait(false);
-        //        if (user != null)
-        //        {
-        //            return Ok(user);
-        //        }
-        //    }
-
-        //    return Unauthorized();
-        //}
-
-        //[HttpPost("swaggerLogin")]
-        //[Consumes("application/x-www-form-urlencoded")]
-        //public async Task<IActionResult> SwaggerLogin([FromForm] LoginRequest request)
-        //{
-        //    var user = await _userService.GetUser(request.Username, request.Password).ConfigureAwait(false);
-        //    if (user != null)
-        //    {
-        //        string token = _tokenManager.GenerateToken(user);
-
-        //        return Ok(new
-        //        {
-        //            access_token = token,
-        //            token_type = "Bearer",
-        //            expires_in = 999999
-        //        });
-        //    }
-
-        //    return Unauthorized();
-        //}
     }
 }

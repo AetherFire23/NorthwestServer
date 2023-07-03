@@ -41,14 +41,9 @@ namespace WebAPI
 
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers(options =>
-            {
-                options.Conventions.Add(new LowercaseControllerModelConvention());
-            });
+            
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
 
             ServicesConfiguration.ConfigureServices(builder); 
 

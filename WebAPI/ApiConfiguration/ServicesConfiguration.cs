@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Quartz;
+using Quartz.AspNetCore;
 using Shared_Resources.Entities;
 using Shared_Resources.GameTasks;
 using System.Reflection;
 using System.Text;
 using WebAPI.Authentication;
 using WebAPI.Constants;
+using WebAPI.Conventions;
 using WebAPI.Game_Actions;
 using WebAPI.GameTasks;
 using WebAPI.Interfaces;
@@ -25,9 +28,12 @@ namespace WebAPI.ApiConfiguration
     {
         public static void ConfigureServices(WebApplicationBuilder builder)
         {
-           RegisterGameTaskTypes(builder);
+            ConfigureConventions(builder);
+            ConfigureSwagger(builder);
+
+            RegisterGameTaskTypes(builder);
             RoleStrategyMapper.RegisterRoleStrategies(builder);
-           SkillStrategyMapper.RegisterSkillStrategies(builder);
+            SkillStrategyMapper.RegisterSkillStrategies(builder);
 
             ConfigureQuartz(builder);
 
@@ -54,6 +60,52 @@ namespace WebAPI.ApiConfiguration
                 builder.Services.AddTransient(type);
             }
         }
+
+        private static void ConfigureConventions(WebApplicationBuilder builder)
+        {
+            builder.Services.AddControllers(options =>
+            {
+                options.Conventions.Add(new LowercaseControllerModelConvention());
+            });
+        }
+
+        private static void ConfigureSwagger(WebApplicationBuilder builder)
+        {
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            // Add Swagger services
+            builder.Services.AddSwaggerGen(c =>
+            {
+                // Add the security definition for JWT Bearer token
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                // Add the security requirement for the JWT Bearer token
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
+        }
+
+
 
         private static void ConfigureQuartz(WebApplicationBuilder builder)
         {
@@ -201,12 +253,12 @@ namespace WebAPI.ApiConfiguration
                 // Set JWT bearer options
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,              
-                    ValidateAudience = true,           
-                    ValidateLifetime = true,           
-                    ValidateIssuerSigningKey = true,   
-                    ValidIssuer = jwtConfig.Issuer,     
-                    ValidAudience = jwtConfig.Audience,    
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtConfig.Issuer,
+                    ValidAudience = jwtConfig.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey))
                 };
             });

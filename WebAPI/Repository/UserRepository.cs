@@ -3,6 +3,7 @@ using WebAPI.Authentication;
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models.Requests;
+using Shared_Resources.Enums;
 
 namespace WebAPI.Repository.Users
 {
@@ -56,8 +57,8 @@ namespace WebAPI.Repository.Users
             bool hasFoundUser = user is not null;
             if (!hasFoundUser) return null; // should make error message srsly
 
-            
-            return hasFoundUser? user : null;
+
+            return hasFoundUser ? user : null;
         }
 
         private async Task<bool> IsCorrectCredentials(LoginRequest request, User? user)
@@ -85,42 +86,39 @@ namespace WebAPI.Repository.Users
             return isCorrect ? user : null;
         }
 
-        //{
-        //    if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
-        //    if (string.IsNullOrEmpty(password)) throw new ArgumentNullException(nameof(password));
-        //    if (string.IsNullOrEmpty(email)) throw new ArgumentNullException(nameof(email));
+        public async Task<bool> IsUserExists(string userName, string email)
+        {
+            bool exists = await _authContext.Users.AnyAsync(x => x.Name == userName && x.Email == email);
+            return exists;
+        }
 
-        //    if (await _authContext.Users.AnyAsync(u => u.Name == name))
-        //    {
-        //        throw new UserNameExistsException(name);
-        //    }
+        public async Task<UserDto> CreateUser(RegisterRequest request)
+        {
+            var user = new User()
+            {
+                Id = Guid.NewGuid(),
+                Email = request.Email,
+                Name = request.UserName,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            };
 
-        //    var newId = Guid.NewGuid();
+            var role = await _authContext.Roles.SingleAsync(x => x.RoleName == RoleName.PereNoel);
 
-        //    var newUser = new User
-        //    {
-        //        Id = newId,
-        //        Name = name,
-        //        PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-        //        Email = email,
-        //        LastLoginDate = DateTime.UtcNow,
-        //        RegistrationDate = DateTime.UtcNow,
-        //        IsActive = true,
-        //        UserRoles = new List<UserRole>
-        //        {
-        //            new UserRole 
-        //            { 
-        //                UserId = newId,
-        //                RoleId = RoleCache.GetRoleId(RoleName.Standard)
-        //            }
-        //        }
-        //    };
+            var userRole = new UserRole()
+            {
+                Id = Guid.NewGuid(),
+                Role = role,
+                User = user,
+            };
+            await _authContext.Users.AddAsync(user);
+            await _authContext.SaveChangesAsync();
 
-        //    _authContext.Users.Add(newUser);
+            await _authContext.UserRoles.AddAsync(userRole);
+            await _authContext.SaveChangesAsync();
 
-        //    await _authContext.SaveChangesAsync();
+            var dto = await GetUserDtoById(user.Id);
 
-        //    return newUser;
-        //}
+            return dto;
+        }
     }
 }
