@@ -13,8 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "TestProject1\UnitTests.csproj", "{651D2156-7BEB-45E3-AFF5-9D58AFAFBE14}"
-EndProject
+
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared_Resources", "Shared_Resources\Shared_Resources.csproj", "{D87FED71-5CD3-4936-8413-378B00CC6853}"
 EndProject
 Global
