@@ -106,29 +106,6 @@ namespace WebAPI.Services
             _playerContext.PrivateChatRoomParticipants.Add(DummyValues.PrivateChatRoomParticipant);
             _playerContext.Items.Add(DummyValues.Freditem);
 
-            //List<Log> logs = Enumerable.Range(0, 1000).Select(x => new Log()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Created = DateTime.UtcNow,
-            //    IsPublic = true,
-            //    EventText = "I am very dumb value haha",
-            //    CreatedBy = "TheMaster",
-            //    GameId = DummyValues.defaultGameGuid,
-            //    TriggeringPlayerId = DummyValues.Fred.Id,
-            //    RoomId = Guid.NewGuid(),
-            //}).ToList() ?? new List<Log>();
-
-            //List<Message> stressMessages = Enumerable.Range(0, 1000).Select(x => new Message()
-            //{
-            //    RoomId = DummyValues.defaultGameGuid,
-            //    SenderName = "TheMaster",
-            //    Text = "Oh Yeah!",
-            //    GameId = DummyValues.defaultGameGuid,
-            //}).ToList();
-
-            //_playerContext.Messages.AddRange(stressMessages);
-            //_playerContext.Logs.AddRange(logs);
-
             _playerContext.SaveChanges();
         }
 
@@ -155,10 +132,6 @@ namespace WebAPI.Services
                 };
 
                 await InitializePlayerRoleSettings(newPlayer);
-
-                //Starting room might change according to some variables. 
-                // Guid roomId = await GetStartingRoomId(newPlayer, info);
-                //newPlayer.CurrentGameRoomId = roomId;
                 await _playerContext.Players.AddAsync(newPlayer);
                 await _playerContext.SaveChangesAsync();
             }
