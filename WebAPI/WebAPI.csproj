@@ -60,6 +60,7 @@
 
   <ItemGroup>
     <Folder Include="GameInitialization_Scratch\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
