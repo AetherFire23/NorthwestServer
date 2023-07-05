@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared_Resources.Enums
 {
-    public enum EventType
+    public enum SSEEventType
     {
         DummyEvent,
     }

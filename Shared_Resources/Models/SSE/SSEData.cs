@@ -6,10 +6,10 @@ namespace Shared_Resources.Models.SSE
 {
     public class SSEData<T>
     {
-        public EventType EventType { get; set; }
+        public SSEEventType EventType { get; set; }
         public T Data { get; set; }
 
-        public SSEData(EventType eventType, T data)
+        public SSEData(SSEEventType eventType, T data)
         {
             EventType = eventType;
             Data = data;

@@ -12,6 +12,7 @@ using System.Text;
 using WebAPI.Authentication;
 using WebAPI.Dummies;
 using WebAPI.Services;
+using WebAPI.Utils;
 
 namespace WebAPI.Controllers
 {
@@ -43,7 +44,11 @@ namespace WebAPI.Controllers
                 {
                     await Task.Delay(1000, cancellationToken);
 
-                    var dumm = new SSEData<List<Player>>(EventType.DummyEvent, new List<Player> { DummyValues.Fred, DummyValues.Ben });
+                    var dumm = new SSEData<List<Player>>(SSEEventType.DummyEvent, new List<Player> { DummyValues.Fred,
+                    new Player() { 
+                    Id = Guid.NewGuid(),
+                    X = RandomHelper.random.Next(0, 10),
+                    } });
                     string line = dumm.ConvertToReadableLine();
                     await Response.WriteAsync(line);
                     await Response.Body.FlushAsync();
