@@ -22,38 +22,51 @@ namespace WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IJwtTokenManager _tokenManager;
+        private readonly ISSEClientManager _sseManager;
 
-        public SSEController(IUserService userService, IJwtTokenManager tokenManager)
+        public SSEController(IUserService userService, IJwtTokenManager tokenManager, ISSEClientManager sseManager)
         {
             _userService = userService;
             _tokenManager = tokenManager;
+            _sseManager = sseManager;
         }
 
         [HttpGet]
         [Route(SSEEndpoints.EventStream)]
-        public async Task GetEventStream2() // should activate only when logged-in so I should finish login
+        public async Task GetEventStream2(Guid playerId, Guid gameId) // should activate only when logged-in so I should finish login
         {
+            PlayerStruct playerStruct = new PlayerStruct(playerId, gameId);
             Console.WriteLine("req received from client");
             Response.Headers.Add("Content-Type", "text/event-stream");
             Response.Headers.Add("Cache-Control", "no-cache");
             Response.Headers.Add("Connection", "keep-alive");
+
             try
             {
-                var cancellationToken = Response.HttpContext.RequestAborted;
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    await Task.Delay(1000, cancellationToken);
+                await _sseManager.Subscribe(playerStruct, Response);
+                await Task.Delay(Timeout.Infinite, Response.HttpContext.RequestAborted);
 
-                    var dumm = new SSEData<List<Player>>(SSEEventType.DummyEvent, new List<Player> { DummyValues.Fred,
-                    new Player() { 
-                    Id = Guid.NewGuid(),
-                    X = RandomHelper.random.Next(0, 10),
-                    } });
-                    string line = dumm.ConvertToReadableLine();
-                    await Response.WriteAsync(line);
-                    await Response.Body.FlushAsync();
-                    Console.WriteLine("Did you receive my event?");
-                }
+
+
+                //while (!cancellationToken.IsCancellationRequested)
+                //{
+                //    await Task.Delay(200, cancellationToken);
+
+                //    SSEEventType eventType = (SSEEventType)RandomHelper.random.Next(0, 3);
+                //    var dumm = new SSEData<List<Player>>(eventType, new List<Player> 
+                //    { 
+                //        DummyValues.Fred,
+                //        new Player() 
+                //        { 
+                //            Id = Guid.NewGuid(),
+                //            X = RandomHelper.random.Next(0, 10),
+                //        } 
+                //    });
+                //    string line = dumm.ConvertToReadableLine();
+                //    await Response.WriteAsync(line);
+                //    await Response.Body.FlushAsync();
+                //    Console.WriteLine("Did you receive my event?");
+                //}
             }
             catch (Exception ex)
             {
@@ -62,7 +75,7 @@ namespace WebAPI.Controllers
             }
             finally
             {
-
+                await _sseManager.Unsubscribe(playerStruct);
             }
         }
     }

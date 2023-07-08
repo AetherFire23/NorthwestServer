@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Shared_Resources.Enums;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -48,8 +47,6 @@ namespace Shared_Resources.Models.SSE
                 .TakeWhile(c => !c.Equals(SSEStrings.EndCharacter))
                 .Aggregate(new StringBuilder(), (sb, c) => sb.Append(c))
                 .ToString();
-
-            //object data = JsonConvert.DeserializeObject<object>(serializedData) ?? throw new Exception("Error while serializing");
 
             var sseData = new SSEClientData(eventType, serializedData);
             return sseData;

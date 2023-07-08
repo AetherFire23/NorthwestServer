@@ -58,9 +58,9 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("TransferItem")] // me sers meme pas du ownerId
-        public async Task<ActionResult<ClientCallResult>> TransferItem(Guid targetId, Guid itemId) // pourrait devenir une method dans le service
+        public async Task<ActionResult<ClientCallResult>> TransferItem(Guid targetId, Guid itemId, Guid gameId) // pourrait devenir une method dans le service
         {
-            await _playerService.TransferItem(targetId, itemId);
+            await _playerService.TransferItem(targetId, itemId, gameId);
             return Ok();
         }
 

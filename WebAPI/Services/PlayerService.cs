@@ -1,8 +1,10 @@
 ﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
+using Shared_Resources.Models.SSE;
 using WebAPI.Game_Actions;
 using WebAPI.Interfaces;
 
@@ -13,18 +15,29 @@ namespace WebAPI.Services
         private readonly PlayerContext _playerContext;
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameActionsRepository _gameActionsRepository;
-        public PlayerService(PlayerContext playerContext, IPlayerRepository playerRepository, IGameActionsRepository gameActionsRepository)
+        private readonly ISSEClientManager _sseClientManager;
+        private readonly ISSEManager _sseManager;
+        public PlayerService(
+            PlayerContext playerContext,
+            IPlayerRepository playerRepository,
+            IGameActionsRepository gameActionsRepository,
+            ISSEClientManager sseClientManager,
+            ISSEManager sseManager)
         {
             _playerContext = playerContext;
             _playerRepository = playerRepository;
             _gameActionsRepository = gameActionsRepository;
+            _sseClientManager = sseClientManager;
+            _sseManager = sseManager;
         }
 
-        public async Task TransferItem(Guid targetId, Guid itemId)
+        public async Task TransferItem(Guid targetId, Guid itemId, Guid gameId)
         {
             Item item = await _playerRepository.GetItemAsync(itemId);
             item.OwnerId = targetId;
+
             await _playerContext.SaveChangesAsync();
+            await _sseManager.SendItemChangedOwnerEvent(gameId);
         }
 
         public async Task UpdatePositionAsync(Guid playerId, float x, float y)

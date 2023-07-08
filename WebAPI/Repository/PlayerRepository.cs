@@ -54,7 +54,7 @@ public class PlayerRepository : IPlayerRepository
     {
         Player player = await GetPlayerAsync(playerId);
 
-        List<Item> items = GetOwnedItems(playerId).ToList();
+        List<Item> items = await GetOwnedItems(playerId);
 
         List<Shared_Resources.Enums.SkillEnum> skillsOwned = GetOwnedSkills(playerId);
 
@@ -81,15 +81,16 @@ public class PlayerRepository : IPlayerRepository
         return playerDTO;
     }
 
-    public List<Shared_Resources.Enums.SkillEnum> GetOwnedSkills(Guid ownerId)
+    public List<SkillEnum> GetOwnedSkills(Guid ownerId)
     {
         return _playerContext.Skills.Where(s => s.OwnerId == ownerId)
             .Select(s => s.SkillType).ToList();
     }
 
-    public List<Item> GetOwnedItems(Guid ownerId)
+    public async Task<List<Item>> GetOwnedItems(Guid ownerId)
     {
-        return _playerContext.Items.Where(item => item.OwnerId == ownerId).ToList();
+        var items = await _playerContext.Items.Where(x => x.OwnerId == ownerId).ToListAsync();
+        return items;
     }
 
     public async Task<List<TriggerNotificationDTO>> GetTriggerNotificationsAsync(Guid playerId, DateTime? timeStamp)

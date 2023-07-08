@@ -19,5 +19,6 @@ public interface IPlayerRepository
     public List<TriggerNotification> GetAllTriggersOfType(Guid playerId, NotificationType notificationType);
     Task<List<Log>> GetAccessibleLogs(Guid playerId, Guid gameId, DateTime? lastTimeStamp);
     Task<List<Player>> GetPlayersInGameAsync(Guid gameId);
+    Task<List<Item>> GetOwnedItems(Guid ownerId);
 } 
 

@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace Shared_Resources.Entities
 {
-    public class Player : IEntity, ITaskParameter, IFormattable
+    public class Player : IPlayerEntity, ITaskParameter, IFormattable
     {
         public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
 

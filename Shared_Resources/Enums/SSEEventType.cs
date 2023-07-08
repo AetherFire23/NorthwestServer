@@ -7,5 +7,7 @@ namespace Shared_Resources.Enums
     public enum SSEEventType
     {
         DummyEvent,
+        RefreshPlayers,
+        RefreshItems,
     }
 }
