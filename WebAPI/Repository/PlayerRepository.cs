@@ -58,7 +58,7 @@ public class PlayerRepository : IPlayerRepository
 
         List<Item> items = await GetOwnedItems(playerId);
 
-        List<Shared_Resources.Enums.SkillEnum> skillsOwned = GetOwnedSkills(playerId);
+        List<SkillEnum> skillsOwned = GetOwnedSkills(playerId);
 
         PlayerDTO playerDTO = new PlayerDTO()
         {
@@ -71,7 +71,6 @@ public class PlayerRepository : IPlayerRepository
             Z = player.Z,
             ActionPoints = player.ActionPoints,
             HealthPoints = player.HealthPoints,
-            CurrentChatRoomId = player.CurrentChatRoomId,
             CurrentGameRoomId = player.CurrentGameRoomId,
             Profession = player.Profession,
 

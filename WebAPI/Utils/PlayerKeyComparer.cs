@@ -4,12 +4,12 @@
     {
         public bool Equals(PlayerStruct x, PlayerStruct y)
         {
-            return x.PlayerId.Equals(y.PlayerId);
+            return x.Id.Equals(y.Id);
         }
 
         public int GetHashCode(PlayerStruct obj)
         {
-            return obj.PlayerId.GetHashCode();
+            return obj.Id.GetHashCode();
         }
     }
 }

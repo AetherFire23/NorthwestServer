@@ -121,7 +121,6 @@ namespace WebAPI.Services
                 {
                     Id = user.Id, // users not saved yet in db, so can use user key as primary key. Will have to Guid.NewGuid() some day
                     ActionPoints = 0,
-                    CurrentChatRoomId = user.Id,
                     GameId = info.Game.Id,
                     HealthPoints = 0,
                     Name = selection.Name,

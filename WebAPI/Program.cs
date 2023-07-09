@@ -21,7 +21,7 @@ namespace WebAPI
                 DummyValues.Fred,
                 DummyValues.Ben,
             };
-            var sseData = new SSEData<List<Player>>(SSEType.DummyEvent, players);
+            var sseData = new SSEData<List<Player>>(SSEType.Heartbeat, players);
             string toLine = sseData.ConvertToReadableLine();
             var parsed = SSEClientData.ParseData(toLine);
 

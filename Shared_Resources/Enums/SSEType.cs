@@ -6,7 +6,7 @@ namespace Shared_Resources.Enums
 {
     public enum SSEType
     {
-        DummyEvent,
+        Heartbeat,
         RefreshPlayers,
         RefreshItems,
         AddLog,

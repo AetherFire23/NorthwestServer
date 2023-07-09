@@ -206,8 +206,8 @@ namespace WebAPI.ApiConfiguration
             builder.Services.AddDbContext<PlayerContext>(options
            => options.UseSqlServer(playerContextConnectionString));
 
-            builder.Services.AddDbContext<AuthenticationContext>(options =>
-                options.UseSqlServer(authenticationConnectionString));
+            //builder.Services.AddDbContext<AuthenticationContext>(options =>
+            //    options.UseSqlServer(authenticationConnectionString));
         }
 
         private static void ConfigureHTTPLogging(WebApplicationBuilder builder)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
+using WebAPI.Extensions;
 using WebAPI.Game_Actions;
 using WebAPI.Temp_settomgs;
 
@@ -37,6 +38,12 @@ namespace WebAPI
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Season> Season { get; set; }
 
+
+        // authentication
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Role> Roles { get; set; }
+
         //There is constructor injection. This must exist to be configurable in Program.cs
         public PlayerContext(DbContextOptions<PlayerContext> options) : base(options)
         {
@@ -61,6 +68,12 @@ namespace WebAPI
             modelBuilder
                 .Entity<Room>()
                 .Ignore(e => e.CardImpact);
+
+            modelBuilder.Entity<Role>()
+                .Property(p => p.RoleName)
+                .HasConversion(
+                v => v.ToString(),
+                v => v.ToEnum<RoleName>());
         }
     }
 }

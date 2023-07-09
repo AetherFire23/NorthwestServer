@@ -19,7 +19,7 @@ namespace WebAPI.ApiConfiguration
             using (var scope = app.Services.CreateScope())
             {
                 var playerContextService = scope.ServiceProvider.GetService<PlayerContext>();
-                var authContext = scope.ServiceProvider.GetService<AuthenticationContext>();
+              //  var authContext = scope.ServiceProvider.GetService<AuthenticationContext>();
 
                 try
                 {
@@ -27,8 +27,8 @@ namespace WebAPI.ApiConfiguration
                     playerContextService.Database.EnsureDeleted(); // deocher our recommecner
                     playerContextService.Database.Migrate();
 
-                    authContext.Database.EnsureDeleted(); // deocher our recommecner
-                    authContext.Database.Migrate();
+                 //   authContext.Database.EnsureDeleted(); // deocher our recommecner
+                 //   authContext.Database.Migrate();
 
                 }
                 catch (Exception ex)
@@ -38,7 +38,7 @@ namespace WebAPI.ApiConfiguration
                 }
 
 
-                await SeedRoles(authContext);
+                await SeedRoles(playerContextService);
 
 
                 var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
@@ -63,7 +63,7 @@ namespace WebAPI.ApiConfiguration
             }
         }
 
-        public static async Task SeedRoles(AuthenticationContext authContext)
+        public static async Task SeedRoles(PlayerContext authContext)
         {
             await authContext.Users.AddAsync(AuthInitialData.MyUser);
             await authContext.Roles.AddAsync(AuthInitialData.PereNoel);

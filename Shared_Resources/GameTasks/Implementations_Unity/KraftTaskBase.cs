@@ -15,9 +15,9 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
         public override bool HasRequiredConditions(GameState gameState)
         {
             // Pas de liste juste if, brackets et ||
-            bool isPlayerInCaptainsQuarters = gameState.Room.Name.Equals(nameof(RoomsTemplate.CaptainsQuarters));
+            bool isPlayerInCaptainsQuarters = gameState.LocalPlayerRoom.Name.Equals(nameof(RoomsTemplate.CaptainsQuarters));
             bool isBelowMaximumItemCount = gameState.PlayerDTO.Items.Count < 2;
-            bool ohYeah = gameState.Room.Name.Equals(nameof(RoomsTemplate.CrowsNest));
+            bool ohYeah = gameState.LocalPlayerRoom.Name.Equals(nameof(RoomsTemplate.CrowsNest));
             return isBelowMaximumItemCount;
         }
 
