@@ -31,11 +31,16 @@ namespace WebAPI.Services
             _sseManager = sseManager;
         }
 
-        public async Task TransferItem(Guid targetId, Guid itemId, Guid gameId)
+        public async Task TransferItem(Guid targetId, Guid ownerId, Guid itemId, Guid gameId)
         {
             Item item = await _playerRepository.GetItemAsync(itemId);
-            item.OwnerId = targetId;
 
+            if (item.OwnerId != ownerId)
+            {
+                Console.WriteLine($"Item ownership transfer was cancelled. With Id : {item.Id} {item.ItemType} ");
+            }// Ca veut dire que yer ailleurs live
+
+            item.OwnerId = targetId;
             await _playerContext.SaveChangesAsync();
             await _sseManager.SendItemChangedOwnerEvent(gameId);
         }
@@ -86,7 +91,7 @@ namespace WebAPI.Services
                 await _playerContext.AddAsync(log);
                 await _playerContext.SaveChangesAsync();
 
-                //_gameActionsRepository.ChangeRoomAction(player, currentRoom, targetRoom);
+                await _sseManager.SendNewLogEvent(log);
 
                 return ClientCallResult.Success;
             }

@@ -13,7 +13,6 @@ namespace WebAPI.Controllers
         private readonly PlayerContext _playerContext;
         private readonly IPlayerRepository _playerRepository;
         private readonly IGameStateRepository _gameStateRepository;
-        private readonly IMainMenuRepository _mainMenuRepository;
         private readonly IPlayerService _playerService;
         private readonly IGameTaskService _gameTaskService;
 
@@ -27,7 +26,6 @@ namespace WebAPI.Controllers
             _playerRepository = playerRepository;
             _playerContext = playerContext;
             _gameStateRepository = gameStateRepository;
-            _mainMenuRepository = mainMenuRepository;
             _playerService = playerService;
             _gameTaskService = gameTaskService;
         }
@@ -57,10 +55,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("TransferItem")] // me sers meme pas du ownerId
-        public async Task<ActionResult<ClientCallResult>> TransferItem(Guid targetId, Guid itemId, Guid gameId) // pourrait devenir une method dans le service
+        [Route("TransferItem")] // me sers meme pas du ownerId        // Hey, je veux que x owner own, voici le owner que jai. Mais si le owner que j<ai != le owner de litem ca doit larreter et refresher
+        public async Task<ActionResult<ClientCallResult>> TransferItem(Guid targetId, Guid ownerId, Guid itemId, Guid gameId) // pourrait devenir une method dans le service
         {
-            await _playerService.TransferItem(targetId, itemId, gameId);
+            await _playerService.TransferItem(targetId, ownerId, itemId, gameId);
             return Ok();
         }
 
@@ -98,7 +96,6 @@ namespace WebAPI.Controllers
             //var t = _mainMenuRepository.GetMainMenuState(userId);
             return Ok();
         }
-
 
         [HttpPut]
         [Route("CHangbenPosition")]

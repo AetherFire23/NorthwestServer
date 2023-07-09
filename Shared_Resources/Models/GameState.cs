@@ -8,7 +8,7 @@ namespace Shared_Resources.Models
     public class GameState
     {
         public PlayerDTO PlayerDTO { get; set; } = new PlayerDTO();
-        public RoomDTO Room { get; set; } = new RoomDTO();
+        public RoomDTO Room { get; set; } = new RoomDTO(); // ark va etre called a eter delted
         public List<Message> NewMessages { get; set; } = new List<Message>();
         public List<Player> Players { get; set; } = new List<Player>();
         public List<TriggerNotificationDTO> TriggerNotifications { get; set; } = new List<TriggerNotificationDTO>();

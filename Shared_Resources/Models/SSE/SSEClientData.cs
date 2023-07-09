@@ -8,10 +8,10 @@ namespace Shared_Resources.Models.SSE
 {
     public class SSEClientData
     {
-        public SSEEventType EventType { get; set; }
+        public SSEType EventType { get; set; }
         public string SerializedData { get; set; }
 
-        public SSEClientData(SSEEventType eventType, string serializedData)
+        public SSEClientData(SSEType eventType, string serializedData)
         {
             EventType = eventType;
             SerializedData = serializedData;
@@ -39,7 +39,7 @@ namespace Shared_Resources.Models.SSE
                 .TakeWhile(c => c != SSEStrings.Separator)
                 .Aggregate(new StringBuilder(), (sb, c) => sb.Append(c))
                 .ToString();
-            SSEEventType eventType = (SSEEventType)Enum.Parse(typeof(SSEEventType), eventTypeText);
+            SSEType eventType = (SSEType)Enum.Parse(typeof(SSEType), eventTypeText);
 
             var serializedData = sseDataLine
                 .SkipWhile(c => !c.Equals(SSEStrings.Separator))

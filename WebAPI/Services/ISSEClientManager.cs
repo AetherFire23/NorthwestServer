@@ -14,7 +14,7 @@ namespace WebAPI.Services
         Task Subscribe(PlayerStruct playerId, HttpResponse response);
 
         Task Unsubscribe(PlayerStruct playerId);
-        Task<List<Guid>> GetLoggedPlayers(Guid gameId);
         Task PushDataToPlayer<T>(Guid playerId, SSEData<T> data);
+        List<Guid> GetLoggedPlayers(Guid gameId);
     }
 }

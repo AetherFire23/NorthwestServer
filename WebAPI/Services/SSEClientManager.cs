@@ -12,7 +12,7 @@ namespace WebAPI.Services
         private ConcurrentDictionary<PlayerStruct, HttpResponse> _subscribedPlayers { get; } = new(new PlayerKeyComparer());
         //   private readonly object _responseLock = new object(); // yeah so ask ben about concurrency and sending events
 
-        public async Task<List<Guid>> GetLoggedPlayers(Guid gameId)
+        public List<Guid> GetLoggedPlayers(Guid gameId)
         {
             List<Guid> playerIds = _subscribedPlayers.Keys.Where(x => x.GameId == gameId)
                 .Select(x => x.PlayerId).ToList();

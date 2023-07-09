@@ -2,6 +2,8 @@
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
+using Shared_Resources.Models;
+using System.Runtime.CompilerServices;
 using WebAPI;
 public class PlayerRepository : IPlayerRepository
 {
@@ -124,37 +126,45 @@ public class PlayerRepository : IPlayerRepository
         return triggersOfType;
     }
 
-    public async Task<List<Log>> GetAccessibleLogs(Guid playerId, Guid gameId, DateTime? lastTimeStamp)
-    { // ne prend pas en compte le gameId haha
-        var logs = new List<Log>();
+    public async Task<List<Log>> GetAccessibleLogsForPlayer(Guid playerId, Guid gameId)
+    {
+        List<Log> publicLogsInGame = await _playerContext.Logs.Where(x => x.GameId == gameId && x.IsPublic).ToListAsync();
 
-        var newServerLogs = lastTimeStamp is null
-            ? await _playerContext.Logs.Where(x => x.GameId == gameId).ToListAsync()
-            : await _playerContext.Logs.Where(x => x.GameId == gameId && x.Created > lastTimeStamp).ToListAsync();
+        List<LogAccessPermissions> permissionsForPlayer = await _playerContext.LogAccessPermission.Where(x => x.PlayerId == playerId).ToListAsync();
+        List<Log> accessibleLogs = await _playerContext.LogAccessPermission.Join(_playerContext.Logs,
+            accessPermission => accessPermission.LogId,
+            log => log.Id,
+            (a, l) => l).ToListAsync();
 
-        foreach (var log in newServerLogs)
+        List<Log> allVisibleLogs = publicLogsInGame.Union(accessibleLogs).ToList();
+
+        return allVisibleLogs;
+    }
+
+    public async Task<List<Guid>> GetPlayersIdsWhoCanAccessLog(Log log)
+    {
+        var playerIdsWhoCanSeeLogs = _playerContext.LogAccessPermission
+            .Where(x => x.LogId == log.Id)
+            .Select(x => x.PlayerId).ToList();
+
+        return playerIdsWhoCanSeeLogs;
+    }
+
+    public async Task<List<Guid>> FilterPlayersWhoHaveAccessToLog(List<Guid> players, Log log)
+    {
+        if (log.IsPublic)
         {
-            if (log.IsPublic)
-            {
-                logs.Add(log);
-            }
-
-            else
-            {
-                // should encapsulate like RoomLogIsAccessibleTo(LogId, playerId)
-                var playersIdsWhoCanSeeLog = _playerContext.LogAccessPermission
-                    .Where(x => x.LogId == log.Id)
-                    .Select(x => x.PlayerId);
-
-                bool canSeePrivateLog = playersIdsWhoCanSeeLog.Contains(playerId);
-
-                if (canSeePrivateLog)
-                {
-                    logs.Add(log);
-                }
-            }
+            return players;
         }
 
-        return logs;
+        var playersWhoCanSeeLog = await GetPlayersIdsWhoCanAccessLog(log);
+        var playersWithAccess = players.Where(x => HasAccessToLog(playersWhoCanSeeLog, x)).ToList();
+        return playersWithAccess;
+    }
+
+    public bool HasAccessToLog(List<Guid> playersWhoHaveAccessToLog, Guid playerId)
+    {
+        bool hasAccess = playersWhoHaveAccessToLog.Contains(playerId);
+        return hasAccess;
     }
 }

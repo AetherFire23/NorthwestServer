@@ -34,7 +34,7 @@ namespace WebAPI.Repository
             List<RoomDTO> roomList = await GetAllRoomDTOSInGameAsync(playerDTO.GameId);
 
             var trigs = await _playerRepository.GetTriggerNotificationsAsync(playerId, lastTimeStamp);
-            var logs = await _playerRepository.GetAccessibleLogs(playerId, player.GameId, lastTimeStamp);
+            var logs = await _playerRepository.GetAccessibleLogsForPlayer(playerId, player.GameId);
             var privs = await GetPrivateChatRoomsAsync(player.Id);
             var stations = await _playerContext.Stations.Where(x => x.GameId == player.GameId).ToListAsync();
 

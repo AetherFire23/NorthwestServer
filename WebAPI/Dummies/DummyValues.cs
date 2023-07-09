@@ -14,7 +14,7 @@ namespace WebAPI.Dummies
         public static Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
         public static Guid defaultPrivateChatRoomId = new Guid("fedfdb8cc0634d319e6e21cdf3d0790a");
 
-        public static SSEData<List<Player>> dummySSE = new SSEData<List<Player>>(SSEEventType.DummyEvent, PlayerList);
+        public static SSEData<List<Player>> dummySSE = new SSEData<List<Player>>(SSEType.DummyEvent, PlayerList);
 
         public static List<Player> PlayerList = new List<Player>()
         {
@@ -160,11 +160,12 @@ namespace WebAPI.Dummies
             };
         }
 
-        public static Log SomeLog(Guid roomId)
+        public static Log SomeLog(Guid roomId, Guid gameId)
         {
             var log = new Log()
             {
                 Id = Guid.NewGuid(),
+                GameId = gameId,
                 Created = DateTime.UtcNow,
                 CreatedBy = "MASterLolz",
                 EventText = "JE suis un lolzida",
