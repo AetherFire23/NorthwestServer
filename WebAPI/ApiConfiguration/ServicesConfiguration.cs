@@ -165,6 +165,9 @@ namespace WebAPI.ApiConfiguration
             builder.Services.AddScoped<ILandmassService, LandmassService>();
             builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
             builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddSingleton<ISSEClientManager, SSEClientManager>();
+            builder.Services.AddScoped<ISSEManager, SSEManager>();
         }
 
         private static void AddRepositoriesLayer(WebApplicationBuilder builder)
@@ -203,8 +206,8 @@ namespace WebAPI.ApiConfiguration
             builder.Services.AddDbContext<PlayerContext>(options
            => options.UseSqlServer(playerContextConnectionString));
 
-            builder.Services.AddDbContext<AuthenticationContext>(options =>
-                options.UseSqlServer(authenticationConnectionString));
+            //builder.Services.AddDbContext<AuthenticationContext>(options =>
+            //    options.UseSqlServer(authenticationConnectionString));
         }
 
         private static void ConfigureHTTPLogging(WebApplicationBuilder builder)

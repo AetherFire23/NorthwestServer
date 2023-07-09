@@ -19,7 +19,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
                 nameof(RoomsTemplate.QuarterDeck),
                 nameof(RoomsTemplate.Forecastle),
             };
-            bool isInValidRoom = validRoomsNames.Contains(gameState.Room.Name);
+            bool isInValidRoom = validRoomsNames.Contains(gameState.LocalPlayerRoom.Name);
             return isInValidRoom;
         }
 

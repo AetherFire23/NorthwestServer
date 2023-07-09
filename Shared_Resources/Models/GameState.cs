@@ -2,13 +2,28 @@
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shared_Resources.Models
 {
     public class GameState
     {
         public PlayerDTO PlayerDTO { get; set; } = new PlayerDTO();
-        public RoomDTO Room { get; set; } = new RoomDTO();
+        // public RoomDTO Room { get; set; } = new RoomDTO(); // ark va etre called a eter delted
+        //public RoomDTO LocalPlayerRoom => Rooms.FirstOrDefault(x => x.Id == PlayerDTO.CurrentGameRoomId);
+        public RoomDTO LocalPlayerRoom
+        {
+            get
+            {
+                var room = this.Rooms.FirstOrDefault(x => x.Id == this.PlayerDTO.CurrentGameRoomId);
+                if (room is null)
+                {
+                    Console.Out.WriteLine("LocalPlayerRoom was null, make sure this is intended");
+                    return null;
+                }
+                return room;
+            }
+        }
         public List<Message> NewMessages { get; set; } = new List<Message>();
         public List<Player> Players { get; set; } = new List<Player>();
         public List<TriggerNotificationDTO> TriggerNotifications { get; set; } = new List<TriggerNotificationDTO>();

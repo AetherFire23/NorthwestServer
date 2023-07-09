@@ -5,9 +5,6 @@ namespace Shared_Resources.DTOs
 {
     public class LobbyDTO // forGameState
     {
-        public List<Player> PlayersInLobby { get; set; }
-        public List<Player> OtherPlayers { get; set; }
-
-
+        public List<User> UsersInLobby { get; set; } = new List<User>();
     }
 }

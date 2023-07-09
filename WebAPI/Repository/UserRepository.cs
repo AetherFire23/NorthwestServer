@@ -9,9 +9,9 @@ namespace WebAPI.Repository.Users
 {
     public class UserRepository : IUserRepository
     {
-        private readonly AuthenticationContext _authContext;
+        private readonly PlayerContext _authContext;
 
-        public UserRepository(AuthenticationContext context)
+        public UserRepository(PlayerContext context)
         {
             _authContext = context;
         }

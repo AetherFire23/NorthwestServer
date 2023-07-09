@@ -5,15 +5,14 @@ using System.Globalization;
 
 namespace Shared_Resources.Entities
 {
-    public class Player : IEntity, ITaskParameter, IFormattable
-    {
+    public class Player : IPlayerEntity, ITaskParameter, IFormattable
+    { 
         public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
 
         public Guid Id { get; set; }
 
         public Guid GameId { get; set; }
 
-        public Guid CurrentChatRoomId { get; set; }
 
         public Guid CurrentGameRoomId { get; set; }
 
@@ -31,6 +30,8 @@ namespace Shared_Resources.Entities
 
         public int ActionPoints { get; set; }
 
+
+
         public Player Clone()
         {
             return new Player()
@@ -40,7 +41,6 @@ namespace Shared_Resources.Entities
                 X = this.X,
                 Y = this.Y,
                 Z = this.Z,
-                CurrentChatRoomId = this.CurrentChatRoomId,
                 CurrentGameRoomId = this.CurrentGameRoomId,
                 GameId = this.GameId,
                 HealthPoints = this.HealthPoints,

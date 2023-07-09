@@ -4,15 +4,15 @@ using System.Text;
 
 namespace Shared_Resources.Models.SSE
 {
-    public class SSEData<T>
+    public class SSEData
     {
-        public SSEEventType EventType { get; set; }
-        public T Data { get; set; }
+        public SSEType EventType { get; set; }
+        public string SerializedData { get; set; }
 
-        public SSEData(SSEEventType eventType, T data)
+        public SSEData(SSEType eventType, object data)
         {
             EventType = eventType;
-            Data = data;
+            SerializedData = JsonConvert.SerializeObject(data);
         }
 
         public string ConvertToReadableLine() // this is what gets sent through the server
@@ -24,8 +24,8 @@ namespace Shared_Resources.Models.SSE
             builder.Append(SSEStrings.Separator);
 
             builder.Append(SSEStrings.DataPrefix);
-            string serializedData = JsonConvert.SerializeObject(Data);
-            builder.Append(serializedData);
+            //string serializedData = JsonConvert.SerializeObject(Data);
+            builder.Append(SerializedData);
 
             builder.Append(SSEStrings.EndCharacter);
             builder.Append("\n"); // so that it doesnt hand when a reader does ReaderLine()

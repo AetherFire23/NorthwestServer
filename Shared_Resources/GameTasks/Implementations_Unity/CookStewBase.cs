@@ -14,7 +14,7 @@ namespace Shared_Resources.GameTasks.Implementations_Unity
 
         public override bool HasRequiredConditions(GameState gameState)
         {
-            bool isInValidRoom = gameState.Room.Name == nameof(RoomsTemplate.Galley);
+            bool isInValidRoom = gameState.LocalPlayerRoom.Name == nameof(RoomsTemplate.Galley);
             return isInValidRoom;
         }
 

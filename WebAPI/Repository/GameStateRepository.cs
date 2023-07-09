@@ -28,13 +28,13 @@ namespace WebAPI.Repository
             List<PrivateChatRoomParticipant> chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
 
             //string serializedLayout = _playerContext.Landmass.First(l => l.GameId == playerDTO.GameId).SerializedLandmassLayout;
-            RoomDTO roomDTO = await _roomRepository.GetRoomDTOAsync(player.CurrentGameRoomId);
+            // RoomDTO roomDTO = await _roomRepository.GetRoomDTOAsync(player.CurrentGameRoomId);
 
             // FIELD INITIALIZER NOT RECOMMENDED WITH ASYNC/AWAIT
             List<RoomDTO> roomList = await GetAllRoomDTOSInGameAsync(playerDTO.GameId);
 
             var trigs = await _playerRepository.GetTriggerNotificationsAsync(playerId, lastTimeStamp);
-            var logs = await _playerRepository.GetAccessibleLogs(playerId, player.GameId, lastTimeStamp);
+            var logs = await _playerRepository.GetAccessibleLogsForPlayer(playerId, player.GameId);
             var privs = await GetPrivateChatRoomsAsync(player.Id);
             var stations = await _playerContext.Stations.Where(x => x.GameId == player.GameId).ToListAsync();
 
@@ -46,7 +46,6 @@ namespace WebAPI.Repository
                 Players = players,
                 TimeStamp = DateTime.UtcNow,
                 PrivateChatRoomParticipants = chatRoomParticipants,
-                Room = roomDTO,
                 Logs = logs,
                 Rooms = roomList,
                 SerializedLayout = string.Empty,

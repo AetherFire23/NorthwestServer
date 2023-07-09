@@ -10,6 +10,7 @@ using Shared_Resources.Models.Requests;
 using Shared_Resources.Models.SSE;
 using System.Text;
 using WebAPI.Authentication;
+using WebAPI.Constants;
 using WebAPI.Dummies;
 using WebAPI.Services;
 using WebAPI.Utils;
@@ -22,38 +23,35 @@ namespace WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IJwtTokenManager _tokenManager;
+        private readonly ISSEClientManager _sseClientManager;
 
-        public SSEController(IUserService userService, IJwtTokenManager tokenManager)
+        public SSEController(IUserService userService, IJwtTokenManager tokenManager, ISSEClientManager sseManager)
         {
             _userService = userService;
             _tokenManager = tokenManager;
+            _sseClientManager = sseManager;
         }
 
+        // jpourrais envoyer en fait un SSESubscriptionOption
+        // genre IsMainMenu
+        // SubscrinerId
+        // GameId (if applicable)
         [HttpGet]
         [Route(SSEEndpoints.EventStream)]
-        public async Task GetEventStream2() // should activate only when logged-in so I should finish login
+        public async Task GetEventStream2([FromBody] SSESubscriptionOptions options, Guid gameId) // should activate only when logged-in so I should finish login
         {
+            PlayerStruct playerStruct = new PlayerStruct(playerId, gameId);
             Console.WriteLine("req received from client");
             Response.Headers.Add("Content-Type", "text/event-stream");
             Response.Headers.Add("Cache-Control", "no-cache");
             Response.Headers.Add("Connection", "keep-alive");
+
             try
             {
-                var cancellationToken = Response.HttpContext.RequestAborted;
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    await Task.Delay(1000, cancellationToken);
-
-                    var dumm = new SSEData<List<Player>>(SSEEventType.DummyEvent, new List<Player> { DummyValues.Fred,
-                    new Player() { 
-                    Id = Guid.NewGuid(),
-                    X = RandomHelper.random.Next(0, 10),
-                    } });
-                    string line = dumm.ConvertToReadableLine();
-                    await Response.WriteAsync(line);
-                    await Response.Body.FlushAsync();
-                    Console.WriteLine("Did you receive my event?");
-                }
+                // send heartbeat to client to ensure successCode or else it just hangs 
+                await Response.WriteAndFlushSSEData(Heart.Beat);
+                await _sseClientManager.Subscribe(playerStruct, Response); // need generic manager...
+                await Task.Delay(Timeout.Infinite, Response.HttpContext.RequestAborted);
             }
             catch (Exception ex)
             {
@@ -62,7 +60,7 @@ namespace WebAPI.Controllers
             }
             finally
             {
-
+                await _sseClientManager.Unsubscribe(playerStruct);
             }
         }
     }

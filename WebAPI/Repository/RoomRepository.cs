@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR.Protocol;
+using Microsoft.EntityFrameworkCore;
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
@@ -57,7 +58,7 @@ namespace WebAPI.Repository
 
             var playersInRoom = await _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToListAsync();
 
-            var items = await _playerContext.Items.Where(item => item.OwnerId == roomId).ToListAsync();
+            var items = await GetRoomItems(roomId);
             var stations = await _playerContext.Stations.Where(x => x.RoomName == requestedRoom.Name).ToListAsync();
 
             RoomDTO roomDTO = new RoomDTO()
@@ -74,6 +75,25 @@ namespace WebAPI.Repository
             };
 
             return roomDTO;
+        }
+
+        public async Task<List<Item>> GetRoomItems(Guid roomId)
+        {
+            var items = await _playerContext.Items.Where(x => x.OwnerId == roomId).ToListAsync();
+            return items;
+        }
+
+        public async Task<List<Item>> GetItemsInAllRooms(Guid gameId)
+        {
+            var rooms = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
+            var allItems = new List<Item>();
+
+            foreach (var room in rooms)
+            {
+                List<Item> roomItems = await _playerContext.Items.Where(x => x.OwnerId == room.Id).ToListAsync();
+                allItems.AddRange(roomItems);
+            }
+            return allItems;
         }
 
         /// <summary>
