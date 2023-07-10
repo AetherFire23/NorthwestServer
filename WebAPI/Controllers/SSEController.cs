@@ -12,6 +12,7 @@ using System.Text;
 using WebAPI.Authentication;
 using WebAPI.Constants;
 using WebAPI.Dummies;
+using WebAPI.Repository.Users;
 using WebAPI.Services;
 using WebAPI.SSE;
 using WebAPI.Utils;
@@ -26,14 +27,20 @@ namespace WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly IJwtTokenManager _tokenManager;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly IUserRepository _userRepository;
 
         public SSEController(IUserService userService,
             IJwtTokenManager tokenManager,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IPlayerRepository playerRepository,
+            IUserRepository userRepository)
         {
             _userService = userService;
             _tokenManager = tokenManager;
             _serviceProvider = serviceProvider;
+            _playerRepository = playerRepository;
+            _userRepository = userRepository;
         }
 
         // jpourrais envoyer en fait un SSESubscriptionOption
@@ -45,28 +52,19 @@ namespace WebAPI.Controllers
         public async Task GetEventStream2(Guid playerId, Guid gameId) // should activate only when logged-in so I should finish login
         {
             PlayerStruct playerStruct = new PlayerStruct(playerId, gameId);
-            Console.WriteLine("req received from client");
-            Response.Headers.Add("Content-Type", "text/event-stream");
-            Response.Headers.Add("Cache-Control", "no-cache");
-            Response.Headers.Add("Connection", "keep-alive");
             GameSSEClientManager sseGameManager = _serviceProvider.GetSSEManager<GameSSEClientManager>();
-            try
-            {
-                // send heartbeat to client to ensure successCode or else it just hangs 
-                await Response.WriteAndFlushSSEData(Heart.Beat);
-                await sseGameManager.Subscribe(playerStruct, Response);
 
-                await Task.Delay(Timeout.Infinite, Response.HttpContext.RequestAborted);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.InnerException);
-            }
-            finally
-            {
-                await sseGameManager.Unsubscribe(playerStruct);
-            }
+            await sseGameManager.InitializeAndSubscribe(playerStruct, Response);
+        }
+
+        [HttpGet]
+        [Route(SSEEndpoints.MainMenuStream)]
+        public async Task GetEventStreamMainMenu(Guid userId, Guid gameId) // should activate only when logged-in so I should finish login
+        {
+            var user = await _userRepository.GetUserById(userId) ?? throw new Exception("User not found.");
+            var sseMainMenuClientManager = _serviceProvider.GetSSEManager<MainMenuClientManager>();
+
+            await sseMainMenuClientManager.InitializeAndSubscribe(user, Response);
         }
     }
 }
