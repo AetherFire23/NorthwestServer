@@ -14,7 +14,7 @@ namespace WebAPI.Dummies
         public static Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
         public static Guid defaultPrivateChatRoomId = new Guid("fedfdb8cc0634d319e6e21cdf3d0790a");
 
-        public static SSEData<List<Player>> dummySSE = new SSEData<List<Player>>(SSEType.Heartbeat, PlayerList);
+        public static SSEData dummySSE = new SSEData(SSEType.Heartbeat, PlayerList);
 
         public static List<Player> PlayerList = new List<Player>()
         {

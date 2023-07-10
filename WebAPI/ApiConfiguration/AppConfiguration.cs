@@ -67,6 +67,8 @@ namespace WebAPI.ApiConfiguration
         {
             await authContext.Users.AddAsync(AuthInitialData.MyUser);
             await authContext.Roles.AddAsync(AuthInitialData.PereNoel);
+            await authContext.SaveChangesAsync();
+
             await authContext.UserRoles.AddAsync(AuthInitialData.MyUserRole);
 
             await authContext.SaveChangesAsync();

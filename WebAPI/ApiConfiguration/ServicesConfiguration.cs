@@ -20,6 +20,7 @@ using WebAPI.Jobs;
 using WebAPI.Repository;
 using WebAPI.Repository.Users;
 using WebAPI.Services;
+using WebAPI.SSE;
 using WebAPI.Strategies;
 
 namespace WebAPI.ApiConfiguration
@@ -34,6 +35,8 @@ namespace WebAPI.ApiConfiguration
             RegisterGameTaskTypes(builder);
             RoleStrategyMapper.RegisterRoleStrategies(builder);
             SkillStrategyMapper.RegisterSkillStrategies(builder);
+            SSERegistar.RegisterSSEManagerTypes(builder.Services);
+
 
             ConfigureQuartz(builder);
 
@@ -166,7 +169,7 @@ namespace WebAPI.ApiConfiguration
             builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
             builder.Services.AddScoped<IUserService, UserService>();
 
-            builder.Services.AddSingleton<ISSEClientManager, SSEClientManager>();
+            //builder.Services.AddSingleton<ISSEClientManager, GameSSEClientManager>();
             builder.Services.AddScoped<ISSEManager, SSEManager>();
         }
 

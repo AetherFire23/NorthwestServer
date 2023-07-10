@@ -13,7 +13,9 @@ using WebAPI.Authentication;
 using WebAPI.Constants;
 using WebAPI.Dummies;
 using WebAPI.Services;
+using WebAPI.SSE;
 using WebAPI.Utils;
+using WebAPI.Utils.Extensions;
 
 namespace WebAPI.Controllers
 {
@@ -23,13 +25,15 @@ namespace WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IJwtTokenManager _tokenManager;
-        private readonly ISSEClientManager _sseClientManager;
+        private readonly IServiceProvider _serviceProvider;
 
-        public SSEController(IUserService userService, IJwtTokenManager tokenManager, ISSEClientManager sseManager)
+        public SSEController(IUserService userService,
+            IJwtTokenManager tokenManager,
+            IServiceProvider serviceProvider)
         {
             _userService = userService;
             _tokenManager = tokenManager;
-            _sseClientManager = sseManager;
+            _serviceProvider = serviceProvider;
         }
 
         // jpourrais envoyer en fait un SSESubscriptionOption
@@ -38,19 +42,20 @@ namespace WebAPI.Controllers
         // GameId (if applicable)
         [HttpGet]
         [Route(SSEEndpoints.EventStream)]
-        public async Task GetEventStream2([FromBody] SSESubscriptionOptions options, Guid gameId) // should activate only when logged-in so I should finish login
+        public async Task GetEventStream2(Guid playerId, Guid gameId) // should activate only when logged-in so I should finish login
         {
             PlayerStruct playerStruct = new PlayerStruct(playerId, gameId);
             Console.WriteLine("req received from client");
             Response.Headers.Add("Content-Type", "text/event-stream");
             Response.Headers.Add("Cache-Control", "no-cache");
             Response.Headers.Add("Connection", "keep-alive");
-
+            GameSSEClientManager sseGameManager = _serviceProvider.GetSSEManager<GameSSEClientManager>();
             try
             {
                 // send heartbeat to client to ensure successCode or else it just hangs 
                 await Response.WriteAndFlushSSEData(Heart.Beat);
-                await _sseClientManager.Subscribe(playerStruct, Response); // need generic manager...
+                await sseGameManager.Subscribe(playerStruct, Response);
+
                 await Task.Delay(Timeout.Infinite, Response.HttpContext.RequestAborted);
             }
             catch (Exception ex)
@@ -60,7 +65,7 @@ namespace WebAPI.Controllers
             }
             finally
             {
-                await _sseClientManager.Unsubscribe(playerStruct);
+                await sseGameManager.Unsubscribe(playerStruct);
             }
         }
     }

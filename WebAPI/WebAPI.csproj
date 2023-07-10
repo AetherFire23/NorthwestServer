@@ -12,18 +12,22 @@
     <Compile Remove="GameTasks_old\Stations\**" />
     <Compile Remove="Game_Actions\NewFolder\**" />
     <Compile Remove="Game_Settings\**" />
+    <Compile Remove="Migrations\**" />
     <Content Remove="GameState Management\**" />
     <Content Remove="GameTasks_old\Stations\**" />
     <Content Remove="Game_Actions\NewFolder\**" />
     <Content Remove="Game_Settings\**" />
+    <Content Remove="Migrations\**" />
     <EmbeddedResource Remove="GameState Management\**" />
     <EmbeddedResource Remove="GameTasks_old\Stations\**" />
     <EmbeddedResource Remove="Game_Actions\NewFolder\**" />
     <EmbeddedResource Remove="Game_Settings\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <None Remove="GameState Management\**" />
     <None Remove="GameTasks_old\Stations\**" />
     <None Remove="Game_Actions\NewFolder\**" />
     <None Remove="Game_Settings\**" />
+    <None Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,7 +64,6 @@
 
   <ItemGroup>
     <Folder Include="GameInitialization_Scratch\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

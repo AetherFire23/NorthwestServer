@@ -5,6 +5,6 @@ namespace WebAPI.Constants
 {
     public static class Heart
     {
-        public static readonly SSEData<string> Beat = new SSEData<string>(SSEType.Heartbeat, "");
+        public static readonly SSEData Beat = new SSEData(SSEType.Heartbeat, "");
     }
 }
