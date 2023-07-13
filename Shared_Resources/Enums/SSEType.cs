@@ -12,6 +12,7 @@ namespace Shared_Resources.Enums
         AddLog,
         AddChatMessage,
         RefreshShipState,
+        RefreshLobbiesAndActiveGames
 
     }
 }

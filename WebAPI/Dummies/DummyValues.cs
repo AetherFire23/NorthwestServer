@@ -14,7 +14,7 @@ namespace WebAPI.Dummies
         public static Guid defaultplayer2guid = new Guid("b3543b2e-cd81-479f-b99e-d11a8aab37a0");
         public static Guid defaultPrivateChatRoomId = new Guid("fedfdb8cc0634d319e6e21cdf3d0790a");
 
-        public static SSEData<List<Player>> dummySSE = new SSEData<List<Player>>(SSEType.Heartbeat, PlayerList);
+        public static SSEData dummySSE = new SSEData(SSEType.Heartbeat, PlayerList);
 
         public static List<Player> PlayerList = new List<Player>()
         {
@@ -22,15 +22,13 @@ namespace WebAPI.Dummies
             Fred,
         };
 
-
-
-        public static UserDto RealFred = new UserDto()
+        public static UserDto FredUser { get; set; } = new UserDto()
         {
             Id = defaultPlayer1Guid,
             Name = "RealFred",
         };
 
-        public static UserDto RealBen = new UserDto()
+        public static UserDto BenUser { get; set; } = new UserDto()
         {
             Id = defaultplayer2guid,
             Name = "RealBen",
@@ -40,6 +38,7 @@ namespace WebAPI.Dummies
         {
             ActionPoints = 4,
             CurrentGameRoomId = Guid.Empty, // must be set 
+            UserId = FredUser.Id,
             GameId = defaultGameGuid,
             HealthPoints = 5,
             Id = defaultplayer2guid,
@@ -96,7 +95,7 @@ namespace WebAPI.Dummies
         public static Game Game = new Game()
         {
             Id = defaultGameGuid,
-            Active = true,
+            IsActive = true,
             NextTick = DateTime.UtcNow.AddSeconds(5),
         };
 
@@ -173,5 +172,26 @@ namespace WebAPI.Dummies
             };
             return log;
         }
+
+
+        public static User MyUser = new User()
+        {
+            Id = Guid.NewGuid(),
+            Name = "Fred",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("mereEnShorts"),
+        };
+
+        public static Role PereNoel = new Role()
+        {
+            Id = new Guid("4e9ec37d-71d9-4e66-8970-45424db1eeb1"),
+            RoleName = RoleName.PereNoel,
+        };
+
+        public static UserRole MyUserRole = new UserRole()
+        {
+            Id = Guid.NewGuid(),
+            Role = PereNoel,
+            User = MyUser,
+        };
     }
 }

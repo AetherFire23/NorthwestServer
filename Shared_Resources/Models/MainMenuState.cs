@@ -7,10 +7,7 @@ namespace Shared_Resources.Models
 {
     public class MainMenuState
     {
-        public UserDto User { get; set; } = new UserDto();
-        public List<GameDto> ActiveGames { get; set; } = new List<GameDto>();
-        public List<UserDto> Friends { get; set; } = new List<UserDto>();
-        public List<MenuNotification> Notifications { get; set; } = new List<MenuNotification>();
+        public UserDto UserDto { get; set; } = new UserDto();
         public DateTime? TimeStamp { get; set; }
     }
 }

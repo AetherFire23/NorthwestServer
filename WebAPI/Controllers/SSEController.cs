@@ -1,19 +1,13 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shared_Resources.Constants.Endpoints;
-using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
-using Shared_Resources.Enums;
-using Shared_Resources.Models;
-using Shared_Resources.Models.Requests;
-using Shared_Resources.Models.SSE;
-using System.Text;
 using WebAPI.Authentication;
-using WebAPI.Constants;
-using WebAPI.Dummies;
+using WebAPI.Extensions;
+using WebAPI.Repository.Users;
 using WebAPI.Services;
-using WebAPI.Utils;
+using WebAPI.SSE;
+using WebAPI.SSE.ClientManagers;
+using WebAPI.SSE.SSECore;
+using WebAPI.SSE.Subscribers;
 
 namespace WebAPI.Controllers
 {
@@ -21,47 +15,36 @@ namespace WebAPI.Controllers
     [Route(SSEEndpoints.ServerSideEvents)]
     public class SSEController : ControllerBase
     {
-        private readonly IUserService _userService;
-        private readonly IJwtTokenManager _tokenManager;
-        private readonly ISSEClientManager _sseClientManager;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IUserRepository _userRepository;
 
-        public SSEController(IUserService userService, IJwtTokenManager tokenManager, ISSEClientManager sseManager)
+        public SSEController(
+            IServiceProvider serviceProvider,
+            IUserRepository userRepository)
         {
-            _userService = userService;
-            _tokenManager = tokenManager;
-            _sseClientManager = sseManager;
+            _serviceProvider = serviceProvider;
+            _userRepository = userRepository;
         }
 
-        // jpourrais envoyer en fait un SSESubscriptionOption
-        // genre IsMainMenu
-        // SubscrinerId
-        // GameId (if applicable)
         [HttpGet]
         [Route(SSEEndpoints.EventStream)]
-        public async Task GetEventStream2([FromBody] SSESubscriptionOptions options, Guid gameId) // should activate only when logged-in so I should finish login
+        public async Task GetGameEventStream(Guid playerId, Guid gameId)
         {
-            PlayerStruct playerStruct = new PlayerStruct(playerId, gameId);
-            Console.WriteLine("req received from client");
-            Response.Headers.Add("Content-Type", "text/event-stream");
-            Response.Headers.Add("Cache-Control", "no-cache");
-            Response.Headers.Add("Connection", "keep-alive");
+            PlayerSubscriber playerSubscriber = new PlayerSubscriber(playerId, gameId);
+            GameSSEClientManager sseGameManager = _serviceProvider.GetSSEManager<GameSSEClientManager>();
 
-            try
-            {
-                // send heartbeat to client to ensure successCode or else it just hangs 
-                await Response.WriteAndFlushSSEData(Heart.Beat);
-                await _sseClientManager.Subscribe(playerStruct, Response); // need generic manager...
-                await Task.Delay(Timeout.Infinite, Response.HttpContext.RequestAborted);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.InnerException);
-            }
-            finally
-            {
-                await _sseClientManager.Unsubscribe(playerStruct);
-            }
+            await sseGameManager.InitializeAndSubscribe(playerSubscriber, Response);
+        }
+
+        [HttpGet]
+        [Route(SSEEndpoints.MainMenuStream)]
+        public async Task GetMainMenuEventStream(Guid userId) // should activate only when logged-in so I should finish login
+        {
+            // User user = await _userRepository.GetUserById(userId) ?? throw new Exception("User not found.");
+            SSESubscriber subscriber = new SSESubscriber(userId);
+            MainMenuClientManager sseMainMenuClientManager = _serviceProvider.GetSSEManager<MainMenuClientManager>();
+
+            await sseMainMenuClientManager.InitializeAndSubscribe(subscriber, Response);
         }
     }
 }

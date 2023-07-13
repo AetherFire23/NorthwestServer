@@ -15,64 +15,29 @@ namespace WebAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IJwtTokenManager _tokenManager;
-
-        public UserController(IUserService userService, IJwtTokenManager tokenManager)
+        private readonly IAuthenticationService _authenticationService;
+        
+        public UserController(IUserService userService,
+            IAuthenticationService authenticationService)
         {
             _userService = userService;
-            _tokenManager = tokenManager;
+            _authenticationService = authenticationService;
         }
 
         [HttpPost]
         [Route(UserEndpoints.Login)]
         public async Task<ActionResult<ClientCallResult>> Login([FromBody] LoginRequest request)
         {
-            (bool Allowed, UserDto UserModel) canIssueUser = await _userService.AllowIssueTokenToUser(request);
-
-            if (canIssueUser.Allowed)
-            {
-                string token = _tokenManager.GenerateToken(canIssueUser.UserModel);
-                var result = new ClientCallResult()
-                {
-                    IsSuccessful = true,
-                    Content = token,
-                    Message = "Token issued !"
-                };
-                return Ok(result);
-            }
-
-            var unsuccessfulRequest = new ClientCallResult()
-            {
-                IsSuccessful = false,
-                Content = string.Empty,
-                Message = "User could not be authenticated"// for unity-sude
-            };
-
-            return Ok(unsuccessfulRequest);
+            var clientCallResult = await _authenticationService.TryLogin(request);
+            return Ok(clientCallResult);
         }
 
         //   just seed that shit first
         [HttpPost(UserEndpoints.Register)]
         public async Task<ActionResult<ClientCallResult>> Register([FromBody] RegisterRequest request)
         {
-            (bool IsCreated, UserDto Model) allowedUser = await _userService.AllowCreateUser(request);
-
-            if (allowedUser.IsCreated)
-            {
-                var result = new ClientCallResult()
-                {
-                    IsSuccessful = true,
-                    Content = allowedUser.Model,
-                };
-                return Ok(result);
-            }
-
-            
-            return Ok(new ClientCallResult()
-            {
-                IsSuccessful = false,
-                Message = "user authentication failed !"
-            });
+            ClientCallResult clientCallResult = await _authenticationService.TryRegister(request);
+            return Ok(clientCallResult);
         }
 
         [Authorize(Roles = nameof(RoleName.PereNoel))]

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
+using System.Reflection;
 using WebAPI.Extensions;
 using WebAPI.Game_Actions;
 using WebAPI.Temp_settomgs;
@@ -36,8 +37,9 @@ namespace WebAPI
         public DbSet<Landmass> Landmass { get; set; }
         public DbSet<ShipState> ShipStates { get; set; }
         public DbSet<Status> Statuses { get; set; }
-        public DbSet<Season> Season { get; set; }
-
+        public DbSet<Season> Seasons { get; set; }
+        public DbSet<Lobby> Lobbies { get; set; }
+        public DbSet<UserLobby> UserLobbies { get; set; }
 
         // authentication
         public DbSet<User> Users { get; set; }
@@ -51,6 +53,7 @@ namespace WebAPI
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) // denis says fluent api is for advanced shit
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder
                 .Entity<GameAction>()
                 .Property(e => e.GameActionType)

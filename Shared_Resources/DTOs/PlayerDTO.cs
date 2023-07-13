@@ -9,7 +9,7 @@ namespace Shared_Resources.DTOs
     {
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
-        public Guid CurrentChatRoomId { get; set; }
+        public Guid UserId { get; set; }
         public Guid CurrentGameRoomId { get; set; }
         public RoleType Profession { get; set; }
         public List<Item> Items { get; set; } = new List<Item>();

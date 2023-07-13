@@ -1,8 +1,8 @@
 ﻿using Shared_Resources.Entities;
 
-namespace WebAPI.Services
+namespace WebAPI.SSE
 {
-    public interface ISSEManager
+    public interface IGameSSESender
     {
         Task SendItemChangedOwnerEvent(Guid gameId);
         Task SendNewLogEvent(Log log);

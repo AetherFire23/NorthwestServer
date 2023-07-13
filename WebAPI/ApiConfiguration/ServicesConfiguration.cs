@@ -11,7 +11,6 @@ using Shared_Resources.GameTasks;
 using System.Reflection;
 using System.Text;
 using WebAPI.Authentication;
-using WebAPI.Constants;
 using WebAPI.Conventions;
 using WebAPI.Game_Actions;
 using WebAPI.GameTasks;
@@ -19,7 +18,10 @@ using WebAPI.Interfaces;
 using WebAPI.Jobs;
 using WebAPI.Repository;
 using WebAPI.Repository.Users;
+using WebAPI.Seeding;
 using WebAPI.Services;
+using WebAPI.SSE;
+using WebAPI.SSE.Senders;
 using WebAPI.Strategies;
 
 namespace WebAPI.ApiConfiguration
@@ -34,6 +36,9 @@ namespace WebAPI.ApiConfiguration
             RegisterGameTaskTypes(builder);
             RoleStrategyMapper.RegisterRoleStrategies(builder);
             SkillStrategyMapper.RegisterSkillStrategies(builder);
+            builder.Services.RegisterSSEManagers();
+
+
 
             ConfigureQuartz(builder);
 
@@ -61,7 +66,7 @@ namespace WebAPI.ApiConfiguration
             }
         }
 
-        private static void ConfigureConventions(WebApplicationBuilder builder)
+        private static void ConfigureConventions(WebApplicationBuilder builder) // required for my library for endpoints
         {
             builder.Services.AddControllers(options =>
             {
@@ -104,8 +109,6 @@ namespace WebAPI.ApiConfiguration
                 });
             });
         }
-
-
 
         private static void ConfigureQuartz(WebApplicationBuilder builder)
         {
@@ -166,8 +169,20 @@ namespace WebAPI.ApiConfiguration
             builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
             builder.Services.AddScoped<IUserService, UserService>();
 
-            builder.Services.AddSingleton<ISSEClientManager, SSEClientManager>();
-            builder.Services.AddScoped<ISSEManager, SSEManager>();
+            //builder.Services.AddSingleton<ISSEClientManager, GameSSEClientManager>();
+            builder.Services.AddScoped<IGameSSESender, GameSSESender>();
+
+            //seeding
+            builder.Services.AddScoped<ISeedSequence, SeedSequence>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+            builder.Services.AddScoped<ILobbyService, LobbyService>();
+            builder.Services.AddScoped<ILobbyRepository, LobbyRepository>();
+
+
+            // sse 
+            builder.Services.AddScoped<IGameSSESender, GameSSESender>();
+            builder.Services.AddScoped<IMainMenuSSESender, MainMenuSSESender>();
         }
 
         private static void AddRepositoriesLayer(WebApplicationBuilder builder)
@@ -266,6 +281,10 @@ namespace WebAPI.ApiConfiguration
                 };
             });
             builder.Services.AddAuthorization();
+        }
+
+        private static void AddSSEServices(WebApplicationBuilder builder)
+        {
         }
     }
 }

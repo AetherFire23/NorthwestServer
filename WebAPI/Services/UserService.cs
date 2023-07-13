@@ -26,7 +26,7 @@ namespace WebAPI.Services
                 return (false, null);
             }
 
-            UserDto? userDto = await _userRepository.GetUserDtoById(user.Id);
+            UserDto? userDto = await _userRepository.MapUserDtoById(user.Id);
             return (true, userDto);
         }
 

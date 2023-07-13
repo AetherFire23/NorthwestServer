@@ -26,11 +26,6 @@ namespace WebAPI.Repository
             List<Message> newMessages = await GetNewMessagesAsync(lastTimeStamp, playerDTO.GameId);
             List<Player> players = await _playerRepository.GetPlayersInGameAsync(playerDTO.GameId);
             List<PrivateChatRoomParticipant> chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
-
-            //string serializedLayout = _playerContext.Landmass.First(l => l.GameId == playerDTO.GameId).SerializedLandmassLayout;
-            // RoomDTO roomDTO = await _roomRepository.GetRoomDTOAsync(player.CurrentGameRoomId);
-
-            // FIELD INITIALIZER NOT RECOMMENDED WITH ASYNC/AWAIT
             List<RoomDTO> roomList = await GetAllRoomDTOSInGameAsync(playerDTO.GameId);
 
             var trigs = await _playerRepository.GetTriggerNotificationsAsync(playerId, lastTimeStamp);

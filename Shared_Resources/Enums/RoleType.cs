@@ -2,8 +2,11 @@
 {
     public enum RoleType
     {
-        Engineer,
         Commander,
         Medic,
+        Sailor,
+        Cook,
+        Engineer,
+
     }
 }

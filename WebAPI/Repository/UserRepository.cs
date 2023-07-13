@@ -4,29 +4,43 @@ using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models.Requests;
 using Shared_Resources.Enums;
+using WebAPI.Interfaces;
+using WebAPI.Extensions;
 
 namespace WebAPI.Repository.Users
 {
     public class UserRepository : IUserRepository
     {
         private readonly PlayerContext _authContext;
+        private readonly IGameRepository _gameRepository;
+        private readonly ILobbyRepository _lobbyRepository;
 
-        public UserRepository(PlayerContext context)
+        public UserRepository(PlayerContext context,
+            IGameRepository gameRepository,
+            ILobbyRepository lobbyRepository)
         {
             _authContext = context;
+            _gameRepository = gameRepository;
+            _lobbyRepository = lobbyRepository;
         }
 
-        public async Task<UserDto> GetUserDtoById(Guid id)
+
+        public async Task<UserDto> MapUserDtoById(Guid userId)
         {
-            var user = await GetUserById(id);
+            var user = await GetUserById(userId);
+            var players = user.Players.ToList();
 
             var roleNames = user.UserRoles.Select(x => x.Role.RoleName).ToList();
-
+            var activeGamesForUser = await GetActiveGameDtosForUser(user.Id);
+            var lobbyDtos = await GetLobbyDtosForUser(userId);
             var userDto = new UserDto()
             {
                 Id = user.Id,
                 Name = user.Name,
-                RoleNames = roleNames
+                RoleNames = roleNames,
+                ActiveGamesForUser = activeGamesForUser,
+                Players = players,
+                QueuedLobbies = lobbyDtos,
             };
             return userDto;
         }
@@ -45,6 +59,11 @@ namespace WebAPI.Repository.Users
         {
             var user = await _authContext.Users
                 .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .Include(u => u.Games)
+                .Include(u => u.Players)
+                .Include(u => u.UserLobbies)
+                .ThenInclude(ur => ur.Lobby)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             return user;
@@ -56,7 +75,6 @@ namespace WebAPI.Repository.Users
 
             bool hasFoundUser = user is not null;
             if (!hasFoundUser) return null; // should make error message srsly
-
 
             return hasFoundUser ? user : null;
         }
@@ -94,31 +112,73 @@ namespace WebAPI.Repository.Users
 
         public async Task<UserDto> CreateUser(RegisterRequest request)
         {
-            var user = new User()
+            var user = new User
             {
                 Id = Guid.NewGuid(),
                 Email = request.Email,
                 Name = request.UserName,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)
             };
 
-            var role = await _authContext.Roles.SingleAsync(x => x.RoleName == RoleName.PereNoel);
+            var role = await _authContext.Roles.SingleOrDefaultAsync(x => x.RoleName == RoleName.PereNoel);
 
-            var userRole = new UserRole()
+            var userRole = new UserRole
             {
                 Id = Guid.NewGuid(),
                 Role = role,
-                User = user,
+                User = user
             };
-            await _authContext.Users.AddAsync(user);
+
+            _authContext.Users.Add(user);
+            _authContext.UserRoles.Add(userRole);
             await _authContext.SaveChangesAsync();
 
-            await _authContext.UserRoles.AddAsync(userRole);
-            await _authContext.SaveChangesAsync();
-
-            var dto = await GetUserDtoById(user.Id);
+            var dto = await MapUserDtoById(user.Id);
 
             return dto;
+        }
+
+        public async Task<List<GameDto>> GetActiveGameDtosForUser(Guid userId) // dont want that in entity since some games can be inactive
+        {
+            User? user = await GetUserById(userId);
+            var activeGames = user.Games
+                .Where(x => x.IsActive)
+                .Select(x => x.Id)
+                .ToList();
+
+            List<GameDto> gameDtos = new();
+            foreach (var game in activeGames)
+            {
+                var gameDto = await _gameRepository.MapGameDto(game);
+                gameDtos.Add(gameDto);
+            }
+
+            return gameDtos;
+        }
+
+        public async Task<List<LobbyDto>> GetLobbyDtosForUser(Guid userId)
+        {
+            User? user = await GetUserById(userId);
+            List<LobbyDto> lobbyDtos = new();
+            foreach(var lobby in user.Lobbies)
+            {
+                var lobbyDto = await _lobbyRepository.MapLobbyDto(lobby.Id);
+                lobbyDtos.Add(lobbyDto);
+            }
+            return lobbyDtos;
+        }
+
+        public async Task<List<UserDto>> GetUserDtosById(List<Guid> userIds)
+        {
+            List<UserDto> userDtos = await userIds.SelectAsync(MapUserDtoById);
+            return userDtos;
+        }
+
+        public async Task<List<UserDto>> GetUserDtosFromUser(List<User> user)
+        {
+            List<Guid> userIds = user.Select(x=> x.Id).ToList();
+            List<UserDto> userDtos = await userIds.SelectAsync(MapUserDtoById);
+            return userDtos;
         }
     }
 }

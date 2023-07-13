@@ -8,6 +8,7 @@ using Shared_Resources.Enums;
 using Shared_Resources.Entities;
 using WebAPI.Dummies;
 using Newtonsoft.Json;
+using WebAPI.Extensions;
 
 namespace WebAPI
 {
@@ -16,12 +17,13 @@ namespace WebAPI
         static async Task Main(string[] args) // techniquement je devrais tout move dans les petites classes
         {
 
+
             List<Player> players = new List<Player>()
             {
                 DummyValues.Fred,
                 DummyValues.Ben,
             };
-            var sseData = new SSEData<List<Player>>(SSEType.Heartbeat, players);
+            var sseData = new SSEData(SSEType.Heartbeat, players);
             string toLine = sseData.ConvertToReadableLine();
             var parsed = SSEClientData.ParseData(toLine);
 

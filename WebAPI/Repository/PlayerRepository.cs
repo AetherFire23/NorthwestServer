@@ -2,12 +2,13 @@
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
+using Shared_Resources.Interfaces;
 using Shared_Resources.Models;
 using System.Runtime.CompilerServices;
 using WebAPI;
 public class PlayerRepository : IPlayerRepository
 {
-    PlayerContext _playerContext;
+    private readonly PlayerContext _playerContext;
 
     DbSet<Player> Players => _playerContext.Players;
 
@@ -42,7 +43,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<List<PrivateInvitation>> GetPlayerInvitations(Guid playerId)
     {
-        var playerInvites = _playerContext.Invitations.Where(invite => invite.ToPlayerId == playerId).ToList();
+        var playerInvites = await _playerContext.Invitations.Where(invite => invite.ToPlayerId == playerId).ToListAsync();
         return playerInvites;
     }
 
@@ -66,6 +67,7 @@ public class PlayerRepository : IPlayerRepository
             Id = playerId,
             GameId = player.GameId,
             Name = player.Name,
+            UserId = player.UserId,
             X = player.X,
             Y = player.Y,
             Z = player.Z,
@@ -84,7 +86,8 @@ public class PlayerRepository : IPlayerRepository
 
     public List<SkillEnum> GetOwnedSkills(Guid ownerId)
     {
-        return _playerContext.Skills.Where(s => s.OwnerId == ownerId)
+        return _playerContext.Skills
+            .Where(s => s.OwnerId == ownerId)
             .Select(s => s.SkillType).ToList();
     }
 
@@ -149,15 +152,15 @@ public class PlayerRepository : IPlayerRepository
         return playerIdsWhoCanSeeLogs;
     }
 
-    public async Task<List<Guid>> FilterPlayersWhoHaveAccessToLog(List<Guid> players, Log log)
+    public async Task<List<Guid>> FilterPlayersWhoHaveAccessToLog(List<Guid> playerId, Log log)
     {
         if (log.IsPublic)
         {
-            return players;
+            return playerId;
         }
 
         var playersWhoCanSeeLog = await GetPlayersIdsWhoCanAccessLog(log);
-        var playersWithAccess = players.Where(x => HasAccessToLog(playersWhoCanSeeLog, x)).ToList();
+        var playersWithAccess = playerId.Where(p => HasAccessToLog(playersWhoCanSeeLog, p)).ToList();
         return playersWithAccess;
     }
 

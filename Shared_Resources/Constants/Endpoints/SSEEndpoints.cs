@@ -9,6 +9,7 @@ namespace Shared_Resources.Constants.Endpoints
     {
         public const string ServerSideEvents = nameof(ServerSideEvents);
         public const string EventStream = nameof(EventStream);
-        
+        public const string MainMenuStream = nameof(MainMenuStream);
+
     }
 }

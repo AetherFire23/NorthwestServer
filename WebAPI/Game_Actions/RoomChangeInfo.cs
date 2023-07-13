@@ -16,6 +16,7 @@ namespace WebAPI.Game_Actions
             {
                 Id = Guid.NewGuid(),
                 GameId = Player.GameId,
+                
                 GameActionType = GameActionType.RoomChanged,
                 SerializedProperties = JsonConvert.SerializeObject(this),
                 Created = DateTime.UtcNow,

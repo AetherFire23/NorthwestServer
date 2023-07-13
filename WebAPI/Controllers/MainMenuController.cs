@@ -29,6 +29,15 @@
             {
                 return Ok(new MainMenuState());
             }
+
+            [HttpPost]
+            [Route(MainMenuEndpoints.CreateLobby)]
+            public async Task<ActionResult<ClientCallResult>> CreateLobby()
+            {
+                // add lobby
+                // will have to think about empty lobbies cleanup
+                return Ok();
+            }
         }
     }
 }

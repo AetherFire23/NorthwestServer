@@ -3,7 +3,7 @@ using System;
 
 namespace Shared_Resources.Models
 {
-    public class PlayerSelections
+    public class UserGamePreparation
     {
         public Guid UserId { get; set; }
         public RoleType RoleType { get; set; }

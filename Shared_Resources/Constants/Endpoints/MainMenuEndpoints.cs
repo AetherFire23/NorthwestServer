@@ -12,7 +12,8 @@ namespace Shared_Resources.Constants.Endpoints
     [ControllerPathMapper(MainMenu)]
     public static class MainMenuEndpoints
     {
-        public const string MainMenu = nameof(MainMenu); 
-        public const string State = nameof(State); 
+        public const string MainMenu = nameof(MainMenu);
+        public const string State = nameof(State);
+        public const string CreateLobby = nameof(CreateLobby);
     }
 }

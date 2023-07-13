@@ -7,7 +7,7 @@ namespace WebAPI.Services
 {
     public class CycleManagerService : ICycleManagerService
     {
-        public static int TimeBetweenTicksInSeconds = 8;
+        
         private readonly PlayerContext _playerContext;
         private readonly IGameRepository _gameRepository;
         private readonly IPlayerRepository _playerRepository;
@@ -25,12 +25,12 @@ namespace WebAPI.Services
 
         public async Task TickGame(Guid gameId)
         {
-            Game game = await _gameRepository.GetGame(gameId);
+            Game game = await _gameRepository.GetGameById(gameId);
 
             List<Player> playersInGame = await _playerRepository.GetPlayersInGameAsync(gameId);
             await TickPlayerRoles(playersInGame);
 
-            game.NextTick = DateTime.UtcNow.AddSeconds(TimeBetweenTicksInSeconds);
+            game.NextTick = Game.CalculateNextTick();
 
             await _playerContext.SaveChangesAsync();
             Console.WriteLine("Game Has ticked");
@@ -64,5 +64,7 @@ namespace WebAPI.Services
                 await roleService.TickPlayerFromRoleAsync(p);
             }
         }
+
+
     }
 }

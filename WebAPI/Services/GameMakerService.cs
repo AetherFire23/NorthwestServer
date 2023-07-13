@@ -1,11 +1,15 @@
-﻿using Shared_Resources.DTOs;
+﻿using Microsoft.OpenApi.Extensions;
+using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
+using System.Runtime.InteropServices;
 using WebAPI.Dummies;
+using WebAPI.Extensions;
 using WebAPI.Interfaces;
+using WebAPI.Jobs;
+using WebAPI.Repository.Users;
 using WebAPI.Strategies;
-
 namespace WebAPI.Services
 {
     public class GameMakerService : IGameMakerService
@@ -18,6 +22,8 @@ namespace WebAPI.Services
         private readonly ILandmassCardsService _landmassCardsService;
         private readonly IServiceProvider _serviceProvider;
         private readonly IShipService _shipStasusesService;
+        private readonly ILobbyRepository _lobbyRepository;
+        private readonly IUserRepository _userRepository;
 
         public GameMakerService(PlayerContext playerContext,
             IGameMakerRepository gameMakerRepository,
@@ -26,7 +32,10 @@ namespace WebAPI.Services
             ILandmassService landmassService,
             ILandmassCardsService landmassCardsService,
             IServiceProvider serviceProvider,
-            IShipService shipStasusesService)
+            IShipService shipStasusesService,
+            ILobbyRepository lobbyRepository,
+            IPlayerRepository playerRepository,
+            IUserRepository userRepository)
         {
             _gameMakerRepository = gameMakerRepository;
             _roomRepository = roomRepository;
@@ -36,99 +45,88 @@ namespace WebAPI.Services
             _landmassCardsService = landmassCardsService;
             _serviceProvider = serviceProvider;
             _shipStasusesService = shipStasusesService;
+            _lobbyRepository = lobbyRepository;
+            _userRepository = userRepository;
+        }
+        public async Task CreateGameFromLobby(Guid lobbyId)
+        {
+            NewGameInfo newGameInfo = await CreateGameInfoPreparation(lobbyId);
+            await InitializeNewGame(newGameInfo);
         }
 
-        public async Task CreateDummyGame()
+        private async Task<NewGameInfo> CreateGameInfoPreparation(Guid lobbyId)
         {
-            NewGameInfo info = new NewGameInfo()
+            // I need to know username and player role 
+            var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+            var userDtos = await _userRepository.GetUserDtosFromUser(lobby.UsersInLobby);
+            var usersGamePrep = await ShufflePlayerRoles(lobbyId);
+            var newGameInfo = new NewGameInfo()
             {
-                Users = new List<UserDto>()
-                {
-                    DummyValues.RealBen,
-                    DummyValues.RealFred,
-                },
-
-                RoleChoices = new List<PlayerSelections>()
-                {
-                    new PlayerSelections() // ben
-                    {
-                           UserId = DummyValues.RealBen.Id,
-                           RoleType = RoleType.Commander,
-                           Name = "BenPlayer"
-                    },
-                    new PlayerSelections() // fred
-                    {
-                           UserId = DummyValues.RealFred.Id,
-                           RoleType = RoleType.Medic,
-                           Name = "FredPlayer",
-                    },
-                },
+                Game = Game.FactorizeInitialGame(),
+                UserGamePreparation = usersGamePrep,
+                Users = userDtos,
             };
 
-            await CreateGameAsync(info);
+            return newGameInfo;
         }
 
-        public async Task CreateGameAsync(NewGameInfo newGameInfo)
+        private async Task<List<UserGamePreparation>> ShufflePlayerRoles(Guid lobbyId)
         {
-            Guid gameId = DummyValues.Game.Id;
+            // sets the randomly selected roles into the usergameprep
+            List<RoleType> randomRoles = EnumFunExtensions.GetAllEnumValues<RoleType>().Shuffle();
+            List<UserGamePreparation> userSelections = await GetPlayerGamePrepFromLobby(lobbyId);
+            randomRoles.ApplyActionOnMutualIndexMatch(userSelections,
+                (randomRole, gamePrep) => gamePrep.RoleType = randomRole);
 
-            Game newGame = new Game()
-            {
-                Active = true,
-                Id = gameId,
-                NextTick = DateTime.UtcNow.AddSeconds(CycleManagerService.TimeBetweenTicksInSeconds),
-            };
+            return userSelections;
+        }
 
-            newGameInfo.Game = newGame;
-
-            await _playerContext.Games.AddAsync(newGame);
+        private async Task InitializeNewGame(NewGameInfo newGameInfo)
+        {
+            await _playerContext.Games.AddAsync(newGameInfo.Game);
             await _playerContext.SaveChangesAsync();
 
+
             // Need to initialize rooms before players, because player construction requires a GameRoomId.
-            await _roomRepository.CreateNewRoomsAndConnections(gameId);
+            await _roomRepository.CreateNewRoomsAndConnections(newGameInfo.GameId);
             await _shipStasusesService.InitializeShipStatusesAndResources(newGameInfo.Game.Id);
             await InitializePlayersAsync(newGameInfo);
             await InitializeItemsAsync(newGameInfo);
             await _landmassCardsService.InitializeLandmassCards(newGameInfo.Game.Id);
 
             // Stations are tied to rooms, currently, only in services that interact with them in a hardcoded way. - So stations can be created independently of rooms
-            await _stationRepository.CreateAndAddStationsToDb(gameId);
-            await _landmassService.AdvanceToNextLandmass(gameId);
+            await _stationRepository.CreateAndAddStationsToDb(newGameInfo.GameId);
+            await _landmassService.AdvanceToNextLandmass(newGameInfo.GameId);
             await _playerContext.SaveChangesAsync();
         }
 
-        public void InsertVeryDummyValues()
-        {
-            _playerContext.TriggerNotifications.Add(DummyValues.TriggerNotification1);
-            _playerContext.Messages.Add(DummyValues.Message1);
-            _playerContext.Messages.Add(DummyValues.Message2);
-            _playerContext.PrivateChatRooms.Add(DummyValues.PrivateChatRoom);
-            _playerContext.PrivateChatRoomParticipants.Add(DummyValues.PrivateChatRoomParticipant);
-            _playerContext.Items.Add(DummyValues.Freditem);
 
-            _playerContext.SaveChanges();
-        }
 
-        public async Task InitializePlayersAsync(NewGameInfo info)
+        private async Task InitializePlayersAsync(NewGameInfo info)
         {
             /* Will need to clarify what gets initialized before what.
               for example, class cannot depend on starting room(for knowing which bonuses is applying), and starting room also depend on class. One needs to be
               created before the other. */
-            foreach (var user in info.Users)
+            foreach (var userDto in info.Users)
             {
-                PlayerSelections selection = info.RoleChoices.First(x => x.UserId == user.Id);
+                var userEntity = await _userRepository.GetUserById(userDto.Id); // entity doit etre tracked encore une fois. jpas sur daimer ca 
+                // cte feature-la serieux 
+                UserGamePreparation selection = info.UserGamePreparation.First(x => x.UserId == userDto.Id);
                 var newPlayer = new Player()
                 {
-                    Id = user.Id, // users not saved yet in db, so can use user key as primary key. Will have to Guid.NewGuid() some day
+                    Id = userDto.Id, // users not saved yet in db, so can use user key as primary key. Will have to Guid.NewGuid() some day
                     ActionPoints = 0,
                     GameId = info.Game.Id,
                     HealthPoints = 0,
                     Name = selection.Name,
-                    Profession = info.RoleChoices.First(x => x.UserId == user.Id).RoleType,
+                    Profession = info.UserGamePreparation.First(x => x.UserId == userDto.Id).RoleType,
                     X = 0f,
                     Y = 0f,
                     Z = 0f,
+                    User = userEntity
                 };
+
+                // wtf quand tu add un player sanss User  ca cree un ostie de user wtf entity framework de chien sale 
 
                 await InitializePlayerRoleSettings(newPlayer);
                 await _playerContext.Players.AddAsync(newPlayer);
@@ -136,13 +134,13 @@ namespace WebAPI.Services
             }
         }
 
-        public async Task InitializePlayerRoleSettings(Player player)
+        private async Task InitializePlayerRoleSettings(Player player)
         {
             var roleStrategy = ResolveRoleStrategy(player.Profession);
             await roleStrategy.InitializePlayerFromRoleAsync(player);
         }
 
-        public async Task InitializeItemsAsync(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
+        private async Task InitializeItemsAsync(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
         {
             List<Room> rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
 
@@ -165,7 +163,20 @@ namespace WebAPI.Services
             await _playerContext.SaveChangesAsync();
         }
 
-        public IRoleInitializationStrategy ResolveRoleStrategy(RoleType role)
+        private async Task<List<UserGamePreparation>> GetPlayerGamePrepFromLobby(Guid lobbyId)
+        {
+            // name is stored in UserLobby upon joining a lobby
+            var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+            var playerSelections = lobby.UserLobbies.Select(x => new UserGamePreparation
+            {
+                UserId = x.User.Id,
+                Name = x.NameSelection
+            }).ToList();
+
+            return playerSelections;
+        }
+
+        private IRoleInitializationStrategy ResolveRoleStrategy(RoleType role)
         {
             var strategType = RoleStrategyMapper.GetStrategyTypeByRole(role);
             var strategy = _serviceProvider.GetService(strategType) as IRoleInitializationStrategy;

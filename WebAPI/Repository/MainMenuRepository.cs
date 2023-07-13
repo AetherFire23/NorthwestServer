@@ -3,6 +3,7 @@ using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using WebAPI.Interfaces;
+using WebAPI.Repository.Users;
 
 namespace WebAPI.Repository
 {
@@ -10,19 +11,30 @@ namespace WebAPI.Repository
     {
         private readonly PlayerContext _playerContext;
         private readonly IPlayerRepository _playerRepository;
-        public MainMenuRepository(PlayerContext playerContext, IPlayerRepository playerRepository)
+        private readonly IUserRepository _userRepository;
+        private readonly IGameRepository _gameRepository;
+        private readonly ILobbyRepository _lobbyRepository;
+
+        public MainMenuRepository(PlayerContext playerContext,
+            IPlayerRepository playerRepository,
+            IUserRepository userRepository,
+            IGameRepository gameRepository,
+            ILobbyRepository lobbyRepository)
         {
             _playerContext = playerContext;
             _playerRepository = playerRepository;
+            _userRepository = userRepository;
+            _gameRepository = gameRepository;
+            _lobbyRepository = lobbyRepository;
         }
 
         // presume logged in I could guess
-        public async Task<MainMenuState> GetMainMenuState(Guid playerId) // almost could pass in 
+        public async Task<MainMenuState> GetMainMenuState(Guid userId) // almost could pass in 
         {
-            var player = await _playerRepository.GetPlayerAsync(playerId);
-
+            var userDto = await _userRepository.MapUserDtoById(userId);
             var mainMenuState = new MainMenuState
             {
+                UserDto = userDto,
                 TimeStamp = DateTime.UtcNow,
             };
 

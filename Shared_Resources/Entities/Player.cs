@@ -1,4 +1,5 @@
-﻿using Shared_Resources.Enums;
+﻿using Newtonsoft.Json;
+using Shared_Resources.Enums;
 using Shared_Resources.Interfaces;
 using System;
 using System.Globalization;
@@ -12,7 +13,8 @@ namespace Shared_Resources.Entities
         public Guid Id { get; set; }
 
         public Guid GameId { get; set; }
-
+        public Game Game { get; set; } = new Game();
+        public Guid UserId { get; set; }
 
         public Guid CurrentGameRoomId { get; set; }
 
@@ -30,6 +32,7 @@ namespace Shared_Resources.Entities
 
         public int ActionPoints { get; set; }
 
+        public virtual User User { get; set; } = new User();
 
 
         public Player Clone()

@@ -1,10 +1,12 @@
 ﻿using Shared_Resources.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Shared_Resources.DTOs
 {
-    public class LobbyDTO // forGameState
+    public class LobbyDto // forGameState
     {
-        public List<User> UsersInLobby { get; set; } = new List<User>();
+        public Guid Id { get; set; }
+        public List<User> QueuingUsers { get; set; } = new List<User>();
     }
 }
