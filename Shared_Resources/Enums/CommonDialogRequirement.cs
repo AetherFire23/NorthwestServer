@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Shared_Resources.Enums;
 
-namespace Shared_Resources.Enums
+public enum CommonDialogRequirement
 {
-    public enum CommonDialogRequirement
-    {
-        None,
-        MessageBox,
-        AmountDialog,
-    }
+    None,
+    MessageBox,
+    AmountDialog,
 }

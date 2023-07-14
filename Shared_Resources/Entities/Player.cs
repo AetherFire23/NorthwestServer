@@ -1,68 +1,66 @@
-﻿using Newtonsoft.Json;
-using Shared_Resources.Enums;
+﻿using Shared_Resources.Enums;
 using Shared_Resources.Interfaces;
 using System;
 using System.Globalization;
 
-namespace Shared_Resources.Entities
+namespace Shared_Resources.Entities;
+
+public class Player : IPlayerEntity, ITaskParameter, IFormattable
 {
-    public class Player : IPlayerEntity, ITaskParameter, IFormattable
-    { 
-        public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
+    public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
 
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public Guid GameId { get; set; }
-        public Game Game { get; set; } = new Game();
-        public Guid UserId { get; set; }
+    public Guid GameId { get; set; }
+    public Game Game { get; set; } = new Game();
+    public Guid UserId { get; set; }
 
-        public Guid CurrentGameRoomId { get; set; }
+    public Guid CurrentGameRoomId { get; set; }
 
-        public RoleType Profession { get; set; }
+    public RoleType Profession { get; set; }
 
-        public float X { get; set; }
+    public float X { get; set; }
 
-        public float Y { get; set; }
+    public float Y { get; set; }
 
-        public float Z { get; set; }
+    public float Z { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-        public int HealthPoints { get; set; }
+    public int HealthPoints { get; set; }
 
-        public int ActionPoints { get; set; }
+    public int ActionPoints { get; set; }
 
-        public virtual User User { get; set; } = new User();
+    public virtual User User { get; set; } = new User();
 
 
-        public Player Clone()
+    public Player Clone()
+    {
+        return new Player()
         {
-            return new Player()
-            {
-                Id = this.Id,
-                ActionPoints = this.ActionPoints,
-                X = this.X,
-                Y = this.Y,
-                Z = this.Z,
-                CurrentGameRoomId = this.CurrentGameRoomId,
-                GameId = this.GameId,
-                HealthPoints = this.HealthPoints,
-                Name = this.Name,
-                Profession = this.Profession
-            };
-        }
+            Id = this.Id,
+            ActionPoints = this.ActionPoints,
+            X = this.X,
+            Y = this.Y,
+            Z = this.Z,
+            CurrentGameRoomId = this.CurrentGameRoomId,
+            GameId = this.GameId,
+            HealthPoints = this.HealthPoints,
+            Name = this.Name,
+            Profession = this.Profession
+        };
+    }
 
 
-        public override string ToString()
-        {
-            return ToString(null, CultureInfo.CurrentCulture);
-        }
+    public override string ToString()
+    {
+        return ToString(null, CultureInfo.CurrentCulture);
+    }
 
 
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return $"{this.Name}";
-        }
+    public string ToString(string format, IFormatProvider formatProvider)
+    {
+        return $"{this.Name}";
     }
 }
 

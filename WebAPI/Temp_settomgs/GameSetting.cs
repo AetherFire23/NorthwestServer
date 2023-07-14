@@ -1,8 +1,7 @@
-﻿namespace WebAPI.Temp_settomgs
+﻿namespace WebAPI.Temp_settomgs;
+
+public class GameSetting // juste 1  I guess 
 {
-    public class GameSetting // juste 1  I guess 
-    {
-        public Guid Id { get; set; }
-        public int CycleTimeOffsetInSeconds { get; set; }
-    }
+    public Guid Id { get; set; }
+    public int CycleTimeOffsetInSeconds { get; set; }
 }

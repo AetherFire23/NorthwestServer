@@ -1,7 +1,6 @@
-﻿namespace WebAPI.Interfaces
+﻿namespace WebAPI.Interfaces;
+
+public interface ICycleManagerService
 {
-    public interface ICycleManagerService
-    {
-        Task TickGame(Guid gameId);
-    }
+    Task TickGame(Guid gameId);
 }

@@ -1,9 +1,8 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum RoleName
 {
-    public enum RoleName
-    {
-        PereNoel,
-        Standard,
-        Undefined
-    }
+    PereNoel,
+    Standard,
+    Undefined
 }

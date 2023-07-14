@@ -4,35 +4,34 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Shared_Resources.GameTasks.Implementations_Unity
+namespace Shared_Resources.GameTasks.Implementations_Unity;
+
+public class WatchBase : GameTaskBase
 {
-    public class WatchBase : GameTaskBase
+    public override GameTaskCodes Code => GameTaskCodes.Watch;
+
+    public override GameTaskCategory Category => GameTaskCategory.Room;
+
+    public override bool HasRequiredConditions(GameState gameState)
     {
-        public override GameTaskCodes Code => GameTaskCodes.Watch;
+        bool isInValidRoom = gameState.LocalPlayerRoom.Name == nameof(RoomsTemplate.CrowsNest);
+        return isInValidRoom;
+    }
 
-        public override GameTaskCategory Category => GameTaskCategory.Room;
+    public override List<PromptInfo> GetCheckLists(GameState gameState)
+    {
+        var checkList = new CheckListsBuilder();
 
-        public override bool HasRequiredConditions(GameState gameState)
-        {
-            bool isInValidRoom = gameState.LocalPlayerRoom.Name == nameof(RoomsTemplate.CrowsNest);
-            return isInValidRoom;
-        }
+        return checkList.CheckLists;
+    }
 
-        public override List<PromptInfo> GetCheckLists(GameState gameState)
-        {
-            var checkList = new CheckListsBuilder();
+    public override Task Execute(GameTaskContext context)
+    {
+        throw new NotImplementedException();
+    }
 
-            return checkList.CheckLists;
-        }
-
-        public override Task Execute(GameTaskContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override GameTaskValidationResult Validate(GameTaskContext context)
-        {
-            return new GameTaskValidationResult();
-        }
+    public override GameTaskValidationResult Validate(GameTaskContext context)
+    {
+        return new GameTaskValidationResult();
     }
 }

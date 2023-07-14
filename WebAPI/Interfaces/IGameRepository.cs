@@ -1,14 +1,12 @@
-﻿using Quartz.Core;
-using Shared_Resources.DTOs;
+﻿using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 
-namespace WebAPI.Interfaces
+namespace WebAPI.Interfaces;
+
+public interface IGameRepository
 {
-    public interface IGameRepository
-    {
-        void DeleteGame(Game game);
-        Task<Game> GetGameById(Guid id);
-        Task<List<Game>> GetTickableGames();
-        Task<GameDto> MapGameDto(Guid gameId);
-    }
+    void DeleteGame(Game game);
+    Task<Game> GetGameById(Guid id);
+    Task<List<Game>> GetTickableGames();
+    Task<GameDto> MapGameDto(Guid gameId);
 }

@@ -1,13 +1,12 @@
 ﻿using WebAPI.Interfaces;
 
-namespace WebAPI.Services
+namespace WebAPI.Services;
+
+public class GameStateService : IGameStateService
 {
-    public class GameStateService : IGameStateService
+    private readonly IPlayerRepository _playerRepository;
+    public GameStateService(IPlayerRepository playerRepository)
     {
-        private readonly IPlayerRepository _playerRepository;
-        public GameStateService(IPlayerRepository playerRepository)
-        {
-            _playerRepository = playerRepository;
-        }
+        _playerRepository = playerRepository;
     }
 }

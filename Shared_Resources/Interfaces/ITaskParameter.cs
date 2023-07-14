@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Shared_Resources.Interfaces;
 
-namespace Shared_Resources.Interfaces
+public interface ITaskParameter
 {
-    public interface ITaskParameter
-    {
-        public (string ParamType, string Id) TaskParam { get;}
-    }
+    public (string ParamType, string Id) TaskParam { get; }
 }

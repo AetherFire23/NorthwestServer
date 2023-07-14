@@ -2,13 +2,12 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shared_Resources.Entities;
 
-namespace WebAPI.EntityConfigurations
+namespace WebAPI.EntityConfigurations;
+
+public class PlayerConfigurationProfile : IEntityTypeConfiguration<Player>
 {
-    public class PlayerConfigurationProfile : IEntityTypeConfiguration<Player>
+    public void Configure(EntityTypeBuilder<Player> builder)
     {
-        public void Configure(EntityTypeBuilder<Player> builder)
-        {
-            builder.HasKey(e => e.Id);
-        }
+        builder.HasKey(e => e.Id);
     }
 }

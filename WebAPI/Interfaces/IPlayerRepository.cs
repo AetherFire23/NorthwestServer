@@ -16,5 +16,5 @@ public interface IPlayerRepository
     Task<List<Item>> GetOwnedItems(Guid ownerId);
     Task<List<Log>> GetAccessibleLogsForPlayer(Guid playerId, Guid gameId);
     Task<List<Guid>> FilterPlayersWhoHaveAccessToLog(List<Guid> playerId, Log log);
-} 
+}
 

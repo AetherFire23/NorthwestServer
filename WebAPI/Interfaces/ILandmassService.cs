@@ -1,7 +1,6 @@
-﻿namespace WebAPI.Interfaces
+﻿namespace WebAPI.Interfaces;
+
+public interface ILandmassService
 {
-    public interface ILandmassService
-    {
-        Task AdvanceToNextLandmass(Guid gameId);
-    }
+    Task AdvanceToNextLandmass(Guid gameId);
 }

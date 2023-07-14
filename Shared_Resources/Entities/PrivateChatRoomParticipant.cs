@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Shared_Resources.Entities
+namespace Shared_Resources.Entities;
+
+public class PrivateChatRoomParticipant
 {
-    public class PrivateChatRoomParticipant
-    {
-        public Guid Id { get; set; }
-        public Guid RoomId { get; set; }
-        public Guid ParticipantId { get; set; }
-    }
+    public Guid Id { get; set; }
+    public Guid RoomId { get; set; }
+    public Guid ParticipantId { get; set; }
 }

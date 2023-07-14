@@ -1,7 +1,6 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum MenuNotificationType
 {
-    public enum MenuNotificationType
-    {
-        FriendInvite,
-    }
+    FriendInvite,
 }

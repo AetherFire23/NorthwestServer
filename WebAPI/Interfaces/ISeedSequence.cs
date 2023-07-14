@@ -1,7 +1,6 @@
-﻿namespace WebAPI.Interfaces
+﻿namespace WebAPI.Interfaces;
+
+public interface ISeedSequence
 {
-    public interface ISeedSequence
-    {
-        Task ExecuteSeedSequence();
-    }
+    Task ExecuteSeedSequence();
 }

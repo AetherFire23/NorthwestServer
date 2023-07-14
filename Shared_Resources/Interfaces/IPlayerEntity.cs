@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Shared_Resources.Interfaces
+namespace Shared_Resources.Interfaces;
+
+public interface IPlayerEntity : IEntity
 {
-    public interface IPlayerEntity : IEntity
-    {
-        Guid GameId { get; }
-    }
+    Guid GameId { get; }
 }

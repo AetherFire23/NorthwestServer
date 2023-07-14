@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 
-namespace WebAPI.AutoMapper
+namespace WebAPI.AutoMapper;
+
+public class AutoMapperProfile : Profile
 {
-    public class AutoMapperProfile : Profile
+    public AutoMapperProfile()
     {
-        public AutoMapperProfile()
-        {
-            CreateMap<SourceMappa, DestMappa>();
-        }
+        CreateMap<SourceMappa, DestMappa>();
     }
 }

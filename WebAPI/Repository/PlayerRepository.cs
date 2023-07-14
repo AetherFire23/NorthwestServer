@@ -2,9 +2,6 @@
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
-using Shared_Resources.Interfaces;
-using Shared_Resources.Models;
-using System.Runtime.CompilerServices;
 using WebAPI;
 public class PlayerRepository : IPlayerRepository
 {

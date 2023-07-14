@@ -14,20 +14,23 @@
             private readonly IPlayerRepository _playerRepository;
             private readonly PlayerContext _playerContext;
             private readonly IChatService _chatService;
+            private readonly IMainMenuRepository _mainMenuRepository;
             public MainMenuController(IPlayerRepository playerRepository,
                 PlayerContext playerContext,
-                IChatService chatService)
+                IChatService chatService, IMainMenuRepository mainMenuRepository)
             {
                 _playerRepository = playerRepository;
                 _playerContext = playerContext;
                 _chatService = chatService;
+                _mainMenuRepository = mainMenuRepository;
             }
 
             [HttpGet]
             [Route(MainMenuEndpoints.State)]
-            public async Task<ActionResult<ClientCallResult>> GetMainMenuState() 
+            public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
             {
-                return Ok(new MainMenuState());
+                var clientCallResult = await _mainMenuRepository.GetMainMenuState(userId);
+                return Ok(clientCallResult);
             }
 
             [HttpPost]

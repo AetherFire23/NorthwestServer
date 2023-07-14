@@ -1,9 +1,8 @@
 ﻿using Shared_Resources.Entities;
 
-namespace WebAPI.Interfaces
+namespace WebAPI.Interfaces;
+
+public interface IGameActionsRepository
 {
-    public interface IGameActionsRepository
-    {
-        public void ChangeRoomAction(Player p, Room from, Room to);
-    }
+    public void ChangeRoomAction(Player p, Room from, Room to);
 }

@@ -1,8 +1,5 @@
-﻿using Shared_Resources.Entities;
+﻿namespace WebAPI.Dummies;
 
-namespace WebAPI.Dummies
+public static class AuthDummies
 {
-    public static class AuthDummies
-    {
-    }
 }

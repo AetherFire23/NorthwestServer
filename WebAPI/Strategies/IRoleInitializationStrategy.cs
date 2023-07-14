@@ -1,10 +1,9 @@
 ﻿using Shared_Resources.Entities;
 
-namespace WebAPI.Strategies
+namespace WebAPI.Strategies;
+
+public interface IRoleInitializationStrategy
 {
-    public interface IRoleInitializationStrategy
-    {
-        Task InitializePlayerFromRoleAsync(Player player);
-        Task TickPlayerFromRoleAsync(Player player);
-    }
+    Task InitializePlayerFromRoleAsync(Player player);
+    Task TickPlayerFromRoleAsync(Player player);
 }

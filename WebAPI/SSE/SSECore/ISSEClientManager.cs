@@ -1,12 +1,10 @@
 ﻿using Shared_Resources.Models.SSE;
-using WebAPI.Utils;
 
-namespace WebAPI.SSE.SSECore
+namespace WebAPI.SSE.SSECore;
+
+public interface ISSEClientManager<T> where T : ISSESubscriber
 {
-    public interface ISSEClientManager<T> where T : ISSESubscriber
-    {
-        Task PushDataToPlayer(T playerId, SSEData data);
-        Task Subscribe(T playerId, HttpResponse response);
-        Task Unsubscribe(T player);
-    }
+    Task PushDataToPlayer(T playerId, SSEData data);
+    Task Subscribe(T playerId, HttpResponse response);
+    Task Unsubscribe(T player);
 }

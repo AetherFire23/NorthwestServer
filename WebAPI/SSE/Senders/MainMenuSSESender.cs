@@ -4,35 +4,33 @@ using Shared_Resources.Models.SSE.TransferData;
 using WebAPI.Interfaces;
 using WebAPI.Repository.Users;
 using WebAPI.SSE.ClientManagers;
-using WebAPI.SSE.SSECore;
 
-namespace WebAPI.SSE.Senders
+namespace WebAPI.SSE.Senders;
+
+public class MainMenuSSESender : SSESenderBase<MainMenuClientManager>, IMainMenuSSESender
 {
-    public class MainMenuSSESender : SSESenderBase<MainMenuClientManager>, IMainMenuSSESender
+    private readonly ILobbyRepository _lobbyRepository;
+    private readonly IUserRepository _userRepository;
+
+    public MainMenuSSESender(IServiceProvider serviceProvider,
+        ILobbyRepository lobbyRepository,
+        IUserRepository userRepository) : base(serviceProvider)
     {
-        private readonly ILobbyRepository _lobbyRepository;
-        private readonly IUserRepository _userRepository;
+        _lobbyRepository = lobbyRepository;
+        _userRepository = userRepository;
+    }
 
-        public MainMenuSSESender(IServiceProvider serviceProvider,
-            ILobbyRepository lobbyRepository,
-            IUserRepository userRepository) : base(serviceProvider)
+    public async Task RefreshLobbiesAndGamesInfo(Guid userId)
+    {
+        var lobbies = await _userRepository.GetLobbyDtosForUser(userId);
+        var activeGames = await _userRepository.GetActiveGameDtosForUser(userId);
+
+        var sseData = new SSEData(SSEType.RefreshLobbiesAndActiveGames, new RefreshLobbiesAndGamesTransfer()
         {
-            _lobbyRepository = lobbyRepository;
-            _userRepository = userRepository;
-        }
+            ActiveGamesForUser = activeGames,
+            QueuedLobbies = lobbies,
+        });
 
-        public async Task RefreshLobbiesAndGamesInfo(Guid userId)
-        {
-            var lobbies = await _userRepository.GetLobbyDtosForUser(userId);
-            var activeGames = await _userRepository.GetActiveGameDtosForUser(userId);
-
-            var sseData = new SSEData(SSEType.RefreshLobbiesAndActiveGames, new RefreshLobbiesAndGamesTransfer()
-            {
-                ActiveGamesForUser = activeGames,
-                QueuedLobbies = lobbies,
-            });
-
-            await _client.PushDataToSubscriber(userId, sseData);
-        }
+        await _client.PushDataToSubscriber(userId, sseData);
     }
 }

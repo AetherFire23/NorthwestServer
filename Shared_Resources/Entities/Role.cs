@@ -2,14 +2,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace Shared_Resources.Entities
+namespace Shared_Resources.Entities;
+
+public class Role
 {
-    public class Role
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public RoleName RoleName { get; set; }
+    public RoleName RoleName { get; set; }
 
-        public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-    }
+    public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

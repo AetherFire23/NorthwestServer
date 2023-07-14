@@ -1,12 +1,12 @@
 ﻿
 using Shared_Resources.DTOs;
+using Shared_Resources.Entities;
 using Shared_Resources.Models.Requests;
 
-namespace WebAPI.Services
+namespace WebAPI.Services;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<(bool IsCreated, UserDto UserModel)> AllowCreateUser(RegisterRequest request);
-        Task<(bool Allowed, UserDto UserModel)> AllowIssueTokenToUser(LoginRequest request);
-    }
+    Task<(bool IsCreated, UserDto UserModel)> AllowCreateUser(RegisterRequest request);
+    Task<(bool IsIssued, User? UserModel)> AllowIssueTokenToUser(LoginRequest request);
 }

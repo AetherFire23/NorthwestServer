@@ -1,9 +1,6 @@
-﻿using Shared_Resources.Models;
+﻿namespace WebAPI.Interfaces;
 
-namespace WebAPI.Interfaces
+public interface IGameMakerService
 {
-    public interface IGameMakerService
-    {
-        Task CreateGameFromLobby(Guid lobbyId);
-    }
+    Task CreateGameFromLobby(Guid lobbyId);
 }

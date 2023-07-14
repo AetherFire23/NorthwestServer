@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace Shared_Resources.DTOs
+namespace Shared_Resources.DTOs;
+
+public class LobbyDto // forGameState
 {
-    public class LobbyDto // forGameState
-    {
-        public Guid Id { get; set; }
-        public List<User> QueuingUsers { get; set; } = new List<User>();
-    }
+    public Guid Id { get; set; }
+    public List<User> QueuingUsers { get; set; } = new List<User>();
 }

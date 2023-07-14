@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Shared_Resources.Enums;
 
-namespace Shared_Resources.Enums
+public enum ShipResourceTypes
 {
-    public enum ShipResourceTypes 
-    {
-        Can,
-        Flour,
-        Coal,
-        Gunpowder,
-        Wood,
-        Iron,
+    Can,
+    Flour,
+    Coal,
+    Gunpowder,
+    Wood,
+    Iron,
 
-    }
 }

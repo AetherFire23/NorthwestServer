@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Shared_Resources.Models
+namespace Shared_Resources.Models;
+
+public class JoinLobbyRequest
 {
-    public class JoinLobbyRequest
-    {
-        public Guid UserId { get; set; }
-        public Guid LobbyId { get; set; }
-        public string PlayerName { get; set; } = string.Empty; // when the game starts, which name to apply to the player 
-    }
+    public Guid UserId { get; set; }
+    public Guid LobbyId { get; set; }
+    public string PlayerName { get; set; } = string.Empty; // when the game starts, which name to apply to the player 
 }

@@ -1,9 +1,8 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum State
 {
-    public enum State
-    {
-        Ruined,
-        Worn,
-        Pristine
-    }
+    Ruined,
+    Worn,
+    Pristine
 }

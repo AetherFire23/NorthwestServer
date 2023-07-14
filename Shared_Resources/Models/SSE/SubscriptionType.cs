@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Shared_Resources.Models.SSE;
 
-namespace Shared_Resources.Models.SSE
+public enum SubscriptionType
 {
-    public enum SubscriptionType
-    {
-        MainMenu,
-        Game
-    }
+    MainMenu,
+    Game
 }

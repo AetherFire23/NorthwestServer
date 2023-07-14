@@ -1,7 +1,6 @@
-﻿namespace WebAPI.SSE
+﻿namespace WebAPI.SSE;
+
+/// <summary> Reflection class </summary>
+public interface IClientManager
 {
-    /// <summary> Reflection class </summary>
-    public interface IClientManager
-    {
-    }
 }

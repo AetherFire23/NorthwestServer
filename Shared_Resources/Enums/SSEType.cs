@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Shared_Resources.Enums;
 
-namespace Shared_Resources.Enums
+public enum SSEType
 {
-    public enum SSEType
-    {
-        Heartbeat,
-        RefreshPlayers,
-        RefreshItems,
-        AddLog,
-        AddChatMessage,
-        RefreshShipState,
-        RefreshLobbiesAndActiveGames
+    Heartbeat,
+    RefreshPlayers,
+    RefreshItems,
+    AddLog,
+    AddChatMessage,
+    RefreshShipState,
+    RefreshLobbiesAndActiveGames
 
-    }
 }

@@ -1,7 +1,6 @@
-﻿namespace WebAPI.Constants
+﻿namespace WebAPI.Constants;
+
+public static class Secrets
 {
-    public static class Secrets
-    {
-        public static string Key = "swTcVlnav2";
-    }
+    public static string Key = "swTcVlnav2";
 }

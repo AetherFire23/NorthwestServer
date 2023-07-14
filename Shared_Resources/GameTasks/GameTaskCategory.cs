@@ -1,11 +1,10 @@
-﻿namespace Shared_Resources.GameTasks
-{
-    public enum GameTaskCategory
-    {
-        Room,
-        Role,
-        Player,
+﻿namespace Shared_Resources.GameTasks;
 
-        Sailing,
-    }
+public enum GameTaskCategory
+{
+    Room,
+    Role,
+    Player,
+
+    Sailing,
 }

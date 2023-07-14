@@ -1,67 +1,76 @@
-﻿using Azure.Core;
-using Shared_Resources.DTOs;
+﻿using Shared_Resources.DTOs;
+using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using Shared_Resources.Models.Requests;
+using WebAPI.Repository.Users;
 using WebAPI.Services;
 
-namespace WebAPI.Authentication
+namespace WebAPI.Authentication;
+
+public class AuthenticationService : IAuthenticationService
 {
-    public class AuthenticationService : IAuthenticationService
+    private readonly IUserService _userService;
+    private readonly IJwtTokenManager _jwtTokenManager;
+    private readonly IUserRepository _userRepository;
+    public AuthenticationService(IUserService userService,
+        IJwtTokenManager jwtTokenManager,
+        IUserRepository userRepository)
     {
-        private readonly IUserService _userService;
-        private readonly IJwtTokenManager _jwtTokenManager;
-        public AuthenticationService(IUserService userService, IJwtTokenManager jwtTokenManager)
+        _userService = userService;
+        _jwtTokenManager = jwtTokenManager;
+        _userRepository = userRepository;
+    }
+
+    public async Task<ClientCallResult> TryLogin(LoginRequest loginRequest)
+    {
+        (bool IsIssued, User? UserModel) canIssueToken = await _userService.AllowIssueTokenToUser(loginRequest);
+
+        if (!canIssueToken.IsIssued)
         {
-            _userService = userService;
-            _jwtTokenManager = jwtTokenManager;
-        }
-
-        public async Task<ClientCallResult> TryLogin(LoginRequest loginRequest)
-        {
-            (bool Allowed, UserDto UserModel) canIssueUser = await _userService.AllowIssueTokenToUser(loginRequest);
-
-            if (canIssueUser.Allowed)
-            {
-                string token = _jwtTokenManager.GenerateToken(canIssueUser.UserModel);
-                var result = new ClientCallResult()
-                {
-                    IsSuccessful = true,
-                    Content = token,
-                    Message = "Token issued !"
-                };
-                return result;
-            }
-
-            var unsuccessfulRequest = new ClientCallResult()
+            var unsuccessfulRequest = new ClientCallResult
             {
                 IsSuccessful = false,
-                Content = string.Empty,
-                Message = "User could not be authenticated"// for unity-sude
+                Message = "User could not be authenticated"
             };
 
             return unsuccessfulRequest;
         }
 
-        /// <summary> Content is userdto</summary>
-        public async Task<ClientCallResult> TryRegister(RegisterRequest registerRequest)
+        UserDto userDto = await _userRepository.MapUserDtoById(canIssueToken.UserModel.Id);
+        string token = await _jwtTokenManager.GenerateToken(userDto);
+        var result = new ClientCallResult
         {
-            (bool IsCreated, UserDto Model) allowedUser = await _userService.AllowCreateUser(registerRequest);
-
-            if (allowedUser.IsCreated)
+            IsSuccessful = true,
+            Message = "Token issued !",
+            Content = new LoginResult
             {
-                var result = new ClientCallResult()
-                {
-                    IsSuccessful = true,
-                    Content = allowedUser.Model,
-                };
-                return result;
-            }
+                IsSuccessful = true,
+                Token = token,
+                UserId = userDto.Id,
+            },
+        };
+        return result;
+    }
 
-            return new ClientCallResult()
+    /// <summary> Content is userdto</summary>
+    public async Task<ClientCallResult> TryRegister(RegisterRequest registerRequest)
+    {
+        (bool IsCreated, UserDto Model) allowedUser = await _userService.AllowCreateUser(registerRequest);
+
+        if (allowedUser.IsCreated)
+        {
+            var result = new ClientCallResult()
             {
-                IsSuccessful = false,
-                Message = "user authentication failed !"
+                IsSuccessful = true,
+                Content = allowedUser.Model
             };
+            return result;
         }
+
+        return new ClientCallResult()
+        {
+            IsSuccessful = false,
+            Message = "user authentication failed !"
+        };
     }
 }

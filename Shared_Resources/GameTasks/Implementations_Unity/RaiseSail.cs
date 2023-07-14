@@ -5,42 +5,41 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Shared_Resources.GameTasks.Implementations_Unity
+namespace Shared_Resources.GameTasks.Implementations_Unity;
+
+public class RaiseSail : GameTaskBase
 {
-    public class RaiseSail : GameTaskBase
+    public override GameTaskCodes Code => GameTaskCodes.RaiseSail;
+
+    public override GameTaskCategory Category => GameTaskCategory.Sailing;
+
+    public override bool HasRequiredConditions(GameState gameState)
     {
-        public override GameTaskCodes Code => GameTaskCodes.RaiseSail;
+        bool hasValidItem = gameState.PlayerDTO.Items.Exists(x => x.ItemType == ItemType.Wrench);
 
-        public override GameTaskCategory Category => GameTaskCategory.Sailing;
-
-        public override bool HasRequiredConditions(GameState gameState)
+        List<string> validRoomsNames = new List<string>()
         {
-            bool hasValidItem = gameState.PlayerDTO.Items.Exists(x => x.ItemType == ItemType.Wrench);
+            nameof(RoomsTemplate.QuarterDeck),
+            nameof(RoomsTemplate.Forecastle),
+            nameof(RoomsTemplate.MainDeck),
+        };
+        bool isInValidRoom = validRoomsNames.Contains(gameState.LocalPlayerRoom.Name);
+        return isInValidRoom && hasValidItem;
+    }
 
-            List<string> validRoomsNames = new List<string>()
-            {
-                nameof(RoomsTemplate.QuarterDeck),
-                nameof(RoomsTemplate.Forecastle),
-                nameof(RoomsTemplate.MainDeck),
-            };
-            bool isInValidRoom = validRoomsNames.Contains(gameState.LocalPlayerRoom.Name);
-            return isInValidRoom && hasValidItem;
-        }
+    public override List<PromptInfo> GetCheckLists(GameState gameState)
+    {
+        var builder = new CheckListsBuilder();
+        return builder.CheckLists;
+    }
 
-        public override List<PromptInfo> GetCheckLists(GameState gameState)
-        {
-            var builder = new CheckListsBuilder();
-            return builder.CheckLists;
-        }
+    public override Task Execute(GameTaskContext context)
+    {
+        throw new NotImplementedException();
+    }
 
-        public override Task Execute(GameTaskContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override GameTaskValidationResult Validate(GameTaskContext context)
-        {
-            return new GameTaskValidationResult();
-        }
+    public override GameTaskValidationResult Validate(GameTaskContext context)
+    {
+        return new GameTaskValidationResult();
     }
 }

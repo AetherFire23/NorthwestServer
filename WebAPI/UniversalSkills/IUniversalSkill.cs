@@ -1,10 +1,9 @@
 ﻿using Shared_Resources.Entities;
 
-namespace WebAPI.UniversalSkills
+namespace WebAPI.UniversalSkills;
+
+public interface IUniversalSkill
 {
-    public interface IUniversalSkill
-    {
-        Task<bool> CanApplySkillEffect(Player player);
-        Task ApplyTickEffect(Player player);
-    }
+    Task<bool> CanApplySkillEffect(Player player);
+    Task ApplyTickEffect(Player player);
 }

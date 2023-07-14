@@ -1,11 +1,8 @@
 ﻿using Shared_Resources.DTOs;
-using System.Security.Claims;
 
-namespace WebAPI.Authentication
+namespace WebAPI.Authentication;
+
+public interface IJwtTokenManager
 {
-    public interface IJwtTokenManager
-    {
-        string GenerateToken(UserDto user);
-        ClaimsPrincipal ValidateToken(string token);
-    }
+    Task<string> GenerateToken(UserDto userDto);
 }

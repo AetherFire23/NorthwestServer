@@ -3,31 +3,30 @@ using Shared_Resources.Enums;
 using Shared_Resources.GameTasks;
 using Shared_Resources.GameTasks.Implementations_Unity;
 
-namespace WebAPI.GameTasks.Implementations
+namespace WebAPI.GameTasks.Implementations;
+
+[GameTask(GameTaskCodes.CraftTask)]
+public class KraftTaskExecutea : KraftTaskBase
 {
-    [GameTask(GameTaskCodes.CraftTask)]
-    public class KraftTaskExecutea : KraftTaskBase
+    // should create ItemRepository 
+    // to do something like .AddItem(ownerId, ItemTpype)
+    private readonly PlayerContext _playerContext;
+    public KraftTaskExecutea(PlayerContext playerContext)
     {
-        // should create ItemRepository 
-        // to do something like .AddItem(ownerId, ItemTpype)
-        private readonly PlayerContext _playerContext;
-        public KraftTaskExecutea(PlayerContext playerContext)
+        _playerContext = playerContext;
+    }
+
+    public override async Task Execute(GameTaskContext context)
+    {
+
+        var item = new Item()
         {
-            _playerContext = playerContext;
-        }
+            Id = Guid.NewGuid(),
+            OwnerId = context.Player.Id,
+            ItemType = ItemType.Hose,
+        };
 
-        public override async Task Execute(GameTaskContext context)
-        {
-
-            var item = new Item()
-            {
-                Id = Guid.NewGuid(),
-                OwnerId = context.Player.Id,
-                ItemType = ItemType.Hose,
-            };
-
-            await _playerContext.Items.AddAsync(item);
-            await _playerContext.SaveChangesAsync();
-        }
+        await _playerContext.Items.AddAsync(item);
+        await _playerContext.SaveChangesAsync();
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace WebAPI.SSE.Senders
+﻿namespace WebAPI.SSE.Senders;
+
+internal interface IMainMenuSSESender
 {
-    internal interface IMainMenuSSESender
-    {
-        Task RefreshLobbiesAndGamesInfo(Guid userId);
-    }
+    Task RefreshLobbiesAndGamesInfo(Guid userId);
 }

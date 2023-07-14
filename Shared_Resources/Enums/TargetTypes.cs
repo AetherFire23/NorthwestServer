@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Shared_Resources.Enums;
 
-namespace Shared_Resources.Enums
+public enum TargetTypes
 {
-    public enum TargetTypes
-    {
-        Item,
-        Player,
-        Room,
-        Target
+    Item,
+    Player,
+    Room,
+    Target
 
-    }
 }

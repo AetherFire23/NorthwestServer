@@ -1,14 +1,13 @@
 ﻿using Shared_Resources.Enums;
 
-namespace WebAPI.Strategies
+namespace WebAPI.Strategies;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class RoleStrategyAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class RoleStrategyAttribute : Attribute
+    public RoleType RoleType { get; set; }
+    public RoleStrategyAttribute(RoleType role)
     {
-        public RoleType RoleType { get; set; }
-        public RoleStrategyAttribute(RoleType role)
-        {
-            RoleType = role;
-        }
+        RoleType = role;
     }
 }

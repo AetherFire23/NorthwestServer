@@ -1,6 +1,5 @@
-﻿namespace WebAPI.SSE.Subscribers
+﻿namespace WebAPI.SSE.Subscribers;
+
+public class UserSubscriber
 {
-    public class UserSubscriber
-    {
-    }
 }

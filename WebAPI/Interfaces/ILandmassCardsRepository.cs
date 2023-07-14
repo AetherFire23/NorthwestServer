@@ -1,9 +1,8 @@
 ﻿using Shared_Resources.Entities;
 
-namespace WebAPI.Interfaces
+namespace WebAPI.Interfaces;
+
+public interface ILandmassCardsRepository
 {
-    public interface ILandmassCardsRepository
-    {
-        public Task<List<Card>> GetLandmassCardsAsync(Guid gameId);
-    }
+    public Task<List<Card>> GetLandmassCardsAsync(Guid gameId);
 }
