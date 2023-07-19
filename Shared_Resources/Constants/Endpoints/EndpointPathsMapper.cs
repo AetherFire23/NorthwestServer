@@ -23,7 +23,7 @@ public static class EndpointPathsMapper
     public static Dictionary<Type, Dictionary<string, string>> CreateControllerAndEndpointsMapping()
     {
         var allTypes = typeof(EndpointPathsMapper).Assembly.GetTypes();
-        var controllerTypes = allTypes.Where(ReflectionHelper.CustomAttributeFilter<ControllerPathMapperAttribute>).ToList();
+        var controllerTypes = allTypes.Where(ReflectionHelper.HasCustomAttributeFilter<ControllerPathMapperAttribute>).ToList();
 
         var controllerMapping = new Dictionary<Type, Dictionary<string, string>>();
         foreach (var controllerType in controllerTypes)
@@ -39,25 +39,17 @@ public static class EndpointPathsMapper
     public static KeyValuePair<Type, Dictionary<string, string>> CreateEndpointMappings(Type endpointType) // besoin de savoir cest quoi le path jusqua ce endpoint-la, dans le attribute i Guess ???
     {
         var controllerPath = endpointType.GetCustomAttribute<ControllerPathMapperAttribute>().ControllerName;
-        var endpointNames = endpointType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic)
+        var endpointNamesInControllerClass = endpointType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic)
             .Where(x => x != null)
             .Select(x => x.GetValue(null) as string).ToList() ?? new List<string>();
 
         Dictionary<string, string> partialToFullMapping = new Dictionary<string, string>();
-        foreach (var endpointName in endpointNames)
+        foreach (var endpointName in endpointNamesInControllerClass)
         {
             partialToFullMapping.Add(endpointName, controllerPath + PrefixObliqueAndLowercase(endpointName));
         }
         var endpointTypeMap = new KeyValuePair<Type, Dictionary<string, string>>(endpointType, partialToFullMapping);
         return endpointTypeMap;
-    }
-
-
-    public static List<Type> DiscoverEndpoints()
-    {
-        List<Type> endpoints = ReflectionHelper.GetNonAbstractClassTypes(typeof(EndpointPathsMapper).Assembly);
-        endpoints.Where(ReflectionHelper.CustomAttributeFilter<ControllerPathMapperAttribute>).ToList();
-        return endpoints;
     }
 
     public static string PrefixObliqueAndLowercase(string endpoint)

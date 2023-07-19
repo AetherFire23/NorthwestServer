@@ -19,6 +19,7 @@ public class GameMakerService : IGameMakerService
     private readonly IShipService _shipStasusesService;
     private readonly ILobbyRepository _lobbyRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IGameRepository _gameRepository;
 
     public GameMakerService(PlayerContext playerContext,
         IGameMakerRepository gameMakerRepository,
@@ -30,7 +31,8 @@ public class GameMakerService : IGameMakerService
         IShipService shipStasusesService,
         ILobbyRepository lobbyRepository,
         IPlayerRepository playerRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        IGameRepository gameRepository)
     {
         _gameMakerRepository = gameMakerRepository;
         _roomRepository = roomRepository;
@@ -42,6 +44,7 @@ public class GameMakerService : IGameMakerService
         _shipStasusesService = shipStasusesService;
         _lobbyRepository = lobbyRepository;
         _userRepository = userRepository;
+        _gameRepository = gameRepository;
     }
     public async Task CreateGameFromLobby(Guid lobbyId)
     {
@@ -55,6 +58,8 @@ public class GameMakerService : IGameMakerService
         var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
         var userDtos = await _userRepository.GetUserDtosFromUser(lobby.UsersInLobby);
         var usersGamePrep = await ShufflePlayerRoles(lobbyId);
+
+        // having the bug shit thing
         var newGameInfo = new NewGameInfo()
         {
             Game = Game.FactorizeInitialGame(),
@@ -105,7 +110,8 @@ public class GameMakerService : IGameMakerService
         foreach (var userDto in info.Users)
         {
             var userEntity = await _userRepository.GetUserById(userDto.Id); // entity doit etre tracked encore une fois. jpas sur daimer ca 
-            // cte feature-la serieux 
+            var gameEntity = await _gameRepository.GetGameById(info.GameId);
+            // ouache 
             UserGamePreparation selection = info.UserGamePreparation.First(x => x.UserId == userDto.Id);
             var newPlayer = new Player()
             {
@@ -118,7 +124,8 @@ public class GameMakerService : IGameMakerService
                 X = 0f,
                 Y = 0f,
                 Z = 0f,
-                User = userEntity
+                User = userEntity,
+                Game = gameEntity, 
             };
 
             // wtf quand tu add un player sanss User  ca cree un ostie de user wtf entity framework de chien sale 

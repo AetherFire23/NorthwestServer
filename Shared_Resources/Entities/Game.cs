@@ -10,7 +10,6 @@ public class Game
     public bool IsActive { get; set; }
     public virtual ICollection<Player> PlayersInGame { get; set; } = new List<Player>();
 
-
     public static int TimeBetweenTicksInSeconds = 8;
     /// <summary> Current Time + interval </summary>
     public static DateTime CalculateNextTick()

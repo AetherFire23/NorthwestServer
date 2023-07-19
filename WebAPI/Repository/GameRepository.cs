@@ -32,12 +32,13 @@ public class GameRepository : IGameRepository
 
     public async Task<GameDto> MapGameDto(Guid gameId)
     {
-        var gameEntity = await GetGameById(gameId);
+        //var gameEntity = await GetGameById(gameId);
         var playerCount = (await _playerRepository.GetPlayersInGameAsync(gameId)).Count;
         var dto = new GameDto()
         {
             Id = gameId,
             PlayersInGameCount = playerCount,
+            Created = DateTime.UtcNow,
         };
         return dto;
     }
@@ -46,5 +47,4 @@ public class GameRepository : IGameRepository
     {
         _playerContext.Games.Remove(game);
     }
-
 }

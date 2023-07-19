@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Shared_Resources.Models;
 
@@ -18,7 +19,7 @@ public class ClientCallResult
 
     private JsonSerializerSettings _serializationSettings = new JsonSerializerSettings()
     {
-        PreserveReferencesHandling = PreserveReferencesHandling.All,
+        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
     };
 
     //public void SetSerializedContent<T>(T content)
@@ -29,6 +30,11 @@ public class ClientCallResult
     public T DeserializeContent<T>()
     {
         T result = JsonConvert.DeserializeObject<T>(SerializedContent);
+        if (result is null)
+        {
+            Console.Out.WriteLine(result);
+            throw new ArgumentException("The deserialized json was null inside clientcallresult");
+        }
         return result;
     }
 

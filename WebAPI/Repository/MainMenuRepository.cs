@@ -25,8 +25,7 @@ public class MainMenuRepository : IMainMenuRepository
         _lobbyRepository = lobbyRepository;
     }
 
-    // presume logged in I could guess
-    public async Task<MainMenuState> GetMainMenuState(Guid userId) // almost could pass in 
+    public async Task<ClientCallResult> GetMainMenuState(Guid userId)
     {
         var userDto = await _userRepository.MapUserDtoById(userId);
         var mainMenuState = new MainMenuState
@@ -34,23 +33,14 @@ public class MainMenuRepository : IMainMenuRepository
             UserDto = userDto,
             TimeStamp = DateTime.UtcNow,
         };
+        var clientCallResult = new ClientCallResult()
+        {
+            IsSuccessful = true,
+            Content = mainMenuState,
+        };
 
-        return mainMenuState;
+        return clientCallResult;
     }
-
-    //public async Task<List<MenuNotification>> GetMenuNotifications(Guid userId)
-    //{
-    //    var notifications = _playerContext.MenuNotifications.Where(x => x.ToId == userId
-    //    && x.Retrieved == false);
-    //    foreach (var notification in notifications)
-    //    {
-    //        notification.Retrieved = true;
-    //    }
-    //    await _playerContext.SaveChangesAsync();
-
-    //    return notifications.ToList();
-    //}
-
     public bool AreFriends(Guid user1, Guid user2) // more like service bu wahtever
     {
         var f = _playerContext.FriendPairs.FirstOrDefault(x => (x.Friend1 == user1 && x.Friend2 == user2)

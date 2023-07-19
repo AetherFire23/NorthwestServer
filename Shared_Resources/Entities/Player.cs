@@ -1,4 +1,5 @@
-﻿using Shared_Resources.Enums;
+﻿using Newtonsoft.Json;
+using Shared_Resources.Enums;
 using Shared_Resources.Interfaces;
 using System;
 using System.Globalization;
@@ -9,10 +10,10 @@ public class Player : IPlayerEntity, ITaskParameter, IFormattable
 {
     public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
 
+    [JsonProperty($"id")]
     public Guid Id { get; set; }
 
     public Guid GameId { get; set; }
-    public Game Game { get; set; } = new Game();
     public Guid UserId { get; set; }
 
     public Guid CurrentGameRoomId { get; set; }
@@ -32,6 +33,7 @@ public class Player : IPlayerEntity, ITaskParameter, IFormattable
     public int ActionPoints { get; set; }
 
     public virtual User User { get; set; } = new User();
+    public virtual Game Game { get; set; } = new Game();
 
 
     public Player Clone()

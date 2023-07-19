@@ -73,7 +73,7 @@ public class LobbyService : ILobbyService
             await _gameMakerService.CreateGameFromLobby(lobbyId); // important call lol!
             await CleanupLobbyAndUsersAfterGameStart(lobbyId);
 
-
+            
         }
     }
 

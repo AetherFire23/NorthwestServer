@@ -64,6 +64,7 @@ public class UserRepository : IUserRepository
             .ThenInclude(ur => ur.Role)
             .Include(u => u.Games)
             .Include(u => u.Players)
+            .ThenInclude(p => p.Game)
             .Include(u => u.UserLobbies)
             .ThenInclude(ur => ur.Lobby)
             .FirstOrDefaultAsync(u => u.Id == id);
@@ -178,4 +179,6 @@ public class UserRepository : IUserRepository
         List<UserDto> userDtos = await userIds.SelectAsync(MapUserDtoById);
         return userDtos;
     }
+
+    
 }

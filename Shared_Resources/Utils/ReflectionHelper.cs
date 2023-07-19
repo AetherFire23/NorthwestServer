@@ -59,7 +59,7 @@ public static class ReflectionHelper
         return inheritsFrom;
     }
 
-    public static bool CustomAttributeFilter<TAttribute>(Type attributeType) where TAttribute : Attribute
+    public static bool HasCustomAttributeFilter<TAttribute>(Type attributeType) where TAttribute : Attribute
     {
         bool hasCustomAttribute = CustomAttributeExtensions.GetCustomAttribute<TAttribute>(attributeType) != null;
         return hasCustomAttribute;

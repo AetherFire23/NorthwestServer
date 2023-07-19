@@ -17,11 +17,13 @@ public class PlayerService : IPlayerService
     public PlayerService(
         PlayerContext playerContext,
         IPlayerRepository playerRepository,
-        IGameActionsRepository gameActionsRepository)
+        IGameActionsRepository gameActionsRepository,
+        IGameSSESender gameSSESender)
     {
         _playerContext = playerContext;
         _playerRepository = playerRepository;
         _gameActionsRepository = gameActionsRepository;
+        _gameSSESender = gameSSESender;
     }
 
     public async Task TransferItem(Guid targetId, Guid ownerId, Guid itemId, Guid gameId)

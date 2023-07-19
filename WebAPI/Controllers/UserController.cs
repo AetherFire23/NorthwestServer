@@ -31,7 +31,6 @@ public class UserController : ControllerBase
         return Ok(clientCallResult);
     }
 
-    //   just seed that shit first
     [HttpPost(UserEndpoints.Register)]
     public async Task<ActionResult<ClientCallResult>> Register([FromBody] RegisterRequest request)
     {

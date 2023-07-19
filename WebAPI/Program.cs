@@ -14,8 +14,6 @@ public class Program
 {
     static async Task Main(string[] args) // techniquement je devrais tout move dans les petites classes
     {
-
-
         List<Player> players = new List<Player>()
         {
             DummyValues.Fred,

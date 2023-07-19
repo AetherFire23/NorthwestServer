@@ -23,20 +23,21 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<ClientCallResult> TryLogin(LoginRequest loginRequest)
     {
-        (bool IsIssued, User? UserModel) canIssueToken = await _userService.AllowIssueTokenToUser(loginRequest);
+        (bool isIssued, User? userModel) = await _userService.AllowIssueTokenToUser(loginRequest);
 
-        if (!canIssueToken.IsIssued)
+        if (!isIssued)
         {
             var unsuccessfulRequest = new ClientCallResult
             {
                 IsSuccessful = false,
-                Message = "User could not be authenticated"
+                Message = "User could not be authenticated",
+                Content = new LoginResult(),
             };
 
             return unsuccessfulRequest;
         }
 
-        UserDto userDto = await _userRepository.MapUserDtoById(canIssueToken.UserModel.Id);
+        UserDto userDto = await _userRepository.MapUserDtoById(userModel.Id);
         string token = await _jwtTokenManager.GenerateToken(userDto);
         var result = new ClientCallResult
         {
@@ -55,14 +56,14 @@ public class AuthenticationService : IAuthenticationService
     /// <summary> Content is userdto</summary>
     public async Task<ClientCallResult> TryRegister(RegisterRequest registerRequest)
     {
-        (bool IsCreated, UserDto Model) allowedUser = await _userService.AllowCreateUser(registerRequest);
+        var userCreation = await _userService.AllowCreateUser(registerRequest);
 
-        if (allowedUser.IsCreated)
+        if (userCreation.IsCreated)
         {
             var result = new ClientCallResult()
             {
                 IsSuccessful = true,
-                Content = allowedUser.Model
+                Content = userCreation.UserModel
             };
             return result;
         }

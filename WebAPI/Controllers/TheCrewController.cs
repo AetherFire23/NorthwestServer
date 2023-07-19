@@ -32,10 +32,10 @@ public class TheCrewController : ControllerBase
 
     [HttpGet]
     [Route("GetGameState")]
-    public async Task<ActionResult<GameState>> GetGameState(Guid playerId, DateTime? lastTimeStamp)
+    public async Task<ActionResult<ClientCallResult>> GetGameState(Guid playerId, DateTime? lastTimeStamp)
     {
-        var gameState = await _gameStateRepository.GetPlayerGameStateAsync(playerId, lastTimeStamp);
-        return Ok(gameState);
+        ClientCallResult gameStateResult = await _gameStateRepository.GetPlayerGameStateAsync(playerId, lastTimeStamp);
+        return Ok(gameStateResult);
     }
 
     [HttpPut]
@@ -89,13 +89,13 @@ public class TheCrewController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut]
-    [Route("GetMainMenuState")]
-    public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
-    {
-        //var t = _mainMenuRepository.GetMainMenuState(userId);
-        return Ok();
-    }
+    //[HttpPut]
+    //[Route("GetMainMenuState")]
+    //public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
+    //{
+    //    var t = _mainMenuRepository.GetMainMenuState(userId);
+    //    return Ok();
+    //}
 
     [HttpPut]
     [Route("CHangbenPosition")]

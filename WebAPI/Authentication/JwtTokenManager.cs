@@ -35,6 +35,7 @@ public class JwtTokenManager : IJwtTokenManager
         var roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
         claims.AddRange(roleClaims);
 
+        // store security key
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

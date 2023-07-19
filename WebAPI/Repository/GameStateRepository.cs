@@ -18,7 +18,7 @@ public class GameStateRepository : IGameStateRepository
         _roomRepository = roomRepository;
     }
 
-    public async Task<GameState> GetPlayerGameStateAsync(Guid playerId, DateTime? lastTimeStamp)
+    public async Task<ClientCallResult> GetPlayerGameStateAsync(Guid playerId, DateTime? lastTimeStamp)
     {
         Player player = await _playerRepository.GetPlayerAsync(playerId);
 
@@ -48,7 +48,16 @@ public class GameStateRepository : IGameStateRepository
             Stations = stations,
         };
 
-        return gameState;
+        ClientCallResult clientCallResult = new ClientCallResult
+        {
+            Content = gameState,
+            IsSuccessful = true,
+            Message = string.Empty,
+        };
+
+        var deserializedCheck = clientCallResult.DeserializeContent<GameState>();
+
+        return clientCallResult;
     }
 
     public async Task<List<PrivateChatRoom>> GetPrivateChatRoomsAsync(Guid playerId)

@@ -27,7 +27,7 @@ public class GameTaskService : IGameTaskService
 
         var context = new GameTaskContext
         {
-            GameState = gameState,
+            GameState = gameState.DeserializeContent<GameState>(), // not tested
             Parameters = parameters,
         };
 

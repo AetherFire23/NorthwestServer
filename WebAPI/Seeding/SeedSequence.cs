@@ -128,8 +128,8 @@ public class SeedSequence : ISeedSequence
         {
             var register = new RegisterRequest()
             {
-                UserName = $"DummyPlayer n{index}",
-                Password = $"sexyman{index}",
+                UserName = $"DummyPlayern{index}",
+                Password = $"sexyman",
                 Email = $"superhot@{index}"
             };
             var result = await _authenticationService.TryRegister(register);
