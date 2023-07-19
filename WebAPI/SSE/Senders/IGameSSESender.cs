@@ -4,6 +4,6 @@ namespace WebAPI.SSE;
 
 public interface IGameSSESender
 {
-    Task SendItemChangedOwnerEvent(Guid gameId);
+    Task SendItemChangedEvent(Guid gameId);
     Task SendNewLogEvent(Log log);
 }

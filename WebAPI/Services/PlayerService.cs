@@ -37,7 +37,7 @@ public class PlayerService : IPlayerService
 
         item.OwnerId = targetId;
         await _playerContext.SaveChangesAsync();
-        await _gameSSESender.SendItemChangedOwnerEvent(gameId);
+        await _gameSSESender.SendItemChangedEvent(gameId);
     }
 
     public async Task UpdatePositionAsync(Guid playerId, float x, float y)

@@ -21,7 +21,7 @@ public class GameSSESender : SSESenderBase<GameSSEClientManager>, IGameSSESender
         _gameSSEClientManager = serviceProvider.GetSSEManager<GameSSEClientManager>();
     }
 
-    public async Task SendItemChangedOwnerEvent(Guid gameId)
+    public async Task SendItemChangedEvent(Guid gameId)
     {
         // refresh item and room items
         var loggedPlayers = _gameSSEClientManager.GetLoggedInPlayers(gameId);
@@ -29,6 +29,7 @@ public class GameSSESender : SSESenderBase<GameSSEClientManager>, IGameSSESender
 
         foreach (var player in loggedPlayers)
         {
+            //sending each player its individual item
             var playerItems = await _playerRepository.GetOwnedItems(player.Id);
             PlayerAndRoomItems playerAndItems = new PlayerAndRoomItems()
             {
