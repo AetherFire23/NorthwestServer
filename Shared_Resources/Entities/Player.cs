@@ -36,22 +36,22 @@ public class Player : IPlayerEntity, ITaskParameter, IFormattable
     public virtual Game Game { get; set; } = new Game();
 
 
-    public Player Clone()
-    {
-        return new Player()
-        {
-            Id = this.Id,
-            ActionPoints = this.ActionPoints,
-            X = this.X,
-            Y = this.Y,
-            Z = this.Z,
-            CurrentGameRoomId = this.CurrentGameRoomId,
-            GameId = this.GameId,
-            HealthPoints = this.HealthPoints,
-            Name = this.Name,
-            Profession = this.Profession
-        };
-    }
+    //public Player Clone()
+    //{
+    //    return new Player()
+    //    {
+    //        Id = this.Id,
+    //        ActionPoints = this.ActionPoints,
+    //        X = this.X,
+    //        Y = this.Y,
+    //        Z = this.Z,
+    //        CurrentGameRoomId = this.CurrentGameRoomId,
+    //        GameId = this.GameId,
+    //        HealthPoints = this.HealthPoints,
+    //        Name = this.Name,
+    //        Profession = this.Profession
+    //    };
+    //}
 
 
     public override string ToString()

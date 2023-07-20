@@ -5,7 +5,7 @@ namespace WebAPI.SSE.ClientManagers;
 
 public class GameSSEClientManager : SSEClientManagerBase<PlayerSubscriber>
 {
-    public List<PlayerSubscriber> GetLoggedInPlayers(Guid gameId)
+    public List<PlayerSubscriber> GetLoggedInPlayerSubscribers(Guid gameId)
     {
         var loggedPlayerIds = Subscribers.Where(x => x.GameId == gameId).ToList();
         return loggedPlayerIds;
