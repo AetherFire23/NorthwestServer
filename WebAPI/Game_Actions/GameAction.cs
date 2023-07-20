@@ -15,7 +15,7 @@ public class GameAction
 
     public string CreatedBy { get; set; } = string.Empty;
 
-    [Column(TypeName = "nvarchar(20)")]
+    //[Column(TypeName = "nvarchar(20)")]
     public GameActionType GameActionType { get; set; }
 
     public string SerializedProperties { get; set; } = string.Empty;

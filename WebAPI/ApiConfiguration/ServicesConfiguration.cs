@@ -218,8 +218,21 @@ public static class ServicesConfiguration
         //Add db context here
         string playerContextConnectionString = builder.Configuration.GetConnectionString("PlayerConnection");
         string authenticationConnectionString = builder.Configuration.GetConnectionString("AuthenticationConnection");
-        builder.Services.AddDbContext<PlayerContext>(options
-       => options.UseSqlServer(playerContextConnectionString));
+
+        // useNp
+        // https://stackoverflow.com/questions/3582552/what-is-the-format-for-the-postgresql-connection-string-url
+        // for parameters https://www.npgsql.org/doc/connection-string-parameters.html
+        // Host and Server works
+        // DBeaver tick "show all conncetions"
+        builder.Services.AddDbContext<PlayerContext>(options =>
+            options.UseNpgsql(playerContextConnectionString)
+            .EnableSensitiveDataLogging(true)); // only should be appleid to development 
+            
+
+
+
+       // builder.Services.AddDbContext<PlayerContext>(options
+       //=> options.UseSqlServer(playerContextConnectionString));
 
         //builder.Services.AddDbContext<AuthenticationContext>(options =>
         //    options.UseSqlServer(authenticationConnectionString));

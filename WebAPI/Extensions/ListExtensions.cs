@@ -9,7 +9,7 @@ public static class ListExtensions
         List<T> shuffled = new List<T>();
         while (initialList.Count != 0)
         {
-            int randomNumber = RandomHelper.random.Next(0, initialList.Count);
+            int randomNumber = Random.Shared.Next(0, initialList.Count);
             T? randomValue = initialList.ElementAt(randomNumber);
             shuffled.Add(randomValue);
             initialList.Remove(randomValue);

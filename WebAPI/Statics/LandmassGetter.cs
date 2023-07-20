@@ -16,7 +16,7 @@ public static class LandmassGetter
     private static LandmassLayout GetRandomLandmassLayout()
     {
         List<LandmassLayout> allLayouts = ReadLandmassLayouts();
-        var randomIndex = RandomHelper.random.Next(0, allLayouts.Count);
+        var randomIndex = Random.Shared.Next(0, allLayouts.Count);
         LandmassLayout randomLayout = allLayouts.ElementAt(randomIndex);
         return randomLayout;
     }

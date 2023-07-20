@@ -1,8 +1,9 @@
 ﻿using Shared_Resources.Entities;
+using Shared_Resources.Enums;
 
 namespace WebAPI.UniversalSkills;
 
-[UniversalSkill(Shared_Resources.Enums.SkillEnum.ShootLaser)]
+[UniversalSkill(SkillEnum.ShootLaser)]
 public class ShootLaserFromEyes : IUniversalSkill
 {
     private readonly PlayerContext _playerContext;

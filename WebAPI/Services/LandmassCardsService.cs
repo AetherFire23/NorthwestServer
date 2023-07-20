@@ -95,7 +95,7 @@ public class LandmassCardsService : ILandmassCardsService
     private async Task<Card> DrawRandomCard(List<Card> landmassCards)
     {
         var freeCards = landmassCards.Where(x => !x.IsDiscarded).ToList();
-        var randomIndex = RandomHelper.random.Next(0, freeCards.Count);
+        var randomIndex = Random.Shared.Next(0, freeCards.Count);
         Card randomCard = freeCards[randomIndex];
         randomCard.IsDiscarded = true;
         return randomCard;
