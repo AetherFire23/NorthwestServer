@@ -26,7 +26,7 @@ using WebAPI.Strategies;
 
 namespace WebAPI.ApiConfiguration;
 
-public static class ServicesConfiguration
+public static class ApplicationBuilderHelper
 {
     public static void ConfigureServices(WebApplicationBuilder builder)
     {
@@ -38,12 +38,10 @@ public static class ServicesConfiguration
         SkillStrategyMapper.RegisterSkillStrategies(builder);
         builder.Services.RegisterSSEManagers();
 
-
-
         ConfigureQuartz(builder);
 
-        AddServicesLayer(builder);
-        AddRepositoriesLayer(builder);
+        ServiceLayerConfigurator.AddServicesLayer(builder);
+        RepositoryLayerConfigurator.AddRepositoriesLayer(builder);
 
         ConfigureAutoMapper(builder);
         ConfigureDbContext(builder);
@@ -149,63 +147,9 @@ public static class ServicesConfiguration
         builder.Services.AddTransient<CycleJob>();
     }
 
-    private static void AddServicesLayer(WebApplicationBuilder builder)
-    {
-        // Dependencies
-        builder.Services.AddScoped<ICycleManagerService, CycleManagerService>();
-
-        // Services
-        builder.Services.AddScoped<IPlayerService, PlayerService>();
-        builder.Services.AddScoped<IGameTaskService, GameTaskService>();
-        builder.Services.AddScoped<IPlayerService, PlayerService>();
-        builder.Services.AddScoped<IFriendService, FriendService>();
-        builder.Services.AddScoped<IGameStateService, GameStateService>();
-        builder.Services.AddScoped<IChatService, ChatService>();
-        builder.Services.AddScoped<IGameMakerService, GameMakerService>();
-        builder.Services.AddScoped<IShipService, ShipService>();
-
-        //landmasses
-        builder.Services.AddScoped<ILandmassService, LandmassService>();
-        builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
-        builder.Services.AddScoped<IUserService, UserService>();
-
-        //builder.Services.AddSingleton<ISSEClientManager, GameSSEClientManager>();
-        builder.Services.AddScoped<IGameSSESender, GameSSESender>();
-
-        //seeding
-        builder.Services.AddScoped<ISeedSequence, SeedSequence>();
-        builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-
-        builder.Services.AddScoped<ILobbyService, LobbyService>();
-        builder.Services.AddScoped<ILobbyRepository, LobbyRepository>();
 
 
-        // sse 
-        builder.Services.AddScoped<IGameSSESender, GameSSESender>();
-        builder.Services.AddScoped<IMainMenuSSESender, MainMenuSSESender>();
-    }
 
-    private static void AddRepositoriesLayer(WebApplicationBuilder builder)
-    {
-        // Repos
-        builder.Services.AddScoped<IGameRepository, GameRepository>();
-        builder.Services.AddScoped<IMainMenuRepository, MainMenuRepository>();
-        builder.Services.AddScoped<IGameActionsRepository, GameActionsRepository>();
-        builder.Services.AddScoped<IRoomRepository, RoomRepository>();
-        builder.Services.AddScoped<IGameStateRepository, GameStateRepository>();
-        builder.Services.AddScoped<IStationRepository, StationRepository>();
-        builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
-        builder.Services.AddScoped<IChatRepository, ChatRepository>();
-        builder.Services.AddScoped<IGameMakerRepository, GameMakerRepository>();
-        builder.Services.AddScoped<ILandmassRepository, LandmassRepository>();
-        builder.Services.AddScoped<IShipRepository, ShipRepository>();
-
-        //landmasses
-        builder.Services.AddScoped<ILandmassCardsRepository, LandmassCardsRepository>();
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-        builder.Services.AddScoped<IJwtTokenManager, JwtTokenManager>();
-    }
 
     private static void ConfigureAutoMapper(WebApplicationBuilder builder)
     {

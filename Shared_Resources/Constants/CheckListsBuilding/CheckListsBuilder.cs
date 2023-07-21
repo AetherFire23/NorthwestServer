@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Shared_Resources.Constants;
+namespace Shared_Resources.Constants.CheckListsBuilding;
 
 public class CheckListsBuilder
 {

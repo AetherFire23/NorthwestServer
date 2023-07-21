@@ -1,7 +1,8 @@
-﻿namespace Shared_Resources.Constants.Endpoints;
+﻿namespace Shared_Resources.Constants.Mapper;
 
-public static class APIEndpoints
+public static class APIEndpointsBase
 {
+    // Should read from appsettings
     public const bool IsDevelopment = true;
 
     public const string APIBase = IsDevelopment

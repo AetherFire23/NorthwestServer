@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Shared_Resources.Constants;
+namespace Shared_Resources.Constants.CheckListsBuilding;
 
 public class PromptInfo
 {
@@ -36,7 +36,7 @@ public class PromptInfo
 
     public PromptInfo SetMinimumTargetCount(int min)
     {
-        if (this.ExactTargetAmount != 0) throw new Exception("Cannot set both exact amount and - or min-max value");
+        if (ExactTargetAmount != 0) throw new Exception("Cannot set both exact amount and - or min-max value");
 
         MinimumSelection = min;
         return this;
@@ -44,7 +44,7 @@ public class PromptInfo
 
     public PromptInfo SetMaximumTargetCount(int max)
     {
-        if (this.MinimumSelection > max) throw new Exception($"Minimum value cannot be higher than maximum");
+        if (MinimumSelection > max) throw new Exception($"Minimum value cannot be higher than maximum");
 
         MaximumSelectionAmount = max;
         return this;

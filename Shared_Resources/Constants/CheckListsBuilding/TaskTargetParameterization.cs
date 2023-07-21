@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Shared_Resources.Constants;
+namespace Shared_Resources.Constants.CheckListsBuilding;
 
 public static class TaskTargetParameterization // could be something like TargetParameters
 {

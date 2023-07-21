@@ -1,4 +1,6 @@
-﻿namespace Shared_Resources.Constants.Endpoints;
+﻿using Shared_Resources.Constants.Mapper;
+
+namespace Shared_Resources.Constants.Endpoints;
 
 // private shouldnt be retrieved NOR used
 // should add some ToLower shit in the reflection

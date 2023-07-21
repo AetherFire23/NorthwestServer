@@ -1,6 +1,7 @@
 
 using Newtonsoft.Json;
 using Shared_Resources.Constants.Endpoints;
+using Shared_Resources.Constants.Mapper;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
@@ -14,6 +15,8 @@ public class Program
 {
     static async Task Main(string[] args) // techniquement je devrais tout move dans les petites classes
     {
+        string fullPath = GameEndpoints.GetFullPath(GameEndpoints.GameState);
+
         List<Player> players = new List<Player>()
         {
             DummyValues.Fred,
@@ -43,7 +46,7 @@ public class Program
 
 
 
-        ServicesConfiguration.ConfigureServices(builder);
+        ApplicationBuilderHelper.ConfigureServices(builder);
 
 
         WebApplication app = builder.Build();

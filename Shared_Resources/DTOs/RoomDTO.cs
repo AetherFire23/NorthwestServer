@@ -1,4 +1,4 @@
-﻿using Shared_Resources.Constants;
+﻿using Shared_Resources.Constants.CheckListsBuilding;
 using Shared_Resources.Entities;
 using Shared_Resources.Interfaces;
 using System;

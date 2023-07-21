@@ -19,6 +19,7 @@ public class ClientCallResult
 
     private JsonSerializerSettings _serializationSettings = new JsonSerializerSettings()
     {
+        // no idea why this works 
         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
     };
 

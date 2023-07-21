@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 
 // unity : Use GetFullEndpoint(typeof(MainMenuEndpoits), MainMenuEndpoints.State)
-namespace Shared_Resources.Constants.Endpoints;
+namespace Shared_Resources.Constants.Mapper;
 
 public static class EndpointPathsMapper
 {
