@@ -9,7 +9,6 @@ namespace Shared_Resources.GameTasks.Implementations_Unity;
 public class ChargeCannon : GameTaskBase
 {
     public override GameTaskCodes Code => GameTaskCodes.ChargeCannon;
-
     public override GameTaskCategory Category => GameTaskCategory.Room;
 
     public override bool HasRequiredConditions(GameState gameState)

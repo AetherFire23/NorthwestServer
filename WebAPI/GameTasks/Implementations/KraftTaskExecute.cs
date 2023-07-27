@@ -13,6 +13,7 @@ public class KraftTaskExecutea : KraftTaskBase
     // to do something like .AddItem(ownerId, ItemTpype)
     private readonly PlayerContext _playerContext;
     private readonly IGameSSESender _gameSSESender;
+
     public KraftTaskExecutea(PlayerContext playerContext, IGameSSESender gameSSESender)
     {
         _playerContext = playerContext;
