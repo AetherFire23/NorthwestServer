@@ -8,18 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GameInitialization_Scratch\**" />
     <Compile Remove="GameState Management\**" />
     <Compile Remove="GameTasks_old\Stations\**" />
     <Compile Remove="Game_Actions\NewFolder\**" />
     <Compile Remove="Game_Settings\**" />
+    <Content Remove="GameInitialization_Scratch\**" />
     <Content Remove="GameState Management\**" />
     <Content Remove="GameTasks_old\Stations\**" />
     <Content Remove="Game_Actions\NewFolder\**" />
     <Content Remove="Game_Settings\**" />
+    <EmbeddedResource Remove="GameInitialization_Scratch\**" />
     <EmbeddedResource Remove="GameState Management\**" />
     <EmbeddedResource Remove="GameTasks_old\Stations\**" />
     <EmbeddedResource Remove="Game_Actions\NewFolder\**" />
     <EmbeddedResource Remove="Game_Settings\**" />
+    <None Remove="GameInitialization_Scratch\**" />
     <None Remove="GameState Management\**" />
     <None Remove="GameTasks_old\Stations\**" />
     <None Remove="Game_Actions\NewFolder\**" />
@@ -30,21 +34,24 @@
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.7">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.6.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.7">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Quartz.AspNetCore" Version="3.6.2" />
-    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.6.2" />
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.6.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.6.3" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.6.3" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.6.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
@@ -57,7 +64,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GameInitialization_Scratch\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

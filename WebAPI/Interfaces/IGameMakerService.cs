@@ -1,8 +1,6 @@
-﻿namespace WebAPI.Interfaces
+﻿namespace WebAPI.Interfaces;
+
+public interface IGameMakerService
 {
-    public interface IGameMakerService
-    {
-        public Task CreateDummyGame();
-        public void InsertVeryDummyValues();
-    }
+    Task CreateGameFromLobby(Guid lobbyId);
 }

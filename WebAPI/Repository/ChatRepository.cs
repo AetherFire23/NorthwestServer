@@ -1,8 +1,7 @@
 ﻿using WebAPI.Interfaces;
 
-namespace WebAPI.Repository
+namespace WebAPI.Repository;
+
+public class ChatRepository : IChatRepository
 {
-    public class ChatRepository : IChatRepository
-    {
-    }
 }

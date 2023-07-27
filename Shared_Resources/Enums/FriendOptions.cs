@@ -1,9 +1,8 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum FriendOptions
 {
-    public enum FriendOptions
-    {
-        Invite,
-        Remove,
-        AcceptOrDecline
-    }
+    Invite,
+    Remove,
+    AcceptOrDecline
 }

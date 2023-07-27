@@ -1,13 +1,12 @@
 ﻿using Shared_Resources.Entities;
+using Shared_Resources.Interfaces;
+using System;
 using System.Collections.Generic;
 
-namespace Shared_Resources.DTOs
+namespace Shared_Resources.DTOs;
+
+public class LobbyDto : IEntity // forGameState
 {
-    public class LobbyDTO // forGameState
-    {
-        public List<Player> PlayersInLobby { get; set; }
-        public List<Player> OtherPlayers { get; set; }
-
-
-    }
+    public Guid Id { get; set; }
+    public List<User> QueuingUsers { get; set; } = new List<User>();
 }

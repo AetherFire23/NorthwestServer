@@ -1,13 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace WebAPI.Temp_settomgs;
 
-namespace WebAPI.Temp_settomgs
+public class CookSettingProperties : TaskBase
 {
-    public class CookSettingProperties : TaskBase
+    public int FoodCreated { get; set; } = 1;
+    public CookSettingProperties()
     {
-        public int FoodCreated { get; set; } = 1;
-        public CookSettingProperties()
-        {
-            this.ActionCost = 1;
-        }
+        this.ActionCost = 1;
     }
 }

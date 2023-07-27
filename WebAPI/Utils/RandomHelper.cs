@@ -1,7 +1,6 @@
-﻿namespace WebAPI.Utils
+﻿namespace WebAPI.Utils;
+
+public static class RandomHelper
 {
-    public static class RandomHelper
-    {
-        public static Random random = new Random();
-    }
+    public static Random random = new Random();
 }

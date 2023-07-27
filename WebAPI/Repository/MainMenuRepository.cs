@@ -1,72 +1,50 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Shared_Resources.Entities;
-using Shared_Resources.Models;
+﻿using Shared_Resources.Models;
 using WebAPI.Interfaces;
+using WebAPI.Repository.Users;
 
-namespace WebAPI.Repository
+namespace WebAPI.Repository;
+
+public class MainMenuRepository : IMainMenuRepository
 {
-    public class MainMenuRepository : IMainMenuRepository
+    private readonly PlayerContext _playerContext;
+    private readonly IPlayerRepository _playerRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IGameRepository _gameRepository;
+    private readonly ILobbyRepository _lobbyRepository;
+
+    public MainMenuRepository(PlayerContext playerContext,
+        IPlayerRepository playerRepository,
+        IUserRepository userRepository,
+        IGameRepository gameRepository,
+        ILobbyRepository lobbyRepository)
     {
-        private readonly PlayerContext _playerContext;
+        _playerContext = playerContext;
+        _playerRepository = playerRepository;
+        _userRepository = userRepository;
+        _gameRepository = gameRepository;
+        _lobbyRepository = lobbyRepository;
+    }
 
-        public MainMenuRepository(PlayerContext playerContext)
+    public async Task<ClientCallResult> GetMainMenuState(Guid userId)
+    {
+        var userDto = await _userRepository.MapUserDtoById(userId);
+        var mainMenuState = new MainMenuState
         {
-            _playerContext = playerContext;
-        }
-
-        public MainMenuState GetMainMenuState(Guid UserId)
+            UserDto = userDto,
+            TimeStamp = DateTime.UtcNow,
+        };
+        var clientCallResult = new ClientCallResult()
         {
-            var friends = GetFriends(UserId);
-            var notifications = GetMenuNotifications(UserId);
-            var menuState = new MainMenuState()
-            {
-                Friends = friends,
-                Notifications = notifications
-            };
-            return menuState;
-        }
+            IsSuccessful = true,
+            Content = mainMenuState,
+        };
 
-        public List<User> GetFriends(Guid userId)
-        {
-            var friendPairs = _playerContext.FriendPairs.Where(x => x.Friend1 == userId || x.Friend2 == userId);
-            var friendIds = friendPairs.Select(x => x.Friend1 == userId ? x.Friend2 : x.Friend1);
-
-            var friends = _playerContext.Users.Join(friendIds,
-                x => x.Id,
-                y => y,
-                (x, y) => new User()
-                {
-                    Id = x.Id,
-                    Username = x.Username
-                }).ToList();
-
-            return friends;
-        }
-
-        public List<MenuNotification> GetMenuNotifications(Guid userId)
-        {
-            var notifications = _playerContext.MenuNotifications.Where(x => x.ToId == userId
-            && x.Retrieved == false);
-            foreach (var notification in notifications)
-            {
-                notification.Retrieved = true;
-            }
-            _playerContext.SaveChanges();
-
-            return notifications.ToList();
-        }
-
-        public User GetUser(Guid userId)
-        {
-            var user = _playerContext.Users.First(x => x.Id == userId);
-            return user;
-        }
-
-        public bool AreFriends(Guid user1, Guid user2) // more like service bu wahtever
-        {
-            var f = _playerContext.FriendPairs.FirstOrDefault(x => (x.Friend1 == user1 && x.Friend2 == user2)
-            || (x.Friend2 == user1 && x.Friend1 == user2));
-            return f is not null;
-        }
+        return clientCallResult;
+    }
+    public bool AreFriends(Guid user1, Guid user2) // more like service bu wahtever
+    {
+        var f = _playerContext.FriendPairs.FirstOrDefault(x => (x.Friend1 == user1 && x.Friend2 == user2)
+        || (x.Friend2 == user1 && x.Friend1 == user2));
+        return f is not null;
     }
 }

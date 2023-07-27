@@ -1,30 +1,50 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Quartz.Core;
+using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
-using System.Security.Policy;
 using WebAPI.Interfaces;
 
-namespace WebAPI.Repository
+namespace WebAPI.Repository;
+
+public class GameRepository : IGameRepository
 {
-    public class GameRepository : IGameRepository
+    private readonly PlayerContext _playerContext;
+    private readonly IPlayerRepository _playerRepository;
+
+    public GameRepository(PlayerContext playerContext,
+        IPlayerRepository playerRepository)
     {
-        private readonly PlayerContext _playerContext;
-        public GameRepository(PlayerContext playerContext)
-        {
-            _playerContext = playerContext;
-        }
+        _playerContext = playerContext;
+        _playerRepository = playerRepository;
+    }
 
-        public async Task<List<Game>> GetTickableGames()
-        {
-            var currentDate = DateTime.UtcNow;
-            var games = await _playerContext.Games.Where(x => x.NextTick < currentDate && x.Active).ToListAsync();
-            return games;
-        }
+    public async Task<List<Game>> GetTickableGames()
+    {
+        var currentDate = DateTime.UtcNow;
+        var games = await _playerContext.Games.Where(x => x.NextTick < currentDate && x.IsActive).ToListAsync();
+        return games;
+    }
 
-        public async Task<Game> GetGame(Guid id)
+    public async Task<Game> GetGameById(Guid id)
+    {
+        var game = await _playerContext.Games.FirstAsync(x => x.Id == id);
+        return game;
+    }
+
+    public async Task<GameDto> MapGameDto(Guid gameId)
+    {
+        //var gameEntity = await GetGameById(gameId);
+        var playerCount = (await _playerRepository.GetPlayersInGameAsync(gameId)).Count;
+        var dto = new GameDto()
         {
-            var game = await _playerContext.Games.FirstAsync(x => x.Id == id);
-            return game;
-        }
+            Id = gameId,
+            PlayersInGameCount = playerCount,
+            Created = DateTime.UtcNow,
+        };
+        return dto;
+    }
+
+    public void DeleteGame(Game game)
+    {
+        _playerContext.Games.Remove(game);
     }
 }

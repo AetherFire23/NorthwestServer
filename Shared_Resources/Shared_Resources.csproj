@@ -1,27 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <BaseOutputPath>bin\</BaseOutputPath>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+		<BaseOutputPath>bin\</BaseOutputPath>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>embedded</DebugType>
-    <Optimize>False</Optimize>
-  </PropertyGroup>
-	
-	
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>embedded</DebugType>
-    <Optimize>True</Optimize>
-  </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>embedded</DebugType>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>embedded</DebugType>
+		<Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<PropertyGroup>
@@ -29,7 +32,7 @@
 			<UnityPluginDir>$(ScriptDir)..\..\NorthWest\Assets\Plugins</UnityPluginDir>
 		</PropertyGroup>
 		<Exec Command="if not exist $(UnityPluginDir) echo NorthWest project folder must be in the same folder as the WebAPI project folder &amp; exit 1" />
-        <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(UnityPluginDir)&quot;" />
+		<Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(UnityPluginDir)&quot;" />
 
 	</Target>
 

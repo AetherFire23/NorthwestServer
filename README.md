@@ -1,6 +1,8 @@
 # WebAPI
-- Post-build Script : Doit avoir le projet Northwest dans le même folder que la solution pour que Shared_resources s'exporte dans Unity
+- Post-build Script : Doit avoir le projet Northwest dans le même folder que la solution pour que la DLL Shared_resources  s'exporte dans Unity
+- PostGreSQL avec connection locale
 
-- ContextPas besoin de supprimer la database, vu que les models sont créées dans le code, juste à supprimer les migrations et à faire la commande
-« add-migration initial » 
+TODO : 
+Docker integration
+
 

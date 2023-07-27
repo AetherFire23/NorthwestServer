@@ -1,9 +1,11 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum RoleType
 {
-    public enum RoleType
-    {
-        Engineer,
-        Commander,
-        Medic,
-    }
+    Commander,
+    Medic,
+    Sailor,
+    Cook,
+    Engineer,
+
 }

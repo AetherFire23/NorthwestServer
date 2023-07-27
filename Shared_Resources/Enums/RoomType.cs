@@ -1,8 +1,7 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum RoomType
 {
-    public enum RoomType
-    {
-        Start,
-        Second
-    }
+    Start,
+    Second
 }

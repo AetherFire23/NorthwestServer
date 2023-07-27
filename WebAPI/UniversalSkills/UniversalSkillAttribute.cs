@@ -1,16 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using Shared_Resources.Enums;
+﻿using Shared_Resources.Enums;
 
-namespace WebAPI.UniversalSkills
+namespace WebAPI.UniversalSkills;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class UniversalSkillAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public class UniversalSkillAttribute : Attribute
-    {
-        public SkillEnum SkillAttribute { get; set; } 
+    public SkillEnum SkillAttribute { get; set; }
 
-        public UniversalSkillAttribute(SkillEnum skill)
-        {
-            SkillAttribute = skill;
-        }
+    public UniversalSkillAttribute(SkillEnum skill)
+    {
+        SkillAttribute = skill;
     }
 }

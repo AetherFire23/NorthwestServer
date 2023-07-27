@@ -1,6 +1,5 @@
-﻿namespace Shared_Resources.GameTasks
+﻿namespace Shared_Resources.GameTasks;
+
+public interface IGameTask
 {
-    public interface IGameTask
-    {
-    }
 }

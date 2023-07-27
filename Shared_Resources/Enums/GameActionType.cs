@@ -1,11 +1,10 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum GameActionType
 {
-    public enum GameActionType
-    {
-        Task,
-        GameEnded,
-        GameStarted,
-        RoomChanged,
-        CycleTick,
-    }
+    Task,
+    GameEnded,
+    GameStarted,
+    RoomChanged,
+    CycleTick,
 }

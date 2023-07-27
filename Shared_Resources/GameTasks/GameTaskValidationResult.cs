@@ -1,22 +1,21 @@
-﻿namespace Shared_Resources.GameTasks
+﻿namespace Shared_Resources.GameTasks;
+
+
+public class GameTaskValidationResult
 {
+    public string ErrorMessage { get; } = string.Empty;
+    public bool IsValid => string.IsNullOrWhiteSpace(ErrorMessage);
 
-    public class GameTaskValidationResult
+    /// <summary>
+    /// Constructorless means success
+    /// </summary>
+    public GameTaskValidationResult()
     {
-        public string ErrorMessage { get; } = string.Empty;
-        public bool IsValid => string.IsNullOrWhiteSpace(ErrorMessage);
-
-        /// <summary>
-        /// Constructorless means success
-        /// </summary>
-        public GameTaskValidationResult()
-        {
-            
-        }
-        public GameTaskValidationResult(string errorMessage)
-        {
-            ErrorMessage = errorMessage;
-        }
 
     }
+    public GameTaskValidationResult(string errorMessage)
+    {
+        ErrorMessage = errorMessage;
+    }
+
 }

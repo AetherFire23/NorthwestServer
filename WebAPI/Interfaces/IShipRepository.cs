@@ -1,10 +1,8 @@
-﻿using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
+﻿using Shared_Resources.Entities;
 
-namespace WebAPI.Interfaces
+namespace WebAPI.Interfaces;
+
+public interface IShipRepository
 {
-    public interface IShipRepository
-    {
-        Task<ShipState> GetShipStateAsync(Guid gameId);
-    }
+    Task<ShipState> GetShipStateAsync(Guid gameId);
 }

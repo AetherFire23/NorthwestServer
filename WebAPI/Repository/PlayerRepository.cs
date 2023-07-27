@@ -1,16 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Quartz.Core;
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
-using System.Text;
 using WebAPI;
-using System;
-using System.Collections.Generic;
 public class PlayerRepository : IPlayerRepository
 {
-    PlayerContext _playerContext;
+    private readonly PlayerContext _playerContext;
 
     DbSet<Player> Players => _playerContext.Players;
 
@@ -45,7 +40,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<List<PrivateInvitation>> GetPlayerInvitations(Guid playerId)
     {
-        var playerInvites = _playerContext.Invitations.Where(invite => invite.ToPlayerId == playerId).ToList();
+        var playerInvites = await _playerContext.Invitations.Where(invite => invite.ToPlayerId == playerId).ToListAsync();
         return playerInvites;
     }
 
@@ -59,9 +54,9 @@ public class PlayerRepository : IPlayerRepository
     {
         Player player = await GetPlayerAsync(playerId);
 
-        List<Item> items = GetOwnedItems(playerId).ToList();
+        List<Item> items = await GetOwnedItems(playerId);
 
-        List<Shared_Resources.Enums.SkillEnum> skillsOwned = GetOwnedSkills(playerId);
+        List<SkillEnum> skillsOwned = GetOwnedSkills(playerId);
 
         PlayerDTO playerDTO = new PlayerDTO()
         {
@@ -69,12 +64,12 @@ public class PlayerRepository : IPlayerRepository
             Id = playerId,
             GameId = player.GameId,
             Name = player.Name,
+            UserId = player.UserId,
             X = player.X,
             Y = player.Y,
             Z = player.Z,
             ActionPoints = player.ActionPoints,
             HealthPoints = player.HealthPoints,
-            CurrentChatRoomId = player.CurrentChatRoomId,
             CurrentGameRoomId = player.CurrentGameRoomId,
             Profession = player.Profession,
 
@@ -86,15 +81,17 @@ public class PlayerRepository : IPlayerRepository
         return playerDTO;
     }
 
-    public List<Shared_Resources.Enums.SkillEnum> GetOwnedSkills(Guid ownerId)
+    public List<SkillEnum> GetOwnedSkills(Guid ownerId)
     {
-        return _playerContext.Skills.Where(s => s.OwnerId == ownerId)
+        return _playerContext.Skills
+            .Where(s => s.OwnerId == ownerId)
             .Select(s => s.SkillType).ToList();
     }
 
-    public List<Item> GetOwnedItems(Guid ownerId)
+    public async Task<List<Item>> GetOwnedItems(Guid ownerId)
     {
-        return _playerContext.Items.Where(item => item.OwnerId == ownerId).ToList();
+        var items = await _playerContext.Items.Where(x => x.OwnerId == ownerId).ToListAsync();
+        return items;
     }
 
     public async Task<List<TriggerNotificationDTO>> GetTriggerNotificationsAsync(Guid playerId, DateTime? timeStamp)
@@ -128,37 +125,45 @@ public class PlayerRepository : IPlayerRepository
         return triggersOfType;
     }
 
-    public async Task<List<Log>> GetAccessibleLogs(Guid playerId, Guid gameId, DateTime? lastTimeStamp)
-    { // ne prend pas en compte le gameId haha
-        var logs = new List<Log>();
+    public async Task<List<Log>> GetAccessibleLogsForPlayer(Guid playerId, Guid gameId)
+    {
+        List<Log> publicLogsInGame = await _playerContext.Logs.Where(x => x.GameId == gameId && x.IsPublic).ToListAsync();
 
-        var newServerLogs = lastTimeStamp is null
-            ? await _playerContext.Logs.Where(x => x.GameId == gameId).ToListAsync()
-            : await _playerContext.Logs.Where(x => x.GameId == gameId && x.Created > lastTimeStamp).ToListAsync();
+        List<LogAccessPermissions> permissionsForPlayer = await _playerContext.LogAccessPermission.Where(x => x.PlayerId == playerId).ToListAsync();
+        List<Log> accessibleLogs = await _playerContext.LogAccessPermission.Join(_playerContext.Logs,
+            accessPermission => accessPermission.LogId,
+            log => log.Id,
+            (a, l) => l).ToListAsync();
 
-        foreach (var log in newServerLogs)
+        List<Log> allVisibleLogs = publicLogsInGame.Union(accessibleLogs).ToList();
+
+        return allVisibleLogs;
+    }
+
+    public async Task<List<Guid>> GetPlayersIdsWhoCanAccessLog(Log log)
+    {
+        var playerIdsWhoCanSeeLogs = _playerContext.LogAccessPermission
+            .Where(x => x.LogId == log.Id)
+            .Select(x => x.PlayerId).ToList();
+
+        return playerIdsWhoCanSeeLogs;
+    }
+
+    public async Task<List<Guid>> FilterPlayersWhoHaveAccessToLog(List<Guid> playerId, Log log)
+    {
+        if (log.IsPublic)
         {
-            if (log.IsPublic)
-            {
-                logs.Add(log);
-            }
-
-            else
-            {
-                // should encapsulate like RoomLogIsAccessibleTo(LogId, playerId)
-                var playersIdsWhoCanSeeLog = _playerContext.LogAccessPermission
-                    .Where(x => x.LogId == log.Id)
-                    .Select(x => x.PlayerId);
-
-                bool canSeePrivateLog = playersIdsWhoCanSeeLog.Contains(playerId);
-
-                if (canSeePrivateLog)
-                {
-                    logs.Add(log);
-                }
-            }
+            return playerId;
         }
 
-        return logs;
+        var playersWhoCanSeeLog = await GetPlayersIdsWhoCanAccessLog(log);
+        var playersWithAccess = playerId.Where(p => HasAccessToLog(playersWhoCanSeeLog, p)).ToList();
+        return playersWithAccess;
+    }
+
+    public bool HasAccessToLog(List<Guid> playersWhoHaveAccessToLog, Guid playerId)
+    {
+        bool hasAccess = playersWhoHaveAccessToLog.Contains(playerId);
+        return hasAccess;
     }
 }

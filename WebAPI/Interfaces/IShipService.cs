@@ -1,7 +1,6 @@
-﻿namespace WebAPI.Interfaces
+﻿namespace WebAPI.Interfaces;
+
+public interface IShipService
 {
-    public interface IShipService
-    {
-        Task InitializeShipStatusesAndResources(Guid gameId);
-    }
+    Task InitializeShipStatusesAndResources(Guid gameId);
 }

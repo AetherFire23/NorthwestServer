@@ -1,16 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shared_Resources.Entities;
-using Shared_Resources.Interfaces;
-namespace WebAPI.EntityConfigurations
+
+namespace WebAPI.EntityConfigurations;
+
+public class TriggerNotificationConfigurationProfile : IEntityTypeConfiguration<TriggerNotification>
 {
-    public class TriggerNotificationConfigurationProfile : IEntityTypeConfiguration<TriggerNotification>
+    public void Configure(EntityTypeBuilder<TriggerNotification> builder)
     {
-        public void Configure(EntityTypeBuilder<TriggerNotification> builder)
-        {
-            builder.HasKey(e => e.Id);
-            builder.Property(x => x.NotificationType)
-                .HasColumnType("nvarchar(30)");
-        }
+        builder.HasKey(e => e.Id);
+        //builder.Property(x => x.NotificationType)
+        //    .HasColumnType("nvarchar(30)");
     }
 }

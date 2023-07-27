@@ -1,8 +1,7 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum ItemType
 {
-    public enum ItemType
-    {
-        Wrench,
-        Hose
-    }
+    Wrench,
+    Hose
 }

@@ -1,11 +1,10 @@
-﻿namespace WebAPI.Temp_settomgs
+﻿namespace WebAPI.Temp_settomgs;
+
+public class CleanSettingProperties : TaskBase
 {
-    public class CleanSettingProperties : TaskBase
+    public CleanSettingProperties()
     {
-        public CleanSettingProperties()
-        {
-            this.ActionCost = 1;
-        }
-        public int HygieneGained { get; set; } = 2;
+        this.ActionCost = 1;
     }
+    public int HygieneGained { get; set; } = 2;
 }

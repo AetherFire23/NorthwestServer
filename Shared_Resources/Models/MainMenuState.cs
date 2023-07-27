@@ -1,11 +1,10 @@
-﻿using Shared_Resources.Entities;
-using System.Collections.Generic;
+﻿using Shared_Resources.DTOs;
+using System;
 
-namespace Shared_Resources.Models
+namespace Shared_Resources.Models;
+
+public class MainMenuState
 {
-    public class MainMenuState
-    {
-        public List<User> Friends { get; set; }
-        public List<MenuNotification> Notifications { get; set; }
-    }
+    public UserDto UserDto { get; set; } = new UserDto();
+    public DateTime? TimeStamp { get; set; }
 }

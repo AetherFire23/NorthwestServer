@@ -1,7 +1,6 @@
-﻿namespace Shared_Resources.Models
+﻿namespace Shared_Resources.Models;
+
+public class Station1Property
 {
-    public class Station1Property
-    {
-        public int SomeValue { get; set; }
-    }
+    public int SomeValue { get; set; }
 }

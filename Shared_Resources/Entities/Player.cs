@@ -1,70 +1,68 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.DTOs;
+﻿using Newtonsoft.Json;
 using Shared_Resources.Enums;
 using Shared_Resources.Interfaces;
 using System;
-using System.Collections.Generic;
-using Shared_Resources.Constants;
 using System.Globalization;
-using System.Reflection;
 
-namespace Shared_Resources.Entities
+namespace Shared_Resources.Entities;
+
+public class Player : IPlayerEntity, ITaskParameter, IFormattable
 {
-    public class Player : IEntity, ITaskParameter, IFormattable
+    public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
+
+    [JsonProperty($"id")]
+    public Guid Id { get; set; }
+
+    public Guid GameId { get; set; }
+    public Guid UserId { get; set; }
+
+    public Guid CurrentGameRoomId { get; set; }
+
+    public RoleType Profession { get; set; }
+
+    public float X { get; set; }
+
+    public float Y { get; set; }
+
+    public float Z { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public int HealthPoints { get; set; }
+
+    public int ActionPoints { get; set; }
+
+    public virtual User User { get; set; } = new User();
+    public virtual Game Game { get; set; } = new Game();
+
+
+    //public Player Clone()
+    //{
+    //    return new Player()
+    //    {
+    //        Id = this.Id,
+    //        ActionPoints = this.ActionPoints,
+    //        X = this.X,
+    //        Y = this.Y,
+    //        Z = this.Z,
+    //        CurrentGameRoomId = this.CurrentGameRoomId,
+    //        GameId = this.GameId,
+    //        HealthPoints = this.HealthPoints,
+    //        Name = this.Name,
+    //        Profession = this.Profession
+    //    };
+    //}
+
+
+    public override string ToString()
     {
-        public (string ParamType, string Id) TaskParam => (this.GetType().Name, this.Id.ToString());
-
-        public Guid Id { get; set; }
-
-        public Guid GameId { get; set; }
-
-        public Guid CurrentChatRoomId { get; set; }
-
-        public Guid CurrentGameRoomId { get; set; }
-
-        public RoleType Profession { get; set; }
-
-        public float X { get; set; }
-
-        public float Y { get; set; }
-
-        public float Z { get; set; }
-
-        public string Name { get; set; } = string.Empty;
-
-        public int HealthPoints { get; set; }
-
-        public int ActionPoints { get; set; }
-
-        public Player Clone()
-        {
-            return new Player()
-            {
-                Id = this.Id,
-                ActionPoints = this.ActionPoints,
-                X = this.X,
-                Y = this.Y,
-                Z = this.Z,
-                CurrentChatRoomId = this.CurrentChatRoomId,
-                CurrentGameRoomId = this.CurrentGameRoomId,
-                GameId = this.GameId,
-                HealthPoints = this.HealthPoints,
-                Name = this.Name,
-                Profession = this.Profession
-            };
-        }
+        return ToString(null, CultureInfo.CurrentCulture);
+    }
 
 
-        public override string ToString()
-        {
-            return ToString(null, CultureInfo.CurrentCulture);
-        }
-
-
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return $"{this.Name}";
-        }
+    public string ToString(string format, IFormatProvider formatProvider)
+    {
+        return $"{this.Name}";
     }
 }
 

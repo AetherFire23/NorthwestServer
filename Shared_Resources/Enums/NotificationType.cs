@@ -1,9 +1,8 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum NotificationType
 {
-    public enum NotificationType
-    {
-        CycleChanged,
-        DoorOpen,
-        PrivInv,
-    }
+    CycleChanged,
+    DoorOpen,
+    PrivInv,
 }

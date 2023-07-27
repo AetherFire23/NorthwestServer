@@ -1,6 +1,5 @@
-﻿namespace WebAPI.Interfaces
+﻿namespace WebAPI.Interfaces;
+
+public interface IGameStateService
 {
-    public interface IGameStateService
-    {
-    }
 }

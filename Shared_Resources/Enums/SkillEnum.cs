@@ -1,9 +1,8 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum SkillEnum
 {
-    public enum SkillEnum
-    {
-        CookBonus,
-        AttackBonus,
-        ShootLaser,
-    }
+    CookBonus,
+    AttackBonus,
+    ShootLaser,
 }

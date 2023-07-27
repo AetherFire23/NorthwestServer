@@ -1,9 +1,8 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum SettingType
 {
-    public enum SettingType
-    {
-        Role,
-        Game,
-        Task
-    }
+    Role,
+    Game,
+    Task
 }

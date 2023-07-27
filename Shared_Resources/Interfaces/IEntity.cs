@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Shared_Resources.Interfaces
+namespace Shared_Resources.Interfaces;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-        public Guid Id { get; }
-    }
+    public Guid Id { get; }
 }

@@ -3,55 +3,54 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Shared_Resources.Models
+namespace Shared_Resources.Models;
+
+public static class DefaultRoomFactory
 {
-    public static class DefaultRoomFactory
+    public static Tuple<List<Room>, List<AdjacentRoom>> CreateAndInitializeNewRoomsAndConnections(Guid gameId)
     {
-        public static Tuple<List<Room>, List<AdjacentRoom>> CreateAndInitializeNewRoomsAndConnections(Guid gameId)
-        {
-            List<Room> defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms();
-            InitializeDefaultRoomIds(gameId, defaultRooms);
-            List<AdjacentRoom> connections = CreateAndInitializeConnections(gameId, defaultRooms);
+        List<Room> defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms();
+        InitializeDefaultRoomIds(gameId, defaultRooms);
+        List<AdjacentRoom> connections = CreateAndInitializeConnections(gameId, defaultRooms);
 
-            var tuple = new Tuple<List<Room>, List<AdjacentRoom>>(defaultRooms, connections);
-            return tuple;
+        var tuple = new Tuple<List<Room>, List<AdjacentRoom>>(defaultRooms, connections);
+        return tuple;
+    }
+
+    public static void InitializeDefaultRoomIds(Guid gameId, List<Room> defaultRooms)
+    {
+        foreach (var room in defaultRooms)
+        {
+            room.Id = Guid.NewGuid();
+            room.GameId = gameId;
         }
+    }
 
-        public static void InitializeDefaultRoomIds(Guid gameId, List<Room> defaultRooms)
+    public static List<AdjacentRoom> CreateAndInitializeConnections(Guid gameId, List<Room> initializedRooms, bool isLandmass = false) // landmass rooms connections are initialized in RoomTemplate
+    {
+        if (initializedRooms.Any(x => x.Id == Guid.Empty || x.GameId == Guid.Empty)) throw new Exception("Rooms were not initializedCorrectly");
+
+        List<AdjacentRoom> connections = new List<AdjacentRoom>();
+        foreach (var room in initializedRooms)
         {
-            foreach (var room in defaultRooms)
+            foreach (var adjacentName in room.AdjacentRoomNames)
             {
-                room.Id = Guid.NewGuid();
-                room.GameId = gameId;
-            }
-        }
+                var adjRoomEntity = initializedRooms.FirstOrDefault(x => x.Name.Equals(adjacentName));
 
-        public static List<AdjacentRoom> CreateAndInitializeConnections(Guid gameId, List<Room> initializedRooms, bool isLandmass = false) // landmass rooms connections are initialized in RoomTemplate
-        {
-            if (initializedRooms.Any(x => x.Id == Guid.Empty || x.GameId == Guid.Empty)) throw new Exception("Rooms were not initializedCorrectly");
+                if (adjRoomEntity is null) throw new Exception($"adjacent room not found : {adjacentName}");
 
-            List<AdjacentRoom> connections = new List<AdjacentRoom>();
-            foreach (var room in initializedRooms)
-            {
-                foreach (var adjacentName in room.AdjacentRoomNames)
+                AdjacentRoom connection = new AdjacentRoom()
                 {
-                    var adjRoomEntity = initializedRooms.FirstOrDefault(x => x.Name.Equals(adjacentName));
+                    Id = Guid.NewGuid(),
+                    RoomId = room.Id,
+                    AdjacentId = adjRoomEntity.Id,
+                    GameId = gameId,
+                    IsLandmassConnection = isLandmass
+                };
 
-                    if (adjRoomEntity is null) throw new Exception($"adjacent room not found : {adjacentName}");
-
-                    AdjacentRoom connection = new AdjacentRoom()
-                    {
-                        Id = Guid.NewGuid(),
-                        RoomId = room.Id,
-                        AdjacentId = adjRoomEntity.Id,
-                        GameId = gameId,
-                        IsLandmassConnection = isLandmass
-                    };
-
-                    connections.Add(connection);
-                }
+                connections.Add(connection);
             }
-            return connections;
         }
+        return connections;
     }
 }

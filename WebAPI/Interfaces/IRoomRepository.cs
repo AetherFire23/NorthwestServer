@@ -1,22 +1,23 @@
 ﻿using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 
-namespace WebAPI.Interfaces
+namespace WebAPI.Interfaces;
+
+public interface IRoomRepository
 {
-    public interface IRoomRepository
-    {
-        /// <summary>
-        /// Initializes empty rooms with given gameId and adds it to the database.
-        /// </summary>
-        /// <param name="gameId"></param>
-        Task<List<Room>> GetAllLandmassRoomsInGame(Guid gameId);
-        Task<List<Room>> GetAllActiveLandmassRooms(Guid gameId);
-        Task<Room> GetRoomById(Guid roomId);
-        Task RemoveFromAllConnectedRooms(Guid roomId);
-        Task<List<Room>> GetRoomsInGamesync(Guid gameId);
-        Task<Room> GetRoomFromName(Guid gameId, string roomName);
-        Task<RoomDTO> GetRoomDTOAsync(Guid roomId);
-        Task CreateNewRoomsAndConnections(Guid gameId);
-        Task<List<AdjacentRoom>> GetLandmassAdjacentRoomsAsync(Guid gameId);
-    }
+    /// <summary>
+    /// Initializes empty rooms with given gameId and adds it to the database.
+    /// </summary>
+    /// <param name="gameId"></param>
+    Task<List<Room>> GetAllLandmassRoomsInGame(Guid gameId);
+    Task<List<Room>> GetAllActiveLandmassRooms(Guid gameId);
+    Task<Room> GetRoomById(Guid roomId);
+    Task RemoveFromAllConnectedRooms(Guid roomId);
+    Task<List<Room>> GetRoomsInGamesync(Guid gameId);
+    Task<Room> GetRoomFromName(Guid gameId, string roomName);
+    Task<RoomDTO> GetRoomDTOAsync(Guid roomId);
+    Task CreateNewRoomsAndConnections(Guid gameId);
+    Task<List<AdjacentRoom>> GetLandmassAdjacentRoomsAsync(Guid gameId);
+    Task<List<Item>> GetRoomItems(Guid roomId);
+    Task<List<Item>> GetItemsInAllRooms(Guid gameId);
 }

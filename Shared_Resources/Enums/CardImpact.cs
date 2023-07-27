@@ -1,9 +1,8 @@
-﻿namespace Shared_Resources.Enums
+﻿namespace Shared_Resources.Enums;
+
+public enum CardImpact
 {
-    public enum CardImpact
-    {
-        Positive,
-        Negative,
-        Neutral
-    }
+    Positive,
+    Negative,
+    Neutral
 }

@@ -1,15 +1,11 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.DTOs;
-using Shared_Resources.Enums;
-using System;
+﻿using System;
 
-namespace Shared_Resources.Entities
+namespace Shared_Resources.Entities;
+
+public class Skill
 {
-    public class Skill
-    {
-        //[Key]
-        public Guid Id { get; set; }
-        public Guid OwnerId { get; set; }
-        public Enums.SkillEnum SkillType { get; set; }
-    }
+    //[Key]
+    public Guid Id { get; set; }
+    public Guid OwnerId { get; set; }
+    public Enums.SkillEnum SkillType { get; set; }
 }
