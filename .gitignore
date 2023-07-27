@@ -1,5 +1,8 @@
 # ASP.NET Core
 *.obj
+.vs/
+**/.vs/
+*.suo
 *.bin
 *.dll
 *.exe
