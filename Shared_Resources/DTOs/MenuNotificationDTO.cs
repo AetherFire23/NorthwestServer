@@ -3,7 +3,7 @@ using System;
 
 namespace Shared_Resources.DTOs;
 
-public class MenuNotificationDTO
+public class MenuNotificationDto
 {
     public Guid Id { get; set; }
     public Guid ToId { get; set; }

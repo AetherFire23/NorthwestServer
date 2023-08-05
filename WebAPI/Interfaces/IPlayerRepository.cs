@@ -1,6 +1,5 @@
 ﻿using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
-using Shared_Resources.Enums;
 
 public interface IPlayerRepository
 {
@@ -9,9 +8,7 @@ public interface IPlayerRepository
     public Task<Player> GetPlayerAsync(Guid id);
     public Task<List<PrivateInvitation>> GetPlayerInvitations(Guid playerId);
 
-    public Task<PlayerDTO> MapPlayerDTOAsync(Guid playerId);
-    public Task<List<TriggerNotificationDTO>> GetTriggerNotificationsAsync(Guid playerId, DateTime? timeStamp);
-    public List<TriggerNotification> GetAllTriggersOfType(Guid playerId, NotificationType notificationType);
+    public Task<PlayerDto> MapPlayerDTOAsync(Guid playerId);
     Task<List<Player>> GetPlayersInGameAsync(Guid gameId);
     Task<List<Item>> GetOwnedItems(Guid ownerId);
     Task<List<Log>> GetAccessibleLogsForPlayer(Guid playerId, Guid gameId);

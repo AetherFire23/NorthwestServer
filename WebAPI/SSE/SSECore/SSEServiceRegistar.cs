@@ -9,7 +9,7 @@ public static class SSEServiceRegistar
         var types = DiscoverSSEClientManagerTypesInAssembly();
         foreach (Type type in types)
         {
-            services.AddSingleton(type);
+            _ = services.AddSingleton(type);
         }
         Trace.WriteLine("SSE Managers registered");
     }

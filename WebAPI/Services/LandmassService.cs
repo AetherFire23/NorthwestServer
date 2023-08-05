@@ -1,6 +1,6 @@
 ﻿using Shared_Resources.Entities;
 using WebAPI.Interfaces;
-using WebAPI.Statics;
+using WebAPI.Landmasses;
 
 namespace WebAPI.Services;
 
@@ -23,7 +23,7 @@ public class LandmassService : ILandmassService
     {
         var layout2 = LandmassGetter.CreateNewLandmass();
         List<string> roomNames2 = await _landmassCardsService.DrawNextLandmassRoomNames2(gameId, layout2);
-        LandmassGetter.InsertLandmassNamesInLayout(layout2, roomNames2);
+        _ = LandmassGetter.InsertLandmassNamesInLayout(layout2, roomNames2);
 
         Tuple<List<Room>, List<AdjacentRoom>> s = LandmassEntitiesInitializer.CreateNewDefaultLandmassRoomsAndConnections(layout2, gameId);
         // ligne ici pour initializer les stations des landmasses I guess
@@ -31,7 +31,7 @@ public class LandmassService : ILandmassService
         await WipeLandmassRoomsAndConnections(gameId);
         await _playerContext.Rooms.AddRangeAsync(s.Item1);
         await _playerContext.AdjacentRooms.AddRangeAsync(s.Item2);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     private async Task WipeLandmassRoomsAndConnections(Guid gameId) // faudra y penser

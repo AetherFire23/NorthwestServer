@@ -12,16 +12,9 @@ using System.Reflection;
 using System.Text;
 using WebAPI.Authentication;
 using WebAPI.Conventions;
-using WebAPI.Game_Actions;
 using WebAPI.GameTasks;
-using WebAPI.Interfaces;
 using WebAPI.Jobs;
-using WebAPI.Repository;
-using WebAPI.Repository.Users;
-using WebAPI.Seeding;
-using WebAPI.Services;
 using WebAPI.SSE;
-using WebAPI.SSE.Senders;
 using WebAPI.Strategies;
 
 namespace WebAPI.ApiConfiguration;
@@ -60,13 +53,13 @@ public static class ApplicationBuilderHelper
 
         foreach (var type in apiTypes)
         {
-            builder.Services.AddTransient(type);
+            _ = builder.Services.AddTransient(type);
         }
     }
 
     private static void ConfigureConventions(WebApplicationBuilder builder) // required for my library for endpoints
     {
-        builder.Services.AddControllers(options =>
+        _ = builder.Services.AddControllers(options =>
         {
             options.Conventions.Add(new LowercaseControllerModelConvention());
         });
@@ -75,9 +68,9 @@ public static class ApplicationBuilderHelper
     private static void ConfigureSwagger(WebApplicationBuilder builder)
     {
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
+        _ = builder.Services.AddEndpointsApiExplorer();
         // Add Swagger services
-        builder.Services.AddSwaggerGen(c =>
+        _ = builder.Services.AddSwaggerGen(c =>
         {
             // Add the security definition for JWT Bearer token
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -110,7 +103,7 @@ public static class ApplicationBuilderHelper
 
     private static void ConfigureQuartz(WebApplicationBuilder builder)
     {
-        builder.Services.AddQuartz(q =>
+        _ = builder.Services.AddQuartz(q =>
         {
             q.SchedulerId = "Scheduler-Core";
 
@@ -123,7 +116,7 @@ public static class ApplicationBuilderHelper
                 tp.MaxConcurrency = 10;
             });
 
-            q.ScheduleJob<CycleJob>(trigger => trigger
+            _ = q.ScheduleJob<CycleJob>(trigger => trigger
                 .WithIdentity("Combined Configuration Trigger")
                 .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
                 .WithDescription("my awesome trigger configured for a job with single call"));
@@ -137,14 +130,14 @@ public static class ApplicationBuilderHelper
             //    .WithDescription("my awesome trigger configured for a job with single call"));
         });
 
-        builder.Services.AddQuartzServer(options =>
+        _ = builder.Services.AddQuartzServer(options =>
         {
             // when shutting down we want jobs to complete gracefully
             options.WaitForJobsToComplete = true;
         });
 
         // Add Jobs here
-        builder.Services.AddTransient<CycleJob>();
+        _ = builder.Services.AddTransient<CycleJob>();
     }
 
 
@@ -154,7 +147,7 @@ public static class ApplicationBuilderHelper
     private static void ConfigureAutoMapper(WebApplicationBuilder builder)
     {
         // Configure Automapper
-        builder.Services.AddAutoMapper(typeof(Program).Assembly);
+        _ = builder.Services.AddAutoMapper(typeof(Program).Assembly);
     }
 
     private static void ConfigureDbContext(WebApplicationBuilder builder)
@@ -168,15 +161,15 @@ public static class ApplicationBuilderHelper
         // for parameters https://www.npgsql.org/doc/connection-string-parameters.html
         // Host and Server works
         // DBeaver tick "show all conncetions"
-        builder.Services.AddDbContext<PlayerContext>(options =>
+        _ = builder.Services.AddDbContext<PlayerContext>(options =>
             options.UseNpgsql(playerContextConnectionString)
             .EnableSensitiveDataLogging(true)); // only should be appleid to development 
-            
 
 
 
-       // builder.Services.AddDbContext<PlayerContext>(options
-       //=> options.UseSqlServer(playerContextConnectionString));
+
+        // builder.Services.AddDbContext<PlayerContext>(options
+        //=> options.UseSqlServer(playerContextConnectionString));
 
         //builder.Services.AddDbContext<AuthenticationContext>(options =>
         //    options.UseSqlServer(authenticationConnectionString));
@@ -184,11 +177,11 @@ public static class ApplicationBuilderHelper
 
     private static void ConfigureHTTPLogging(WebApplicationBuilder builder)
     {
-        builder.Services.AddHttpLogging(logging =>
+        _ = builder.Services.AddHttpLogging(logging =>
         {
             logging.LoggingFields = HttpLoggingFields.All;
-            logging.RequestHeaders.Add("sec-ch-ua");
-            logging.ResponseHeaders.Add("MyResponseHeader");
+            _ = logging.RequestHeaders.Add("sec-ch-ua");
+            _ = logging.ResponseHeaders.Add("MyResponseHeader");
             logging.MediaTypeOptions.AddText("application/javascript");
             logging.RequestBodyLogLimit = 4096;
             logging.ResponseBodyLogLimit = 4096;
@@ -197,7 +190,7 @@ public static class ApplicationBuilderHelper
 
     private static void ConfigureIdentityContext(WebApplicationBuilder builder)
     {
-        builder.Services.AddIdentityCore<User>(o =>
+        _ = builder.Services.AddIdentityCore<User>(o =>
         {
             o.Password.RequireDigit = true;
             o.Password.RequireLowercase = false;
@@ -215,10 +208,10 @@ public static class ApplicationBuilderHelper
         var jwtSection = builder.Configuration.GetSection("Jwt");
         var jwtConfig = new JwtConfig();
         jwtSection.Bind(jwtConfig);
-        builder.Services.Configure<JwtConfig>(jwtSection);
+        _ = builder.Services.Configure<JwtConfig>(jwtSection);
 
         // Configure JWT authentication
-        builder.Services.AddAuthentication(options =>
+        _ = builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -237,7 +230,7 @@ public static class ApplicationBuilderHelper
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey))
             };
         });
-        builder.Services.AddAuthorization();
+        _ = builder.Services.AddAuthorization();
     }
 
     private static void AddSSEServices(WebApplicationBuilder builder)

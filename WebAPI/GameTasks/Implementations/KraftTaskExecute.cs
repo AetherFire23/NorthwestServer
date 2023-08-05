@@ -29,8 +29,8 @@ public class KraftTaskExecutea : KraftTaskBase
             ItemType = ItemType.Hose,
         };
 
-        await _playerContext.Items.AddAsync(item);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.Items.AddAsync(item);
+        _ = await _playerContext.SaveChangesAsync();
 
         await _gameSSESender.SendItemChangedEvent(context.GameId);
     }

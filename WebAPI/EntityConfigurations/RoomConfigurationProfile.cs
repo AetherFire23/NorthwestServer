@@ -7,7 +7,7 @@ public class RoomConfigurationProfile : IEntityTypeConfiguration<Room>
 {
     public void Configure(EntityTypeBuilder<Room> builder)
     {
-        builder.HasKey(e => e.Id);
-        builder.Ignore(e => e.AdjacentRoomNames);
+        _ = builder.HasKey(e => e.Id);
+        _ = builder.Ignore(e => e.AdjacentRoomNames);
     }
 }

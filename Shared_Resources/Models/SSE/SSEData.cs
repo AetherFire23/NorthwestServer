@@ -18,17 +18,17 @@ public class SSEData
     public string ConvertToReadableLine() // this is what gets sent through the server
     {
         var builder = new StringBuilder();
-        builder.Append(SSEStrings.EventTypePrefix);
-        builder.Append(EventType.ToString());
+        _ = builder.Append(SSEStrings.EventTypePrefix);
+        _ = builder.Append(EventType.ToString());
 
-        builder.Append(SSEStrings.Separator);
+        _ = builder.Append(SSEStrings.Separator);
 
-        builder.Append(SSEStrings.DataPrefix);
+        _ = builder.Append(SSEStrings.DataPrefix);
         //string serializedData = JsonConvert.SerializeObject(Data);
-        builder.Append(SerializedData);
+        _ = builder.Append(SerializedData);
 
-        builder.Append(SSEStrings.EndCharacter);
-        builder.Append("\n"); // so that it doesnt hand when a reader does ReaderLine()
+        _ = builder.Append(SSEStrings.EndCharacter);
+        _ = builder.Append("\n"); // so that it doesnt hand when a reader does ReaderLine()
 
         string line = builder.ToString();
         return line;

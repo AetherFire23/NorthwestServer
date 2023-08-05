@@ -56,11 +56,11 @@ public class MedicRoleStrategyService : IRoleInitializationStrategy
             PlayerId = player.Id,
         };
 
-        _playerContext.LogAccessPermission.Add(permission); // seeding some log for specific players
-        _playerContext.Logs.Add(log); // seeding some log for specific players
-        _playerContext.Logs.Add(logPublic); // seeding some log for specific players
+        _ = _playerContext.LogAccessPermission.Add(permission); // seeding some log for specific players
+        _ = _playerContext.Logs.Add(log); // seeding some log for specific players
+        _ = _playerContext.Logs.Add(logPublic); // seeding some log for specific players
 
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     public async Task TickPlayerFromRoleAsync(Player player)

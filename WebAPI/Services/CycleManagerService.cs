@@ -32,14 +32,14 @@ public class CycleManagerService : ICycleManagerService
 
         game.NextTick = Game.CalculateNextTick();
 
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
         Console.WriteLine("Game Has ticked");
     }
 
     public async Task TickUniversalSKills(Guid gameId) // pretty much ready-togo
     {
         List<Type> universalSkillTypes = SkillStrategyMapper.GetAllUniversalSkillTypes();
-        List<IUniversalSkill?> universalSkills = universalSkillTypes.Select(x => _serviceProvider.GetService(x) as IUniversalSkill).ToList();
+        List<ITickedSkills?> universalSkills = universalSkillTypes.Select(x => _serviceProvider.GetService(x) as ITickedSkills).ToList();
 
         List<Player> players = await _playerRepository.GetPlayersInGameAsync(gameId);
 

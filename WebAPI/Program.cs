@@ -51,7 +51,7 @@ public class Program
 
         WebApplication app = builder.Build();
 
-        app.UseHttpLogging();
+        _ = app.UseHttpLogging();
 
 
 
@@ -61,16 +61,16 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            _ = app.UseSwagger();
+            _ = app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
+        _ = app.UseHttpsRedirection();
 
-        app.UseAuthentication();
-        app.UseAuthorization();
+        _ = app.UseAuthentication();
+        _ = app.UseAuthorization();
 
-        app.MapControllers();
+        _ = app.MapControllers();
 
         app.Run();
     }

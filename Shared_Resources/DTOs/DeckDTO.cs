@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 namespace Shared_Resources.DTOs;
 
-public class DeckDTO
+public class DeckDto
 {
     public Guid Id { get; set; }
     public Guid GameId { get; set; }

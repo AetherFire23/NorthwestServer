@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared_Resources.Constants.Endpoints;
-using Shared_Resources.Constants.Mapper;
 using Shared_Resources.GameTasks;
 using Shared_Resources.Models;
-using Shared_Resources.Scratches;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Controllers;
@@ -12,21 +10,14 @@ namespace WebAPI.Controllers;
 [Route(GameEndpoints.GameController)]
 public class GameController : ControllerBase
 {
-    private readonly PlayerContext _playerContext;
-    private readonly IPlayerRepository _playerRepository;
     private readonly IGameStateRepository _gameStateRepository;
     private readonly IPlayerService _playerService;
     private readonly IGameTaskService _gameTaskService;
 
-    public GameController(PlayerContext playerContext,
-        IPlayerRepository playerRepository,
-        IGameStateRepository gameStateRepository,
-        IMainMenuRepository mainMenuRepository,
+    public GameController(IGameStateRepository gameStateRepository,
         IPlayerService playerService,
         IGameTaskService gameTaskService)
     {
-        _playerRepository = playerRepository;
-        _playerContext = playerContext;
         _gameStateRepository = gameStateRepository;
         _playerService = playerService;
         _gameTaskService = gameTaskService;

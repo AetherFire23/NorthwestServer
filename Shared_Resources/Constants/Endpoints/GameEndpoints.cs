@@ -1,7 +1,4 @@
 ﻿using Shared_Resources.Constants.Mapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shared_Resources.Constants.Endpoints;
 

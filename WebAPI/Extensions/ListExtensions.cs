@@ -1,6 +1,4 @@
-﻿using WebAPI.Utils;
-
-namespace WebAPI.Extensions;
+﻿namespace WebAPI.Extensions;
 
 public static class ListExtensions
 {
@@ -12,7 +10,7 @@ public static class ListExtensions
             int randomNumber = Random.Shared.Next(0, initialList.Count);
             T? randomValue = initialList.ElementAt(randomNumber);
             shuffled.Add(randomValue);
-            initialList.Remove(randomValue);
+            _ = initialList.Remove(randomValue);
         }
 
         return shuffled;

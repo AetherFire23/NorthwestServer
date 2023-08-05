@@ -1,4 +1,4 @@
-﻿using Shared_Resources.Constants.CheckListsBuilding;
+﻿using Shared_Resources.GameTasks.CheckListsBuilding;
 using Shared_Resources.Models;
 using System;
 using System.Collections.Generic;
@@ -15,9 +15,9 @@ public class KraftTaskBase : GameTaskBase
     public override bool HasRequiredConditions(GameState gameState)
     {
         // Pas de liste juste if, brackets et ||
-        bool isPlayerInCaptainsQuarters = gameState.LocalPlayerRoom.Name.Equals(nameof(RoomsTemplate.CaptainsQuarters));
+        _ = gameState.LocalPlayerRoom.Name.Equals(nameof(RoomsTemplate.CaptainsQuarters));
         bool isBelowMaximumItemCount = gameState.PlayerDTO.Items.Count < 2;
-        bool ohYeah = gameState.LocalPlayerRoom.Name.Equals(nameof(RoomsTemplate.CrowsNest));
+        _ = gameState.LocalPlayerRoom.Name.Equals(nameof(RoomsTemplate.CrowsNest));
         return isBelowMaximumItemCount;
     }
 
@@ -28,7 +28,7 @@ public class KraftTaskBase : GameTaskBase
         var builder = new CheckListsBuilder();
 
         var rooms = gameState.Rooms.Where(x => x.IsLandmass).ToList();
-        builder.CreateCheckListPrompt(rooms, "Changed it!")
+        _ = builder.CreateCheckListPrompt(rooms, "Changed it!")
             .SetMinimumTargetCount(2)
             .SetMaximumTargetCount(5);
         return builder.CheckLists;

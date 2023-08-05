@@ -30,7 +30,7 @@
             public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
             {
                 var clientCallResult = await _mainMenuRepository.GetMainMenuState(userId);
-                var deserializeResult = clientCallResult.DeserializeContent<MainMenuState>();
+                _ = clientCallResult.DeserializeContent<MainMenuState>();
                 return Ok(clientCallResult);
             }
 

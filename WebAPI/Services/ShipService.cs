@@ -37,8 +37,8 @@ public class ShipService : IShipService
             Wood = 10,
         };
 
-        await _playerContext.ShipStates.AddAsync(shipStatus);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.ShipStates.AddAsync(shipStatus);
+        _ = await _playerContext.SaveChangesAsync();
     }
 
 
@@ -58,6 +58,6 @@ public class ShipService : IShipService
             // math formula to calculate expected vs real
         }
 
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 }

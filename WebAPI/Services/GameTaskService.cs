@@ -1,6 +1,5 @@
 ﻿using Shared_Resources.GameTasks;
 using Shared_Resources.Models;
-using Shared_Resources.Scratches;
 using WebAPI.GameTasks;
 using WebAPI.Interfaces;
 

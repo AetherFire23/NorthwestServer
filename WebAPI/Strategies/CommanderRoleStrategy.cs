@@ -32,9 +32,9 @@ public class CommanderRoleStrategy : IRoleInitializationStrategy
             OwnerId = player.Id,
         };
 
-        await _playerContext.Items.AddAsync(item);
+        _ = await _playerContext.Items.AddAsync(item);
 
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     public async Task TickPlayer(Guid playerId)

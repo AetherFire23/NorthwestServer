@@ -61,7 +61,7 @@ public class LobbyService : ILobbyService
         await _lobbyRepository.DeleteLobbyIfEmpty(lobby);
 
         // Send signal to update Lobbies
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
         return ClientCallResult.Success;
     }
 
@@ -73,7 +73,7 @@ public class LobbyService : ILobbyService
             await _gameMakerService.CreateGameFromLobby(lobbyId); // important call lol!
             await CleanupLobbyAndUsersAfterGameStart(lobbyId);
 
-            
+
         }
     }
 
@@ -91,7 +91,7 @@ public class LobbyService : ILobbyService
             NameSelection = nameSelection
         };
         await _lobbyRepository.AddUserLobby(userLobby);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     private async Task CleanupLobbyAndUsersAfterGameStart(Guid lobbyId)
@@ -99,6 +99,6 @@ public class LobbyService : ILobbyService
         var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
         await _lobbyRepository.DeleteManyUsersFromLobby(lobby.UsersInLobby, lobbyId);
         _lobbyRepository.RemoveLobby(lobby);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 }

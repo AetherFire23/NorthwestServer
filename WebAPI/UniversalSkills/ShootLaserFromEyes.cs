@@ -4,7 +4,7 @@ using Shared_Resources.Enums;
 namespace WebAPI.UniversalSkills;
 
 [UniversalSkill(SkillEnum.ShootLaser)]
-public class ShootLaserFromEyes : IUniversalSkill
+public class ShootLaserFromEyes : ITickedSkills
 {
     private readonly PlayerContext _playerContext;
     public ShootLaserFromEyes(PlayerContext playerContext)
@@ -17,6 +17,5 @@ public class ShootLaserFromEyes : IUniversalSkill
     }
     public async Task ApplyTickEffect(Player player)
     {
-        int i = 0;
     }
 }

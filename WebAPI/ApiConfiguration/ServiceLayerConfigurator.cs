@@ -14,35 +14,35 @@ public static class ServiceLayerConfigurator
     public static void AddServicesLayer(WebApplicationBuilder builder)
     {
         // Dependencies
-        builder.Services.AddScoped<ICycleManagerService, CycleManagerService>();
+        _ = builder.Services.AddScoped<ICycleManagerService, CycleManagerService>();
 
         // Services
-        builder.Services.AddScoped<IPlayerService, PlayerService>();
-        builder.Services.AddScoped<IGameTaskService, GameTaskService>();
-        builder.Services.AddScoped<IPlayerService, PlayerService>();
-        builder.Services.AddScoped<IFriendService, FriendService>();
-        builder.Services.AddScoped<IGameStateService, GameStateService>();
-        builder.Services.AddScoped<IChatService, ChatService>();
-        builder.Services.AddScoped<IGameMakerService, GameMakerService>();
-        builder.Services.AddScoped<IShipService, ShipService>();
+        _ = builder.Services.AddScoped<IPlayerService, PlayerService>();
+        _ = builder.Services.AddScoped<IGameTaskService, GameTaskService>();
+        _ = builder.Services.AddScoped<IPlayerService, PlayerService>();
+        _ = builder.Services.AddScoped<IFriendService, FriendService>();
+        _ = builder.Services.AddScoped<IGameStateService, GameStateService>();
+        _ = builder.Services.AddScoped<IChatService, ChatService>();
+        _ = builder.Services.AddScoped<IGameMakerService, GameMakerService>();
+        _ = builder.Services.AddScoped<IShipService, ShipService>();
 
         //landmasses
-        builder.Services.AddScoped<ILandmassService, LandmassService>();
-        builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
-        builder.Services.AddScoped<IUserService, UserService>();
+        _ = builder.Services.AddScoped<ILandmassService, LandmassService>();
+        _ = builder.Services.AddScoped<ILandmassCardsService, LandmassCardsService>();
+        _ = builder.Services.AddScoped<IUserService, UserService>();
 
         //builder.Services.AddSingleton<ISSEClientManager, GameSSEClientManager>();
-        builder.Services.AddScoped<IGameSSESender, GameSSESender>();
+        _ = builder.Services.AddScoped<IGameSSESender, GameSSESender>();
 
         //seeding
-        builder.Services.AddScoped<ISeedSequence, SeedSequence>();
-        builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+        _ = builder.Services.AddScoped<ISeedSequence, SeedSequence>();
+        _ = builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-        builder.Services.AddScoped<ILobbyService, LobbyService>();
-        builder.Services.AddScoped<ILobbyRepository, LobbyRepository>();
+        _ = builder.Services.AddScoped<ILobbyService, LobbyService>();
+        _ = builder.Services.AddScoped<ILobbyRepository, LobbyRepository>();
 
         // sse 
-        builder.Services.AddScoped<IGameSSESender, GameSSESender>();
-        builder.Services.AddScoped<IMainMenuSSESender, MainMenuSSESender>();
+        _ = builder.Services.AddScoped<IGameSSESender, GameSSESender>();
+        _ = builder.Services.AddScoped<IMainMenuSSESender, MainMenuSSESender>();
     }
 }

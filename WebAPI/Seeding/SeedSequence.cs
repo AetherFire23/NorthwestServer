@@ -64,10 +64,10 @@ public class SeedSequence : ISeedSequence
             User = user,
         };
 
-        await _playerContext.AddAsync(user);
-        await _playerContext.AddAsync(role);
-        await _playerContext.AddAsync(userRole);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.AddAsync(user);
+        _ = await _playerContext.AddAsync(role);
+        _ = await _playerContext.AddAsync(userRole);
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     public async Task TestLobbyDestroy()
@@ -83,7 +83,7 @@ public class SeedSequence : ISeedSequence
 
         var result = await _lobbyService.CreateAndJoinLobby(userDto2.Id, "wdwdwdw");
         var lobby = result.DeserializeContent<Lobby>();
-        await _lobbyService.ExitLobby(userDto2.Id, lobby.Id);
+        _ = await _lobbyService.ExitLobby(userDto2.Id, lobby.Id);
     }
 
     public async Task SeedRegisterNormalUser()
@@ -99,17 +99,17 @@ public class SeedSequence : ISeedSequence
         var user = t.DeserializeContent<UserDto>();
         // add authorization later to reuse jwtToken
 
-        var loginRequest = new LoginRequest()
+        _ = new LoginRequest()
         {
             PasswordAttempt = "password",
             UserName = "Fred",
         };
 
         var createLobbyResult = await _lobbyService.CreateAndJoinLobby(user.Id, "Hardood McLord");
-        var createdLobby = createLobbyResult.DeserializeContent<Lobby>();
+        _ = createLobbyResult.DeserializeContent<Lobby>();
 
         var user32 = await _userRepository.GetUserById(user.Id);
-        var userDto = await _userRepository.MapUserDtoById(user.Id);
+        _ = await _userRepository.MapUserDtoById(user.Id);
 
         var mainMenustate = await _mainMenuRepository.GetMainMenuState(user32.Id);
 
@@ -117,8 +117,7 @@ public class SeedSequence : ISeedSequence
         {
             PreserveReferencesHandling = PreserveReferencesHandling.All,
         });
-
-        MainMenuState state = JsonConvert.DeserializeObject<MainMenuState>(serializedTest);
+        _ = JsonConvert.DeserializeObject<MainMenuState>(serializedTest);
     }
 
     public async Task Make5PlayersRegisterAndJoinLobby()
@@ -143,7 +142,7 @@ public class SeedSequence : ISeedSequence
             }
             else // all others just join the lobby
             {
-                await _lobbyService.JoinLobby(new JoinLobbyRequest()
+                _ = await _lobbyService.JoinLobby(new JoinLobbyRequest()
                 {
                     LobbyId = lobby.Id,
                     PlayerName = $"{userDto.Name}{index}",
@@ -162,8 +161,7 @@ public class SeedSequence : ISeedSequence
         };
         var result2 = await _authenticationService.TryRegister(register2);
         var userDto2 = result2.DeserializeContent<UserDto>();
-
-        var c = await _lobbyService.JoinLobby(new JoinLobbyRequest()
+        _ = await _lobbyService.JoinLobby(new JoinLobbyRequest()
         {
             LobbyId = lobby.Id,
             PlayerName = "wdwdwd",

@@ -1,6 +1,5 @@
 ﻿using Shared_Resources.Models.SSE;
 using System.Collections.Concurrent;
-using WebAPI.Constants;
 using WebAPI.Extensions;
 
 namespace WebAPI.SSE.SSECore;
@@ -57,12 +56,12 @@ public abstract class SSEClientManagerBase<T> : IClientManager where T : ISSESub
 
     public async Task Subscribe(T subscriber, HttpResponse response)
     {
-        SubscriberResponseMap.TryAdd(subscriber, response);
+        _ = SubscriberResponseMap.TryAdd(subscriber, response);
     }
 
     public async Task Unsubscribe(T subscriber)
     {
         var pair = SubscriberResponseMap.First(x => x.Key.Id == subscriber.Id);
-        SubscriberResponseMap.TryRemove(pair);
+        _ = SubscriberResponseMap.TryRemove(pair);
     }
 }

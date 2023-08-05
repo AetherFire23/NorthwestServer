@@ -1,4 +1,4 @@
-﻿using Shared_Resources.Constants.CheckListsBuilding;
+﻿using Shared_Resources.GameTasks.CheckListsBuilding;
 using Shared_Resources.Models;
 using System;
 using System.Collections.Generic;

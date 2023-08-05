@@ -26,13 +26,12 @@ public class GameActionsRepository : IGameActionsRepository
 
         var gameAction = roomChangeInfo.ToGameAction();
         var roomLog = roomChangeInfo.ToRoomLog();
-        var notifications = GetNotificationsToPlayersInRoom(gameAction.Id, to.Id, player.Id);
+        _ = GetNotificationsToPlayersInRoom(gameAction.Id, to.Id, player.Id);
 
-        _playerContext.GameActions.Add(gameAction);
-        _playerContext.Logs.Add(roomLog);
-        _playerContext.TriggerNotifications.AddRange(notifications);
+        _ = _playerContext.GameActions.Add(gameAction);
+        _ = _playerContext.Logs.Add(roomLog);
 
-        _playerContext.SaveChanges();
+        _ = _playerContext.SaveChanges();
     }
 
     private IEnumerable<TriggerNotification> GetNotificationsToPlayersInRoom(Guid gameActionId, Guid newRoomId, Guid playerId)

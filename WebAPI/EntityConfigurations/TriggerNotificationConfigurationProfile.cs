@@ -8,7 +8,7 @@ public class TriggerNotificationConfigurationProfile : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<TriggerNotification> builder)
     {
-        builder.HasKey(e => e.Id);
+        _ = builder.HasKey(e => e.Id);
         //builder.Property(x => x.NotificationType)
         //    .HasColumnType("nvarchar(30)");
     }

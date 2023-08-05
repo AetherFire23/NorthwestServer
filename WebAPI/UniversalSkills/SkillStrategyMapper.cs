@@ -41,7 +41,7 @@ public static class SkillStrategyMapper
     {
         var types = Assembly.GetExecutingAssembly().GetTypes()
             .Where(x => x.IsClass && !x.IsAbstract
-              && typeof(IUniversalSkill).IsAssignableFrom(x)).ToList();
+              && typeof(ITickedSkills).IsAssignableFrom(x)).ToList();
 
         // should have customAttributes
         bool hasAllCustomAttributes = types.Any(x => CustomAttributeExtensions.GetCustomAttribute<UniversalSkillAttribute>(x) is null);
@@ -56,7 +56,7 @@ public static class SkillStrategyMapper
 
         foreach (var type in types)
         {
-            builder.Services.AddTransient(type);
+            _ = builder.Services.AddTransient(type);
         }
     }
 }

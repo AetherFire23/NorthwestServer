@@ -54,7 +54,7 @@ public class AuthenticationContext : DbContext
         //    .HasForeignKey(p => p.UserId);
 
 
-        modelBuilder.Entity<Role>()
+        _ = modelBuilder.Entity<Role>()
             .Property(p => p.RoleName)
             .HasConversion(
             v => v.ToString(),

@@ -8,8 +8,8 @@ public class GameConfigurationProfile : IEntityTypeConfiguration<Game>
 {
     public void Configure(EntityTypeBuilder<Game> builder)
     {
-        builder.HasKey(e => e.Id);
-        builder.HasMany(p => p.PlayersInGame)
+        _ = builder.HasKey(e => e.Id);
+        _ = builder.HasMany(p => p.PlayersInGame)
             .WithOne(p => p.Game)
             .HasForeignKey(p => p.GameId);
     }

@@ -36,7 +36,7 @@ public class PlayerService : IPlayerService
         }// Ca veut dire que yer ailleurs live
 
         item.OwnerId = targetId;
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
         await _gameSSESender.SendItemChangedEvent(gameId);
     }
 
@@ -45,7 +45,7 @@ public class PlayerService : IPlayerService
         Player player = await _playerRepository.GetPlayerAsync(playerId);
         player.X = x;
         player.Y = y;
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     public async Task<ClientCallResult> ChangeRoomAsync(Guid playerId, string targetRoomName)
@@ -58,7 +58,7 @@ public class PlayerService : IPlayerService
         if (connectionExists) // should benefit from inversion 
         {
             player.CurrentGameRoomId = targetRoom.Id;
-            await _playerContext.SaveChangesAsync();
+            _ = await _playerContext.SaveChangesAsync();
 
             var log = new Log()
             {
@@ -82,9 +82,9 @@ public class PlayerService : IPlayerService
                 SerializedProperties = JsonConvert.SerializeObject(log),
             };
 
-            await _playerContext.AddAsync(gameAction);
-            await _playerContext.AddAsync(log);
-            await _playerContext.SaveChangesAsync();
+            _ = await _playerContext.AddAsync(gameAction);
+            _ = await _playerContext.AddAsync(log);
+            _ = await _playerContext.SaveChangesAsync();
 
             //await _sseManager.SendNewLogEvent(log);
 

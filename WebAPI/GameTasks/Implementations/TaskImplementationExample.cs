@@ -23,6 +23,6 @@ public class CookTaskExecute : FireCannon
         //var cookStation = await _stationRepo.RetrieveStationAsync<CookStationProperties>(context.GameState.GameId, nameof(StationsTemplate.Wheel));
         //var props = cookStation.ExtraProperties as CookStationProperties;
 
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 }

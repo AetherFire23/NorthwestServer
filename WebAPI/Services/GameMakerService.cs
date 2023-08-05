@@ -83,8 +83,8 @@ public class GameMakerService : IGameMakerService
 
     private async Task InitializeNewGame(NewGameInfo newGameInfo)
     {
-        await _playerContext.Games.AddAsync(newGameInfo.Game);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.Games.AddAsync(newGameInfo.Game);
+        _ = await _playerContext.SaveChangesAsync();
 
 
         // Need to initialize rooms before players, because player construction requires a GameRoomId.
@@ -97,7 +97,7 @@ public class GameMakerService : IGameMakerService
         // Stations are tied to rooms, currently, only in services that interact with them in a hardcoded way. - So stations can be created independently of rooms
         await _stationRepository.CreateAndAddStationsToDb(newGameInfo.GameId);
         await _landmassService.AdvanceToNextLandmass(newGameInfo.GameId);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 
 
@@ -125,14 +125,14 @@ public class GameMakerService : IGameMakerService
                 Y = 0f,
                 Z = 0f,
                 User = userEntity,
-                Game = gameEntity, 
+                Game = gameEntity,
             };
 
             // wtf quand tu add un player sanss User  ca cree un ostie de user wtf entity framework de chien sale 
 
             await InitializePlayerRoleSettings(newPlayer);
-            await _playerContext.Players.AddAsync(newPlayer);
-            await _playerContext.SaveChangesAsync();
+            _ = await _playerContext.Players.AddAsync(newPlayer);
+            _ = await _playerContext.SaveChangesAsync();
         }
     }
 
@@ -160,9 +160,9 @@ public class GameMakerService : IGameMakerService
             OwnerId = rooms.First(x => x.Name == nameof(RoomsTemplate.CrowsNest)).Id,
         };
 
-        await _playerContext.Items.AddAsync(item2);
-        await _playerContext.Items.AddAsync(item3);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.Items.AddAsync(item2);
+        _ = await _playerContext.Items.AddAsync(item3);
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     private async Task<List<UserGamePreparation>> GetPlayerGamePrepFromLobby(Guid lobbyId)

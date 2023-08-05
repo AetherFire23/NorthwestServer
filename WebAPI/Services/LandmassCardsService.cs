@@ -2,7 +2,6 @@
 using Shared_Resources.Models;
 using WebAPI.Interfaces;
 using WebAPI.TestFolder;
-using WebAPI.Utils;
 
 namespace WebAPI.Services;
 
@@ -33,8 +32,6 @@ public class LandmassCardsService : ILandmassCardsService
                 landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
                 continue;
             }
-
-
             //  drawnCards.Add(randomCard);
         }
 
@@ -49,7 +46,7 @@ public class LandmassCardsService : ILandmassCardsService
 
         while (drawnCards.Count < layout.AllRooms.Count)
         {
-            await ReshuffleLandmassCardsIfNeededExceptDrawnCards(gameId, landmassCards, drawnCards);
+            _ = await ReshuffleLandmassCardsIfNeededExceptDrawnCards(gameId, landmassCards, drawnCards);
             drawnCards.Add(await DrawRandomCard(landmassCards));
         }
 
@@ -73,7 +70,7 @@ public class LandmassCardsService : ILandmassCardsService
         .ToList();
 
         await _playerContext.AddRangeAsync(defaultLandmassCards);
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     private async Task ReshuffleLandmassCardsExceptDrawnCards(Guid gameId, List<Card> cardsCurrentlyBeingDrawn)
@@ -89,7 +86,7 @@ public class LandmassCardsService : ILandmassCardsService
             card.IsDiscarded = false;
         }
 
-        await _playerContext.SaveChangesAsync();
+        _ = await _playerContext.SaveChangesAsync();
     }
 
     private async Task<Card> DrawRandomCard(List<Card> landmassCards)

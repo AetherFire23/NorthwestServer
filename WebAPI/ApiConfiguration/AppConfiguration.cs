@@ -7,8 +7,8 @@ public static class AppConfiguration
 {
     public static void AddAuth(WebApplication app)
     {
-        app.UseAuthentication();
-        app.UseAuthorization();
+        _ = app.UseAuthentication();
+        _ = app.UseAuthorization();
     }
 
     public static async Task SeedAndMigrate(WebApplication app)
@@ -22,7 +22,7 @@ public static class AppConfiguration
             try
             {
                 // this deletes and recreates the whole databse when it is launched.
-                playerContextService.Database.EnsureDeleted(); // deocher our recommecner
+                _ = playerContextService.Database.EnsureDeleted(); // deocher our recommecner
                 playerContextService.Database.Migrate();
 
                 //   authContext.Database.EnsureDeleted(); // deocher our recommecner
@@ -34,9 +34,10 @@ public static class AppConfiguration
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occurred");
             }
-            var gameMakerService = scope.ServiceProvider.GetService<IGameMakerService>();
-            ILandmassService? landmassService2 = scope.ServiceProvider.GetService<ILandmassService>();
-            var landmassCardService = scope.ServiceProvider.GetService<ILandmassCardsService>();
+
+            _ = scope.ServiceProvider.GetService<IGameMakerService>();
+            _ = scope.ServiceProvider.GetService<ILandmassService>();
+            _ = scope.ServiceProvider.GetService<ILandmassCardsService>();
 
             //await gameMakerService.CreateDummyGame();
             //gameMakerService.InsertVeryDummyValues();

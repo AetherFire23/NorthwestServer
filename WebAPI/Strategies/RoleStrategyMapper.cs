@@ -1,6 +1,7 @@
 ﻿using Shared_Resources.Enums;
 using System.Collections.Concurrent;
 using System.Reflection;
+using WebAPI.Interfaces;
 
 namespace WebAPI.Strategies;
 
@@ -49,7 +50,7 @@ public static class RoleStrategyMapper
 
         foreach (var type in types)
         {
-            builder.Services.AddTransient(type);
+            _ = builder.Services.AddTransient(type);
         }
     }
 }

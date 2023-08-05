@@ -36,14 +36,16 @@ public class ChatController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut]
-    [Route("InviteToRoom")]
-    public async Task<ActionResult<ClientCallResult>> InviteToRoom(Guid fromId, Guid targetPlayer, Guid targetRoomId)
-    {
-        await _chatService.InviteToRoomAsync(fromId, targetPlayer, targetRoomId);
-        // demander a ben pour quand jai besoin de props + la base class
-        return Ok(ClientCallResult.Success);
-    }
+
+    // need to refactor using SSE client
+    //[HttpPut]
+    //[Route("InviteToRoom")]
+    //public async Task<ActionResult<ClientCallResult>> InviteToRoom(Guid fromId, Guid targetPlayer, Guid targetRoomId)
+    //{
+    //    await _chatService.InviteToRoomAsync(fromId, targetPlayer, targetRoomId);
+    //    // demander a ben pour quand jai besoin de props + la base class
+    //    return Ok(ClientCallResult.Success);
+    //}
 
     [HttpPut]
     [Route("PutNewMessageToServer")]
@@ -53,11 +55,14 @@ public class ChatController : ControllerBase
         return Ok();
     }
 
-    [HttpPut]
-    [Route("SendInviteResponse")]
-    public async Task<ActionResult<ClientCallResult>> SendInviteResponse(Guid triggerId, bool isAccepted)
-    {
-        await _chatService.SendInviteResponse(triggerId, isAccepted);
-        return ClientCallResult.Success;
-    }
+
+
+    // refactor using sse client
+    //[HttpPut]
+    //[Route("SendInviteResponse")]
+    //public async Task<ActionResult<ClientCallResult>> SendInviteResponse(Guid triggerId, bool isAccepted)
+    //{
+    //    await _chatService.SendInviteResponse(triggerId, isAccepted);
+    //    return ClientCallResult.Success;
+    //}
 }

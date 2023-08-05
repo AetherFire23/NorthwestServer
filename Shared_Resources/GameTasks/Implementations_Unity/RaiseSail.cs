@@ -1,8 +1,10 @@
-﻿using Shared_Resources.Constants.CheckListsBuilding;
+﻿using Microsoft.Win32.SafeHandles;
 using Shared_Resources.Enums;
+using Shared_Resources.GameTasks.CheckListsBuilding;
 using Shared_Resources.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Shared_Resources.GameTasks.Implementations_Unity;
@@ -17,7 +19,14 @@ public class RaiseSail : GameTaskBase
     {
         bool hasValidItem = gameState.PlayerDTO.Items.Exists(x => x.ItemType == ItemType.Wrench);
 
-        List<string> validRoomsNames = new List<string>()
+        var firstItem = gameState.PlayerDTO.Items.First();
+        // PEDRO GIGACHAD
+        if (firstItem.ItemType is ItemType.Wrench and not ItemType.Hose)
+        {
+
+        }
+
+        List<string> validRoomsNames = new List<string>
         {
             nameof(RoomsTemplate.QuarterDeck),
             nameof(RoomsTemplate.Forecastle),
