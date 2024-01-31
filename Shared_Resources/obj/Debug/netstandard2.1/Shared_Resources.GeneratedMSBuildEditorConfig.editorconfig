@@ -1,3 +1,5 @@
 is_global = true
 build_property.RootNamespace = Shared_Resources
-build_property.ProjectDir = C:\NorthWest_Source\WebAPI\Shared_Resources\
+build_property.ProjectDir = C:\Temp\northwest\NorthwestServer\Shared_Resources\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

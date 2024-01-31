@@ -2,7 +2,6 @@
 using WebAPI.Authentication;
 using WebAPI.Interfaces;
 using WebAPI.Repository;
-using WebAPI.Seeding;
 using WebAPI.Services;
 using WebAPI.SSE;
 using WebAPI.SSE.Senders;
@@ -35,7 +34,6 @@ public static class ServiceLayerConfigurator
         _ = builder.Services.AddScoped<IGameSSESender, GameSSESender>();
 
         //seeding
-        _ = builder.Services.AddScoped<ISeedSequence, SeedSequence>();
         _ = builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         _ = builder.Services.AddScoped<ILobbyService, LobbyService>();

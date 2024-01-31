@@ -12,18 +12,22 @@
     <Compile Remove="GameState Management\**" />
     <Compile Remove="Game_Actions\NewFolder\**" />
     <Compile Remove="Game_Settings\**" />
+    <Compile Remove="Migrations\**" />
     <Content Remove="GameInitialization_Scratch\**" />
     <Content Remove="GameState Management\**" />
     <Content Remove="Game_Actions\NewFolder\**" />
     <Content Remove="Game_Settings\**" />
+    <Content Remove="Migrations\**" />
     <EmbeddedResource Remove="GameInitialization_Scratch\**" />
     <EmbeddedResource Remove="GameState Management\**" />
     <EmbeddedResource Remove="Game_Actions\NewFolder\**" />
     <EmbeddedResource Remove="Game_Settings\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <None Remove="GameInitialization_Scratch\**" />
     <None Remove="GameState Management\**" />
     <None Remove="Game_Actions\NewFolder\**" />
     <None Remove="Game_Settings\**" />
+    <None Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,10 +61,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared_Resources\Shared_Resources.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

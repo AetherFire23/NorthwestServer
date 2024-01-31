@@ -140,10 +140,6 @@ public static class ApplicationBuilderHelper
         _ = builder.Services.AddTransient<CycleJob>();
     }
 
-
-
-
-
     private static void ConfigureAutoMapper(WebApplicationBuilder builder)
     {
         // Configure Automapper
@@ -153,8 +149,7 @@ public static class ApplicationBuilderHelper
     private static void ConfigureDbContext(WebApplicationBuilder builder)
     {
         //Add db context here
-        string playerContextConnectionString = builder.Configuration.GetConnectionString("PlayerConnection");
-        string authenticationConnectionString = builder.Configuration.GetConnectionString("AuthenticationConnection");
+        string playerContextConnectionString = builder.Configuration.GetConnectionString("PlayerConnectionSql");
 
         // useNp
         // https://stackoverflow.com/questions/3582552/what-is-the-format-for-the-postgresql-connection-string-url
@@ -162,17 +157,8 @@ public static class ApplicationBuilderHelper
         // Host and Server works
         // DBeaver tick "show all conncetions"
         _ = builder.Services.AddDbContext<PlayerContext>(options =>
-            options.UseNpgsql(playerContextConnectionString)
+            options.UseSqlServer(playerContextConnectionString)
             .EnableSensitiveDataLogging(true)); // only should be appleid to development 
-
-
-
-
-        // builder.Services.AddDbContext<PlayerContext>(options
-        //=> options.UseSqlServer(playerContextConnectionString));
-
-        //builder.Services.AddDbContext<AuthenticationContext>(options =>
-        //    options.UseSqlServer(authenticationConnectionString));
     }
 
     private static void ConfigureHTTPLogging(WebApplicationBuilder builder)
@@ -188,20 +174,20 @@ public static class ApplicationBuilderHelper
         });
     }
 
-    private static void ConfigureIdentityContext(WebApplicationBuilder builder)
-    {
-        _ = builder.Services.AddIdentityCore<User>(o =>
-        {
-            o.Password.RequireDigit = true;
-            o.Password.RequireLowercase = false;
-            o.Password.RequireUppercase = false;
-            o.Password.RequireNonAlphanumeric = false;
-            o.Password.RequiredLength = 10;
-            o.User.RequireUniqueEmail = true;
-        })
-        .AddEntityFrameworkStores<AuthenticationContext>()
-        .AddDefaultTokenProviders();
-    }
+    //private static void ConfigureIdentityContext(WebApplicationBuilder builder)
+    //{
+    //    _ = builder.Services.AddIdentityCore<User>(o =>
+    //    {
+    //        o.Password.RequireDigit = true;
+    //        o.Password.RequireLowercase = false;
+    //        o.Password.RequireUppercase = false;
+    //        o.Password.RequireNonAlphanumeric = false;
+    //        o.Password.RequiredLength = 10;
+    //        o.User.RequireUniqueEmail = true;
+    //    })
+    //    .AddEntityFrameworkStores<AuthenticationContext>()
+    //    .AddDefaultTokenProviders();
+    //}
 
     private static void ConfigureJWT(WebApplicationBuilder builder)
     {
@@ -231,10 +217,6 @@ public static class ApplicationBuilderHelper
             };
         });
         _ = builder.Services.AddAuthorization();
-    }
-
-    private static void AddSSEServices(WebApplicationBuilder builder)
-    {
     }
 }
 // will have to configure CORS some day

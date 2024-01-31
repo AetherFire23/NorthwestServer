@@ -22,3 +22,12 @@ C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Reso
 C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.AssemblyInfo.cs
 C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.csproj.CoreCompileInputs.cache
 C:\NorthWest_Source\WebAPI\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.dll
+C:\Temp\northwest\NorthwestServer\Shared_Resources\bin\Debug\netstandard2.1\Shared_Resources.deps.json
+C:\Temp\northwest\NorthwestServer\Shared_Resources\bin\Debug\netstandard2.1\Shared_Resources.dll
+C:\Temp\northwest\NorthwestServer\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.csproj.AssemblyReference.cache
+C:\Temp\northwest\NorthwestServer\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.GeneratedMSBuildEditorConfig.editorconfig
+C:\Temp\northwest\NorthwestServer\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.AssemblyInfoInputs.cache
+C:\Temp\northwest\NorthwestServer\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.AssemblyInfo.cs
+C:\Temp\northwest\NorthwestServer\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.csproj.CoreCompileInputs.cache
+C:\Temp\northwest\NorthwestServer\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.sourcelink.json
+C:\Temp\northwest\NorthwestServer\Shared_Resources\obj\Debug\netstandard2.1\Shared_Resources.dll

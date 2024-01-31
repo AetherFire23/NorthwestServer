@@ -55,27 +55,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\balth\\.nuget\\packages\\": {},
-    "C:\\Users\\balth\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\fred\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\NorthWest_Source\\WebAPI\\Shared_Resources\\Shared_Resources.csproj",
+      "projectUniqueName": "C:\\Temp\\northwest\\NorthwestServer\\Shared_Resources\\Shared_Resources.csproj",
       "projectName": "Shared_Resources",
-      "projectPath": "C:\\NorthWest_Source\\WebAPI\\Shared_Resources\\Shared_Resources.csproj",
-      "packagesPath": "C:\\Users\\balth\\.nuget\\packages\\",
-      "outputPath": "C:\\NorthWest_Source\\WebAPI\\Shared_Resources\\obj\\",
+      "projectPath": "C:\\Temp\\northwest\\NorthwestServer\\Shared_Resources\\Shared_Resources.csproj",
+      "packagesPath": "C:\\Users\\fred\\.nuget\\packages\\",
+      "outputPath": "C:\\Temp\\northwest\\NorthwestServer\\Shared_Resources\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Users\\balth\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\balth\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Users\\balth\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\fred\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -83,7 +75,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -123,7 +114,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
