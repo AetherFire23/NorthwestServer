@@ -1,66 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>d72d1721-f3d7-4de9-a352-85daa3f4a2b8</UserSecretsId>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="GameInitialization_Scratch\**" />
-    <Compile Remove="GameState Management\**" />
-    <Compile Remove="Game_Actions\NewFolder\**" />
-    <Compile Remove="Game_Settings\**" />
-    <Compile Remove="Migrations\**" />
-    <Content Remove="GameInitialization_Scratch\**" />
-    <Content Remove="GameState Management\**" />
-    <Content Remove="Game_Actions\NewFolder\**" />
-    <Content Remove="Game_Settings\**" />
-    <Content Remove="Migrations\**" />
-    <EmbeddedResource Remove="GameInitialization_Scratch\**" />
-    <EmbeddedResource Remove="GameState Management\**" />
-    <EmbeddedResource Remove="Game_Actions\NewFolder\**" />
-    <EmbeddedResource Remove="Game_Settings\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="GameInitialization_Scratch\**" />
-    <None Remove="GameState Management\**" />
-    <None Remove="Game_Actions\NewFolder\**" />
-    <None Remove="Game_Settings\**" />
-    <None Remove="Migrations\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.6.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
-    <PackageReference Include="Quartz.AspNetCore" Version="3.6.3" />
-    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.6.3" />
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.6.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Shared_Resources\Shared_Resources.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>d72d1721-f3d7-4de9-a352-85daa3f4a2b8</UserSecretsId>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="GameInitialization_Scratch\**" />
+		<Compile Remove="GameState Management\**" />
+		<Compile Remove="Game_Actions\NewFolder\**" />
+		<Compile Remove="Game_Settings\**" />
+		<Content Remove="GameInitialization_Scratch\**" />
+		<Content Remove="GameState Management\**" />
+		<Content Remove="Game_Actions\NewFolder\**" />
+		<Content Remove="Game_Settings\**" />
+		<EmbeddedResource Remove="GameInitialization_Scratch\**" />
+		<EmbeddedResource Remove="GameState Management\**" />
+		<EmbeddedResource Remove="Game_Actions\NewFolder\**" />
+		<EmbeddedResource Remove="Game_Settings\**" />
+		<None Remove="GameInitialization_Scratch\**" />
+		<None Remove="GameState Management\**" />
+		<None Remove="Game_Actions\NewFolder\**" />
+		<None Remove="Game_Settings\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
+		<PackageReference Include="Quartz.AspNetCore" Version="3.8.0" />
+		<PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.8.0" />
+		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="IntegrationTests" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Shared_Resources\Shared_Resources.csproj" />
+	</ItemGroup>
 
 </Project>
