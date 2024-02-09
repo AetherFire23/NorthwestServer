@@ -1,7 +1,4 @@
-﻿
-using LandmassTests;
-
-namespace WebAPI.TestFolder;
+﻿namespace WebAPI.Landmasses;
 
 public class RoomInfo
 {

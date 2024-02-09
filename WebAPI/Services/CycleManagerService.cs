@@ -1,20 +1,19 @@
 ﻿using Shared_Resources.Entities;
 using WebAPI.Interfaces;
+using WebAPI.Repositories;
 using WebAPI.Strategies;
 using WebAPI.UniversalSkills;
-
 namespace WebAPI.Services;
 
-public class CycleManagerService : ICycleManagerService
+public class CycleManagerService
 {
-
     private readonly PlayerContext _playerContext;
-    private readonly IGameRepository _gameRepository;
-    private readonly IPlayerRepository _playerRepository;
+    private readonly GameRepository _gameRepository;
+    private readonly PlayerRepository _playerRepository;
     private readonly IServiceProvider _serviceProvider;
     public CycleManagerService(PlayerContext playerContext,
-        IGameRepository gameRepository,
-        IPlayerRepository playerRepository,
+        GameRepository gameRepository,
+        PlayerRepository playerRepository,
         IServiceProvider serviceProvider)
     {
         _playerContext = playerContext;
@@ -43,11 +42,11 @@ public class CycleManagerService : ICycleManagerService
 
         List<Player> players = await _playerRepository.GetPlayersInGameAsync(gameId);
 
-        foreach (var player in players)
+        foreach (Player player in players)
         {
-            foreach (var universalSkill in universalSkills)
+            foreach (ITickedSkills? universalSkill in universalSkills)
             {
-                var canTickSkill = await universalSkill.CanApplySkillEffect(player);
+                bool canTickSkill = await universalSkill.CanApplySkillEffect(player);
                 if (!canTickSkill) continue;
 
                 await universalSkill.ApplyTickEffect(player);
@@ -59,11 +58,9 @@ public class CycleManagerService : ICycleManagerService
     {
         foreach (Player p in playersInGame)
         {
-            var roleManagerType = RoleStrategyMapper.GetStrategyTypeByRole(p.Profession);
-            var roleService = _serviceProvider.GetService(roleManagerType) as IRoleInitializationStrategy;
+            Type roleManagerType = RoleStrategyMapper.GetStrategyTypeByRole(p.Profession);
+            IRoleInitializationStrategy? roleService = _serviceProvider.GetService(roleManagerType) as IRoleInitializationStrategy;
             await roleService.TickPlayerFromRoleAsync(p);
         }
     }
-
-
 }

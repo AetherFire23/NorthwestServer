@@ -5,7 +5,6 @@ using Shared_Resources.Enums;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WebAPI.Repository.Users;
 
 namespace WebAPI.Authentication;
 
@@ -13,35 +12,32 @@ public class JwtTokenManager : IJwtTokenManager
 {
     private readonly JwtConfig _config;
     private readonly JwtSecurityTokenHandler _tokenHandler;
-    private readonly IUserRepository _userRepository;
     // IOptions retrievces jwetconfig from apsset
-    public JwtTokenManager(IOptions<JwtConfig> jwtConfig,
-        IUserRepository userRepository)
+    public JwtTokenManager(IOptions<JwtConfig> jwtConfig)
     {
         _config = jwtConfig.Value;
         _tokenHandler = new JwtSecurityTokenHandler();
-        _userRepository = userRepository;
     }
 
     public async Task<string> GenerateToken(UserDto userDto)
     {
-        var claims = new List<Claim>()
+        List<Claim> claims = new List<Claim>()
         {
             new Claim(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
             new Claim(ClaimTypes.Name, userDto.Name)
         };
 
         // create claims for each role
-        var roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
+        List<Claim> roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
         claims.AddRange(roleClaims);
 
         // store security key
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
+        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var expires = DateTime.Now.AddDays(Convert.ToDouble(_config.ExpirationDays));
+        DateTime expires = DateTime.Now.AddDays(Convert.ToDouble(_config.ExpirationDays));
 
-        var securityToken = new JwtSecurityToken(
+        JwtSecurityToken securityToken = new JwtSecurityToken(
             _config.Issuer,
             _config.Audience,
             claims,
@@ -49,7 +45,7 @@ public class JwtTokenManager : IJwtTokenManager
             signingCredentials: creds
         );
 
-        var writenToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
+        string writenToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
         return writenToken;
     }
 
@@ -57,7 +53,7 @@ public class JwtTokenManager : IJwtTokenManager
     {
         try
         {
-            var validationParameters = new TokenValidationParameters
+            TokenValidationParameters validationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
@@ -69,7 +65,7 @@ public class JwtTokenManager : IJwtTokenManager
             };
 
             // Validate and parse the token
-            var principal = _tokenHandler.ValidateToken(token, validationParameters, out _);
+            ClaimsPrincipal principal = _tokenHandler.ValidateToken(token, validationParameters, out _);
 
             // Ensure the token has the required claims or perform additional validations
 

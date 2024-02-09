@@ -13,27 +13,27 @@ public static class RoleStrategyMapper
     {
         if (!RoleStrategyTypeMap.ContainsKey(role)) throw new Exception($"Strategy not found for role: {role}");
 
-        var strategyType = RoleStrategyTypeMap[role];
+        Type strategyType = RoleStrategyTypeMap[role];
         return strategyType;
     }
 
     private static IReadOnlyDictionary<RoleType, Type> CreateRoleStratMap()
     {
-        var types = DiscoverStrategyTypesInAssembly();
+        List<Type> types = DiscoverStrategyTypesInAssembly();
 
         Dictionary<RoleType, Type> map = new Dictionary<RoleType, Type>();
-        foreach (var type in types)
+        foreach (Type type in types)
         {
             RoleType roleType = CustomAttributeExtensions.GetCustomAttribute<RoleStrategyAttribute>(type).RoleType;
             map.Add(roleType, type);
         }
-        var mapConcurrent = new ConcurrentDictionary<RoleType, Type>(map);
+        ConcurrentDictionary<RoleType, Type> mapConcurrent = new ConcurrentDictionary<RoleType, Type>(map);
         return mapConcurrent;
     }
 
     private static List<Type> DiscoverStrategyTypesInAssembly()
     {
-        var types = Assembly.GetExecutingAssembly().GetTypes()
+        List<Type> types = Assembly.GetExecutingAssembly().GetTypes()
             .Where(x => x.IsClass && !x.IsAbstract
               && typeof(IRoleInitializationStrategy).IsAssignableFrom(x)).ToList();
 
@@ -46,9 +46,9 @@ public static class RoleStrategyMapper
 
     public static void RegisterRoleStrategies(WebApplicationBuilder builder)
     {
-        var types = DiscoverStrategyTypesInAssembly();
+        List<Type> types = DiscoverStrategyTypesInAssembly();
 
-        foreach (var type in types)
+        foreach (Type type in types)
         {
             _ = builder.Services.AddTransient(type);
         }

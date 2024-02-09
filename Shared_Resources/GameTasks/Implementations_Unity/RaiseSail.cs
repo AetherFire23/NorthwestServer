@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32.SafeHandles;
-using Shared_Resources.Enums;
+﻿using Shared_Resources.Enums;
 using Shared_Resources.GameTasks.CheckListsBuilding;
 using Shared_Resources.Models;
 using System;
@@ -19,7 +18,7 @@ public class RaiseSail : GameTaskBase
     {
         bool hasValidItem = gameState.PlayerDTO.Items.Exists(x => x.ItemType == ItemType.Wrench);
 
-        var firstItem = gameState.PlayerDTO.Items.First();
+        Entities.Item firstItem = gameState.PlayerDTO.Items.First();
         // PEDRO GIGACHAD
         if (firstItem.ItemType is ItemType.Wrench and not ItemType.Hose)
         {
@@ -38,7 +37,7 @@ public class RaiseSail : GameTaskBase
 
     public override List<PromptInfo> GetCheckLists(GameState gameState)
     {
-        var builder = new CheckListsBuilder();
+        CheckListsBuilder builder = new CheckListsBuilder();
         return builder.CheckLists;
     }
 

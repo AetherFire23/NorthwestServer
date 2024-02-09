@@ -1,14 +1,13 @@
 ﻿using Shared_Resources.Entities;
-using WebAPI.Interfaces;
+using WebAPI.Repositories;
 
 namespace WebAPI.Services;
 
-public class ShipService : IShipService
+public class ShipService
 {
     private readonly PlayerContext _playerContext;
-    private readonly IShipRepository _shipRepository;
-    public ShipService(PlayerContext playerContext,
-        IShipRepository shipRepository)
+    private readonly ShipRepository _shipRepository;
+    public ShipService(PlayerContext playerContext, ShipRepository shipRepository)
     {
         _playerContext = playerContext;
         _shipRepository = shipRepository;
@@ -17,7 +16,7 @@ public class ShipService : IShipService
     public async Task InitializeShipStatusesAndResources(Guid gameId)
     {
         // rajouter une varialbe Speed I guess ^^
-        var shipStatus = new ShipState()
+        ShipState shipStatus = new ShipState()
         {
             Id = Guid.NewGuid(),
             GameId = gameId,
@@ -44,7 +43,7 @@ public class ShipService : IShipService
 
     public async Task TickShipAdvancement(Guid gameId)
     {
-        var shipState = await _shipRepository.GetShipStateAsync(gameId);
+        ShipState shipState = await _shipRepository.GetShipStateAsync(gameId);
         if (shipState.HullInPercentage < 75)
         {
             shipState.SpeedInKilometers -= 1; // placeHolder

@@ -15,20 +15,20 @@ public static class EndpointPathsMapper
 
     public static string GetFullEndpoint(Type controllerType, string endpoint)
     {
-        var controllerEndpointsMapping = EndpointTypesAndMap.GetValueOrDefault(controllerType) ?? throw new Exception($"Did not find controller :{controllerType}");
-        var fullPath = controllerEndpointsMapping.GetValueOrDefault(endpoint) ?? throw new Exception($"Did not find endpoint : {endpoint}");
+        Dictionary<string, string> controllerEndpointsMapping = EndpointTypesAndMap.GetValueOrDefault(controllerType) ?? throw new Exception($"Did not find controller :{controllerType}");
+        string fullPath = controllerEndpointsMapping.GetValueOrDefault(endpoint) ?? throw new Exception($"Did not find endpoint : {endpoint}");
         return fullPath;
     }
 
     public static Dictionary<Type, Dictionary<string, string>> CreateControllerAndEndpointsMapping()
     {
-        var allTypes = typeof(EndpointPathsMapper).Assembly.GetTypes();
-        var controllerTypes = allTypes.Where(ReflectionHelper.HasCustomAttributeFilter<ControllerPathMapperAttribute>).ToList();
+        Type[] allTypes = typeof(EndpointPathsMapper).Assembly.GetTypes();
+        List<Type> controllerTypes = allTypes.Where(ReflectionHelper.HasCustomAttributeFilter<ControllerPathMapperAttribute>).ToList();
 
-        var controllerMapping = new Dictionary<Type, Dictionary<string, string>>();
-        foreach (var controllerType in controllerTypes)
+        Dictionary<Type, Dictionary<string, string>> controllerMapping = new Dictionary<Type, Dictionary<string, string>>();
+        foreach (Type? controllerType in controllerTypes)
         {
-            var endpointMapping = CreateEndpointMappings(controllerType);
+            KeyValuePair<Type, Dictionary<string, string>> endpointMapping = CreateEndpointMappings(controllerType);
             controllerMapping.Add(endpointMapping.Key, endpointMapping.Value);
         }
 
@@ -38,17 +38,17 @@ public static class EndpointPathsMapper
     // partial name to full name (for Unity-side retrieval)
     public static KeyValuePair<Type, Dictionary<string, string>> CreateEndpointMappings(Type endpointType) // besoin de savoir cest quoi le path jusqua ce endpoint-la, dans le attribute i Guess ???
     {
-        var controllerPath = endpointType.GetCustomAttribute<ControllerPathMapperAttribute>().ControllerName;
-        var endpointNamesInControllerClass = endpointType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic)
+        string controllerPath = endpointType.GetCustomAttribute<ControllerPathMapperAttribute>().ControllerName;
+        List<string?> endpointNamesInControllerClass = endpointType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic)
             .Where(x => x != null)
             .Select(x => x.GetValue(null) as string).ToList() ?? new List<string>();
 
         Dictionary<string, string> partialToFullMapping = new Dictionary<string, string>();
-        foreach (var endpointName in endpointNamesInControllerClass)
+        foreach (string? endpointName in endpointNamesInControllerClass)
         {
             partialToFullMapping.Add(endpointName, controllerPath + PrefixObliqueAndLowercase(endpointName));
         }
-        var endpointTypeMap = new KeyValuePair<Type, Dictionary<string, string>>(endpointType, partialToFullMapping);
+        KeyValuePair<Type, Dictionary<string, string>> endpointTypeMap = new KeyValuePair<Type, Dictionary<string, string>>(endpointType, partialToFullMapping);
         return endpointTypeMap;
     }
 

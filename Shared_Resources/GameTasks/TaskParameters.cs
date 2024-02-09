@@ -28,7 +28,7 @@ public class TaskParameters : List<(string ParamType, string Id)>
 
     public List<(string ParamType, string Id)> GetRooms()
     {
-        var rooms = this.Where(x => x.ParamType == typeof(RoomDTO).Name).ToList();
+        List<(string ParamType, string Id)> rooms = this.Where(x => x.ParamType == typeof(RoomDTO).Name).ToList();
         return rooms;
     }
 }

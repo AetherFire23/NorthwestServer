@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using Quartz.AspNetCore;
-using Shared_Resources.Entities;
 using Shared_Resources.GameTasks;
 using System.Reflection;
 using System.Text;
@@ -14,8 +12,8 @@ using WebAPI.Authentication;
 using WebAPI.Conventions;
 using WebAPI.GameTasks;
 using WebAPI.Jobs;
-using WebAPI.SSE;
 using WebAPI.Strategies;
+using WebAPI.UniversalSkills;
 
 namespace WebAPI.ApiConfiguration;
 
@@ -29,7 +27,6 @@ public static class ApplicationBuilderHelper
         RegisterGameTaskTypes(builder);
         RoleStrategyMapper.RegisterRoleStrategies(builder);
         SkillStrategyMapper.RegisterSkillStrategies(builder);
-        builder.Services.RegisterSSEManagers();
 
         ConfigureQuartz(builder);
 
@@ -46,12 +43,12 @@ public static class ApplicationBuilderHelper
 
     private static void RegisterGameTaskTypes(WebApplicationBuilder builder) // should extract this to GameTaskStrategyMapper
     {
-        var apiTypes = typeof(Program).Assembly.GetTypes()
+        IEnumerable<Type> apiTypes = typeof(Program).Assembly.GetTypes()
             .Where(type => type.IsClass && !type.IsAbstract
             && typeof(IGameTask).IsAssignableFrom(type)
             && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
 
-        foreach (var type in apiTypes)
+        foreach (Type? type in apiTypes)
         {
             _ = builder.Services.AddTransient(type);
         }
@@ -149,8 +146,8 @@ public static class ApplicationBuilderHelper
     private static void ConfigureDbContext(WebApplicationBuilder builder)
     {
         //Add db context here
-        string playerContextConnectionString = builder.Configuration.GetConnectionString("PlayerConnectionSql");
-
+        var playerContextConnectionString = builder.Configuration.GetConnectionString("PlayerConnectionSql");
+        
         // useNp
         // https://stackoverflow.com/questions/3582552/what-is-the-format-for-the-postgresql-connection-string-url
         // for parameters https://www.npgsql.org/doc/connection-string-parameters.html
@@ -191,8 +188,8 @@ public static class ApplicationBuilderHelper
 
     private static void ConfigureJWT(WebApplicationBuilder builder)
     {
-        var jwtSection = builder.Configuration.GetSection("Jwt");
-        var jwtConfig = new JwtConfig();
+        IConfigurationSection jwtSection = builder.Configuration.GetSection("Jwt");
+        JwtConfig jwtConfig = new JwtConfig();
         jwtSection.Bind(jwtConfig);
         _ = builder.Services.Configure<JwtConfig>(jwtSection);
 
@@ -218,5 +215,7 @@ public static class ApplicationBuilderHelper
         });
         _ = builder.Services.AddAuthorization();
     }
+
+
 }
 // will have to configure CORS some day

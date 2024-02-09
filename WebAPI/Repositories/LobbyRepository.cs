@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
-using WebAPI.Interfaces;
 
-namespace WebAPI.Repository;
+namespace WebAPI.Repositories;
 
-public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>, ILobbyRepository
+public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>
 {
     public LobbyRepository(PlayerContext playerContext
         ) : base(playerContext)
@@ -16,7 +15,7 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>, ILobbyRepos
 
     public async Task<Lobby?> GetLobbyById(Guid lobbyId)
     {
-        var lobby = await Set
+        Lobby? lobby = await Set
             .Include(p => p.UserLobbies)
             .ThenInclude(ur => ur.User)
             .FirstOrDefaultAsync(x => x.Id == lobbyId);
@@ -31,9 +30,9 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>, ILobbyRepos
 
     public async Task<LobbyDto> MapLobbyDto(Guid lobbyId)
     {
-        var lobby = await GetLobbyById(lobbyId);
-        var usersInLobby = lobby.UserLobbies.Select(ur => ur.User).ToList();
-        var lobbyDto = new LobbyDto()
+        Lobby? lobby = await GetLobbyById(lobbyId);
+        List<User> usersInLobby = lobby.UserLobbies.Select(ur => ur.User).ToList();
+        LobbyDto lobbyDto = new LobbyDto()
         {
             Id = lobbyId,
             QueuingUsers = usersInLobby,
@@ -63,7 +62,7 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>, ILobbyRepos
 
     public async Task<UserLobby?> GetUserLobbyByJoinTargetIds(Guid userId, Guid lobbyId)
     {
-        var userLobby = await Context.UserLobbies
+        UserLobby? userLobby = await Context.UserLobbies
             .Include(ul => ul.User)
             .Include(ul => ul.Lobby)
             .FirstOrDefaultAsync(x => x.User.Id == userId && x.Lobby.Id == lobbyId);
@@ -72,7 +71,7 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>, ILobbyRepos
 
     public async Task DeleteUserFromLobby(Guid userId, Guid lobbyId)
     {
-        var userLobby = await GetUserLobbyByJoinTargetIds(userId, lobbyId);
+        UserLobby? userLobby = await GetUserLobbyByJoinTargetIds(userId, lobbyId);
         _ = Context.UserLobbies.Remove(userLobby);
         _ = await Context.SaveChangesAsync();
     }
@@ -88,7 +87,7 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>, ILobbyRepos
 
     public async Task DeleteManyUsersFromLobby(List<User> users, Guid lobbyId)
     {
-        foreach (var user in users)
+        foreach (User user in users)
         {
             await DeleteUserFromLobby(user.Id, lobbyId);
         }

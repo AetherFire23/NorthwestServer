@@ -3,38 +3,34 @@ using Shared_Resources.Enums;
 using Shared_Resources.Models;
 using WebAPI.Extensions;
 using WebAPI.Interfaces;
-using WebAPI.Repository.Users;
+using WebAPI.Repositories;
 using WebAPI.Strategies;
 namespace WebAPI.Services;
 
-public class GameMakerService : IGameMakerService
+public class GameMakerService
 {
-    private readonly IGameMakerRepository _gameMakerRepository;
-    private readonly IRoomRepository _roomRepository;
-    private readonly IStationRepository _stationRepository;
+    private readonly RoomRepository _roomRepository;
+    private readonly StationRepository _stationRepository;
     private readonly PlayerContext _playerContext;
-    private readonly ILandmassService _landmassService;
-    private readonly ILandmassCardsService _landmassCardsService;
+    private readonly LandmassService _landmassService;
+    private readonly LandmassCardsService _landmassCardsService;
     private readonly IServiceProvider _serviceProvider;
-    private readonly IShipService _shipStasusesService;
-    private readonly ILobbyRepository _lobbyRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly IGameRepository _gameRepository;
+    private readonly ShipService _shipStasusesService;
+    private readonly LobbyRepository _lobbyRepository;
+    private readonly UserRepository _userRepository;
+    private readonly GameRepository _gameRepository;
 
     public GameMakerService(PlayerContext playerContext,
-        IGameMakerRepository gameMakerRepository,
-        IRoomRepository roomRepository,
-        IStationRepository stationRepository,
-        ILandmassService landmassService,
-        ILandmassCardsService landmassCardsService,
+        RoomRepository roomRepository,
+        StationRepository stationRepository,
+        LandmassService landmassService,
+        LandmassCardsService landmassCardsService,
         IServiceProvider serviceProvider,
-        IShipService shipStasusesService,
-        ILobbyRepository lobbyRepository,
-        IPlayerRepository playerRepository,
-        IUserRepository userRepository,
-        IGameRepository gameRepository)
+        ShipService shipStasusesService,
+        LobbyRepository lobbyRepository,
+        UserRepository userRepository,
+        GameRepository gameRepository)
     {
-        _gameMakerRepository = gameMakerRepository;
         _roomRepository = roomRepository;
         _stationRepository = stationRepository;
         _playerContext = playerContext;
@@ -55,12 +51,12 @@ public class GameMakerService : IGameMakerService
     private async Task<NewGameInfo> CreateGameInfoPreparation(Guid lobbyId)
     {
         // I need to know username and player role 
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
-        var userDtos = await _userRepository.GetUserDtosFromUser(lobby.UsersInLobby);
-        var usersGamePrep = await ShufflePlayerRoles(lobbyId);
+        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        List<Shared_Resources.DTOs.UserDto> userDtos = await _userRepository.GetUserDtosFromUser(lobby.UsersInLobby);
+        List<UserGamePreparation> usersGamePrep = await ShufflePlayerRoles(lobbyId);
 
         // having the bug shit thing
-        var newGameInfo = new NewGameInfo()
+        NewGameInfo newGameInfo = new NewGameInfo()
         {
             Game = Game.FactorizeInitialGame(),
             UserGamePreparation = usersGamePrep,
@@ -100,20 +96,18 @@ public class GameMakerService : IGameMakerService
         _ = await _playerContext.SaveChangesAsync();
     }
 
-
-
     private async Task InitializePlayersAsync(NewGameInfo info)
     {
         /* Will need to clarify what gets initialized before what.
           for example, class cannot depend on starting room(for knowing which bonuses is applying), and starting room also depend on class. One needs to be
           created before the other. */
-        foreach (var userDto in info.Users)
+        foreach (Shared_Resources.DTOs.UserDto userDto in info.Users)
         {
-            var userEntity = await _userRepository.GetUserById(userDto.Id); // entity doit etre tracked encore une fois. jpas sur daimer ca 
-            var gameEntity = await _gameRepository.GetGameById(info.GameId);
+            User? userEntity = await _userRepository.GetUserById(userDto.Id); // entity doit etre tracked encore une fois. jpas sur daimer ca 
+            Game gameEntity = await _gameRepository.GetGameById(info.GameId);
             // ouache 
             UserGamePreparation selection = info.UserGamePreparation.First(x => x.UserId == userDto.Id);
-            var newPlayer = new Player()
+            Player newPlayer = new Player()
             {
                 Id = userDto.Id, // users not saved yet in db, so can use user key as primary key. Will have to Guid.NewGuid() some day
                 ActionPoints = 0,
@@ -138,7 +132,7 @@ public class GameMakerService : IGameMakerService
 
     private async Task InitializePlayerRoleSettings(Player player)
     {
-        var roleStrategy = ResolveRoleStrategy(player.Profession);
+        IRoleInitializationStrategy roleStrategy = ResolveRoleStrategy(player.Profession);
         await roleStrategy.InitializePlayerFromRoleAsync(player);
     }
 
@@ -146,14 +140,14 @@ public class GameMakerService : IGameMakerService
     {
         List<Room> rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
 
-        var item2 = new Item()
+        Item item2 = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Hose,
             OwnerId = rooms.First(x => x.Name == nameof(RoomsTemplate.CrowsNest)).Id,
         };
 
-        var item3 = new Item()
+        Item item3 = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Hose,
@@ -168,8 +162,8 @@ public class GameMakerService : IGameMakerService
     private async Task<List<UserGamePreparation>> GetPlayerGamePrepFromLobby(Guid lobbyId)
     {
         // name is stored in UserLobby upon joining a lobby
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
-        var playerSelections = lobby.UserLobbies.Select(x => new UserGamePreparation
+        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        List<UserGamePreparation> playerSelections = lobby.UserLobbies.Select(x => new UserGamePreparation
         {
             UserId = x.User.Id,
             Name = x.NameSelection
@@ -180,8 +174,8 @@ public class GameMakerService : IGameMakerService
 
     private IRoleInitializationStrategy ResolveRoleStrategy(RoleType role)
     {
-        var strategType = RoleStrategyMapper.GetStrategyTypeByRole(role);
-        var strategy = _serviceProvider.GetService(strategType) as IRoleInitializationStrategy;
+        Type strategType = RoleStrategyMapper.GetStrategyTypeByRole(role);
+        IRoleInitializationStrategy? strategy = _serviceProvider.GetService(strategType) as IRoleInitializationStrategy;
         return strategy;
     }
 }

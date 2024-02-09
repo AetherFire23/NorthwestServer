@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared_Resources.Interfaces;
 
-namespace WebAPI.Repository;
+namespace WebAPI.Repositories;
 
 public abstract class RepositoryBase<TEntity, TContext>
     where TEntity : class, IEntity
@@ -18,13 +18,13 @@ public abstract class RepositoryBase<TEntity, TContext>
 
     protected async Task<TEntity> GetById(Guid id)
     {
-        var entity = await Set.FirstAsync(x => x.Id == id);
+        TEntity entity = await Set.FirstAsync(x => x.Id == id);
         return entity;
     }
 
     protected async Task<TEntity> TaskGetByIdOrDefault(Guid id)
     {
-        var entity = await Set.FirstAsync(x => x.Id == id);
+        TEntity entity = await Set.FirstAsync(x => x.Id == id);
         return entity;
     }
 

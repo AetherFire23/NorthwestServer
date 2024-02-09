@@ -10,7 +10,7 @@ public class CheckListsBuilder
 
     public PromptInfo CreateCheckListPrompt<T>(List<T> objects, string description) where T : ITaskParameter
     {
-        var info = new PromptInfo(objects.Select(x => x as ITaskParameter).ToList(), description);
+        PromptInfo info = new PromptInfo(objects.Select(x => x as ITaskParameter).ToList(), description);
         CheckLists.Add(info);
         return info;
     }

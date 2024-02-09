@@ -6,7 +6,7 @@ public static class GameExtensions
 {
     public static Game GetInitialGame(this Game self)
     {
-        var game = new Game()
+        Game game = new Game()
         {
             Id = Guid.NewGuid(),
             IsActive = true,

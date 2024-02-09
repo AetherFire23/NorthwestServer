@@ -2,6 +2,7 @@
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
 using WebAPI.Interfaces;
+using WebAPI.Repositories;
 
 namespace WebAPI.Strategies;
 
@@ -9,23 +10,19 @@ namespace WebAPI.Strategies;
 public class CommanderRoleStrategy : IRoleInitializationStrategy
 {
     private readonly PlayerContext _playerContext;
-    private readonly IRoomRepository _roomRepository;
-    private readonly IPlayerRepository _playerRepository;
-    public CommanderRoleStrategy(PlayerContext playerContext,
-        IRoomRepository roomRepository,
-        IPlayerRepository playerRepository)
+    private readonly RoomRepository _roomRepository;
+    public CommanderRoleStrategy(PlayerContext playerContext, RoomRepository roomRepository)
     {
         _playerContext = playerContext;
         _roomRepository = roomRepository;
-        _playerRepository = playerRepository;
     }
 
     public async Task InitializePlayerFromRoleAsync(Player player) // not added to Db yet
     {
-        var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.MiddleCorridor));
+        Room room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.MiddleCorridor));
         player.CurrentGameRoomId = room.Id;
 
-        var item = new Item()
+        Item item = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Wrench,
@@ -33,7 +30,6 @@ public class CommanderRoleStrategy : IRoleInitializationStrategy
         };
 
         _ = await _playerContext.Items.AddAsync(item);
-
         _ = await _playerContext.SaveChangesAsync();
     }
 

@@ -1,7 +1,6 @@
 ﻿using Shared_Resources.Interfaces;
 using System;
 using System.Collections.Generic;
-
 namespace Shared_Resources.Entities;
 
 public class Station : ITaskParameter, IFormattable
@@ -18,8 +17,8 @@ public class Station : ITaskParameter, IFormattable
 
     public KeyValuePair<string, string> GetKeyValuePairParameter(int index)
     {
-        var prefix = $"station{index}";
-        var kvp = new KeyValuePair<string, string>(prefix, this.Id.ToString()); // maybe I could use name this might be easier.
+        string prefix = $"station{index}";
+        KeyValuePair<string, string> kvp = new KeyValuePair<string, string>(prefix, this.Id.ToString()); // maybe I could use name this might be easier.
         return kvp;
     }
 

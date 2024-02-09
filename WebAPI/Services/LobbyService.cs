@@ -1,22 +1,23 @@
 ﻿using Shared_Resources.Entities;
 using Shared_Resources.Models;
-using WebAPI.Interfaces;
-using WebAPI.Repository.Users;
+using System.Net;
+using WebAPI.Exceptions;
+using WebAPI.Repositories;
 
 namespace WebAPI.Services;
 
-public class LobbyService : ILobbyService
+public class LobbyService
 {
     private readonly PlayerContext _playerContext;
-    private readonly ILobbyRepository _lobbyRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly IGameRepository _gameRepository;
-    private readonly IGameMakerService _gameMakerService;
-    public LobbyService(ILobbyRepository lobbyRepository,
+    private readonly LobbyRepository _lobbyRepository;
+    private readonly UserRepository _userRepository;
+    private readonly GameRepository _gameRepository;
+    private readonly GameMakerService _gameMakerService;
+    public LobbyService(LobbyRepository lobbyRepository,
         PlayerContext playerContext,
-        IUserRepository userRepository,
-        IGameRepository gameRepository,
-        IGameMakerService gameMakerService)
+        UserRepository userRepository,
+        GameRepository gameRepository,
+        GameMakerService gameMakerService)
     {
         _lobbyRepository = lobbyRepository;
         _playerContext = playerContext;
@@ -25,55 +26,45 @@ public class LobbyService : ILobbyService
         _gameMakerService = gameMakerService;
     }
 
-    public async Task<ClientCallResult> CreateAndJoinLobby(Guid userId, string nameSelection)
+    public async Task<Lobby> CreateAndJoinLobby(Guid userId, string nameSelection)
     {
-        var newLobby = await _lobbyRepository.CreateAndAddLobby();
+        Lobby newLobby = await _lobbyRepository.CreateAndAddLobby();
         await CreateNewUserLobbyAndAddToDb(userId, newLobby.Id, nameSelection);
 
-        var clientCallResult = new ClientCallResult()
-        {
-            IsSuccessful = true,
-            Content = newLobby,
-        };
-
-        return clientCallResult;
+        return newLobby;
     }
 
-    public async Task<ClientCallResult> JoinLobby(JoinLobbyRequest joinRequest)
+    public async Task JoinLobby(JoinLobbyRequest joinRequest)
     {
-        if ((await _lobbyRepository.GetLobbyById(joinRequest.LobbyId)) is null) return ClientCallResult.Failure;
-        if (await _lobbyRepository.IsUserLobbyAlreadyExists(joinRequest.UserId, joinRequest.LobbyId)) return ClientCallResult.Failure;
+        if ((await _lobbyRepository.GetLobbyById(joinRequest.LobbyId)) is null) throw new RequestException(HttpStatusCode.BadRequest);
+        if (await _lobbyRepository.IsUserLobbyAlreadyExists(joinRequest.UserId, joinRequest.LobbyId)) throw new RequestException(HttpStatusCode.BadRequest);
 
         await CreateNewUserLobbyAndAddToDb(joinRequest.UserId, joinRequest.LobbyId, joinRequest.PlayerName);
         await CreateGameIfLobbyIsFull(joinRequest.LobbyId);
-        // Start game if the lobby is full
-        // SSE to update lobbies
-        return ClientCallResult.Success;
     }
 
-    public async Task<ClientCallResult> ExitLobby(Guid userId, Guid lobbyId)
+    public async Task ExitLobby(Guid userId, Guid lobbyId)
     {
-        var lobby = (await _lobbyRepository.GetLobbyById(lobbyId));
-        if (lobby is null) return ClientCallResult.Failure;
-        if ((await _lobbyRepository.GetUserLobbyByJoinTargetIds(userId, lobbyId)) is null) return new ClientCallResult() { IsSuccessful = false, Message = "User is not in this lobby" };
+        Lobby? lobby = (await _lobbyRepository.GetLobbyById(lobbyId));
+        if (lobby is null) throw new RequestException(HttpStatusCode.BadRequest);
+        if ((await _lobbyRepository.GetUserLobbyByJoinTargetIds(userId, lobbyId)) is null) throw new RequestException(HttpStatusCode.BadRequest);
 
         await _lobbyRepository.DeleteUserFromLobby(userId, lobbyId);
         await _lobbyRepository.DeleteLobbyIfEmpty(lobby);
 
         // Send signal to update Lobbies
         _ = await _playerContext.SaveChangesAsync();
-        return ClientCallResult.Success;
     }
 
     public async Task CreateGameIfLobbyIsFull(Guid lobbyId) // important method cos it creates the game
     {
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+
+        // magic number 5 to determine that game is full
         if (lobby.UsersInLobby.Count == 5)
         {
             await _gameMakerService.CreateGameFromLobby(lobbyId); // important call lol!
             await CleanupLobbyAndUsersAfterGameStart(lobbyId);
-
-
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using Quartz;
-using WebAPI.Interfaces;
+using WebAPI.Repositories;
+using WebAPI.Services;
 
 namespace WebAPI.Jobs;
 
@@ -9,9 +10,9 @@ namespace WebAPI.Jobs;
 /// </summary>
 public class CycleJob : IJob
 {
-    private readonly IGameRepository _gameRepository;
-    private readonly ICycleManagerService _cycleManager;
-    public CycleJob(IGameRepository gameRepository, ICycleManagerService cycleManager)
+    private readonly GameRepository _gameRepository;
+    private readonly CycleManagerService _cycleManager;
+    public CycleJob(GameRepository gameRepository, CycleManagerService cycleManager)
     {
         _cycleManager = cycleManager;
         _gameRepository = gameRepository;
@@ -20,14 +21,14 @@ public class CycleJob : IJob
     public async Task Execute(IJobExecutionContext context) // en ce moment tough de pouvoir faire teser 
     {
         await Task.Delay(1);
-        var tickableGames = await _gameRepository.GetTickableGames();
+        List<Shared_Resources.Entities.Game> tickableGames = await _gameRepository.GetTickableGames();
         if (!tickableGames.Any())
         {
             Console.WriteLine("No games to tick.");
             return;
         }
 
-        foreach (var game in tickableGames)
+        foreach (Shared_Resources.Entities.Game game in tickableGames)
         {
             await _cycleManager.TickGame(game.Id);
         }

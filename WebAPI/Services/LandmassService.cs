@@ -1,18 +1,18 @@
 ﻿using Shared_Resources.Entities;
-using WebAPI.Interfaces;
 using WebAPI.Landmasses;
+using WebAPI.Repositories;
 
 namespace WebAPI.Services;
 
-public class LandmassService : ILandmassService
+public class LandmassService
 {
     private readonly PlayerContext _playerContext;
-    private readonly IRoomRepository _roomRepository;
-    private readonly ILandmassCardsService _landmassCardsService;
+    private readonly RoomRepository _roomRepository;
+    private readonly LandmassCardsService _landmassCardsService;
 
     public LandmassService(PlayerContext playerContext,
-        IRoomRepository roomRepository,
-        ILandmassCardsService landmassCardsService)
+        RoomRepository roomRepository,
+        LandmassCardsService landmassCardsService)
     {
         _roomRepository = roomRepository;
         _playerContext = playerContext;
@@ -21,7 +21,7 @@ public class LandmassService : ILandmassService
 
     public async Task AdvanceToNextLandmass(Guid gameId) // entry point for switching landmasses
     {
-        var layout2 = LandmassGetter.CreateNewLandmass();
+        LandmassLayout layout2 = LandmassGetter.CreateNewLandmass();
         List<string> roomNames2 = await _landmassCardsService.DrawNextLandmassRoomNames2(gameId, layout2);
         _ = LandmassGetter.InsertLandmassNamesInLayout(layout2, roomNames2);
 
@@ -36,8 +36,8 @@ public class LandmassService : ILandmassService
 
     private async Task WipeLandmassRoomsAndConnections(Guid gameId) // faudra y penser
     {
-        var landmassRooms = await _roomRepository.GetAllLandmassRoomsInGame(gameId);
-        var connections = await _roomRepository.GetLandmassAdjacentRoomsAsync(gameId);
+        List<Room> landmassRooms = await _roomRepository.GetAllLandmassRoomsInGame(gameId);
+        List<AdjacentRoom> connections = await _roomRepository.GetLandmassAdjacentRoomsAsync(gameId);
 
         _playerContext.Rooms.RemoveRange(landmassRooms);
         _playerContext.AdjacentRooms.RemoveRange(connections);

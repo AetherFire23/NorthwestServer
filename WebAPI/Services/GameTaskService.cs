@@ -1,45 +1,41 @@
 ﻿using Shared_Resources.GameTasks;
-using Shared_Resources.Models;
+using System.Net;
+using WebAPI.Exceptions;
 using WebAPI.GameTasks;
-using WebAPI.Interfaces;
+using WebAPI.Repositories;
 
 namespace WebAPI.Services;
 
-public class GameTaskService : IGameTaskService
+public class GameTaskService
 {
-    private readonly IGameStateRepository _gameStateRepository;
+    private readonly GameStateRepository _gameStateRepository;
     private readonly IServiceProvider _serviceProvider;
 
-    public GameTaskService(IGameStateRepository gameStateRepository, IServiceProvider serviceProvider)
+    public GameTaskService(GameStateRepository gameStateRepository, IServiceProvider serviceProvider)
     {
         _gameStateRepository = gameStateRepository;
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<ClientCallResult> ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, TaskParameters parameters)
+    public async Task ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, TaskParameters parameters)
     {
-        var gameState = await _gameStateRepository.GetPlayerGameStateAsync(playerId, null);
-        if (gameState == null)
-        {
-            return ClientCallResult.Failure;
-        }
+        Shared_Resources.Models.GameState? gameState = await _gameStateRepository.GetPlayerGameStateAsync(playerId, null);
+        if (gameState is null) throw new RequestException(HttpStatusCode.BadRequest);
 
-        var context = new GameTaskContext
+
+        GameTaskContext context = new GameTaskContext
         {
-            GameState = gameState.DeserializeContent<GameState>(), // not tested
+            // ill check in integration test if this breaks
+            GameState = gameState, // not tested
             Parameters = parameters,
         };
 
         Type gameTaskType = GameTaskTypeSelector.GetGameTaskType(taskCode);
-        var gameTask = _serviceProvider.GetService(gameTaskType) as GameTaskBase;
+        GameTaskBase? gameTask = _serviceProvider.GetService(gameTaskType) as GameTaskBase;
 
-        var result = gameTask.Validate(context);
+        GameTaskValidationResult result = gameTask.Validate(context);
         if (!result.IsValid)
-        {
-            return ClientCallResult.Failure;
-        }
 
-        await gameTask.Execute(context);
-        return ClientCallResult.Success;
+            await gameTask.Execute(context);
     }
 }

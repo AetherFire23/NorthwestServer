@@ -2,6 +2,7 @@
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
 using WebAPI.Interfaces;
+using WebAPI.Repositories;
 
 namespace WebAPI.Strategies;
 
@@ -9,11 +10,9 @@ namespace WebAPI.Strategies;
 public class EngineerRoleStrategy : IRoleInitializationStrategy
 {
     private readonly PlayerContext _playerContext;
-    private readonly IRoomRepository _roomRepository;
-    private readonly IPlayerRepository _playerRepository;
-    public EngineerRoleStrategy(PlayerContext playerContext,
-        IRoomRepository roomRepository,
-        IPlayerRepository playerRepository)
+    private readonly RoomRepository _roomRepository;
+    private readonly PlayerRepository _playerRepository;
+    public EngineerRoleStrategy(PlayerContext playerContext, RoomRepository roomRepository, PlayerRepository playerRepository)
     {
         _playerContext = playerContext;
         _roomRepository = roomRepository;
@@ -22,10 +21,10 @@ public class EngineerRoleStrategy : IRoleInitializationStrategy
 
     public async Task InitializePlayerFromRoleAsync(Player player) // not added to Db yet
     {
-        var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.MiddleCorridor));
+        Room room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.MiddleCorridor));
         player.CurrentGameRoomId = room.Id;
 
-        var item = new Item()
+        Item item = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Wrench,

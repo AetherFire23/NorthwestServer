@@ -1,33 +1,23 @@
-﻿
-using Shared_Resources.DTOs;
+﻿using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models.Requests;
-using WebAPI.Repository.Users;
+using WebAPI.Repositories;
 
 namespace WebAPI.Services;
 
-public class UserService : IUserService
+public class UserService
 {
-    private readonly IUserRepository _userRepository;
+    private readonly UserRepository _userRepository;
 
-    public UserService(IUserRepository repository)
+    public UserService(UserRepository repository)
     {
         _userRepository = repository;
     }
 
-    public async Task<(bool IsIssued, User? UserModel)> AllowIssueTokenToUser(LoginRequest request)
+    public async Task<(bool IsIssued, User? UserModel)> CanIssueTokenToUser(LoginRequest request)
     {
         User? user = await _userRepository.GetUserByVerifyingCredentialsOrNull(request);
         (bool IsIssued, User? UserModel) isIssuedUser = new(user is not null, user);
         return isIssuedUser;
-    }
-
-    public async Task<(bool IsCreated, UserDto UserModel)> AllowCreateUser(RegisterRequest request)
-    {
-        bool userExists = await _userRepository.IsUserExists(request.UserName, request.Email);
-        if (userExists) return (false, null);
-
-        UserDto user = await _userRepository.CreateUser(request);
-        return (true, user);
     }
 }

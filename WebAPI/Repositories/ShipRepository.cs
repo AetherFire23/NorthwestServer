@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared_Resources.Entities;
-using WebAPI.Interfaces;
+namespace WebAPI.Repositories;
 
-namespace WebAPI.Repository;
-
-public class ShipRepository : IShipRepository
+public class ShipRepository
 {
     private readonly PlayerContext _playerContext;
     public ShipRepository(PlayerContext playerContext)

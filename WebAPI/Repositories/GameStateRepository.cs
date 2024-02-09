@@ -2,23 +2,22 @@
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
-using WebAPI.Interfaces;
 
-namespace WebAPI.Repository;
+namespace WebAPI.Repositories;
 
-public class GameStateRepository : IGameStateRepository
+public class GameStateRepository
 {
-    private readonly IRoomRepository _roomRepository;
-    private readonly IPlayerRepository _playerRepository;
+    private readonly RoomRepository _roomRepository;
+    private readonly PlayerRepository _playerRepository;
     private readonly PlayerContext _playerContext;
-    public GameStateRepository(PlayerContext playerContext, IPlayerRepository playerRepository, IRoomRepository roomRepository)
+    public GameStateRepository(PlayerContext playerContext, PlayerRepository playerRepository, RoomRepository roomRepository)
     {
         _playerContext = playerContext;
         _playerRepository = playerRepository;
         _roomRepository = roomRepository;
     }
 
-    public async Task<ClientCallResult> GetPlayerGameStateAsync(Guid playerId, DateTime? lastTimeStamp)
+    public async Task<GameState> GetPlayerGameStateAsync(Guid playerId, DateTime? lastTimeStamp)
     {
         Player player = await _playerRepository.GetPlayerAsync(playerId);
 
@@ -28,11 +27,11 @@ public class GameStateRepository : IGameStateRepository
         List<PrivateChatRoomParticipant> chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
         List<RoomDTO> roomList = await GetAllRoomDTOSInGameAsync(playerDTO.GameId);
 
-        var logs = await _playerRepository.GetAccessibleLogsForPlayer(playerId, player.GameId);
-        var privs = await GetPrivateChatRoomsAsync(player.Id);
-        var stations = await _playerContext.Stations.Where(x => x.GameId == player.GameId).ToListAsync();
+        List<Log> logs = await _playerRepository.GetAccessibleLogsForPlayer(playerId, player.GameId);
+        List<PrivateChatRoom> privs = await GetPrivateChatRoomsAsync(player.Id);
+        List<Station> stations = await _playerContext.Stations.Where(x => x.GameId == player.GameId).ToListAsync();
 
-        var gameState = new GameState()
+        GameState gameState = new GameState()
         {
             PlayerDTO = playerDTO,
             NewMessages = newMessages,
@@ -46,21 +45,12 @@ public class GameStateRepository : IGameStateRepository
             Stations = stations,
         };
 
-        ClientCallResult clientCallResult = new ClientCallResult
-        {
-            Content = gameState,
-            IsSuccessful = true,
-            Message = string.Empty,
-        };
-
-        var deserializedCheck = clientCallResult.DeserializeContent<GameState>();
-
-        return clientCallResult;
+        return gameState;
     }
 
     public async Task<List<PrivateChatRoom>> GetPrivateChatRoomsAsync(Guid playerId)
     {
-        var rooms = await _playerContext.PrivateChatRooms.Join(_playerContext.PrivateChatRoomParticipants,
+        List<PrivateChatRoom> rooms = await _playerContext.PrivateChatRooms.Join(_playerContext.PrivateChatRoomParticipants,
             p => p.Id,
             participant => participant.RoomId,
             (p, p2) => p).ToListAsync();
@@ -70,13 +60,13 @@ public class GameStateRepository : IGameStateRepository
 
     public async Task<List<RoomDTO>> GetAllRoomDTOSInGameAsync(Guid gameId)
     {
-        var roomsInGame = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
+        List<Room> roomsInGame = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
 
-        var roomDtos = new List<RoomDTO>();
+        List<RoomDTO> roomDtos = new List<RoomDTO>();
 
-        foreach (var room in roomsInGame)
+        foreach (Room? room in roomsInGame)
         {
-            var roomDTO = await _roomRepository.GetRoomDTOAsync(room.Id);
+            RoomDTO roomDTO = await _roomRepository.GetRoomDTOAsync(room.Id);
             roomDtos.Add(roomDTO);
         }
 
@@ -87,10 +77,10 @@ public class GameStateRepository : IGameStateRepository
 
     public async Task<List<PrivateChatRoomParticipant>> GetChatRoomsWithMainPlayerInItAsync(Guid playerID)
     {
-        var roomsTheMainPlayerIsIn = await _playerContext.PrivateChatRoomParticipants.Where(pair => pair.ParticipantId == playerID).ToListAsync();
-        var chatRoomIds = roomsTheMainPlayerIsIn.Select(chatRoom => chatRoom.RoomId).ToList();
-        var participantsInSameRoom = await _playerContext.PrivateChatRoomParticipants.Where(room => chatRoomIds.Contains(room.RoomId)).ToListAsync(); // qqch marche pas
-        var excludeMainPlayer = participantsInSameRoom.Where(room => room.ParticipantId != playerID);
+        List<PrivateChatRoomParticipant> roomsTheMainPlayerIsIn = await _playerContext.PrivateChatRoomParticipants.Where(pair => pair.ParticipantId == playerID).ToListAsync();
+        List<Guid> chatRoomIds = roomsTheMainPlayerIsIn.Select(chatRoom => chatRoom.RoomId).ToList();
+        List<PrivateChatRoomParticipant> participantsInSameRoom = await _playerContext.PrivateChatRoomParticipants.Where(room => chatRoomIds.Contains(room.RoomId)).ToListAsync(); // qqch marche pas
+        IEnumerable<PrivateChatRoomParticipant> excludeMainPlayer = participantsInSameRoom.Where(room => room.ParticipantId != playerID);
 
         return participantsInSameRoom;
     }
@@ -98,7 +88,7 @@ public class GameStateRepository : IGameStateRepository
     public async Task<List<Message>> GetNewMessagesAsync(DateTime? lastTimeStamp, Guid gameId)
     {
         bool hasReceivedMessages = lastTimeStamp != null;
-        var messages = !hasReceivedMessages
+        List<Message> messages = !hasReceivedMessages
                ? GetMessagesFromGameId(gameId)
                : GetMessagesAfterTimeStamp(lastTimeStamp, gameId);
 
@@ -107,7 +97,7 @@ public class GameStateRepository : IGameStateRepository
 
     public List<Message> GetMessagesFromGameId(Guid gameId)
     {
-        var allMessages = _playerContext.Messages.Where(mess => mess.GameId == gameId).ToList();
+        List<Message> allMessages = _playerContext.Messages.Where(mess => mess.GameId == gameId).ToList();
         return allMessages;
     }
 

@@ -1,29 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Shared_Resources.Entities;
-using Shared_Resources.Models;
 using WebAPI.Game_Actions;
-using WebAPI.Interfaces;
-using WebAPI.SSE;
 
 namespace WebAPI.Services;
 
-public class PlayerService : IPlayerService
+public class PlayerService
 {
     private readonly PlayerContext _playerContext;
-    private readonly IPlayerRepository _playerRepository;
-    private readonly IGameActionsRepository _gameActionsRepository;
-    private readonly IGameSSESender _gameSSESender;
+    private readonly PlayerRepository _playerRepository;
+    private readonly GameActionsRepository _gameActionsRepository;
     public PlayerService(
         PlayerContext playerContext,
-        IPlayerRepository playerRepository,
-        IGameActionsRepository gameActionsRepository,
-        IGameSSESender gameSSESender)
+        PlayerRepository playerRepository,
+        GameActionsRepository gameActionsRepository)
     {
         _playerContext = playerContext;
         _playerRepository = playerRepository;
         _gameActionsRepository = gameActionsRepository;
-        _gameSSESender = gameSSESender;
     }
 
     public async Task TransferItem(Guid targetId, Guid ownerId, Guid itemId, Guid gameId)
@@ -37,7 +31,6 @@ public class PlayerService : IPlayerService
 
         item.OwnerId = targetId;
         _ = await _playerContext.SaveChangesAsync();
-        await _gameSSESender.SendItemChangedEvent(gameId);
     }
 
     public async Task UpdatePositionAsync(Guid playerId, float x, float y)
@@ -48,11 +41,11 @@ public class PlayerService : IPlayerService
         _ = await _playerContext.SaveChangesAsync();
     }
 
-    public async Task<ClientCallResult> ChangeRoomAsync(Guid playerId, string targetRoomName)
+    public async Task ChangeRoomAsync(Guid playerId, string targetRoomName)
     {
-        var player = await _playerRepository.GetPlayerAsync(playerId);
-        var currentRoom = await _playerContext.Rooms.FirstAsync(x => x.Id == player.CurrentGameRoomId);
-        var targetRoom = await _playerContext.Rooms.FirstAsync(x => x.Name == targetRoomName); // devrait pas etre avec le gameid aussi?
+        Player player = await _playerRepository.GetPlayerAsync(playerId);
+        Room currentRoom = await _playerContext.Rooms.FirstAsync(x => x.Id == player.CurrentGameRoomId);
+        Room targetRoom = await _playerContext.Rooms.FirstAsync(x => x.Name == targetRoomName); // devrait pas etre avec le gameid aussi?
         bool connectionExists = await _playerContext.AdjacentRooms.FirstOrDefaultAsync(x => x.RoomId == currentRoom.Id && x.AdjacentId == targetRoom.Id) is not null;
 
         if (connectionExists) // should benefit from inversion 
@@ -60,7 +53,7 @@ public class PlayerService : IPlayerService
             player.CurrentGameRoomId = targetRoom.Id;
             _ = await _playerContext.SaveChangesAsync();
 
-            var log = new Log()
+            Log log = new Log()
             {
                 Id = Guid.NewGuid(),
                 Created = DateTime.UtcNow,
@@ -72,7 +65,7 @@ public class PlayerService : IPlayerService
                 GameId = player.GameId,
             };
 
-            var gameAction = new GameAction()
+            GameAction gameAction = new GameAction()
             {
                 Id = Guid.NewGuid(),
                 Created = DateTime.UtcNow,
@@ -85,20 +78,8 @@ public class PlayerService : IPlayerService
             _ = await _playerContext.AddAsync(gameAction);
             _ = await _playerContext.AddAsync(log);
             _ = await _playerContext.SaveChangesAsync();
-
-            //await _sseManager.SendNewLogEvent(log);
-
-            return ClientCallResult.Success;
         }
-
         // else fail
         string message = $"Connection between {currentRoom.Name} and {targetRoom.Name} did not exist. If room is intended to be destroyed, use .IsBlockedConnection";
-
-
-        return new ClientCallResult()
-        {
-            Message = message,
-            IsSuccessful = false,
-        };
     }
 }

@@ -485,23 +485,23 @@ public static class RoomsTemplate // cest quoi deja les stairway haha
 
     public static List<Room> ReadSerializedDefaultRooms()
     {
-        var rooms = JsonConvert.DeserializeObject<List<Room>>(DefaultSerializedRooms) ?? new List<Room>();
+        List<Room> rooms = JsonConvert.DeserializeObject<List<Room>>(DefaultSerializedRooms) ?? new List<Room>();
         return rooms;
     }
 
     private static List<Room> DiscoverReflectedTemplateRooms()
     {
-        var reflectedRooms = typeof(RoomsTemplate).GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
+        List<Room?> reflectedRooms = typeof(RoomsTemplate).GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
             .Where(x => x.PropertyType == typeof(Room))
             .Select(x => x.GetValue(null) as Room).ToList();
 
         bool hasNullRoom = reflectedRooms.Any(x => x is null);
         if (hasNullRoom) throw new Exception($"One room was null while initializing !");
 
-        var isDuplicateRoomNameOrId = reflectedRooms.FirstOrDefault(x => reflectedRooms.Where(y => x != y).Any(y => y.Name == x.Name)) != null;
+        bool isDuplicateRoomNameOrId = reflectedRooms.FirstOrDefault(x => reflectedRooms.Where(y => x != y).Any(y => y.Name == x.Name)) != null;
         if (isDuplicateRoomNameOrId) throw new Exception($"Two rooms with the same name were found.");
 
-        var nonNullableReflectedRooms = reflectedRooms.Select(x => x ?? new Room()).ToList();
+        List<Room> nonNullableReflectedRooms = reflectedRooms.Select(x => x ?? new Room()).ToList();
         return nonNullableReflectedRooms;
     }
 }

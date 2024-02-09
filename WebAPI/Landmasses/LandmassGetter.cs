@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
-using WebAPI.TestFolder;
 namespace WebAPI.Landmasses;
 
 public static class LandmassGetter
 {
     private static List<LandmassLayout> ReadLandmassLayouts()
     {
-        var allLandmassesSerialized = File.ReadAllText("Layout.txt");
+        string allLandmassesSerialized = File.ReadAllText("Layout.txt");
         List<LandmassLayout>? layouts = JsonConvert.DeserializeObject<List<LandmassLayout>>(allLandmassesSerialized) ?? new List<LandmassLayout>();
         return layouts;
     }
@@ -14,7 +13,7 @@ public static class LandmassGetter
     private static LandmassLayout GetRandomLandmassLayout()
     {
         List<LandmassLayout> allLayouts = ReadLandmassLayouts();
-        var randomIndex = Random.Shared.Next(0, allLayouts.Count);
+        int randomIndex = Random.Shared.Next(0, allLayouts.Count);
         LandmassLayout randomLayout = allLayouts.ElementAt(randomIndex);
         return randomLayout;
     }

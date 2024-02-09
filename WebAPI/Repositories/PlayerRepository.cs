@@ -3,7 +3,7 @@ using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Enums;
 using WebAPI;
-public class PlayerRepository : IPlayerRepository
+public class PlayerRepository
 {
     private readonly PlayerContext _playerContext;
     DbSet<Player> Players => _playerContext.Players;
@@ -24,26 +24,26 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<Player> GetPlayerAsync(Guid id)
     {
-        var player = await _playerContext.Players.FirstAsync(queriedPlayer => queriedPlayer.Id == id);
+        Player player = await _playerContext.Players.FirstAsync(queriedPlayer => queriedPlayer.Id == id);
         return player;
     }
 
     public async Task<Item> GetItemAsync(Guid itemId)
     {
-        var item = await _playerContext.Items.FirstAsync(x => x.Id == itemId);
+        Item item = await _playerContext.Items.FirstAsync(x => x.Id == itemId);
 
         return item;
     }
 
     public async Task<List<PrivateInvitation>> GetPlayerInvitations(Guid playerId)
     {
-        var playerInvites = await _playerContext.Invitations.Where(invite => invite.ToPlayerId == playerId).ToListAsync();
+        List<PrivateInvitation> playerInvites = await _playerContext.Invitations.Where(invite => invite.ToPlayerId == playerId).ToListAsync();
         return playerInvites;
     }
 
     public async Task<List<Player>> GetPlayersInGameAsync(Guid gameId)
     {
-        var allPlayers = await Players.Where(player => player.GameId == gameId).ToListAsync();
+        List<Player> allPlayers = await Players.Where(player => player.GameId == gameId).ToListAsync();
         return allPlayers;
     }
 
@@ -87,7 +87,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<List<Item>> GetOwnedItems(Guid ownerId)
     {
-        var items = await _playerContext.Items.Where(x => x.OwnerId == ownerId).ToListAsync();
+        List<Item> items = await _playerContext.Items.Where(x => x.OwnerId == ownerId).ToListAsync();
         return items;
     }
 
@@ -108,7 +108,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<List<Guid>> GetPlayersIdsWhoCanAccessLog(Log log)
     {
-        var playerIdsWhoCanSeeLogs = _playerContext.LogAccessPermission
+        List<Guid> playerIdsWhoCanSeeLogs = _playerContext.LogAccessPermission
             .Where(x => x.LogId == log.Id)
             .Select(x => x.PlayerId).ToList();
 
@@ -122,8 +122,8 @@ public class PlayerRepository : IPlayerRepository
             return playerId;
         }
 
-        var playersWhoCanSeeLog = await GetPlayersIdsWhoCanAccessLog(log);
-        var playersWithAccess = playerId.Where(p => HasAccessToLog(playersWhoCanSeeLog, p)).ToList();
+        List<Guid> playersWhoCanSeeLog = await GetPlayersIdsWhoCanAccessLog(log);
+        List<Guid> playersWithAccess = playerId.Where(p => HasAccessToLog(playersWhoCanSeeLog, p)).ToList();
         return playersWithAccess;
     }
 

@@ -9,7 +9,7 @@ public class GameTaskReflection
 {
     public static List<Type> GetGameTaskTypes()
     {
-        var unityTasks = Assembly.GetExecutingAssembly().GetTypes()
+        List<Type> unityTasks = Assembly.GetExecutingAssembly().GetTypes()
             .Where(type => type.IsClass && !type.IsAbstract
             && typeof(IGameTask).IsAssignableFrom(type)).ToList();
 
@@ -18,9 +18,9 @@ public class GameTaskReflection
 
     public static List<IGameTask> CreateGameTaskInstances()
     {
-        var types = GetGameTaskTypes();
+        List<Type> types = GetGameTaskTypes();
 
-        var instantiated = types.Select(x => Activator.CreateInstance(x) as IGameTask);
+        IEnumerable<IGameTask?> instantiated = types.Select(x => Activator.CreateInstance(x) as IGameTask);
 
         if (instantiated.Any(x => x is null))
         {

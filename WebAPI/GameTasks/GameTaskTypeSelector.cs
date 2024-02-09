@@ -21,11 +21,11 @@ public static class GameTaskTypeSelector
 
     private static ConcurrentDictionary<GameTaskCodes, Type> CreateTaskTypesMap()
     {
-        var gameTasksMap = new Dictionary<GameTaskCodes, Type>();
+        Dictionary<GameTaskCodes, Type> gameTasksMap = new Dictionary<GameTaskCodes, Type>();
 
         foreach (Type gameTaskType in GetTaskTypes())
         {
-            var attr = CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(gameTaskType);
+            GameTaskAttribute? attr = CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(gameTaskType);
 
             gameTasksMap.Add(attr.TaskCode, gameTaskType);
         }
@@ -35,7 +35,7 @@ public static class GameTaskTypeSelector
 
     private static List<Type> GetTaskTypes()
     {
-        var types = typeof(Program).Assembly.GetTypes()
+        List<Type> types = typeof(Program).Assembly.GetTypes()
             .Where(type => type.IsClass && !type.IsAbstract
             && typeof(IGameTask).IsAssignableFrom(type)
             && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null).ToList();

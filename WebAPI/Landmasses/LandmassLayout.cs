@@ -1,7 +1,6 @@
-﻿using LandmassTests;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace WebAPI.TestFolder;
+namespace WebAPI.Landmasses;
 
 public class LandmassLayout
 {

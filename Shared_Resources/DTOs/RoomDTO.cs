@@ -24,8 +24,8 @@ public class RoomDTO : ITaskParameter, IFormattable
     public float Y { get; set; }
     public KeyValuePair<string, string> GetKeyValuePairParameter(int index)
     {
-        var name = $"{TaskTargetParameterization.RoomNamePrefix}{index}";
-        var kvp = new KeyValuePair<string, string>(name, this.Name);
+        string name = $"{TaskTargetParameterization.RoomNamePrefix}{index}";
+        KeyValuePair<string, string> kvp = new KeyValuePair<string, string>(name, this.Name);
         return kvp;
     }
     public override string ToString()

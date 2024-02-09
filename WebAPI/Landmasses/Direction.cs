@@ -1,4 +1,4 @@
-﻿namespace LandmassTests;
+﻿namespace WebAPI.Landmasses;
 
 public enum Direction
 {

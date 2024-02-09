@@ -17,7 +17,7 @@ public class SSEData
 
     public string ConvertToReadableLine() // this is what gets sent through the server
     {
-        var builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         _ = builder.Append(SSEStrings.EventTypePrefix);
         _ = builder.Append(EventType.ToString());
 

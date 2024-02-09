@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared_Resources.Constants.Endpoints;
+using Shared_Resources.DTOs;
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
 using Shared_Resources.Models.Requests;
 using WebAPI.Authentication;
 using WebAPI.Services;
-
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route(UserEndpoints.Users)]
 public class UserController : ControllerBase
 {
-    private readonly IUserService _userService;
-    private readonly IAuthenticationService _authenticationService;
+    private readonly UserService _userService;
+    private readonly AuthenticationService _authenticationService;
 
-    public UserController(IUserService userService,
-        IAuthenticationService authenticationService)
+    public UserController(UserService userService, AuthenticationService authenticationService)
     {
         _userService = userService;
         _authenticationService = authenticationService;
@@ -25,17 +24,19 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route(UserEndpoints.Login)]
-    public async Task<ActionResult<ClientCallResult>> Login([FromBody] LoginRequest request)
+    [ProducesResponseType(200, Type = typeof(LoginResult))]
+    public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
-        var clientCallResult = await _authenticationService.TryLogin(request);
-        return Ok(clientCallResult);
+        var loginResult = await _authenticationService.TryLogin(request);
+        return Ok(loginResult);
     }
 
     [HttpPost(UserEndpoints.Register)]
-    public async Task<ActionResult<ClientCallResult>> Register([FromBody] RegisterRequest request)
+    [ProducesResponseType(200, Type = typeof(UserDto))]
+    public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
-        ClientCallResult clientCallResult = await _authenticationService.TryRegister(request);
-        return Ok(clientCallResult);
+        var userDto = await _authenticationService.TryRegister(request);
+        return Ok(userDto);
     }
 
     [Authorize(Roles = nameof(RoleName.PereNoel))]

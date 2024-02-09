@@ -1,6 +1,5 @@
 ﻿using Shared_Resources.Enums;
 using System;
-
 namespace Shared_Resources.Entities;
 
 public class Season

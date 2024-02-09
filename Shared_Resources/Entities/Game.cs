@@ -14,14 +14,14 @@ public class Game
     /// <summary> Current Time + interval </summary>
     public static DateTime CalculateNextTick()
     {
-        var dateTime = DateTime.UtcNow.AddSeconds(TimeBetweenTicksInSeconds);
+        DateTime dateTime = DateTime.UtcNow.AddSeconds(TimeBetweenTicksInSeconds);
         return dateTime;
     }
 
 
     public static Game FactorizeInitialGame()
     {
-        var game = new Game()
+        Game game = new Game()
         {
             Id = Guid.NewGuid(),
             IsActive = true,

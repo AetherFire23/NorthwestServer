@@ -2,6 +2,7 @@
 using Shared_Resources.Enums;
 using Shared_Resources.Models;
 using WebAPI.Interfaces;
+using WebAPI.Repositories;
 
 namespace WebAPI.Strategies;
 
@@ -9,23 +10,19 @@ namespace WebAPI.Strategies;
 public class MedicRoleStrategyService : IRoleInitializationStrategy
 {
     private readonly PlayerContext _playerContext;
-    private readonly IRoomRepository _roomRepository;
-    private readonly IPlayerRepository _playerRepository;
-    public MedicRoleStrategyService(PlayerContext playerContext,
-        IRoomRepository roomRepository,
-        IPlayerRepository playerRepository)
+    private readonly RoomRepository _roomRepository;
+    public MedicRoleStrategyService(PlayerContext playerContext, RoomRepository roomRepository)
     {
         _playerContext = playerContext;
         _roomRepository = roomRepository;
-        _playerRepository = playerRepository;
     }
 
     public async Task InitializePlayerFromRoleAsync(Player player)
     {
-        var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.CrowsNest));
+        Room room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.CrowsNest));
         player.CurrentGameRoomId = room.Id;
 
-        var log = new Log()
+        Log log = new Log()
         {
             Id = Guid.NewGuid(),
             Created = DateTime.UtcNow,
@@ -37,7 +34,7 @@ public class MedicRoleStrategyService : IRoleInitializationStrategy
             TriggeringPlayerId = player.Id,
         };
 
-        var logPublic = new Log()
+        Log logPublic = new Log()
         {
             Id = Guid.NewGuid(),
             Created = DateTime.UtcNow,
@@ -49,7 +46,7 @@ public class MedicRoleStrategyService : IRoleInitializationStrategy
             TriggeringPlayerId = player.Id,
         };
 
-        var permission = new LogAccessPermissions()
+        LogAccessPermissions permission = new LogAccessPermissions()
         {
             Id = Guid.NewGuid(),
             LogId = log.Id,

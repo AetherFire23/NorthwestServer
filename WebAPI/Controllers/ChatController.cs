@@ -1,39 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shared_Resources.Models;
-using WebAPI.Interfaces;
-
+using WebAPI.Services;
 namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class ChatController : ControllerBase
 {
-    private readonly IPlayerRepository _playerRepository;
-    private readonly PlayerContext _playerContext;
-    private readonly IChatService _chatService;
-    public ChatController(IPlayerRepository playerRepository,
-        PlayerContext playerContext,
-        IChatService chatService)
+    private readonly ChatService _chatService;
+    public ChatController(ChatService chatService)
     {
-        _playerRepository = playerRepository;
-        _playerContext = playerContext;
         _chatService = chatService;
     }
 
     [HttpPut]
     [Route("CreateChatroom")] // used
-    public async Task<ActionResult<ClientCallResult>> CreateChatroom(string playerGuid, string newRoomGuid)
+    public async Task<ActionResult> CreateChatroom(string playerGuid, string newRoomGuid)
     {
-        ClientCallResult result = await _chatService.CreateChatroomAsync(playerGuid, newRoomGuid);
-        return Ok(result);
+        await _chatService.CreateChatroomAsync(playerGuid, newRoomGuid);
+        return Ok();
     }
 
     [HttpPut] // put = update, post = creation
     [Route("LeaveChatRoom")] // used 
-    public async Task<ActionResult<ClientCallResult>> LeaveChatRoom(Guid playerId, Guid roomToLeave) // va dependre de comment je manage les data
+    public async Task<ActionResult> LeaveChatRoom(Guid playerId, Guid roomToLeave) // va dependre de comment je manage les data
     {
-        ClientCallResult result = await _chatService.LeaveChatRoomAsync(playerId, roomToLeave);
-        return Ok(result);
+        await _chatService.LeaveChatRoomAsync(playerId, roomToLeave);
+        return Ok();
     }
 
 

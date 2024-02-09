@@ -48,5 +48,4 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Shared_Resources\Shared_Resources.csproj" />
 	</ItemGroup>
-
 </Project>

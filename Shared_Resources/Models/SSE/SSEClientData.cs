@@ -41,14 +41,14 @@ public class SSEClientData
             .ToString();
         SSEType eventType = (SSEType)Enum.Parse(typeof(SSEType), eventTypeText);
 
-        var serializedData = sseDataLine
+        string serializedData = sseDataLine
             .SkipWhile(c => !c.Equals(SSEStrings.Separator))
             .Skip(SSEStrings.DataPrefix.Length + 1)
             .TakeWhile(c => !c.Equals(SSEStrings.EndCharacter))
             .Aggregate(new StringBuilder(), (sb, c) => sb.Append(c))
             .ToString();
 
-        var sseData = new SSEClientData(eventType, serializedData);
+        SSEClientData sseData = new SSEClientData(eventType, serializedData);
         return sseData;
     }
 }

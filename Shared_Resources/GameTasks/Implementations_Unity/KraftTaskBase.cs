@@ -25,9 +25,9 @@ public class KraftTaskBase : GameTaskBase
     // rename PromptInfo to checklist
     public override List<PromptInfo> GetCheckLists(GameState gameState)
     {
-        var builder = new CheckListsBuilder();
+        CheckListsBuilder builder = new CheckListsBuilder();
 
-        var rooms = gameState.Rooms.Where(x => x.IsLandmass).ToList();
+        List<DTOs.RoomDTO> rooms = gameState.Rooms.Where(x => x.IsLandmass).ToList();
         _ = builder.CreateCheckListPrompt(rooms, "Changed it!")
             .SetMinimumTargetCount(2)
             .SetMaximumTargetCount(5);

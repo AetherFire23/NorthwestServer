@@ -2,76 +2,51 @@
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using Shared_Resources.Models.Requests;
-using WebAPI.Repository.Users;
+using System.Net;
+using WebAPI.Exceptions;
+using WebAPI.Repositories;
 using WebAPI.Services;
 
 namespace WebAPI.Authentication;
 
-public class AuthenticationService : IAuthenticationService
+public class AuthenticationService
 {
-    private readonly IUserService _userService;
-    private readonly IJwtTokenManager _jwtTokenManager;
-    private readonly IUserRepository _userRepository;
-    public AuthenticationService(IUserService userService,
-        IJwtTokenManager jwtTokenManager,
-        IUserRepository userRepository)
+    private readonly UserService _userService;
+    private readonly JwtTokenManager _jwtTokenManager;
+    private readonly UserRepository _userRepository;
+    public AuthenticationService(UserService userService,
+        JwtTokenManager jwtTokenManager,
+        UserRepository userRepository)
     {
         _userService = userService;
         _jwtTokenManager = jwtTokenManager;
         _userRepository = userRepository;
     }
 
-    public async Task<ClientCallResult> TryLogin(LoginRequest loginRequest)
+    public async Task<LoginResult> TryLogin(LoginRequest loginRequest)
     {
-        (bool isIssued, User? userModel) = await _userService.AllowIssueTokenToUser(loginRequest);
+        (var isTokenIssued, var userModel) = await _userService.CanIssueTokenToUser(loginRequest);
+        if (!isTokenIssued) throw new HttpRequestException();
 
-        if (!isIssued)
+        var userDto = await _userRepository.MapUserDtoById(userModel.Id);
+        var token = await _jwtTokenManager.GenerateToken(userDto);
+
+        var loginResult = new LoginResult
         {
-            var unsuccessfulRequest = new ClientCallResult
-            {
-                IsSuccessful = false,
-                Message = "User could not be authenticated",
-                Content = new LoginResult(),
-            };
-
-            return unsuccessfulRequest;
-        }
-
-        UserDto userDto = await _userRepository.MapUserDtoById(userModel.Id);
-        string token = await _jwtTokenManager.GenerateToken(userDto);
-        var result = new ClientCallResult
-        {
-            IsSuccessful = true,
-            Message = "Token issued !",
-            Content = new LoginResult
-            {
-                IsSuccessful = true,
-                Token = token,
-                UserId = userDto.Id,
-            },
+            Token = token,
+            UserId = userDto.Id,
         };
-        return result;
+
+        return loginResult;
     }
 
     /// <summary> Content is userdto</summary>
-    public async Task<ClientCallResult> TryRegister(RegisterRequest registerRequest)
+    public async Task<UserDto> TryRegister(RegisterRequest registerRequest)
     {
-        var userCreation = await _userService.AllowCreateUser(registerRequest);
+        if ((await _userRepository.IsUserExists(registerRequest))) 
+            throw new RequestException(HttpStatusCode.BadRequest);
 
-        if (userCreation.IsCreated)
-        {
-            var result = new ClientCallResult()
-            {
-                IsSuccessful = true,
-                Content = userCreation.UserModel
-            };
-            return result;
-        }
-
-        return new ClientCallResult()
-        {
-            IsSuccessful = false,
-            Message = "user authentication failed !"
-        };
+        UserDto user = await _userRepository.CreateUser(registerRequest);
+        return user;
     }
 }

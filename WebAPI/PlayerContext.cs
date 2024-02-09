@@ -71,5 +71,12 @@ public class PlayerContext : DbContext
             .HasConversion(
             v => v.ToString(),
             v => v.ToEnum<RoleName>());
+
+        modelBuilder.Entity<Role>().HasData(new Role()
+        {
+            Id = Guid.NewGuid(),
+            RoleName = RoleName.PereNoel,
+            UserRoles = [],
+        });
     }
 }

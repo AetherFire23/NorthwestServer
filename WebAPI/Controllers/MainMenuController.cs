@@ -1,47 +1,42 @@
-﻿namespace WebAPI.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using Shared_Resources.Constants.Endpoints;
+using Shared_Resources.Models;
+using WebAPI.Repositories;
+namespace WebAPI.Controllers;
+
+[ApiController]
+[Route(MainMenuEndpoints.MainMenu)]
+public class MainMenuController : ControllerBase
 {
-    using global::WebAPI.Interfaces;
-    using Microsoft.AspNetCore.Mvc;
-    using Shared_Resources.Constants.Endpoints;
-    using Shared_Resources.Models;
-
-    namespace WebAPI.Controllers
+    private readonly MainMenuRepository _mainMenuRepository;
+    public MainMenuController(MainMenuRepository mainMenuRepository)
     {
-        [ApiController]
-        [Route(MainMenuEndpoints.MainMenu)]
-        public class MainMenuController : ControllerBase
-        {
-            private readonly IPlayerRepository _playerRepository;
-            private readonly PlayerContext _playerContext;
-            private readonly IChatService _chatService;
-            private readonly IMainMenuRepository _mainMenuRepository;
-            public MainMenuController(IPlayerRepository playerRepository,
-                PlayerContext playerContext,
-                IChatService chatService, IMainMenuRepository mainMenuRepository)
-            {
-                _playerRepository = playerRepository;
-                _playerContext = playerContext;
-                _chatService = chatService;
-                _mainMenuRepository = mainMenuRepository;
-            }
+        _mainMenuRepository = mainMenuRepository;
+    }
 
-            [HttpGet]
-            [Route(MainMenuEndpoints.State)]
-            public async Task<ActionResult<ClientCallResult>> GetMainMenuState(Guid userId)
-            {
-                var clientCallResult = await _mainMenuRepository.GetMainMenuState(userId);
-                _ = clientCallResult.DeserializeContent<MainMenuState>();
-                return Ok(clientCallResult);
-            }
+    [HttpGet]
+    [Route(MainMenuEndpoints.State)]
+    [ProducesResponseType(200, Type = typeof(MainMenuState))]
+    public async Task<ActionResult> GetMainMenuState(Guid userId)
+    {
+        var clientCallResult = await _mainMenuRepository.GetMainMenuState(userId);
+        return Ok(clientCallResult);
+    }
 
-            [HttpPost]
-            [Route(MainMenuEndpoints.CreateLobby)]
-            public async Task<ActionResult<ClientCallResult>> CreateLobby()
-            {
-                // add lobby
-                // will have to think about empty lobbies cleanup
-                return Ok();
-            }
-        }
+    [HttpPost]
+    [Route(MainMenuEndpoints.CreateLobby)]
+    public async Task<ActionResult> CreateLobby()
+    {
+        // add lobby
+        // will have to think about empty lobbies cleanup
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("joinLobby")]
+    public async Task<ActionResult> JoinLobby([FromQuery] string lobbyId)
+    {
+        return Ok();
     }
 }
+

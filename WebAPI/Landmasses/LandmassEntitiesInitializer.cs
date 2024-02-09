@@ -1,7 +1,5 @@
-﻿using LandmassTests;
-using Shared_Resources.Entities;
+﻿using Shared_Resources.Entities;
 using Shared_Resources.Models;
-using WebAPI.TestFolder;
 
 namespace WebAPI.Landmasses;
 
@@ -36,22 +34,22 @@ public static class LandmassEntitiesInitializer
         foreach (Room room in defaultLandmassRooms)
         {
             RoomCell layoutRoomCell = layout.AllCels.First(x => x.Name == room.Name);
-            var neighborsNames = layoutRoomCell.DoorConnections.Values.Select(x => x.Name).ToList();
+            List<string> neighborsNames = layoutRoomCell.DoorConnections.Values.Select(x => x.Name).ToList();
             room.AdjacentRoomNames.AddRange(neighborsNames);
         }
     }
 
     private static List<AdjacentRoom> CreateAdjacentRooms(List<Room> defaultLandmassRooms, Guid gameId)
     {
-        var adjacents = DefaultRoomFactory.CreateAndInitializeConnections(gameId, defaultLandmassRooms, true);
+        List<AdjacentRoom> adjacents = DefaultRoomFactory.CreateAndInitializeConnections(gameId, defaultLandmassRooms, true);
         return adjacents;
     }
 
     private static void SetRoomPositionIntoLandmassRooms(LandmassLayout layout, List<Room> defaultLandmassRooms)
     {
-        foreach (var room in defaultLandmassRooms)
+        foreach (Room room in defaultLandmassRooms)
         {
-            var roomCell = layout.AllRooms.First(x => x.Name == room.Name);
+            RoomCell roomCell = layout.AllRooms.First(x => x.Name == room.Name);
             room.X = roomCell.Position.X;
             room.Y = roomCell.Position.Y;
         }

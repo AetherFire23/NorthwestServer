@@ -131,7 +131,7 @@ public static class DummyValues
 
     public static PrivateChatRoom PrivateChatRoom = new PrivateChatRoom()
     {
-        Id = DummyValues.defaultPrivateChatRoomId,
+        Id = defaultPrivateChatRoomId,
         ChatRoomName = "MyRoomName"
     };
 
@@ -139,7 +139,7 @@ public static class DummyValues
     {
         Id = Guid.NewGuid(),
         ParticipantId = defaultPlayer1Guid,
-        RoomId = DummyValues.defaultPrivateChatRoomId
+        RoomId = defaultPrivateChatRoomId
     };
     public static Item Freditem = new Item()
     {
@@ -159,7 +159,7 @@ public static class DummyValues
 
     public static Log SomeLog(Guid roomId, Guid gameId)
     {
-        var log = new Log()
+        Log log = new Log()
         {
             Id = Guid.NewGuid(),
             GameId = gameId,

@@ -3,45 +3,40 @@ using Newtonsoft.Json;
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
-using WebAPI.Interfaces;
+namespace WebAPI.Repositories;
 
-namespace WebAPI.Repository;
-
-public class StationRepository : IStationRepository
+public class StationRepository
 {
     private readonly PlayerContext _playerContext;
-    private readonly IPlayerRepository _playerRepository;
-
-    public StationRepository(PlayerContext playerContext, IPlayerRepository playerRepository)
+    public StationRepository(PlayerContext playerContext)
     {
-        _playerRepository = playerRepository;
         _playerContext = playerContext;
     }
 
     public async Task<StationDTO> RetrieveStationAsync<T>(Guid stationId) where T : new()
     {
-        var station = await _playerContext.Stations.FirstAsync(x => x.Id == stationId);
-        var stationDTO = CreateDTO<T>(station);
+        Station station = await _playerContext.Stations.FirstAsync(x => x.Id == stationId);
+        StationDTO stationDTO = CreateDTO<T>(station);
         return stationDTO;
     }
     public async Task<StationDTO> RetrieveStationAsync<T>(Guid gameId, string stationName) where T : new()
     {
-        var station = await _playerContext.Stations.FirstAsync(x => x.GameId == gameId && x.Name == stationName);
-        var stationDTO = CreateDTO<T>(station);
+        Station station = await _playerContext.Stations.FirstAsync(x => x.GameId == gameId && x.Name == stationName);
+        StationDTO stationDTO = CreateDTO<T>(station);
         return stationDTO;
     }
 
     public async Task SaveStation(StationDTO station)
     {
-        var currentStation = await GetStation(station.Id);
+        Station currentStation = await GetStation(station.Id);
         currentStation.SerializedProperties = JsonConvert.SerializeObject(station.ExtraProperties);
 
-        _ = await _playerContext.SaveChangesAsync();
+        await _playerContext.SaveChangesAsync();
     }
 
     private async Task<Station> GetStation(Guid stationId) // call au contexte
     {
-        var station = await _playerContext.Stations.FirstAsync(x => x.Id == stationId);
+        Station station = await _playerContext.Stations.FirstAsync(x => x.Id == stationId);
         return station;
     }
 
@@ -59,11 +54,11 @@ public class StationRepository : IStationRepository
     // should create the same template as with the rooms...
     public async Task CreateAndAddStationsToDb(Guid gameId) // is template
     {
-        var allStations = StationsTemplate.ReadSerializedDefaultStations();
+        List<Station> allStations = StationsTemplate.ReadSerializedDefaultStations();
 
         if (allStations.Any(x => x is null)) throw new Exception("One station was not initialized.");
 
-        foreach (var station in allStations)
+        foreach (Station station in allStations)
         {
             station.GameId = gameId;
 

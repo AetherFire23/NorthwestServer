@@ -1,17 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
-using WebAPI.Interfaces;
+namespace WebAPI.Repositories;
 
-namespace WebAPI.Repository;
-
-public class GameRepository : IGameRepository
+public class GameRepository
 {
     private readonly PlayerContext _playerContext;
-    private readonly IPlayerRepository _playerRepository;
+    private readonly PlayerRepository _playerRepository;
 
-    public GameRepository(PlayerContext playerContext,
-        IPlayerRepository playerRepository)
+    public GameRepository(PlayerContext playerContext, PlayerRepository playerRepository)
     {
         _playerContext = playerContext;
         _playerRepository = playerRepository;
@@ -19,22 +16,22 @@ public class GameRepository : IGameRepository
 
     public async Task<List<Game>> GetTickableGames()
     {
-        var currentDate = DateTime.UtcNow;
-        var games = await _playerContext.Games.Where(x => x.NextTick < currentDate && x.IsActive).ToListAsync();
+        DateTime currentDate = DateTime.UtcNow;
+        List<Game> games = await _playerContext.Games.Where(x => x.NextTick < currentDate && x.IsActive).ToListAsync();
         return games;
     }
 
     public async Task<Game> GetGameById(Guid id)
     {
-        var game = await _playerContext.Games.FirstAsync(x => x.Id == id);
+        Game game = await _playerContext.Games.FirstAsync(x => x.Id == id);
         return game;
     }
 
     public async Task<GameDto> MapGameDto(Guid gameId)
     {
         //var gameEntity = await GetGameById(gameId);
-        var playerCount = (await _playerRepository.GetPlayersInGameAsync(gameId)).Count;
-        var dto = new GameDto()
+        int playerCount = (await _playerRepository.GetPlayersInGameAsync(gameId)).Count;
+        GameDto dto = new GameDto()
         {
             Id = gameId,
             PlayersInGameCount = playerCount,

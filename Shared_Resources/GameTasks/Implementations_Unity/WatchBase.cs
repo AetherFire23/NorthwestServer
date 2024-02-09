@@ -20,7 +20,7 @@ public class WatchBase : GameTaskBase
 
     public override List<PromptInfo> GetCheckLists(GameState gameState)
     {
-        var checkList = new CheckListsBuilder();
+        CheckListsBuilder checkList = new CheckListsBuilder();
 
         return checkList.CheckLists;
     }

@@ -1,16 +1,16 @@
 ﻿using Shared_Resources.Entities;
 using Shared_Resources.Models;
-using WebAPI.Interfaces;
-using WebAPI.TestFolder;
+using WebAPI.Landmasses;
+using WebAPI.Repositories;
 
 namespace WebAPI.Services;
 
-public class LandmassCardsService : ILandmassCardsService
+public class LandmassCardsService
 {
-    private readonly ILandmassCardsRepository _landmassCardsRepository;
+    private readonly LandmassCardsRepository _landmassCardsRepository;
     private readonly PlayerContext _playerContext;
 
-    public LandmassCardsService(ILandmassCardsRepository landmassCardsRepository, PlayerContext playerContext)
+    public LandmassCardsService(LandmassCardsRepository landmassCardsRepository, PlayerContext playerContext)
     {
         _landmassCardsRepository = landmassCardsRepository;
         _playerContext = playerContext;
@@ -32,10 +32,9 @@ public class LandmassCardsService : ILandmassCardsService
                 landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
                 continue;
             }
-            //  drawnCards.Add(randomCard);
         }
 
-        var drawnRoomNames = drawnCards.Select(x => x.Name).ToList();
+        List<string> drawnRoomNames = drawnCards.Select(x => x.Name).ToList();
         return drawnRoomNames;
     }
 
@@ -50,16 +49,16 @@ public class LandmassCardsService : ILandmassCardsService
             drawnCards.Add(await DrawRandomCard(landmassCards));
         }
 
-        var drawnRoomNames = drawnCards.Select(x => x.Name).ToList();
+        List<string> drawnRoomNames = drawnCards.Select(x => x.Name).ToList();
         return drawnRoomNames;
     }
 
     // Initialize rooms from landmass cards.
     public async Task InitializeLandmassCards(Guid gameId)
     {
-        var defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms().Where(x => x.IsLandmass).ToList();
+        List<Room> defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms().Where(x => x.IsLandmass).ToList();
 
-        var defaultLandmassCards = defaultRooms.Select(x => new Card()
+        List<Card> defaultLandmassCards = defaultRooms.Select(x => new Card()
         {
             Id = Guid.NewGuid(),
             IsDiscarded = false,
@@ -75,10 +74,10 @@ public class LandmassCardsService : ILandmassCardsService
 
     private async Task ReshuffleLandmassCardsExceptDrawnCards(Guid gameId, List<Card> cardsCurrentlyBeingDrawn)
     {
-        var landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
+        List<Card> landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
         if (landmassCards.Any(x => !x.IsDiscarded)) throw new Exception("Must shuffle cards only when there are no valid cards left");
 
-        foreach (var card in landmassCards)
+        foreach (Card card in landmassCards)
         {
             // do not switch on already drawn cards. 
             if (cardsCurrentlyBeingDrawn.Contains(card)) continue;
@@ -91,8 +90,8 @@ public class LandmassCardsService : ILandmassCardsService
 
     private async Task<Card> DrawRandomCard(List<Card> landmassCards)
     {
-        var freeCards = landmassCards.Where(x => !x.IsDiscarded).ToList();
-        var randomIndex = Random.Shared.Next(0, freeCards.Count);
+        List<Card> freeCards = landmassCards.Where(x => !x.IsDiscarded).ToList();
+        int randomIndex = Random.Shared.Next(0, freeCards.Count);
         Card randomCard = freeCards[randomIndex];
         randomCard.IsDiscarded = true;
         return randomCard;

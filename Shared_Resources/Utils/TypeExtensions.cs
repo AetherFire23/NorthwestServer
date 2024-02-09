@@ -15,7 +15,7 @@ public static class TypeExtensions
     /// <summary> crash if not foud </summary>
     public static T GetCustomAttribute<T>(this Type type) where T : Attribute
     {
-        var attribute = CustomAttributeExtensions.GetCustomAttribute<T>(type) ?? throw new Exception($"Attribute not found : {type.Name}");
+        T attribute = CustomAttributeExtensions.GetCustomAttribute<T>(type) ?? throw new Exception($"Attribute not found : {type.Name}");
         return attribute;
     }
 }

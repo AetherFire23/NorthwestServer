@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using WebAPI.Exceptions;
 namespace WebAPI.ApiConfiguration;
 
 public static class AppConfiguration
@@ -7,14 +9,15 @@ public static class AppConfiguration
     {
         _ = app.UseAuthentication();
         _ = app.UseAuthorization();
+        ConfigureExceptions(app);
     }
 
     public static async Task SeedAndMigrate(WebApplication app)
     {
         //Migration
-        using (var scope = app.Services.CreateScope())
+        using (IServiceScope scope = app.Services.CreateScope())
         {
-            var playerContextService = scope.ServiceProvider.GetService<PlayerContext>();
+            PlayerContext? playerContextService = scope.ServiceProvider.GetService<PlayerContext>();
             //  var authContext = scope.ServiceProvider.GetService<AuthenticationContext>();
             try
             {
@@ -27,9 +30,34 @@ public static class AppConfiguration
             }
             catch (Exception ex)
             {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occurred");
             }
         }
+    }
+
+
+    private static void ConfigureExceptions(WebApplication app)
+    {
+        _ = app.UseExceptionHandler(exceptionHandler =>
+        {
+            exceptionHandler.Run(async context =>
+            {
+                IExceptionHandlerPathFeature? exceptionHandlerFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+
+                if (exceptionHandlerFeature?.Error is RequestException exBase)
+                {
+                    context.Response.StatusCode = (int)exBase.StatusCode;
+
+                    ExceptionResponseData responseData = new()
+                    {
+                        Data = exBase.ExceptionData,
+                        Message = exBase.HttpMessage,
+                    };
+
+                    await context.Response.WriteAsJsonAsync(responseData);
+                }
+            });
+        });
     }
 }

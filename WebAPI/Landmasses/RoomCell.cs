@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Drawing;
 
-namespace LandmassTests;
+namespace WebAPI.Landmasses;
 
 public class RoomCell
 {
@@ -23,10 +23,10 @@ public class RoomCell
 
     public string DebugCreator = string.Empty;
 
-    public bool IsEmptySpace => this.Name == "";
+    public bool IsEmptySpace => Name == "";
     public void ConnectNeighbors(RoomCell roomCell, Direction direction)
     {
-        this.Neighbors.Add(direction, roomCell);
+        Neighbors.Add(direction, roomCell);
 
         Direction oppositeDirection = DirectionHelper.GetOppositeDirection(direction);
         roomCell.Neighbors.Add(oppositeDirection, this);
@@ -34,7 +34,7 @@ public class RoomCell
 
     public void ConnectDoors(RoomCell roomCell)
     {
-        bool alreadyConnected = this.DoorConnections.Values.Contains(roomCell)
+        bool alreadyConnected = DoorConnections.Values.Contains(roomCell)
             || roomCell.DoorConnections.Values.Contains(this);
 
 
@@ -44,8 +44,8 @@ public class RoomCell
             return;
         }
 
-        var keyPair = this.Neighbors.FirstOrDefault(x => x.Value == roomCell);
-        this.DoorConnections.Add(keyPair.Key, keyPair.Value);
+        KeyValuePair<Direction, RoomCell> keyPair = Neighbors.FirstOrDefault(x => x.Value == roomCell);
+        DoorConnections.Add(keyPair.Key, keyPair.Value);
 
         Direction opposite = DirectionHelper.GetOppositeDirection(keyPair.Key);
         roomCell.DoorConnections.Add(opposite, this);
@@ -53,7 +53,7 @@ public class RoomCell
 
     public List<RoomCell> GetAllNeighboringRooms()
     {
-        var neighorRooms = this.Neighbors.Select(x => x.Value)
+        List<RoomCell> neighorRooms = Neighbors.Select(x => x.Value)
             .Where(x => x.Name != "").ToList();
 
         return neighorRooms;
@@ -61,9 +61,9 @@ public class RoomCell
 
     public void PrintNeighbor()
     {
-        Console.WriteLine($"{this.Name}");
+        Console.WriteLine($"{Name}");
 
-        foreach (var cell in this.Neighbors)
+        foreach (KeyValuePair<Direction, RoomCell> cell in Neighbors)
         {
             Console.WriteLine($"{cell.Key}");
         }
@@ -71,7 +71,7 @@ public class RoomCell
 
     public override string ToString()
     {
-        string name = this.Name == "" ? "Empty" : this.Name;
+        string name = Name == "" ? "Empty" : Name;
         return name;
     }
 }

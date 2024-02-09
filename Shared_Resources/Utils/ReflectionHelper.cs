@@ -48,7 +48,7 @@ public static class ReflectionHelper
     // seems to exclude static classes in dotnet 2.1
     public static List<Type> GetNonAbstractClassTypes(Assembly assembly) // stati classed are implicitly sealed
     {
-        var types = assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract).ToList();
+        List<Type> types = assembly.GetTypes().Where(x => x.IsClass && !x.IsAbstract).ToList();
         return types;
     }
 

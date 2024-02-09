@@ -4,19 +4,18 @@ using Shared_Resources.Entities;
 using Shared_Resources.Enums;
 using Shared_Resources.Models.Requests;
 using WebAPI.Extensions;
-using WebAPI.Interfaces;
 
-namespace WebAPI.Repository.Users;
+namespace WebAPI.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository
 {
     private readonly PlayerContext _playerContext;
-    private readonly IGameRepository _gameRepository;
-    private readonly ILobbyRepository _lobbyRepository;
+    private readonly GameRepository _gameRepository;
+    private readonly LobbyRepository _lobbyRepository;
 
     public UserRepository(PlayerContext context,
-        IGameRepository gameRepository,
-        ILobbyRepository lobbyRepository)
+        GameRepository gameRepository,
+        LobbyRepository lobbyRepository)
     {
         _playerContext = context;
         _gameRepository = gameRepository;
@@ -26,14 +25,14 @@ public class UserRepository : IUserRepository
 
     public async Task<UserDto> MapUserDtoById(Guid userId)
     {
-        var user = await GetUserById(userId);
+        User? user = await GetUserById(userId);
         if (user is null) throw new ArgumentException(nameof(user));
-        var players = user.Players.ToList();
+        List<Player> players = user.Players.ToList();
 
-        var roleNames = user.UserRoles.Select(x => x.Role.RoleName).ToList();
-        var activeGamesForUser = await GetActiveGameDtosForUser(user.Id);
-        var lobbyDtos = await GetLobbyDtosForUser(userId);
-        var userDto = new UserDto
+        List<RoleName> roleNames = user.UserRoles.Select(x => x.Role.RoleName).ToList();
+        List<GameDto> activeGamesForUser = await GetActiveGameDtosForUser(user.Id);
+        List<LobbyDto> lobbyDtos = await GetLobbyDtosForUser(userId);
+        UserDto userDto = new UserDto
         {
             Id = user.Id,
             Name = user.Name,
@@ -59,7 +58,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserById(Guid id)
     {
-        var user = await _playerContext.Users
+        User? user = await _playerContext.Users
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
             .Include(u => u.Games)
@@ -74,7 +73,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserByCredentialsOrDefault(string userName)
     {
-        var user = await _playerContext.Users.FirstOrDefaultAsync(u => u.Name == userName);
+        User? user = await _playerContext.Users.FirstOrDefaultAsync(u => u.Name == userName);
         return user;
     }
 
@@ -86,7 +85,7 @@ public class UserRepository : IUserRepository
 
     private async Task<User?> GetUserByNameOrNull(string name)
     {
-        var user = await _playerContext.Users
+        User? user = await _playerContext.Users
             .Include(u => u.UserRoles)
             .ThenInclude(u => u.Role)
             .FirstOrDefaultAsync(u => u.Name == name);
@@ -97,15 +96,15 @@ public class UserRepository : IUserRepository
 
     private async Task<User?> GetUserIfVerifiedOrNull(Guid id, string password)
     {
-        var user = await GetUserById(id).ConfigureAwait(false);
+        User? user = await GetUserById(id).ConfigureAwait(false);
         bool isCorrect = BCrypt.Net.BCrypt.Verify(user.PasswordHash, password);
         if (!isCorrect) throw new ArgumentException("Password incorrect");
         return isCorrect ? user : null;
     }
 
-    public async Task<bool> IsUserExists(string userName, string email)
+    public async Task<bool> IsUserExists(RegisterRequest registerRequest)
     {
-        bool exists = await _playerContext.Users.AnyAsync(x => x.Name == userName && x.Email == email);
+        bool exists = await _playerContext.Users.AnyAsync(x => x.Name == registerRequest.UserName && x.Email == registerRequest.Email);
         return exists;
     }
 
@@ -119,7 +118,7 @@ public class UserRepository : IUserRepository
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)
         };
 
-        var role = await _playerContext.Roles.SingleOrDefaultAsync(x => x.RoleName == RoleName.PereNoel);
+        var role = await _playerContext.Roles.SingleAsync(x => x.RoleName == RoleName.PereNoel);
 
         var userRole = new UserRole
         {
@@ -140,15 +139,15 @@ public class UserRepository : IUserRepository
     public async Task<List<GameDto>> GetActiveGameDtosForUser(Guid userId) // dont want that in entity since some games can be inactive
     {
         User? user = await GetUserById(userId);
-        var activeGames = user.Games
+        List<Guid> activeGames = user.Games
             .Where(x => x.IsActive)
             .Select(x => x.Id)
             .ToList();
 
         List<GameDto> gameDtos = new();
-        foreach (var game in activeGames)
+        foreach (Guid game in activeGames)
         {
-            var gameDto = await _gameRepository.MapGameDto(game);
+            GameDto gameDto = await _gameRepository.MapGameDto(game);
             gameDtos.Add(gameDto);
         }
 
@@ -159,9 +158,9 @@ public class UserRepository : IUserRepository
     {
         User? user = await GetUserById(userId);
         List<LobbyDto> lobbyDtos = new();
-        foreach (var lobby in user.Lobbies)
+        foreach (Lobby lobby in user.Lobbies)
         {
-            var lobbyDto = await _lobbyRepository.MapLobbyDto(lobby.Id);
+            LobbyDto lobbyDto = await _lobbyRepository.MapLobbyDto(lobby.Id);
             lobbyDtos.Add(lobbyDto);
         }
         return lobbyDtos;
@@ -179,6 +178,4 @@ public class UserRepository : IUserRepository
         List<UserDto> userDtos = await userIds.SelectAsync(MapUserDtoById);
         return userDtos;
     }
-
-
 }

@@ -13,13 +13,13 @@ public static class DefaultRoomFactory
         InitializeDefaultRoomIds(gameId, defaultRooms);
         List<AdjacentRoom> connections = CreateAndInitializeConnections(gameId, defaultRooms);
 
-        var tuple = new Tuple<List<Room>, List<AdjacentRoom>>(defaultRooms, connections);
+        Tuple<List<Room>, List<AdjacentRoom>> tuple = new Tuple<List<Room>, List<AdjacentRoom>>(defaultRooms, connections);
         return tuple;
     }
 
     public static void InitializeDefaultRoomIds(Guid gameId, List<Room> defaultRooms)
     {
-        foreach (var room in defaultRooms)
+        foreach (Room room in defaultRooms)
         {
             room.Id = Guid.NewGuid();
             room.GameId = gameId;
@@ -31,11 +31,11 @@ public static class DefaultRoomFactory
         if (initializedRooms.Any(x => x.Id == Guid.Empty || x.GameId == Guid.Empty)) throw new Exception("Rooms were not initializedCorrectly");
 
         List<AdjacentRoom> connections = new List<AdjacentRoom>();
-        foreach (var room in initializedRooms)
+        foreach (Room room in initializedRooms)
         {
-            foreach (var adjacentName in room.AdjacentRoomNames)
+            foreach (string adjacentName in room.AdjacentRoomNames)
             {
-                var adjRoomEntity = initializedRooms.FirstOrDefault(x => x.Name.Equals(adjacentName));
+                Room? adjRoomEntity = initializedRooms.FirstOrDefault(x => x.Name.Equals(adjacentName));
 
                 if (adjRoomEntity is null) throw new Exception($"adjacent room not found : {adjacentName}");
 

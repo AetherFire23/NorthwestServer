@@ -385,7 +385,7 @@ public static class StationsTemplate
 
     public static void dwdw()
     {
-        var listRoosm = new List<Station>();
+        List<Station> listRoosm = new List<Station>();
         listRoosm.Add(StationsTemplate.Anchor);
         listRoosm.Add(StationsTemplate.BladesLocker);
         listRoosm.Add(StationsTemplate.Bed);
@@ -396,7 +396,7 @@ public static class StationsTemplate
 
     private static List<Station> RetrieveReflectionStations()
     {
-        var reflectedStations = typeof(StationsTemplate).GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
+        List<Station> reflectedStations = typeof(StationsTemplate).GetProperties(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
                 .Where(x => x.PropertyType == typeof(Station))
                 .Select(x => (x.GetValue(null) as Station) ?? new Station()).ToList();
 
@@ -415,7 +415,7 @@ public static class StationsTemplate
 
     public static List<Station> ReadSerializedDefaultStations()
     {
-        var stations = JsonConvert.DeserializeObject<List<Station>>(DefaultSerializedStations) ?? new List<Station>();
+        List<Station> stations = JsonConvert.DeserializeObject<List<Station>>(DefaultSerializedStations) ?? new List<Station>();
         return stations;
     }
 }

@@ -69,7 +69,7 @@ public class PromptInfo
 
     public List<object> GetPromptsAsObjects()
     {
-        var objects = Targets.Cast<object>().ToList();
+        List<object> objects = Targets.Cast<object>().ToList();
         return objects;
     }
 

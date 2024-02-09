@@ -1,8 +1,8 @@
 ﻿using Shared_Resources.GameTasks;
 using Shared_Resources.GameTasks.Implementations_Unity;
-using WebAPI.Interfaces;
+using WebAPI.Repositories;
 
-namespace WebAPI.GameTasks.Executions;
+namespace WebAPI.GameTasks.Implementations;
 
 [GameTask(GameTaskCodes.ChargeCannon)]
 public class CookTaskExecute : FireCannon
@@ -10,9 +10,9 @@ public class CookTaskExecute : FireCannon
     private const string _stationNameParam = "stationName";
     private const int _stationCost = 3;
 
-    private readonly IStationRepository _stationRepo;
+    private readonly StationRepository _stationRepo;
     private readonly PlayerContext _playerContext;
-    public CookTaskExecute(PlayerContext playerContext, IStationRepository stationRepository)
+    public CookTaskExecute(PlayerContext playerContext, StationRepository stationRepository)
     {
         _stationRepo = stationRepository;
         _playerContext = playerContext;

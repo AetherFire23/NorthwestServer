@@ -1,15 +1,14 @@
 ﻿using Shared_Resources.Entities;
 using Shared_Resources.Enums;
-using WebAPI.Interfaces;
 
 namespace WebAPI.Game_Actions;
 
-public class GameActionsRepository : IGameActionsRepository
+public class GameActionsRepository
 {
     private readonly PlayerContext _playerContext;
-    private readonly IPlayerRepository _playerRepository;
+    private readonly PlayerRepository _playerRepository;
 
-    public GameActionsRepository(PlayerContext playerContext, IPlayerRepository playerRepository)
+    public GameActionsRepository(PlayerContext playerContext, PlayerRepository playerRepository)
     {
         _playerContext = playerContext;
         _playerRepository = playerRepository;
@@ -17,15 +16,15 @@ public class GameActionsRepository : IGameActionsRepository
 
     public void ChangeRoomAction(Player player, Room from, Room to)
     {
-        var roomChangeInfo = new RoomChangeInfo()
+        RoomChangeInfo roomChangeInfo = new RoomChangeInfo()
         {
             Player = player,
             Room1 = from,
             Room2 = to,
         };
 
-        var gameAction = roomChangeInfo.ToGameAction();
-        var roomLog = roomChangeInfo.ToRoomLog();
+        GameAction gameAction = roomChangeInfo.ToGameAction();
+        Log roomLog = roomChangeInfo.ToRoomLog();
         _ = GetNotificationsToPlayersInRoom(gameAction.Id, to.Id, player.Id);
 
         _ = _playerContext.GameActions.Add(gameAction);
@@ -36,9 +35,9 @@ public class GameActionsRepository : IGameActionsRepository
 
     private IEnumerable<TriggerNotification> GetNotificationsToPlayersInRoom(Guid gameActionId, Guid newRoomId, Guid playerId)
     {
-        var playersInNewRoom = _playerContext.Players.Where(player => player.CurrentGameRoomId == newRoomId && player.Id != playerId).ToList();
+        List<Player> playersInNewRoom = _playerContext.Players.Where(player => player.CurrentGameRoomId == newRoomId && player.Id != playerId).ToList();
 
-        var notifications = playersInNewRoom.Select(p => new TriggerNotification()
+        IEnumerable<TriggerNotification> notifications = playersInNewRoom.Select(p => new TriggerNotification()
         {
             PlayerId = p.Id,
             GameActionId = gameActionId,

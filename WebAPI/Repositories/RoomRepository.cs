@@ -2,11 +2,9 @@
 using Shared_Resources.DTOs;
 using Shared_Resources.Entities;
 using Shared_Resources.Models;
-using WebAPI.Interfaces;
+namespace WebAPI.Repositories;
 
-namespace WebAPI.Repository;
-
-public class RoomRepository : IRoomRepository
+public class RoomRepository
 {
     private readonly PlayerContext _playerContext;
     public RoomRepository(PlayerContext playerContext)
@@ -16,49 +14,49 @@ public class RoomRepository : IRoomRepository
 
     public async Task<List<Room>> GetAllLandmassRoomsInGame(Guid gameId)
     {
-        var rooms = await _playerContext.Rooms.Where(r => r.IsLandmass && r.GameId == gameId).ToListAsync();
+        List<Room> rooms = await _playerContext.Rooms.Where(r => r.IsLandmass && r.GameId == gameId).ToListAsync();
         return rooms;
     }
 
     public async Task<List<Room>> GetAllActiveLandmassRooms(Guid gameId)
     {
-        var rooms = await _playerContext.Rooms.Where(r => r.IsActive && r.IsLandmass && r.GameId == gameId).ToListAsync();
+        List<Room> rooms = await _playerContext.Rooms.Where(r => r.IsActive && r.IsLandmass && r.GameId == gameId).ToListAsync();
         return rooms;
     }
 
     public async Task<Room> GetRoomById(Guid roomId)
     {
-        var room = await _playerContext.Rooms.FirstAsync(r => r.Id == roomId);
+        Room room = await _playerContext.Rooms.FirstAsync(r => r.Id == roomId);
         return room;
     }
 
     public async Task RemoveFromAllConnectedRooms(Guid roomId)
     {
-        var connections = await _playerContext.AdjacentRooms.Where(x => x.RoomId == roomId || x.AdjacentId == roomId).ToListAsync();
+        List<AdjacentRoom> connections = await _playerContext.AdjacentRooms.Where(x => x.RoomId == roomId || x.AdjacentId == roomId).ToListAsync();
         _playerContext.RemoveRange(connections);
         _ = await _playerContext.SaveChangesAsync();
     }
 
     public async Task<List<Room>> GetRoomsInGamesync(Guid gameId)
     {
-        var rooms = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
+        List<Room> rooms = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
         return rooms;
     }
 
     public async Task<Room> GetRoomFromName(Guid gameId, string roomName)
     {
-        var room = await _playerContext.Rooms.FirstAsync(r => r.GameId == gameId && r.Name == roomName);
+        Room room = await _playerContext.Rooms.FirstAsync(r => r.GameId == gameId && r.Name == roomName);
         return room;
     }
 
     public async Task<RoomDTO> GetRoomDTOAsync(Guid roomId)
     {
-        var requestedRoom = await GetRoomById(roomId);
+        Room requestedRoom = await GetRoomById(roomId);
 
-        var playersInRoom = await _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToListAsync();
+        List<Player> playersInRoom = await _playerContext.Players.Where(player => player.CurrentGameRoomId == roomId).ToListAsync();
 
-        var items = await GetRoomItems(roomId);
-        var stations = await _playerContext.Stations.Where(x => x.RoomName == requestedRoom.Name).ToListAsync();
+        List<Item> items = await GetRoomItems(roomId);
+        List<Station> stations = await _playerContext.Stations.Where(x => x.RoomName == requestedRoom.Name).ToListAsync();
 
         RoomDTO roomDTO = new RoomDTO()
         {
@@ -78,16 +76,16 @@ public class RoomRepository : IRoomRepository
 
     public async Task<List<Item>> GetRoomItems(Guid roomId)
     {
-        var items = await _playerContext.Items.Where(x => x.OwnerId == roomId).ToListAsync();
+        List<Item> items = await _playerContext.Items.Where(x => x.OwnerId == roomId).ToListAsync();
         return items;
     }
 
     public async Task<List<Item>> GetItemsInAllRooms(Guid gameId)
     {
-        var rooms = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
-        var allItems = new List<Item>();
+        List<Room> rooms = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
+        List<Item> allItems = new List<Item>();
 
-        foreach (var room in rooms)
+        foreach (Room? room in rooms)
         {
             List<Item> roomItems = await _playerContext.Items.Where(x => x.OwnerId == room.Id).ToListAsync();
             allItems.AddRange(roomItems);
@@ -109,7 +107,7 @@ public class RoomRepository : IRoomRepository
 
     public async Task<List<AdjacentRoom>> GetLandmassAdjacentRoomsAsync(Guid gameId)
     {
-        var adjacentRooms = await _playerContext.AdjacentRooms.Where(x => x.GameId == gameId && x.IsLandmassConnection).ToListAsync();
+        List<AdjacentRoom> adjacentRooms = await _playerContext.AdjacentRooms.Where(x => x.GameId == gameId && x.IsLandmassConnection).ToListAsync();
         return adjacentRooms;
     }
 }

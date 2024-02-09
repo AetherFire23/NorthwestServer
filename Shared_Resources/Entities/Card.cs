@@ -9,6 +9,9 @@ public class Card
     public Guid GameId { get; set; }
     public string Name { get; set; } = string.Empty;
     public CardImpact CardImpact { get; set; }
+
+
+    // IsDrawn?
     public bool IsDiscarded { get; set; }
 
     public override string ToString()

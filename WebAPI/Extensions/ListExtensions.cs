@@ -24,8 +24,8 @@ public static class ListExtensions
 
         for (int i = 0; i < list1.Count; i++)
         {
-            var element1 = list1[i];
-            var element2 = list2[i];
+            T1? element1 = list1[i];
+            T2? element2 = list2[i];
 
             action(element1, element2);
         }
@@ -35,9 +35,9 @@ public static class ListExtensions
     {
         List<T2> elements = new List<T2>();
 
-        foreach (var element in source)
+        foreach (T? element in source)
         {
-            var result = await selection(element);
+            T2? result = await selection(element);
             elements.Add(result);
         }
 

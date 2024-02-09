@@ -21,7 +21,7 @@ public class LowerAnchorBase : GameTaskBase
 
     public override List<PromptInfo> GetCheckLists(GameState gameState)
     {
-        var builder = new CheckListsBuilder();
+        CheckListsBuilder builder = new CheckListsBuilder();
         return builder.CheckLists;
     }
 

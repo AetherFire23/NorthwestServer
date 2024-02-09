@@ -23,7 +23,7 @@ public class TriggerNotification
     public TriggerNotificationDTO ToDTO()
     {
 
-        var notif = new TriggerNotificationDTO()
+        TriggerNotificationDTO notif = new TriggerNotificationDTO()
         {
             Id = this.Id,
             Created = this.Created,
@@ -36,8 +36,8 @@ public class TriggerNotification
         {
             case NotificationType.PrivInv:
                 {
-                    var asClass = JsonConvert.DeserializeObject<PrivateInvitationProperties>(this.SerializedProperties);
-                    notif.ExtraProperties = (object)asClass;
+                    PrivateInvitationProperties? asClass = JsonConvert.DeserializeObject<PrivateInvitationProperties>(this.SerializedProperties);
+                    notif.ExtraProperties = asClass;
                     break;
                 }
             case NotificationType.CycleChanged:
