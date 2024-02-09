@@ -1,53 +1,30 @@
+using IntegrationTests.GameStart;
+using IntegrationTests.Players;
+using IntegrationTests.Services;
+using IntegrationTests.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
 using WebAPI;
+using Xunit.Abstractions;
 namespace IntegrationTests;
 
 public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private readonly Client _client;
-    private UserDto _userDto;
-    public BasicTests(WebApplicationFactory<Program> factory)
+    //private readonly SwagClient _client;
+    private readonly ITestOutputHelper _output;
+    private readonly ServiceProvider _serviceProvider;
+    public BasicTests(WebApplicationFactory<Program> factory, ITestOutputHelper output)
     {
         _factory = factory;
-        var factoriedClient = _factory.CreateClient();
-        var swagClient = new Client("/", factoriedClient);
-        _client = swagClient;
-
-        var s = new ServiceCollection();
-        var sp = s.BuildServiceProvider();
+        _output = output;
+        _serviceProvider = TestServicesRegistration.GenerateTestServiceProvider(factory);
     }
 
     // will actually have to code a list of the players 
     [Fact]
-    public async Task Test1()
+    public async Task TestGame()
     {
-        await Register();
-        var loginRequest = new LoginRequest()
-        {
-            PasswordAttempt = "password",
-            UserName = "username",
-        };
-
-        var loginResult = await _client.LoginAsync(loginRequest);
-    }
-
-    private async Task Register()
-    {
-        RegisterRequest registerRequest = new RegisterRequest
-        {
-            Email = "testmaster@proton.exe",
-            Password = "password",
-            UserName = "username",
-        };
-
-        _userDto = await _client.RegisterAsync(registerRequest);
-    }
-
-    // will eventually need real unit tests to test specific tasks
-    [Fact]
-    private async Task Testoman()
-    {
-
+        var registerPhase = _serviceProvider.GetRequiredService<RegistrationPhase>();
+        await registerPhase.RegisterPlayers();
     }
 }

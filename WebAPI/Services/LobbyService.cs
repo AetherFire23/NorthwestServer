@@ -28,7 +28,7 @@ public class LobbyService
 
     public async Task<Lobby> CreateAndJoinLobby(Guid userId, string nameSelection)
     {
-        Lobby newLobby = await _lobbyRepository.CreateAndAddLobby();
+        var newLobby = await _lobbyRepository.CreateAndAddLobby();
         await CreateNewUserLobbyAndAddToDb(userId, newLobby.Id, nameSelection);
 
         return newLobby;
@@ -63,15 +63,13 @@ public class LobbyService
         // magic number 5 to determine that game is full
         if (lobby.UsersInLobby.Count == 5)
         {
-            await _gameMakerService.CreateGameFromLobby(lobbyId); // important call lol!
+            await _gameMakerService.CreateGameFromLobby(lobbyId); // important call!
             await CleanupLobbyAndUsersAfterGameStart(lobbyId);
         }
     }
 
     private async Task CreateNewUserLobbyAndAddToDb(Guid userId, Guid lobbyId, string nameSelection)
     {
-        // Join tables using just the virtual syntax and leveraging ef core shadowing sshit require entities to be tracked/
-        // requires superfluous db calls but who care
         var trackedUser = await _userRepository.GetUserById(userId);
         var trackedLobby = await _lobbyRepository.GetLobbyById(lobbyId);
         var userLobby = new UserLobby()

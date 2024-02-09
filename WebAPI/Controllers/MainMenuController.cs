@@ -15,7 +15,7 @@ public class MainMenuController : ControllerBase
     }
 
     [HttpGet]
-    [Route(MainMenuEndpoints.State)]
+    [Route("GetMainMenuState")]
     [ProducesResponseType(200, Type = typeof(MainMenuState))]
     public async Task<ActionResult> GetMainMenuState(Guid userId)
     {

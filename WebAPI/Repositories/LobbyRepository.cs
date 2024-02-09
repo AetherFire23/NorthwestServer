@@ -42,14 +42,14 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>
 
     public async Task AddUserLobby(UserLobby userLobby)
     {
-        _ = await Context.UserLobbies.AddAsync(userLobby);
+        await Context.UserLobbies.AddAsync(userLobby);
     }
 
     public async Task<Lobby> CreateAndAddLobby()
     {
-        Lobby newLobby = new Lobby() { Id = Guid.NewGuid() };
+        var newLobby = new Lobby() { Id = Guid.NewGuid() };
         await AddLobby(newLobby);
-        _ = await Context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
         return newLobby;
     }
 
@@ -71,7 +71,7 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>
 
     public async Task DeleteUserFromLobby(Guid userId, Guid lobbyId)
     {
-        UserLobby? userLobby = await GetUserLobbyByJoinTargetIds(userId, lobbyId);
+        var userLobby = await GetUserLobbyByJoinTargetIds(userId, lobbyId);
         _ = Context.UserLobbies.Remove(userLobby);
         _ = await Context.SaveChangesAsync();
     }
