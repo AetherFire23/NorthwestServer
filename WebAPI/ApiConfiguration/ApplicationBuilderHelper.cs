@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Quartz;
 using Quartz.AspNetCore;
 using Shared_Resources.GameTasks;
@@ -19,9 +21,9 @@ namespace WebAPI.ApiConfiguration;
 
 public static class ApplicationBuilderHelper
 {
-    public static void ConfigureServices(WebApplicationBuilder builder)
+    public static void ConfigureWebApplication(WebApplicationBuilder builder)
     {
-        ConfigureConventions(builder);
+        ConfigureControllers(builder);
         ConfigureSwagger(builder);
 
         RegisterGameTaskTypes(builder);
@@ -41,6 +43,11 @@ public static class ApplicationBuilderHelper
         ConfigureJWT(builder);
     }
 
+    private static void ConfigureNewtonsoft(WebApplicationBuilder builder)
+    {
+       
+    }
+
     private static void RegisterGameTaskTypes(WebApplicationBuilder builder) // should extract this to GameTaskStrategyMapper
     {
         IEnumerable<Type> apiTypes = typeof(Program).Assembly.GetTypes()
@@ -54,21 +61,34 @@ public static class ApplicationBuilderHelper
         }
     }
 
-    private static void ConfigureConventions(WebApplicationBuilder builder) // required for my library for endpoints
+    private static void ConfigureControllers(WebApplicationBuilder builder) // required for my library for endpoints
     {
-        _ = builder.Services.AddControllers(options =>
+        builder.Services.AddControllers(options =>
         {
             options.Conventions.Add(new LowercaseControllerModelConvention());
-        });
+            options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        })
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.All;
+                // to convert enum to string and vice-versa to that the codegen can happen correctly 
+               // options.SerializerSettings.Converters.Add(new StringEnumConverter());
+
+
+            });
     }
 
     private static void ConfigureSwagger(WebApplicationBuilder builder)
     {
+        builder.Services.AddSwaggerGenNewtonsoftSupport();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         _ = builder.Services.AddEndpointsApiExplorer();
         // Add Swagger services
+
         _ = builder.Services.AddSwaggerGen(c =>
         {
+            c.UseAllOfToExtendReferenceSchemas();
             // Add the security definition for JWT Bearer token
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
@@ -140,7 +160,7 @@ public static class ApplicationBuilderHelper
     private static void ConfigureAutoMapper(WebApplicationBuilder builder)
     {
         // Configure Automapper
-        _ = builder.Services.AddAutoMapper(typeof(Program).Assembly);
+        //_ = builder.Services.AddAutoMapper(typeof(Program).Assembly);
     }
 
     private static void ConfigureDbContext(WebApplicationBuilder builder)

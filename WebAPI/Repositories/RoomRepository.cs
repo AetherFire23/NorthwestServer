@@ -98,7 +98,7 @@ public class RoomRepository
     /// </summary>
     public async Task CreateNewRoomsAndConnections(Guid gameId)
     {
-        Tuple<List<Room>, List<AdjacentRoom>> roomsAndConnections = DefaultRoomFactory.CreateAndInitializeNewRoomsAndConnections(gameId);
+        var roomsAndConnections = DefaultRoomFactory.CreateAndInitializeNewRoomsAndConnections(gameId);
 
         await _playerContext.Rooms.AddRangeAsync(roomsAndConnections.Item1);
         await _playerContext.AdjacentRooms.AddRangeAsync(roomsAndConnections.Item2);

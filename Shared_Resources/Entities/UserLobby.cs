@@ -2,10 +2,11 @@
 
 namespace Shared_Resources.Entities;
 
-public class UserLobby
+public class UserLobby : EntityBase
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public string NameSelection { get; set; } // required
-    public virtual User User { get; set; } = new User();
-    public virtual Lobby Lobby { get; set; } = new Lobby();
+    public Guid UserId { get; set; }
+    public User User { get; set; }
+    public Guid LobbyId { get; set; }
+    public Lobby Lobby { get; set; }
 }
+

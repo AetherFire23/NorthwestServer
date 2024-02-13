@@ -72,6 +72,10 @@ public class PlayerContext : DbContext
             v => v.ToString(),
             v => v.ToEnum<RoleName>());
 
+        modelBuilder.Entity<Lobby>()
+            .HasMany(x => x.UserLobbies)
+            .WithOne(x => x.Lobby);
+
         modelBuilder.Entity<Role>().HasData(new Role()
         {
             Id = Guid.NewGuid(),

@@ -2,6 +2,8 @@
 using Shared_Resources.Enums;
 using Shared_Resources.Interfaces;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace Shared_Resources.Entities;
@@ -13,8 +15,8 @@ public class Player : IPlayerEntity, ITaskParameter, IFormattable
     [JsonProperty($"id")]
     public Guid Id { get; set; }
 
-    public Guid GameId { get; set; }
-    public Guid UserId { get; set; }
+
+
 
     public Guid CurrentGameRoomId { get; set; }
 
@@ -32,8 +34,12 @@ public class Player : IPlayerEntity, ITaskParameter, IFormattable
 
     public int ActionPoints { get; set; }
 
-    public virtual User User { get; set; } = new User();
-    public virtual Game Game { get; set; } = new Game();
+    public Guid UserId { get; set; }
+    [AllowNull]
+    public virtual User? User { get; set; }
+
+    public Guid GameId { get; set; }
+    public virtual Game? Game { get; set; }
 
 
     //public Player Clone()

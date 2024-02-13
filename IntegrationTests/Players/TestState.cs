@@ -2,6 +2,7 @@
 
 public class TestState
 {
-    public PlayerInfo LocalPlayerInfo { get; set; }
-    public List<PlayerInfo> OtherPlayersInfos { get; set; }
+    public UserInfo LocalUserInfo { get; set; }
+    public List<UserInfo> OtherPlayersInfos { get; set; }
+
 }

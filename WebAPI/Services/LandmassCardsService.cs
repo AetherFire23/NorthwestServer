@@ -56,9 +56,10 @@ public class LandmassCardsService
     // Initialize rooms from landmass cards.
     public async Task InitializeLandmassCards(Guid gameId)
     {
-        List<Room> defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms().Where(x => x.IsLandmass).ToList();
+        var defaultLandmassRooms = RoomsTemplate.ReadSerializedDefaultRooms()
+            .Where(x => x.IsLandmass).ToList();
 
-        List<Card> defaultLandmassCards = defaultRooms.Select(x => new Card()
+        var defaultLandmassCards = defaultLandmassRooms.Select(x => new Card()
         {
             Id = Guid.NewGuid(),
             IsDiscarded = false,
@@ -69,7 +70,7 @@ public class LandmassCardsService
         .ToList();
 
         await _playerContext.AddRangeAsync(defaultLandmassCards);
-        _ = await _playerContext.SaveChangesAsync();
+        await _playerContext.SaveChangesAsync();
     }
 
     private async Task ReshuffleLandmassCardsExceptDrawnCards(Guid gameId, List<Card> cardsCurrentlyBeingDrawn)
@@ -77,6 +78,7 @@ public class LandmassCardsService
         List<Card> landmassCards = await _landmassCardsRepository.GetLandmassCardsAsync(gameId);
         if (landmassCards.Any(x => !x.IsDiscarded)) throw new Exception("Must shuffle cards only when there are no valid cards left");
 
+        // refactor with where bruh
         foreach (Card card in landmassCards)
         {
             // do not switch on already drawn cards. 

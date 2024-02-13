@@ -14,17 +14,28 @@ public class RegistrationPhase
         _state = state;
         _webApplicationFactory = webApplicationFactory;
     }
-
-
+     
     public async Task RegisterPlayers()
     {
         var localPlayer = await RegisterNewPlayer();
-        var otherPlayers = await Task.WhenAll(Enumerable.Range(1, 5).Select(async x => await RegisterNewPlayer()));
-        _state.LocalPlayerInfo = localPlayer;
+        var otherPlayers = await RegisterOtherPlayers();
+        _state.LocalUserInfo = localPlayer;
         _state.OtherPlayersInfos = otherPlayers.ToList();
     }
 
-    private async Task<PlayerInfo> RegisterNewPlayer()
+    private async Task<List<UserInfo>> RegisterOtherPlayers()
+    {
+        var otherPlayers = new List<UserInfo>();
+        for(int i =0; i < 5; i++)
+        {
+            var p = await RegisterNewPlayer();
+            otherPlayers.Add(p);
+        }
+
+        return otherPlayers;
+    }
+
+    private async Task<UserInfo> RegisterNewPlayer()
     {
         var userName = Generation.CreateRandomUserName();
 
@@ -35,7 +46,7 @@ public class RegistrationPhase
             Password = Guid.NewGuid().ToString(),
         };
 
-        var playerInfo = new PlayerInfo(_webApplicationFactory.CreateClient(), registerRequest)
+        var playerInfo = new UserInfo(_webApplicationFactory.CreateClient(), registerRequest)
         {
             RegisterRequest = registerRequest,
         };

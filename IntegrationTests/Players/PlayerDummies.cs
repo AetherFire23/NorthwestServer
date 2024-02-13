@@ -2,9 +2,9 @@
 
 public class PlayerDummies
 {
-    public List<PlayerInfo> GeneratePlayerDummies()
+    public List<UserInfo> GeneratePlayerDummies()
     {
-        var players = new List<PlayerInfo>();
+        var players = new List<UserInfo>();
         for (int i = 0; i < 10; i++)
         {
             var registerRequest = new RegisterRequest()

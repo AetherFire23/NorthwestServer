@@ -4,7 +4,6 @@ using Shared_Resources.GameTasks;
 using Shared_Resources.Models;
 using WebAPI.Repositories;
 using WebAPI.Services;
-
 namespace WebAPI.Controllers;
 
 [ApiController]
@@ -42,14 +41,14 @@ public class GameController : ControllerBase
 
     [HttpPut] // put = update, post = creation
     [Route(GameEndpoints.UpdatePlayerPosition)]
-    public async Task<ActionResult> UpdatePositionByPlayerModel(Guid playerId, float x, float y) // va dependre de comment je manage les data
+    public async Task<ActionResult> UpdatePositionByPlayerModel(Guid playerId, float x, float y)
     {
         await _playerService.UpdatePositionAsync(playerId, x, y);
         return Ok();
     }
 
     [HttpPut]
-    [Route(GameEndpoints.TransferItem)] // me sers meme pas du ownerId        // Hey, je veux que x owner own, voici le owner que jai. Mais si le owner que j<ai != le owner de litem ca doit larreter et refresher
+    [Route(GameEndpoints.TransferItem)] 
     public async Task<ActionResult> TransferItem(Guid targetId, Guid ownerId, Guid itemId, Guid gameId) // pourrait devenir une method dans le service
     {
         await _playerService.TransferItem(targetId, ownerId, itemId, gameId);

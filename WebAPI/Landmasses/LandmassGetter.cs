@@ -3,19 +3,24 @@ namespace WebAPI.Landmasses;
 
 public static class LandmassGetter
 {
-    private static List<LandmassLayout> ReadLandmassLayouts()
-    {
-        string allLandmassesSerialized = File.ReadAllText("Layout.txt");
-        List<LandmassLayout>? layouts = JsonConvert.DeserializeObject<List<LandmassLayout>>(allLandmassesSerialized) ?? new List<LandmassLayout>();
-        return layouts;
-    }
-
     private static LandmassLayout GetRandomLandmassLayout()
     {
-        List<LandmassLayout> allLayouts = ReadLandmassLayouts();
+        var allLayouts = ReadLandmassLayouts();
         int randomIndex = Random.Shared.Next(0, allLayouts.Count);
-        LandmassLayout randomLayout = allLayouts.ElementAt(randomIndex);
+        var randomLayout = allLayouts.ElementAt(randomIndex);
         return randomLayout;
+    }
+    private static List<LandmassLayout> ReadLandmassLayouts()
+    {
+        var northwestDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "NorthwestData");
+        if (!Directory.Exists(northwestDataPath)) throw new DirectoryNotFoundException(northwestDataPath);
+
+        var layoutPath = Path.Combine(northwestDataPath, "Layout.txt");
+        if (!File.Exists(layoutPath)) throw new FileNotFoundException(layoutPath);
+
+        var allLandmassesSerialized = File.ReadAllText(layoutPath);
+        var layouts = JsonConvert.DeserializeObject<List<LandmassLayout>>(allLandmassesSerialized) ?? new List<LandmassLayout>();
+        return layouts;
     }
 
     public static LandmassLayout CreateNewLandmassLayoutAndInsertNames(List<string> drawnRoomNames)
@@ -32,7 +37,7 @@ public static class LandmassGetter
 
     public static LandmassLayout CreateNewLandmass()
     {
-        LandmassLayout layout = GetRandomLandmassLayout();
+        var layout = GetRandomLandmassLayout();
         return layout;
     }
 

@@ -15,12 +15,12 @@ public class MainMenuRepository
     public async Task<MainMenuState> GetMainMenuState(Guid userId)
     {
         var userDto = await _userRepository.MapUserDtoById(userId);
-        MainMenuState mainMenuState = new MainMenuState
+        var mainMenuState = new MainMenuState
         {
             UserDto = userDto,
             TimeStamp = DateTime.UtcNow,
         };
-
+        await _playerContext.SaveChangesAsync();
         return mainMenuState;
     }
     public bool AreFriends(Guid user1, Guid user2) // more like service bu wahtever

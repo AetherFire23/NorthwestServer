@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Shared_Resources.Entities;
@@ -8,6 +9,8 @@ public class Game
     public Guid Id { get; set; }
     public DateTime NextTick { get; set; }
     public bool IsActive { get; set; }
+
+    [JsonProperty(Required = Required.AllowNull)]
     public virtual ICollection<Player> PlayersInGame { get; set; } = new List<Player>();
 
     public static int TimeBetweenTicksInSeconds = 8;
@@ -19,7 +22,7 @@ public class Game
     }
 
 
-    public static Game FactorizeInitialGame()
+    public static Game CreateInitialGame()
     {
         Game game = new Game()
         {

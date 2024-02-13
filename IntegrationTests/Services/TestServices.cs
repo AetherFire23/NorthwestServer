@@ -21,6 +21,7 @@ public static class TestServicesRegistration
     {
         serviceCollection.AddSingleton<TestState>();
         serviceCollection.AddSingleton<RegistrationPhase>();
+        serviceCollection.AddSingleton<LobbyPhase>();
         serviceCollection.AddSingleton(webAppFactory);
     }
 }

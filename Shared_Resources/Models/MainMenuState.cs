@@ -5,6 +5,6 @@ namespace Shared_Resources.Models;
 
 public class MainMenuState
 {
-    public UserDto UserDto { get; set; } = new UserDto();
+    public UserDto UserDto { get; set; }
     public DateTime? TimeStamp { get; set; }
 }

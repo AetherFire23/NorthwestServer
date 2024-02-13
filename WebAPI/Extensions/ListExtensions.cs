@@ -33,7 +33,7 @@ public static class ListExtensions
 
     public static async Task<List<T2>> SelectAsync<T, T2>(this List<T> source, Func<T, Task<T2>> selection)
     {
-        List<T2> elements = new List<T2>();
+        var elements = new List<T2>();
 
         foreach (T? element in source)
         {

@@ -8,5 +8,5 @@ namespace Shared_Resources.DTOs;
 public class LobbyDto : IEntity // forGameState
 {
     public Guid Id { get; set; }
-    public List<User> QueuingUsers { get; set; } = new List<User>();
+    public List<User> UsersInLobby { get; set; } = new List<User>();
 }

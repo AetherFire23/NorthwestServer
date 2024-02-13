@@ -15,9 +15,9 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>
 
     public async Task<Lobby?> GetLobbyById(Guid lobbyId)
     {
-        Lobby? lobby = await Set
+        var lobby = await Set
             .Include(p => p.UserLobbies)
-            .ThenInclude(ur => ur.User)
+                .ThenInclude(ur => ur.User)
             .FirstOrDefaultAsync(x => x.Id == lobbyId);
         return lobby;
     }
@@ -30,12 +30,12 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>
 
     public async Task<LobbyDto> MapLobbyDto(Guid lobbyId)
     {
-        Lobby? lobby = await GetLobbyById(lobbyId);
-        List<User> usersInLobby = lobby.UserLobbies.Select(ur => ur.User).ToList();
-        LobbyDto lobbyDto = new LobbyDto()
+        var lobby = await GetLobbyById(lobbyId);
+        var usersInLobby = lobby.UserLobbies.Select(ur => ur.User).ToList();
+        var lobbyDto = new LobbyDto()
         {
             Id = lobbyId,
-            QueuingUsers = usersInLobby,
+            UsersInLobby = usersInLobby,
         };
         return lobbyDto;
     }
@@ -60,9 +60,9 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>
         return userExists;
     }
 
-    public async Task<UserLobby?> GetUserLobbyByJoinTargetIds(Guid userId, Guid lobbyId)
+    public async Task<UserLobby?> FindUserLobby(Guid userId, Guid lobbyId)
     {
-        UserLobby? userLobby = await Context.UserLobbies
+        var userLobby = await Context.UserLobbies
             .Include(ul => ul.User)
             .Include(ul => ul.Lobby)
             .FirstOrDefaultAsync(x => x.User.Id == userId && x.Lobby.Id == lobbyId);
@@ -71,7 +71,7 @@ public class LobbyRepository : RepositoryBase<Lobby, PlayerContext>
 
     public async Task DeleteUserFromLobby(Guid userId, Guid lobbyId)
     {
-        var userLobby = await GetUserLobbyByJoinTargetIds(userId, lobbyId);
+        var userLobby = await FindUserLobby(userId, lobbyId);
         _ = Context.UserLobbies.Remove(userLobby);
         _ = await Context.SaveChangesAsync();
     }
