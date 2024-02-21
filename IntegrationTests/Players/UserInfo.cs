@@ -9,9 +9,9 @@ public class UserInfo
     public SwagClient Client;
     public Guid PlayerUID => Store.GameState.PlayerUID;
     public Guid Id => Store.MainMenuState.UserDto.Id;
-    public UserInfo(HttpClient client, RegisterRequest registerRequest)
+    public UserInfo(SwagClient client, RegisterRequest registerRequest)
     {
-        Client = client.ToNSwagClient();
+        Client = client;
         RegisterRequest = registerRequest;
     }
 

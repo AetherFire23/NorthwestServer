@@ -1,31 +1,26 @@
+﻿
+using IntegrationTests;
 using IntegrationTests.GameStart;
 using IntegrationTests.Players;
 using IntegrationTests.Services;
 using IntegrationTests.Utils;
-using Microsoft.AspNetCore.Mvc.Testing;
-using WebAPI;
-using Xunit.Abstractions;
-namespace IntegrationTests;
+using Microsoft.Extensions.DependencyInjection;
 
-public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
+public class Program
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly ITestOutputHelper _output;
-    private readonly ServiceProvider _serviceProvider;
-    public BasicTests(WebApplicationFactory<Program> factory, ITestOutputHelper output)
-    {
-        _factory = factory;
-        _output = output;
-        _serviceProvider = TestServicesRegistration.GenerateTestServiceProvider();
-    }
+    private static ServiceProvider _serviceProvider;
 
-    [Fact]
-    public async Task TestGame()
+    static async Task Main(string[] args)
     {
+        await Task.Delay(4000);
+        _serviceProvider = TestServicesRegistration.GenerateTestServiceProvider();
+
+        var createClient = () => new SwagClient("http://localhost:7060", new HttpClient());
+
+
+
         var registerPhase = _serviceProvider.GetRequiredService<RegistrationPhase>();
         var lobbyPhase = _serviceProvider.GetRequiredService<LobbyPhase>();
-
-        var createClient = () => _factory.CreateClient().ToNSwagClient();
 
         await registerPhase.RegisterPlayers(createClient);
         await lobbyPhase.LobbyCreation();
@@ -33,5 +28,6 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
 
         var state = _serviceProvider.GetRequiredService<TestState>();
         var g = await state.LocalUserInfo.UpdateGameState();
+
     }
 }

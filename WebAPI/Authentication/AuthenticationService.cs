@@ -26,7 +26,7 @@ public class AuthenticationService
     public async Task<LoginResult> TryLogin(LoginRequest loginRequest)
     {
         (var isTokenIssued, var userModel) = await _userService.CanIssueTokenToUser(loginRequest);
-        if (!isTokenIssued) throw new HttpRequestException();
+        if (!isTokenIssued) throw new HttpRequestException(" COuld not login");
 
         var userDto = await _userRepository.MapUserDtoById(userModel.Id);
         var token = await _jwtTokenManager.GenerateToken(userDto);

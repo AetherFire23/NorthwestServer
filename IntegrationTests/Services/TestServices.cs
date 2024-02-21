@@ -7,21 +7,20 @@ namespace IntegrationTests.Services;
 
 public static class TestServicesRegistration
 {
-    public static ServiceProvider GenerateTestServiceProvider(WebApplicationFactory<Program> webAppFactory)
+    public static ServiceProvider GenerateTestServiceProvider()
     {
         var serviceCollection = new ServiceCollection();
 
-        serviceCollection.RegisterTestServices(webAppFactory);
-
+        serviceCollection.RegisterTestServices();
         var sp = serviceCollection.BuildServiceProvider();
         return sp;
     }
 
-    public static void RegisterTestServices(this ServiceCollection serviceCollection, WebApplicationFactory<Program> webAppFactory)
+    public static void RegisterTestServices(this ServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<TestState>();
         serviceCollection.AddSingleton<RegistrationPhase>();
         serviceCollection.AddSingleton<LobbyPhase>();
-        serviceCollection.AddSingleton(webAppFactory);
+
     }
 }

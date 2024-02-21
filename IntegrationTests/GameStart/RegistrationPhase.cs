@@ -2,51 +2,48 @@
 using IntegrationTests.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
 using WebAPI;
-
 namespace IntegrationTests.GameStart;
 
 public class RegistrationPhase
 {
     private readonly TestState _state;
-    private readonly WebApplicationFactory<Program> _webApplicationFactory;
-    public RegistrationPhase(TestState state, WebApplicationFactory<Program> webApplicationFactory)
+    public RegistrationPhase(TestState state)
     {
         _state = state;
-        _webApplicationFactory = webApplicationFactory;
     }
-     
-    public async Task RegisterPlayers()
+    public async Task RegisterPlayers(Func<SwagClient> createClient)
     {
-        var localPlayer = await RegisterNewPlayer();
-        var otherPlayers = await RegisterOtherPlayers();
+        var localPlayer = await RegisterNewPlayer(createClient, true);
+        Console.WriteLine($"username: {localPlayer.RegisterRequest.UserName}");
+        Console.WriteLine($"password: {localPlayer.RegisterRequest.Password}");
+
+        var otherPlayers = await RegisterOtherPlayers(createClient);
         _state.LocalUserInfo = localPlayer;
         _state.OtherPlayersInfos = otherPlayers.ToList();
     }
-
-    private async Task<List<UserInfo>> RegisterOtherPlayers()
+    private async Task<List<UserInfo>> RegisterOtherPlayers(Func<SwagClient> createClient)
     {
         var otherPlayers = new List<UserInfo>();
-        for(int i =0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
-            var p = await RegisterNewPlayer();
+            var p = await RegisterNewPlayer(createClient, false);
             otherPlayers.Add(p);
         }
 
         return otherPlayers;
     }
-
-    private async Task<UserInfo> RegisterNewPlayer()
+    private async Task<UserInfo> RegisterNewPlayer(Func<SwagClient> createClient, bool isDefaultRequest)
     {
         var userName = Generation.CreateRandomUserName();
 
-        var registerRequest = new RegisterRequest
+        var registerRequest = isDefaultRequest ? DefaultRequest.DefaultLocalPlayerRequest : new RegisterRequest
         {
             UserName = userName,
             Email = Generation.GenerateEmail(userName),
             Password = Guid.NewGuid().ToString(),
         };
 
-        var playerInfo = new UserInfo(_webApplicationFactory.CreateClient(), registerRequest)
+        var playerInfo = new UserInfo(createClient(), registerRequest)
         {
             RegisterRequest = registerRequest,
         };
