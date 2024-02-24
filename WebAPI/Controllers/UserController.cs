@@ -27,6 +27,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(200, Type = typeof(LoginResult))]
     public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
+        await Task.Delay(250);
         var loginResult = await _authenticationService.TryLogin(request);
         return Ok(loginResult);
     }

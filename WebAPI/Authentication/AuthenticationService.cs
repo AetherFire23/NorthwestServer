@@ -1,12 +1,10 @@
 ﻿using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
 using Shared_Resources.Models;
 using Shared_Resources.Models.Requests;
 using System.Net;
 using WebAPI.Exceptions;
 using WebAPI.Repositories;
 using WebAPI.Services;
-
 namespace WebAPI.Authentication;
 
 public class AuthenticationService
