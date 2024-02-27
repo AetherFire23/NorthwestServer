@@ -1,18 +1,17 @@
 ﻿using IntegrationTests.GameStart;
+using IntegrationTests.GameTask;
 using IntegrationTests.Players;
-using Microsoft.AspNetCore.Mvc.Testing;
-using WebAPI;
 
 namespace IntegrationTests.Services;
 
 public static class TestServicesRegistration
 {
-    public static ServiceProvider GenerateTestServiceProvider()
+    public static ServiceProvider RegisterTestServices()
     {
-        var serviceCollection = new ServiceCollection();
+        ServiceCollection serviceCollection = new ServiceCollection();
 
         serviceCollection.RegisterTestServices();
-        var sp = serviceCollection.BuildServiceProvider();
+        ServiceProvider sp = serviceCollection.BuildServiceProvider();
         return sp;
     }
 
@@ -21,6 +20,6 @@ public static class TestServicesRegistration
         serviceCollection.AddSingleton<TestState>();
         serviceCollection.AddSingleton<RegistrationPhase>();
         serviceCollection.AddSingleton<LobbyPhase>();
-
+        serviceCollection.AddSingleton<TestGameTasks>();
     }
 }

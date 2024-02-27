@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
-using Shared_Resources.Models;
+using WebAPI.DTOs;
+using WebAPI.Entities;
+using WebAPI.Models;
 
 namespace WebAPI.Repositories;
 
@@ -10,28 +10,30 @@ public class GameStateRepository
     private readonly RoomRepository _roomRepository;
     private readonly PlayerRepository _playerRepository;
     private readonly PlayerContext _playerContext;
-    public GameStateRepository(PlayerContext playerContext, PlayerRepository playerRepository, RoomRepository roomRepository)
+    private readonly GameTaskAvailabilityRepository _gameTaskAvailabilityRepository;
+    public GameStateRepository(PlayerContext playerContext, PlayerRepository playerRepository, RoomRepository roomRepository, GameTaskAvailabilityRepository gameTaskAvailabilityRepository)
     {
         _playerContext = playerContext;
         _playerRepository = playerRepository;
         _roomRepository = roomRepository;
+        _gameTaskAvailabilityRepository = gameTaskAvailabilityRepository;
     }
 
     public async Task<GameState> GetPlayerGameStateAsync(Guid playerId, DateTime? lastTimeStamp)
     {
-        Player player = await _playerRepository.GetPlayerAsync(playerId);
+        var player = await _playerRepository.GetPlayerAsync(playerId);
 
-        PlayerDto playerDTO = await _playerRepository.MapPlayerDTOAsync(playerId);
-        List<Message> newMessages = await GetNewMessagesAsync(lastTimeStamp, playerDTO.GameId);
-        List<Player> players = await _playerRepository.GetPlayersInGameAsync(playerDTO.GameId);
-        List<PrivateChatRoomParticipant> chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
-        List<RoomDTO> roomList = await GetAllRoomDTOSInGameAsync(playerDTO.GameId);
+        var playerDTO = await _playerRepository.MapPlayerDTOAsync(playerId);
+        var newMessages = await GetNewMessagesAsync(lastTimeStamp, playerDTO.GameId);
+        var players = await _playerRepository.GetPlayersInGameAsync(playerDTO.GameId);
+        var chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
+        var roomList = await GetAllRoomDTOSInGameAsync(playerDTO.GameId);
 
-        List<Log> logs = await _playerRepository.GetAccessibleLogsForPlayer(playerId, player.GameId);
-        List<PrivateChatRoom> privs = await GetPrivateChatRoomsAsync(player.Id);
-        List<Station> stations = await _playerContext.Stations.Where(x => x.GameId == player.GameId).ToListAsync();
+        var logs = await _playerRepository.GetAccessibleLogsForPlayer(playerId, player.GameId);
+        var privs = await GetPrivateChatRoomsAsync(player.Id);
+        var stations = await _playerContext.Stations.Where(x => x.GameId == player.GameId).ToListAsync();
 
-        GameState gameState = new GameState()
+        var gameState = new GameState()
         {
             PlayerDTO = playerDTO,
             NewMessages = newMessages,
@@ -44,6 +46,11 @@ public class GameStateRepository
             PrivateChatRooms = privs,
             Stations = stations,
         };
+
+
+        // Since it uses GameState as a dependency. Cannot initialize the gameTasks before. 
+        var gameTaskValidationResults = await _gameTaskAvailabilityRepository.GetAvailableGameTasks(gameState);
+        gameState.AvailableGameTasks = gameTaskValidationResults;
 
         return gameState;
     }
@@ -58,15 +65,15 @@ public class GameStateRepository
         return rooms;
     }
 
-    public async Task<List<RoomDTO>> GetAllRoomDTOSInGameAsync(Guid gameId)
+    public async Task<List<RoomDto>> GetAllRoomDTOSInGameAsync(Guid gameId)
     {
         List<Room> roomsInGame = await _playerContext.Rooms.Where(x => x.GameId == gameId).ToListAsync();
 
-        List<RoomDTO> roomDtos = new List<RoomDTO>();
+        List<RoomDto> roomDtos = new List<RoomDto>();
 
         foreach (Room? room in roomsInGame)
         {
-            RoomDTO roomDTO = await _roomRepository.GetRoomDTOAsync(room.Id);
+            RoomDto roomDTO = await _roomRepository.GetRoomDTOAsync(room.Id);
             roomDtos.Add(roomDTO);
         }
 

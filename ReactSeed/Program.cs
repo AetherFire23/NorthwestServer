@@ -3,7 +3,6 @@ using IntegrationTests;
 using IntegrationTests.GameStart;
 using IntegrationTests.Players;
 using IntegrationTests.Services;
-using IntegrationTests.Utils;
 using Microsoft.Extensions.DependencyInjection;
 
 public class Program
@@ -13,21 +12,21 @@ public class Program
     static async Task Main(string[] args)
     {
         await Task.Delay(4000);
-        _serviceProvider = TestServicesRegistration.GenerateTestServiceProvider();
+        _serviceProvider = TestServicesRegistration.RegisterTestServices();
 
-        var createClient = () => new SwagClient("http://localhost:7060", new HttpClient());
+        Func<SwagClient> createClient = () => new SwagClient("http://localhost:7060", new HttpClient());
 
 
 
-        var registerPhase = _serviceProvider.GetRequiredService<RegistrationPhase>();
-        var lobbyPhase = _serviceProvider.GetRequiredService<LobbyPhase>();
+        RegistrationPhase registerPhase = _serviceProvider.GetRequiredService<RegistrationPhase>();
+        LobbyPhase lobbyPhase = _serviceProvider.GetRequiredService<LobbyPhase>();
 
         await registerPhase.RegisterPlayers(createClient);
         await lobbyPhase.LobbyCreation();
         await lobbyPhase.GameStarts();
 
-        var state = _serviceProvider.GetRequiredService<TestState>();
-        var g = await state.LocalUserInfo.UpdateGameState();
+        TestState state = _serviceProvider.GetRequiredService<TestState>();
+        GameState g = await state.LocalUserInfo.UpdateGameState();
 
     }
 }

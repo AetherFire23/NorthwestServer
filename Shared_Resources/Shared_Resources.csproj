@@ -26,14 +26,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<PropertyGroup>
-			<ScriptDir>$(MSBuildThisFileDirectory)</ScriptDir>
-			<UnityPluginDir>$(ScriptDir)..\..\NorthWest\Assets\Plugins</UnityPluginDir>
-		</PropertyGroup>
-		<Exec Command="if not exist $(UnityPluginDir) echo NorthWest project folder must be in the same folder as the WebAPI project folder &amp; exit 1" />
-		<Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(UnityPluginDir)&quot;" />
 
-	</Target>
+	
 
 </Project>

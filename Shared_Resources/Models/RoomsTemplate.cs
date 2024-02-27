@@ -477,16 +477,16 @@ public static class RoomsTemplate // cest quoi deja les stairway haha
     };
 
     // this gets called at start of program for caching
-    public static void InitializeDefaultReflectedRooms() 
+    public static void InitializeDefaultReflectedRooms()
     {
-        var rooms = DiscoverReflectedTemplateRooms();
+        List<Room> rooms = DiscoverReflectedTemplateRooms();
         string json = JsonConvert.SerializeObject(rooms);
         RoomsTemplate.DefaultSerializedRooms = json;
     }
 
     public static List<Room> ReadSerializedDefaultRooms()
     {
-        var rooms = JsonConvert.DeserializeObject<List<Room>>(DefaultSerializedRooms) ?? new List<Room>();
+        List<Room> rooms = JsonConvert.DeserializeObject<List<Room>>(DefaultSerializedRooms) ?? new List<Room>();
         return rooms;
     }
 
@@ -508,7 +508,7 @@ public static class RoomsTemplate // cest quoi deja les stairway haha
         if (isDuplicateRoomNameOrId) throw new Exception($"Two rooms with the same name were found.");
 
         // little workaround to make rooms non-nullable after reflection
-        var nonNullableReflectedRooms = reflectedRooms.Select(x => x ?? new Room()).ToList();
+        List<Room> nonNullableReflectedRooms = reflectedRooms.Select(x => x ?? new Room()).ToList();
         return nonNullableReflectedRooms;
     }
 }

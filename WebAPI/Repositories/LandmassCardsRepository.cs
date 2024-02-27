@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared_Resources.Entities;
+using WebAPI.Entities;
 
 namespace WebAPI.Repositories;
 

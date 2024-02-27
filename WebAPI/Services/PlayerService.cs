@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Shared_Resources.Entities;
+using WebAPI.Entities;
+using WebAPI.Enums;
 using WebAPI.Game_Actions;
 
 namespace WebAPI.Services;
@@ -71,7 +72,7 @@ public class PlayerService
                 Created = DateTime.UtcNow,
                 CreatedBy = player.Name,
                 GameId = player.GameId,
-                GameActionType = Shared_Resources.Enums.GameActionType.RoomChanged,
+                GameActionType = GameActionType.RoomChanged,
                 SerializedProperties = JsonConvert.SerializeObject(log),
             };
 

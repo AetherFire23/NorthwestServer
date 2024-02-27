@@ -1,12 +1,14 @@
-﻿using Shared_Resources.GameTasks;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace WebAPI.GameTasks;
 
 public static class GameTaskTypeSelector
 {
-    // ah holy shit javais pas realize que le execution au start du program se passait sur les static functions
+    public static List<Type> RegisteredGameTasks { get; private set; } = [];
+
+    // remember execution of static methods take place when first invoked
     private static readonly IReadOnlyDictionary<GameTaskCodes, Type> _gameTasksMap = CreateTaskTypesMap();
 
     public static Type GetGameTaskType(GameTaskCodes taskCode)
@@ -21,7 +23,7 @@ public static class GameTaskTypeSelector
 
     private static ConcurrentDictionary<GameTaskCodes, Type> CreateTaskTypesMap()
     {
-        Dictionary<GameTaskCodes, Type> gameTasksMap = new Dictionary<GameTaskCodes, Type>();
+        var gameTasksMap = new Dictionary<GameTaskCodes, Type>();
 
         foreach (Type gameTaskType in GetTaskTypes())
         {
@@ -35,10 +37,13 @@ public static class GameTaskTypeSelector
 
     private static List<Type> GetTaskTypes()
     {
-        List<Type> types = typeof(Program).Assembly.GetTypes()
+        var gameTaskTypes = typeof(Program).Assembly.GetTypes()
             .Where(type => type.IsClass && !type.IsAbstract
             && typeof(IGameTask).IsAssignableFrom(type)
             && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null).ToList();
-        return types;
+
+        RegisteredGameTasks.AddRange(gameTaskTypes);
+
+        return gameTaskTypes;
     }
 }

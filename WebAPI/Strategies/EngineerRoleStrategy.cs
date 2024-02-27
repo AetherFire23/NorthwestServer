@@ -1,7 +1,7 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.Enums;
-using Shared_Resources.Models;
+﻿using WebAPI.Entities;
+using WebAPI.Enums;
 using WebAPI.Interfaces;
+using WebAPI.Models;
 using WebAPI.Repositories;
 
 namespace WebAPI.Strategies;

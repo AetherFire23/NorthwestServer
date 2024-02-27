@@ -7,12 +7,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Quartz;
 using Quartz.AspNetCore;
-using Shared_Resources.GameTasks;
-using System.Reflection;
 using System.Text;
+using System.Reflection;
 using WebAPI.Authentication;
 using WebAPI.Conventions;
 using WebAPI.GameTasks;
+using WebAPI.GameTasks.Reflect;
 using WebAPI.Jobs;
 using WebAPI.Strategies;
 using WebAPI.UniversalSkills;
@@ -41,11 +41,13 @@ public static class ApplicationBuilderHelper
 
         // ConfigureIdentityContext(builder);
         ConfigureJWT(builder);
+
+        builder.Services.AddTaskDelegateCache();
     }
 
     private static void ConfigureNewtonsoft(WebApplicationBuilder builder)
     {
-       
+
     }
 
     private static void RegisterGameTaskTypes(WebApplicationBuilder builder) // should extract this to GameTaskStrategyMapper
@@ -57,7 +59,7 @@ public static class ApplicationBuilderHelper
 
         foreach (Type? type in apiTypes)
         {
-            _ = builder.Services.AddTransient(type);
+            _ = builder.Services.AddSingleton(type);
         }
     }
 
@@ -72,8 +74,11 @@ public static class ApplicationBuilderHelper
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.All;
+
+
+
                 // to convert enum to string and vice-versa to that the codegen can happen correctly 
-               // options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
 
 
             });
@@ -97,7 +102,7 @@ public static class ApplicationBuilderHelper
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
                 Scheme = "bearer",
-                BearerFormat = "JWT"
+                BearerFormat = "JWT",
             });
 
             // Add the security requirement for the JWT Bearer token
@@ -109,18 +114,18 @@ public static class ApplicationBuilderHelper
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
+                            Id = "Bearer",
+                        },
                     },
                     Array.Empty<string>()
-                }
+                },
             });
         });
     }
 
     private static void ConfigureQuartz(WebApplicationBuilder builder)
     {
-        _ = builder.Services.AddQuartz(q =>
+        builder.Services.AddQuartz(q =>
         {
             q.SchedulerId = "Scheduler-Core";
 
@@ -154,20 +159,20 @@ public static class ApplicationBuilderHelper
         });
 
         // Add Jobs here
-        _ = builder.Services.AddTransient<CycleJob>();
+        builder.Services.AddTransient<CycleJob>();
     }
 
     private static void ConfigureAutoMapper(WebApplicationBuilder builder)
     {
         // Configure Automapper
-        //_ = builder.Services.AddAutoMapper(typeof(Program).Assembly);
+        // _ = builder.Services.AddAutoMapper(typeof(Program).Assembly);
     }
 
     private static void ConfigureDbContext(WebApplicationBuilder builder)
     {
-        //Add db context here
-        var playerContextConnectionString = builder.Configuration.GetConnectionString("PlayerConnectionSql");
-        
+        // Add db context here
+        string? playerContextConnectionString = builder.Configuration.GetConnectionString("PlayerConnectionSql");
+
         // useNp
         // https://stackoverflow.com/questions/3582552/what-is-the-format-for-the-postgresql-connection-string-url
         // for parameters https://www.npgsql.org/doc/connection-string-parameters.html
@@ -175,7 +180,7 @@ public static class ApplicationBuilderHelper
         // DBeaver tick "show all conncetions"
         _ = builder.Services.AddDbContext<PlayerContext>(options =>
             options.UseSqlServer(playerContextConnectionString)
-            .EnableSensitiveDataLogging(true)); // only should be appleid to development 
+            .EnableSensitiveDataLogging(true)); // only should be appleid to development
     }
 
     private static void ConfigureHTTPLogging(WebApplicationBuilder builder)
@@ -230,12 +235,10 @@ public static class ApplicationBuilderHelper
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtConfig.Issuer,
                 ValidAudience = jwtConfig.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey)),
             };
         });
         _ = builder.Services.AddAuthorization();
     }
-
-
 }
 // will have to configure CORS some day

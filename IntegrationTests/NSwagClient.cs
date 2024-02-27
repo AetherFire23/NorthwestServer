@@ -318,15 +318,15 @@ namespace IntegrationTests
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<GameState> GameStateAsync(System.Guid? playerId, System.DateTimeOffset? lastTimeStamp)
+        public virtual System.Threading.Tasks.Task<GameState> GamestateAsync(System.Guid? playerId, System.DateTimeOffset? lastTimeStamp)
         {
-            return GameStateAsync(playerId, lastTimeStamp, System.Threading.CancellationToken.None);
+            return GamestateAsync(playerId, lastTimeStamp, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GameState> GameStateAsync(System.Guid? playerId, System.DateTimeOffset? lastTimeStamp, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GameState> GamestateAsync(System.Guid? playerId, System.DateTimeOffset? lastTimeStamp, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -339,8 +339,8 @@ namespace IntegrationTests
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "gamecontroller/GameState"
-                    urlBuilder_.Append("gamecontroller/GameState");
+                    // Operation Path: "game/gamestate"
+                    urlBuilder_.Append("game/gamestate");
                     urlBuilder_.Append('?');
                     if (playerId != null)
                     {
@@ -406,15 +406,15 @@ namespace IntegrationTests
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ExecuteGameTaskAsync(System.Guid? playerId, GameTaskCodes? taskCode, System.Collections.Generic.IEnumerable<StringStringTuple> body)
+        public virtual System.Threading.Tasks.Task ExecuteTaskAsync(System.Guid? playerId, GameTaskCodes? taskCode, System.Collections.Generic.IDictionary<string, string> body)
         {
-            return ExecuteGameTaskAsync(playerId, taskCode, body, System.Threading.CancellationToken.None);
+            return ExecuteTaskAsync(playerId, taskCode, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ExecuteGameTaskAsync(System.Guid? playerId, GameTaskCodes? taskCode, System.Collections.Generic.IEnumerable<StringStringTuple> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ExecuteTaskAsync(System.Guid? playerId, GameTaskCodes? taskCode, System.Collections.Generic.IDictionary<string, string> body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -430,8 +430,8 @@ namespace IntegrationTests
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "gamecontroller/ExecuteGameTask"
-                    urlBuilder_.Append("gamecontroller/ExecuteGameTask");
+                    // Operation Path: "game/executeTask"
+                    urlBuilder_.Append("game/executeTask");
                     urlBuilder_.Append('?');
                     if (playerId != null)
                     {
@@ -492,15 +492,15 @@ namespace IntegrationTests
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UpdatePlayerPositionAsync(System.Guid? playerId, float? x, float? y)
+        public virtual System.Threading.Tasks.Task UpdateplayerpositionAsync(System.Guid? playerId, float? x, float? y)
         {
-            return UpdatePlayerPositionAsync(playerId, x, y, System.Threading.CancellationToken.None);
+            return UpdateplayerpositionAsync(playerId, x, y, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UpdatePlayerPositionAsync(System.Guid? playerId, float? x, float? y, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task UpdateplayerpositionAsync(System.Guid? playerId, float? x, float? y, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -513,8 +513,8 @@ namespace IntegrationTests
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "gamecontroller/UpdatePlayerPosition"
-                    urlBuilder_.Append("gamecontroller/UpdatePlayerPosition");
+                    // Operation Path: "game/updateplayerposition"
+                    urlBuilder_.Append("game/updateplayerposition");
                     urlBuilder_.Append('?');
                     if (playerId != null)
                     {
@@ -579,15 +579,15 @@ namespace IntegrationTests
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task TransferItemAsync(System.Guid? targetId, System.Guid? ownerId, System.Guid? itemId, System.Guid? gameId)
+        public virtual System.Threading.Tasks.Task TransferitemAsync(System.Guid? targetId, System.Guid? ownerId, System.Guid? itemId, System.Guid? gameId)
         {
-            return TransferItemAsync(targetId, ownerId, itemId, gameId, System.Threading.CancellationToken.None);
+            return TransferitemAsync(targetId, ownerId, itemId, gameId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task TransferItemAsync(System.Guid? targetId, System.Guid? ownerId, System.Guid? itemId, System.Guid? gameId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task TransferitemAsync(System.Guid? targetId, System.Guid? ownerId, System.Guid? itemId, System.Guid? gameId, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -600,8 +600,8 @@ namespace IntegrationTests
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "gamecontroller/TransferItem"
-                    urlBuilder_.Append("gamecontroller/TransferItem");
+                    // Operation Path: "game/transferitem"
+                    urlBuilder_.Append("game/transferitem");
                     urlBuilder_.Append('?');
                     if (targetId != null)
                     {
@@ -670,15 +670,15 @@ namespace IntegrationTests
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ChangeRoomAsync(System.Guid? playerId, string targetRoomName)
+        public virtual System.Threading.Tasks.Task ChangeroomAsync(System.Guid? playerId, string targetRoomName)
         {
-            return ChangeRoomAsync(playerId, targetRoomName, System.Threading.CancellationToken.None);
+            return ChangeroomAsync(playerId, targetRoomName, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ChangeRoomAsync(System.Guid? playerId, string targetRoomName, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ChangeroomAsync(System.Guid? playerId, string targetRoomName, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -691,8 +691,8 @@ namespace IntegrationTests
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "gamecontroller/ChangeRoom"
-                    urlBuilder_.Append("gamecontroller/ChangeRoom");
+                    // Operation Path: "game/changeroom"
+                    urlBuilder_.Append("game/changeroom");
                     urlBuilder_.Append('?');
                     if (playerId != null)
                     {
@@ -837,15 +837,15 @@ namespace IntegrationTests
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Lobby> CreateLobbyAsync(System.Guid? userId)
+        public virtual System.Threading.Tasks.Task<Lobby> CreatelobbyAsync(System.Guid? userId)
         {
-            return CreateLobbyAsync(userId, System.Threading.CancellationToken.None);
+            return CreatelobbyAsync(userId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Lobby> CreateLobbyAsync(System.Guid? userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Lobby> CreatelobbyAsync(System.Guid? userId, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -859,8 +859,8 @@ namespace IntegrationTests
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "mainmenu/CreateLobby"
-                    urlBuilder_.Append("mainmenu/CreateLobby");
+                    // Operation Path: "mainmenu/createlobby"
+                    urlBuilder_.Append("mainmenu/createlobby");
                     urlBuilder_.Append('?');
                     if (userId != null)
                     {
@@ -1102,8 +1102,8 @@ namespace IntegrationTests
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "users/Login"
-                    urlBuilder_.Append("users/Login");
+                    // Operation Path: "users/login"
+                    urlBuilder_.Append("users/login");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1184,8 +1184,8 @@ namespace IntegrationTests
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "users/Register"
-                    urlBuilder_.Append("users/Register");
+                    // Operation Path: "users/register"
+                    urlBuilder_.Append("users/register");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1461,7 +1461,7 @@ namespace IntegrationTests
         public PlayerDto PlayerDTO { get; set; }
 
         [Newtonsoft.Json.JsonProperty("localPlayerRoom", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RoomDTO LocalPlayerRoom { get; set; }
+        public RoomDto LocalPlayerRoom { get; set; }
 
         [Newtonsoft.Json.JsonProperty("newMessages", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<Message> NewMessages { get; set; }
@@ -1476,7 +1476,7 @@ namespace IntegrationTests
         public System.Collections.Generic.ICollection<Log> Logs { get; set; }
 
         [Newtonsoft.Json.JsonProperty("rooms", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<RoomDTO> Rooms { get; set; }
+        public System.Collections.Generic.ICollection<RoomDto> Rooms { get; set; }
 
         [Newtonsoft.Json.JsonProperty("timeStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTimeOffset? TimeStamp { get; set; }
@@ -1490,6 +1490,9 @@ namespace IntegrationTests
         [Newtonsoft.Json.JsonProperty("stations", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<Station> Stations { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("availableGameTasks", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<GameTaskAvailabilityResult> AvailableGameTasks { get; set; }
+
         [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid GameId { get; set; }
 
@@ -1499,54 +1502,100 @@ namespace IntegrationTests
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GameTaskAvailabilityResult
+    {
+        [Newtonsoft.Json.JsonProperty("gameTaskName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string GameTaskName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("requirements", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<TaskRequirement> Requirements { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("isValid", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsValid { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("isVisible", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsVisible { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public enum GameTaskCodes
     {
 
-        _0 = 0,
+        [System.Runtime.Serialization.EnumMember(Value = @"ChargeCannon")]
+        ChargeCannon = 0,
 
-        _1 = 1,
+        [System.Runtime.Serialization.EnumMember(Value = @"FireCannon")]
+        FireCannon = 1,
 
-        _2 = 2,
+        [System.Runtime.Serialization.EnumMember(Value = @"RepairCannon")]
+        RepairCannon = 2,
 
-        _3 = 3,
+        [System.Runtime.Serialization.EnumMember(Value = @"RaiseSail")]
+        RaiseSail = 3,
 
-        _4 = 4,
+        [System.Runtime.Serialization.EnumMember(Value = @"LowerSail")]
+        LowerSail = 4,
 
-        _5 = 5,
+        [System.Runtime.Serialization.EnumMember(Value = @"SetSail")]
+        SetSail = 5,
 
-        _6 = 6,
+        [System.Runtime.Serialization.EnumMember(Value = @"RepairSail")]
+        RepairSail = 6,
 
-        _7 = 7,
+        [System.Runtime.Serialization.EnumMember(Value = @"Watch")]
+        Watch = 7,
 
-        _8 = 8,
+        [System.Runtime.Serialization.EnumMember(Value = @"ChargeMortar")]
+        ChargeMortar = 8,
 
-        _9 = 9,
+        [System.Runtime.Serialization.EnumMember(Value = @"FireMortar")]
+        FireMortar = 9,
 
-        _10 = 10,
+        [System.Runtime.Serialization.EnumMember(Value = @"RepairMortar")]
+        RepairMortar = 10,
 
-        _11 = 11,
+        [System.Runtime.Serialization.EnumMember(Value = @"Expedition")]
+        Expedition = 11,
 
-        _12 = 12,
+        [System.Runtime.Serialization.EnumMember(Value = @"Evacuation")]
+        Evacuation = 12,
 
-        _13 = 13,
+        [System.Runtime.Serialization.EnumMember(Value = @"Fish")]
+        Fish = 13,
 
-        _14 = 14,
+        [System.Runtime.Serialization.EnumMember(Value = @"Fire")]
+        Fire = 14,
 
-        _15 = 15,
+        [System.Runtime.Serialization.EnumMember(Value = @"RaiseAnchor")]
+        RaiseAnchor = 15,
 
-        _16 = 16,
+        [System.Runtime.Serialization.EnumMember(Value = @"LowererAnchor")]
+        LowererAnchor = 16,
 
-        _17 = 17,
+        [System.Runtime.Serialization.EnumMember(Value = @"CookMeat")]
+        CookMeat = 17,
 
-        _18 = 18,
+        [System.Runtime.Serialization.EnumMember(Value = @"CookFish")]
+        CookFish = 18,
 
-        _19 = 19,
+        [System.Runtime.Serialization.EnumMember(Value = @"CookStew")]
+        CookStew = 19,
 
-        _20 = 20,
+        [System.Runtime.Serialization.EnumMember(Value = @"Lock")]
+        Lock = 20,
 
-        _21 = 21,
+        [System.Runtime.Serialization.EnumMember(Value = @"Unlock")]
+        Unlock = 21,
 
-        _22 = 22,
+        [System.Runtime.Serialization.EnumMember(Value = @"CraftTask")]
+        CraftTask = 22,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"TestTask")]
+        TestTask = 23,
 
     }
 
@@ -1560,6 +1609,7 @@ namespace IntegrationTests
         public System.Guid OwnerId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("itemType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public ItemType ItemType { get; set; }
 
     }
@@ -1568,9 +1618,11 @@ namespace IntegrationTests
     public enum ItemType
     {
 
-        _0 = 0,
+        [System.Runtime.Serialization.EnumMember(Value = @"Wrench")]
+        Wrench = 0,
 
-        _1 = 1,
+        [System.Runtime.Serialization.EnumMember(Value = @"Hose")]
+        Hose = 1,
 
     }
 
@@ -1698,9 +1750,6 @@ namespace IntegrationTests
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Player
     {
-        [Newtonsoft.Json.JsonProperty("taskParam", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public StringStringValueTuple TaskParam { get; set; }
-
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid Id { get; set; }
 
@@ -1708,6 +1757,7 @@ namespace IntegrationTests
         public System.Guid CurrentGameRoomId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("profession", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public RoleType Profession { get; set; }
 
         [Newtonsoft.Json.JsonProperty("x", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -1758,12 +1808,13 @@ namespace IntegrationTests
         public System.Guid CurrentGameRoomId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("profession", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public RoleType Profession { get; set; }
 
         [Newtonsoft.Json.JsonProperty("items", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<Item> Items { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("skills", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("skills", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore, ItemConverterType = typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public System.Collections.Generic.ICollection<SkillEnum> Skills { get; set; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -1832,6 +1883,7 @@ namespace IntegrationTests
         public System.Guid Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("roleName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public RoleName RoleName { get; set; }
 
         [Newtonsoft.Json.JsonProperty("userRoles", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -1843,11 +1895,14 @@ namespace IntegrationTests
     public enum RoleName
     {
 
-        _0 = 0,
+        [System.Runtime.Serialization.EnumMember(Value = @"PereNoel")]
+        PereNoel = 0,
 
-        _1 = 1,
+        [System.Runtime.Serialization.EnumMember(Value = @"Standard")]
+        Standard = 1,
 
-        _2 = 2,
+        [System.Runtime.Serialization.EnumMember(Value = @"Undefined")]
+        Undefined = 2,
 
     }
 
@@ -1855,20 +1910,25 @@ namespace IntegrationTests
     public enum RoleType
     {
 
-        _0 = 0,
+        [System.Runtime.Serialization.EnumMember(Value = @"Commander")]
+        Commander = 0,
 
-        _1 = 1,
+        [System.Runtime.Serialization.EnumMember(Value = @"Medic")]
+        Medic = 1,
 
-        _2 = 2,
+        [System.Runtime.Serialization.EnumMember(Value = @"Sailor")]
+        Sailor = 2,
 
-        _3 = 3,
+        [System.Runtime.Serialization.EnumMember(Value = @"Cook")]
+        Cook = 3,
 
-        _4 = 4,
+        [System.Runtime.Serialization.EnumMember(Value = @"Engineer")]
+        Engineer = 4,
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class RoomDTO
+    public partial class RoomDto
     {
         [Newtonsoft.Json.JsonProperty("taskParam", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public StringStringValueTuple TaskParam { get; set; }
@@ -1889,6 +1949,7 @@ namespace IntegrationTests
         public System.Collections.Generic.ICollection<Player> Players { get; set; }
 
         [Newtonsoft.Json.JsonProperty("roomType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public RoomType RoomType { get; set; }
 
         [Newtonsoft.Json.JsonProperty("stations", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -1909,9 +1970,11 @@ namespace IntegrationTests
     public enum RoomType
     {
 
-        _0 = 0,
+        [System.Runtime.Serialization.EnumMember(Value = @"Start")]
+        Start = 0,
 
-        _1 = 1,
+        [System.Runtime.Serialization.EnumMember(Value = @"Second")]
+        Second = 1,
 
     }
 
@@ -1919,20 +1982,20 @@ namespace IntegrationTests
     public enum SkillEnum
     {
 
-        _0 = 0,
+        [System.Runtime.Serialization.EnumMember(Value = @"CookBonus")]
+        CookBonus = 0,
 
-        _1 = 1,
+        [System.Runtime.Serialization.EnumMember(Value = @"AttackBonus")]
+        AttackBonus = 1,
 
-        _2 = 2,
+        [System.Runtime.Serialization.EnumMember(Value = @"ShootLaser")]
+        ShootLaser = 2,
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class Station
     {
-        [Newtonsoft.Json.JsonProperty("taskParam", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public StringStringValueTuple TaskParam { get; set; }
-
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid Id { get; set; }
 
@@ -1957,7 +2020,7 @@ namespace IntegrationTests
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class StringStringTuple
+    public partial class StringStringValueTuple
     {
         [Newtonsoft.Json.JsonProperty("item1", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Item1 { get; set; }
@@ -1968,13 +2031,13 @@ namespace IntegrationTests
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class StringStringValueTuple
+    public partial class TaskRequirement
     {
-        [Newtonsoft.Json.JsonProperty("item1", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Item1 { get; set; }
+        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Description { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("item2", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Item2 { get; set; }
+        [Newtonsoft.Json.JsonProperty("fulfillsRequirement", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool FulfillsRequirement { get; set; }
 
     }
 
@@ -2022,7 +2085,7 @@ namespace IntegrationTests
         [Newtonsoft.Json.JsonProperty("roleNamesAsString", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> RoleNamesAsString { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("roleNames", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("roleNames", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore, ItemConverterType = typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public System.Collections.Generic.ICollection<RoleName> RoleNames { get; set; }
 
         [Newtonsoft.Json.JsonProperty("players", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]

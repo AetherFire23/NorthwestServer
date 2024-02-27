@@ -1,4 +1,4 @@
-﻿using Shared_Resources.Enums;
+﻿using WebAPI.Enums;
 
 namespace WebAPI.UniversalSkills;
 

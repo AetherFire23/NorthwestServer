@@ -1,4 +1,4 @@
-﻿using Shared_Resources.Entities;
+﻿using WebAPI.Entities;
 using WebAPI.Landmasses;
 using WebAPI.Repositories;
 
@@ -21,8 +21,8 @@ public class LandmassService
 
     public async Task AdvanceToNextLandmass(Guid gameId) // entry point for switching landmasses
     {
-        var layout2 = LandmassGetter.CreateNewLandmass();
-        var roomNames2 = await _landmassCardsService.DrawNextLandmassRoomNames2(gameId, layout2);
+        LandmassLayout layout2 = LandmassGetter.CreateNewLandmass();
+        List<string> roomNames2 = await _landmassCardsService.DrawNextLandmassRoomNames2(gameId, layout2);
         LandmassGetter.InsertLandmassNamesInLayout(layout2, roomNames2);
 
         Tuple<List<Room>, List<AdjacentRoom>> s = LandmassEntitiesInitializer.CreateNewDefaultLandmassRoomsAndConnections(layout2, gameId);

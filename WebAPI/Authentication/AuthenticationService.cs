@@ -1,8 +1,9 @@
-﻿using Shared_Resources.DTOs;
-using Shared_Resources.Models;
-using Shared_Resources.Models.Requests;
-using System.Net;
+﻿using System.Net;
+using WebAPI.DTOs;
+using WebAPI.Entities;
 using WebAPI.Exceptions;
+using WebAPI.Models;
+using WebAPI.Models.Requests;
 using WebAPI.Repositories;
 using WebAPI.Services;
 namespace WebAPI.Authentication;
@@ -23,13 +24,13 @@ public class AuthenticationService
 
     public async Task<LoginResult> TryLogin(LoginRequest loginRequest)
     {
-        (var isTokenIssued, var userModel) = await _userService.CanIssueTokenToUser(loginRequest);
+        (bool isTokenIssued, User? userModel) = await _userService.CanIssueTokenToUser(loginRequest);
         if (!isTokenIssued) throw new HttpRequestException(" COuld not login");
 
-        var userDto = await _userRepository.MapUserDtoById(userModel.Id);
-        var token = await _jwtTokenManager.GenerateToken(userDto);
+        UserDto userDto = await _userRepository.MapUserDtoById(userModel.Id);
+        string token = await _jwtTokenManager.GenerateToken(userDto);
 
-        var loginResult = new LoginResult
+        LoginResult loginResult = new LoginResult
         {
             Token = token,
             UserId = userDto.Id,
@@ -41,7 +42,7 @@ public class AuthenticationService
     /// <summary> Content is userdto</summary>
     public async Task<UserDto> TryRegister(RegisterRequest registerRequest)
     {
-        if ((await _userRepository.IsUserExists(registerRequest))) 
+        if ((await _userRepository.IsUserExists(registerRequest)))
             throw new RequestException(HttpStatusCode.BadRequest);
 
         UserDto user = await _userRepository.CreateUser(registerRequest);

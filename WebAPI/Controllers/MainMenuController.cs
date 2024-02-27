@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Shared_Resources.Constants.Endpoints;
-using Shared_Resources.Entities;
-using Shared_Resources.Models;
+using WebAPI.Entities;
+using WebAPI.Models;
 using WebAPI.Repositories;
 using WebAPI.Services;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route(MainMenuEndpoints.MainMenu)]
+[Route("mainmenu")]
 public class MainMenuController : ControllerBase
 {
     private readonly MainMenuRepository _mainMenuRepository;
@@ -38,7 +37,7 @@ public class MainMenuController : ControllerBase
             string serializedJson = JsonConvert.SerializeObject(mainMenuState, Formatting.None, setts);
 
             // Deserialize the object
-            MainMenuState deserializedObject = JsonConvert.DeserializeObject<MainMenuState>(serializedJson, setts);
+            var deserializedObject = JsonConvert.DeserializeObject<MainMenuState>(serializedJson, setts);
         }
         catch (Exception ex)
         {
@@ -50,10 +49,10 @@ public class MainMenuController : ControllerBase
     }
 
     [HttpPost]
-    [Route(MainMenuEndpoints.CreateLobby)]
+    [Route("createlobby")]
     public async Task<ActionResult<Lobby>> CreateLobby([FromQuery] Guid userId)
     {
-        var lobby = await _lobbyService.CreateAndJoinLobby(userId);
+        Lobby lobby = await _lobbyService.CreateAndJoinLobby(userId);
         return Ok(lobby);
     }
 

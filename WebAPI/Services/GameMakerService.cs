@@ -1,8 +1,9 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.Enums;
-using Shared_Resources.Models;
+﻿using WebAPI.DTOs;
+using WebAPI.Entities;
+using WebAPI.Enums;
 using WebAPI.Extensions;
 using WebAPI.Interfaces;
+using WebAPI.Models;
 using WebAPI.Repositories;
 using WebAPI.Strategies;
 namespace WebAPI.Services;
@@ -44,19 +45,19 @@ public class GameMakerService
     }
     public async Task CreateGameFromLobby(Guid lobbyId)
     {
-        var newGameInfo = await CreateGameInfoPreparation(lobbyId);
+        NewGameInfo newGameInfo = await CreateGameInfoPreparation(lobbyId);
         await InitializeNewGame(newGameInfo);
     }
 
     private async Task<NewGameInfo> CreateGameInfoPreparation(Guid lobbyId)
     {
         // I need to know username and player role 
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
-        var userDtos = await _userRepository.GetUserDtosFromUser(lobby.UsersInLobby);
-        var usersGamePrep = await ShufflePlayerRoles(lobbyId);
+        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        List<UserDto> userDtos = await _userRepository.GetUserDtosFromUser(lobby.UsersInLobby);
+        List<UserGamePreparation> usersGamePrep = await ShufflePlayerRoles(lobbyId);
 
         // having the bug shit thing
-        var newGameInfo = new NewGameInfo()
+        NewGameInfo newGameInfo = new NewGameInfo()
         {
             Game = Game.CreateInitialGame(),
             UserGamePreparation = usersGamePrep,
@@ -68,11 +69,11 @@ public class GameMakerService
 
     private async Task<List<UserGamePreparation>> ShufflePlayerRoles(Guid lobbyId)
     {
-        var randomRoles = EnumFunExtensions.GetAllEnumValues<RoleType>().Shuffle();
-        var userSelections = await GetPlayerGamePrepFromLobby(lobbyId);
+        List<RoleType> randomRoles = EnumFunExtensions.GetAllEnumValues<RoleType>().Shuffle();
+        List<UserGamePreparation> userSelections = await GetPlayerGamePrepFromLobby(lobbyId);
 
         // sets the randomly selected roles into the usergameprep
-        foreach ((var role, var userGamePreparation) in randomRoles.Zip(userSelections))
+        foreach ((RoleType role, UserGamePreparation? userGamePreparation) in randomRoles.Zip(userSelections))
         {
             userGamePreparation.RoleType = role;
         }
@@ -104,13 +105,13 @@ public class GameMakerService
         /* Will need to clarify what gets initialized before what.
           for example, class cannot depend on starting room(for knowing which bonuses is applying), and starting room also depend on class. One needs to be
           created before the other. */
-        foreach (var userDto in gameInfo.Users)
+        foreach (UserDto userDto in gameInfo.Users)
         {
-            var userEntity = await _userRepository.GetUserById(userDto.Id); // entity doit etre tracked encore une fois. jpas sur daimer ca 
-            var gameEntity = await _gameRepository.GetGameById(gameInfo.GameId);
+            User? userEntity = await _userRepository.GetUserById(userDto.Id); // entity doit etre tracked encore une fois. jpas sur daimer ca 
+            Game gameEntity = await _gameRepository.GetGameById(gameInfo.GameId);
             // ouache 
-            var selection = gameInfo.UserGamePreparation.First(x => x.UserId == userDto.Id);
-            var newPlayer = new Player()
+            UserGamePreparation selection = gameInfo.UserGamePreparation.First(x => x.UserId == userDto.Id);
+            Player newPlayer = new Player()
             {
                 Id = userDto.Id, // users not saved yet in db, so can use user key as primary key. Will have to Guid.NewGuid() some day
                 ActionPoints = 0,
@@ -135,22 +136,22 @@ public class GameMakerService
 
     private async Task InitializePlayerRoleSettings(Player player)
     {
-        var roleStrategy = ResolveRoleStrategy(player.Profession);
+        IRoleInitializationStrategy roleStrategy = ResolveRoleStrategy(player.Profession);
         await roleStrategy.InitializePlayerFromRoleAsync(player);
     }
 
     private async Task InitializeItemsAsync(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
     {
-        var rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
+        List<Room> rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
 
-        var item2 = new Item()
+        Item item2 = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Hose,
             OwnerId = rooms.First(x => x.Name == nameof(RoomsTemplate.CrowsNest)).Id,
         };
 
-        var item3 = new Item()
+        Item item3 = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Hose,
@@ -165,8 +166,8 @@ public class GameMakerService
     private async Task<List<UserGamePreparation>> GetPlayerGamePrepFromLobby(Guid lobbyId)
     {
         // name is stored in UserLobby upon joining a lobby
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
-        var playerSelections = lobby.UserLobbies.Select(x => new UserGamePreparation
+        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        List<UserGamePreparation> playerSelections = lobby.UserLobbies.Select(x => new UserGamePreparation
         {
             UserId = x.User.Id,
         }).ToList();

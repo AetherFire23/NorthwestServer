@@ -1,7 +1,7 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.Models;
-using System.Net;
+﻿using System.Net;
+using WebAPI.Entities;
 using WebAPI.Exceptions;
+using WebAPI.Models;
 using WebAPI.Repositories;
 
 namespace WebAPI.Services;
@@ -25,9 +25,9 @@ public class LobbyService
 
     public async Task<Lobby> CreateAndJoinLobby(Guid userId)
     {
-        var newLobby = await _lobbyRepository.CreateAndAddLobby();
+        Lobby newLobby = await _lobbyRepository.CreateAndAddLobby();
         await CreateNewUserLobbyAndAddToDb(userId, newLobby.Id);
-        var lobs = _playerContext.Lobbies.ToList();
+        List<Lobby> lobs = _playerContext.Lobbies.ToList();
         return newLobby;
     }
 
@@ -41,7 +41,7 @@ public class LobbyService
 
     public async Task ExitLobby(Guid userId, Guid lobbyId)
     {
-        var lobby = (await _lobbyRepository.GetLobbyById(lobbyId));
+        Lobby? lobby = (await _lobbyRepository.GetLobbyById(lobbyId));
         if (lobby is null) throw new RequestException(HttpStatusCode.BadRequest);
         if ((await _lobbyRepository.FindUserLobby(userId, lobbyId)) is null) throw new RequestException(HttpStatusCode.BadRequest, "user not in lobby");
 
@@ -61,7 +61,7 @@ public class LobbyService
 
     public async Task CreateGameIfLobbyIsFull(Guid lobbyId) // important method cos it creates the game
     {
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
 
         // magic number 5 to determine that game is full
         if (lobby.UsersInLobby.Count == 5)
@@ -74,15 +74,15 @@ public class LobbyService
     private async Task CreateNewUserLobbyAndAddToDb(Guid userId, Guid lobbyId)
     {
         await _playerContext.SaveChangesAsync();
-        var trackedUser = await _userRepository.GetUserById(userId);
-        var trackedLobby = await _lobbyRepository.GetLobbyById(lobbyId);
-        var userLobby = new UserLobby()
+        User? trackedUser = await _userRepository.GetUserById(userId);
+        Lobby? trackedLobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        UserLobby userLobby = new UserLobby()
         {
             User = trackedUser,
             Lobby = trackedLobby,
         };
 
-     
+
 
         _playerContext.UserLobbies.Add(userLobby);
         await _playerContext.SaveChangesAsync();
@@ -90,7 +90,7 @@ public class LobbyService
 
     private async Task CleanupLobbyAndUsersAfterGameStart(Guid lobbyId)
     {
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
         await _lobbyRepository.DeleteManyUsersFromLobby(lobby.UsersInLobby, lobbyId);
         _lobbyRepository.RemoveLobby(lobby);
         await _playerContext.SaveChangesAsync();

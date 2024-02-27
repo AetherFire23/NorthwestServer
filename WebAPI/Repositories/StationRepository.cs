@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
-using Shared_Resources.Models;
+using WebAPI.DTOs;
+using WebAPI.Entities;
+using WebAPI.Models;
 namespace WebAPI.Repositories;
 
 public class StationRepository

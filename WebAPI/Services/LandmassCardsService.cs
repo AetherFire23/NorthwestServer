@@ -1,6 +1,6 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.Models;
+﻿using WebAPI.Entities;
 using WebAPI.Landmasses;
+using WebAPI.Models;
 using WebAPI.Repositories;
 
 namespace WebAPI.Services;
@@ -56,10 +56,10 @@ public class LandmassCardsService
     // Initialize rooms from landmass cards.
     public async Task InitializeLandmassCards(Guid gameId)
     {
-        var defaultLandmassRooms = RoomsTemplate.ReadSerializedDefaultRooms()
+        List<Room> defaultLandmassRooms = RoomsTemplate.ReadSerializedDefaultRooms()
             .Where(x => x.IsLandmass).ToList();
 
-        var defaultLandmassCards = defaultLandmassRooms.Select(x => new Card()
+        List<Card> defaultLandmassCards = defaultLandmassRooms.Select(x => new Card()
         {
             Id = Guid.NewGuid(),
             IsDiscarded = false,

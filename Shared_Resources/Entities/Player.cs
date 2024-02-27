@@ -2,7 +2,6 @@
 using Shared_Resources.Enums;
 using Shared_Resources.Interfaces;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 

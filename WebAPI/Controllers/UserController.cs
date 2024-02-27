@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared_Resources.Constants.Endpoints;
-using Shared_Resources.DTOs;
-using Shared_Resources.Enums;
-using Shared_Resources.Models;
-using Shared_Resources.Models.Requests;
 using WebAPI.Authentication;
+using WebAPI.DTOs;
+using WebAPI.Enums;
+using WebAPI.Models;
+using WebAPI.Models.Requests;
 using WebAPI.Services;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route(UserEndpoints.Users)]
+[Route("Users")]
 public class UserController : ControllerBase
 {
     private readonly UserService _userService;
@@ -23,20 +22,20 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    [Route(UserEndpoints.Login)]
+    [Route("login")]
     [ProducesResponseType(200, Type = typeof(LoginResult))]
     public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
         await Task.Delay(250);
-        var loginResult = await _authenticationService.TryLogin(request);
+        LoginResult loginResult = await _authenticationService.TryLogin(request);
         return Ok(loginResult);
     }
 
-    [HttpPost(UserEndpoints.Register)]
+    [HttpPost("register")]
     [ProducesResponseType(200, Type = typeof(UserDto))]
     public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
-        var userDto = await _authenticationService.TryRegister(request);
+        UserDto userDto = await _authenticationService.TryRegister(request);
         return Ok(userDto);
     }
 

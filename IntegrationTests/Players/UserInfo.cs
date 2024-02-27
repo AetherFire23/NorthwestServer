@@ -1,6 +1,4 @@
-﻿using IntegrationTests.Utils;
-
-namespace IntegrationTests.Players;
+﻿namespace IntegrationTests.Players;
 
 public class UserInfo
 {
@@ -18,16 +16,16 @@ public class UserInfo
     public async Task<GameState> UpdateGameState()
     {
         await UpdateMainMenuState();
-        var gameId = Store.MainMenuState.UserDto.ActiveGames.First().Id;
-        var playerId = Store.MainMenuState.UserDto.Players.First(x=> x.GameId == gameId).Id;
-        var state = await Client.GameStateAsync(playerId, Store.GameState.TimeStamp);
+        Guid gameId = Store.MainMenuState.UserDto.ActiveGames.First().Id;
+        Guid playerId = Store.MainMenuState.UserDto.Players.First(x => x.GameId == gameId).Id;
+        GameState state = await Client.GamestateAsync(playerId, Store.GameState.TimeStamp);
         this.Store.GameState = state;
         return state;
     }
 
     public async Task UpdateMainMenuState()
     {
-        var mainMenuState = await Client.GetMainMenuStateAsync(this.Id);
+        MainMenuState mainMenuState = await Client.GetMainMenuStateAsync(this.Id);
         Store.MainMenuState = mainMenuState;
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Shared_Resources.Entities;
-using Shared_Resources.Enums;
+using WebAPI.Entities;
+using WebAPI.Enums;
 
 namespace WebAPI.Game_Actions;
 

@@ -18,6 +18,7 @@ public class RepositoryLayerConfigurator
         _ = builder.Services.AddScoped<PlayerRepository>();
         _ = builder.Services.AddScoped<LandmassRepository>();
         _ = builder.Services.AddScoped<ShipRepository>();
+        builder.Services.AddScoped<GameTaskAvailabilityRepository>();
 
         //landmasses
         _ = builder.Services.AddScoped<LandmassCardsRepository>();

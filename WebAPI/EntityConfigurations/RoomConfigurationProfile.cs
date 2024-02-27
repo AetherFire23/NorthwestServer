@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Shared_Resources.Entities;
+using WebAPI.Entities;
 namespace WebAPI.EntityConfigurations;
 
 public class RoomConfigurationProfile : IEntityTypeConfiguration<Room>

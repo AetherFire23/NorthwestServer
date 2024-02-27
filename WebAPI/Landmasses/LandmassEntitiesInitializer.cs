@@ -1,5 +1,5 @@
-﻿using Shared_Resources.Entities;
-using Shared_Resources.Models;
+﻿using WebAPI.Entities;
+using WebAPI.Models;
 
 namespace WebAPI.Landmasses;
 

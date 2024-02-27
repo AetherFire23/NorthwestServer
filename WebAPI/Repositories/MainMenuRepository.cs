@@ -1,4 +1,6 @@
-﻿using Shared_Resources.Models;
+﻿using WebAPI.DTOs;
+using WebAPI.Entities;
+using WebAPI.Models;
 namespace WebAPI.Repositories;
 
 public class MainMenuRepository
@@ -14,8 +16,8 @@ public class MainMenuRepository
 
     public async Task<MainMenuState> GetMainMenuState(Guid userId)
     {
-        var userDto = await _userRepository.MapUserDtoById(userId);
-        var mainMenuState = new MainMenuState
+        UserDto userDto = await _userRepository.MapUserDtoById(userId);
+        MainMenuState mainMenuState = new MainMenuState
         {
             UserDto = userDto,
             TimeStamp = DateTime.UtcNow,
@@ -25,7 +27,7 @@ public class MainMenuRepository
     }
     public bool AreFriends(Guid user1, Guid user2) // more like service bu wahtever
     {
-        Shared_Resources.Entities.FriendPair? f = _playerContext.FriendPairs.FirstOrDefault(x => x.Friend1 == user1 && x.Friend2 == user2
+        FriendPair? f = _playerContext.FriendPairs.FirstOrDefault(x => x.Friend1 == user1 && x.Friend2 == user2
         || x.Friend2 == user1 && x.Friend1 == user2);
         return f is not null;
     }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
-using Shared_Resources.Models;
+using WebAPI.DTOs;
+using WebAPI.Entities;
+using WebAPI.Models;
 namespace WebAPI.Repositories;
 
 public class RoomRepository
@@ -49,7 +49,7 @@ public class RoomRepository
         return room;
     }
 
-    public async Task<RoomDTO> GetRoomDTOAsync(Guid roomId)
+    public async Task<RoomDto> GetRoomDTOAsync(Guid roomId)
     {
         Room requestedRoom = await GetRoomById(roomId);
 
@@ -58,7 +58,7 @@ public class RoomRepository
         List<Item> items = await GetRoomItems(roomId);
         List<Station> stations = await _playerContext.Stations.Where(x => x.RoomName == requestedRoom.Name).ToListAsync();
 
-        RoomDTO roomDTO = new RoomDTO()
+        RoomDto roomDTO = new RoomDto()
         {
             Id = requestedRoom.Id,
             Items = items,
@@ -98,7 +98,7 @@ public class RoomRepository
     /// </summary>
     public async Task CreateNewRoomsAndConnections(Guid gameId)
     {
-        var roomsAndConnections = DefaultRoomFactory.CreateAndInitializeNewRoomsAndConnections(gameId);
+        Tuple<List<Room>, List<AdjacentRoom>> roomsAndConnections = DefaultRoomFactory.CreateAndInitializeNewRoomsAndConnections(gameId);
 
         await _playerContext.Rooms.AddRangeAsync(roomsAndConnections.Item1);
         await _playerContext.AdjacentRooms.AddRangeAsync(roomsAndConnections.Item2);

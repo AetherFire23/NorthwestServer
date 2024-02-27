@@ -14,14 +14,14 @@ public class LobbyPhase
     public async Task LobbyCreation()
     {
         // local player creates lobby
-        var lobby = await _state.LocalUserInfo.Client.CreateLobbyAsync(_state.LocalUserInfo.Id);
+        Lobby lobby = await _state.LocalUserInfo.Client.CreatelobbyAsync(_state.LocalUserInfo.Id);
         _createdLobbyId = lobby.Id;
 
         // all other players join that lobby
-        foreach (var userInfo in _state.OtherPlayersInfos)
+        foreach (UserInfo userInfo in _state.OtherPlayersInfos)
         {
             await userInfo.UpdateMainMenuState();
-            var joinRequest = new JoinLobbyRequest
+            JoinLobbyRequest joinRequest = new JoinLobbyRequest
             {
                 LobbyId = userInfo.Store.MainMenuState.UserDto.AvailableLobbies.First().Id,
                 UserId = userInfo.Id,

@@ -1,4 +1,4 @@
-﻿using Shared_Resources.DTOs;
+﻿using WebAPI.DTOs;
 
 namespace WebAPI.Authentication;
 

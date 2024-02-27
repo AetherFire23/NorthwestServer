@@ -1,6 +1,5 @@
-﻿using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
-using Shared_Resources.Models.Requests;
+﻿using WebAPI.Entities;
+using WebAPI.Models.Requests;
 using WebAPI.Repositories;
 
 namespace WebAPI.Services;

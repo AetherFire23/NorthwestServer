@@ -34,7 +34,7 @@ public static class FunExt
     {
         if (self.Any())
         {
-            var selected = self.Select(selector);
+            IEnumerable<T2> selected = self.Select(selector);
             return selected;
         }
 

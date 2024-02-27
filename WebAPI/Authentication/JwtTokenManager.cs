@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Shared_Resources.DTOs;
-using Shared_Resources.Enums;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebAPI.DTOs;
+using WebAPI.Enums;
 
 namespace WebAPI.Authentication;
 
@@ -21,19 +21,19 @@ public class JwtTokenManager : IJwtTokenManager
 
     public async Task<string> GenerateToken(UserDto userDto)
     {
-        List<Claim> claims = new List<Claim>()
+        var claims = new List<Claim>()
         {
             new Claim(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
             new Claim(ClaimTypes.Name, userDto.Name)
         };
 
         // create claims for each role
-        List<Claim> roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
+        var roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
         claims.AddRange(roleClaims);
 
         // store security key
-        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
-        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         DateTime expires = DateTime.Now.AddDays(Convert.ToDouble(_config.ExpirationDays));
 

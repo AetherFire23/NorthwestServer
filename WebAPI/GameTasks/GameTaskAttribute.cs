@@ -1,13 +1,15 @@
-﻿using Shared_Resources.GameTasks;
-
-namespace WebAPI.GameTasks;
-
-[AttributeUsage(AttributeTargets.Class)]
-public class GameTaskAttribute : Attribute
+﻿namespace WebAPI.GameTasks
 {
-    public GameTaskCodes TaskCode;
-    public GameTaskAttribute(GameTaskCodes gt)
+    [AttributeUsage(AttributeTargets.Class)]
+    public class GameTaskAttribute : Attribute
     {
-        TaskCode = gt;
+        public GameTaskCodes TaskCode { get; set; }
+        public GameTaskCategory Category { get; set; }
+        public GameTaskAttribute(GameTaskCodes gt, GameTaskCategory category = GameTaskCategory.None)
+        {
+            TaskCode = gt;
+            Category = category;
+        }
     }
 }
+

@@ -4,20 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{2B3CFB07-1D6D-45CC-B83E-E5099FF423D4}"
-	ProjectSection(ProjectDependencies) = postProject
-		{D87FED71-5CD3-4936-8413-378B00CC6853} = {D87FED71-5CD3-4936-8413-378B00CC6853}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6DDC101C-1A7F-4734-A6AA-40AF0078B530}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared_Resources", "Shared_Resources\Shared_Resources.csproj", "{D87FED71-5CD3-4936-8413-378B00CC6853}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{5AFEB64A-5AC5-4641-83C5-1F7A93B6AB1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactSeed", "ReactSeed\ReactSeed.csproj", "{3CB113D3-FB55-4BDB-8251-0F843371A711}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactSeed", "ReactSeed\ReactSeed.csproj", "{3CB113D3-FB55-4BDB-8251-0F843371A711}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +24,6 @@ Global
 		{2B3CFB07-1D6D-45CC-B83E-E5099FF423D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B3CFB07-1D6D-45CC-B83E-E5099FF423D4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B3CFB07-1D6D-45CC-B83E-E5099FF423D4}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{D87FED71-5CD3-4936-8413-378B00CC6853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D87FED71-5CD3-4936-8413-378B00CC6853}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D87FED71-5CD3-4936-8413-378B00CC6853}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D87FED71-5CD3-4936-8413-378B00CC6853}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5AFEB64A-5AC5-4641-83C5-1F7A93B6AB1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5AFEB64A-5AC5-4641-83C5-1F7A93B6AB1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AFEB64A-5AC5-4641-83C5-1F7A93B6AB1E}.Release|Any CPU.ActiveCfg = Release|Any CPU

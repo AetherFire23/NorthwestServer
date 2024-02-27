@@ -1,6 +1,6 @@
-﻿using Shared_Resources.Enums;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Reflection;
+using WebAPI.Enums;
 
 namespace WebAPI.UniversalSkills;
 

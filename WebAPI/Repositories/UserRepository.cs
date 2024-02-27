@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
-using Shared_Resources.Enums;
-using Shared_Resources.Models.Requests;
+using WebAPI.DTOs;
+using WebAPI.Entities;
+using WebAPI.Enums;
 using WebAPI.Extensions;
+using WebAPI.Models.Requests;
 namespace WebAPI.Repositories;
 
 public class UserRepository
@@ -24,14 +23,14 @@ public class UserRepository
 
     public async Task<UserDto> MapUserDtoById(Guid userId)
     {
-        var user = await GetUserById(userId);
+        User? user = await GetUserById(userId);
         if (user is null) throw new ArgumentException(nameof(user));
-        var players = user.Players.ToList();
-        var availablesLobbies = _playerContext.Lobbies.Any() ? _playerContext.Lobbies.ToList() : new List<Lobby>();
-        var roleNames = user.UserRoles.Select(x => x.Role.RoleName).ToList();
-        var activeGames = await GetActiveGameDtosForUser(user.Id);
-        var lobbyDtos = await GetLobbyDtosForUser(userId);
-        var userDto = new UserDto
+        List<Player> players = user.Players.ToList();
+        List<Lobby> availablesLobbies = _playerContext.Lobbies.Any() ? _playerContext.Lobbies.ToList() : new List<Lobby>();
+        List<RoleName> roleNames = user.UserRoles.Select(x => x.Role.RoleName).ToList();
+        List<GameDto> activeGames = await GetActiveGameDtosForUser(user.Id);
+        List<LobbyDto> lobbyDtos = await GetLobbyDtosForUser(userId);
+        UserDto userDto = new UserDto
         {
             Id = user.Id,
             Name = user.Name,
@@ -67,7 +66,7 @@ public class UserRepository
             .ThenInclude(ur => ur.Role)
             .Include(u => u.Players)
             .ThenInclude(p => p.Game)
-            .Include(x=> x.Players)
+            .Include(x => x.Players)
             .Include(u => u.UserLobbies)
             .ThenInclude(ur => ur.Lobby)
             .FirstOrDefaultAsync(u => u.Id == id);
@@ -114,7 +113,7 @@ public class UserRepository
 
     public async Task<UserDto> CreateUser(RegisterRequest request)
     {
-        var user = new User
+        User user = new User
         {
             Id = Guid.NewGuid(),
             Email = request.Email,
@@ -122,9 +121,9 @@ public class UserRepository
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)
         };
 
-        var role = await _playerContext.Roles.SingleAsync(x => x.RoleName == RoleName.PereNoel);
+        Role role = await _playerContext.Roles.SingleAsync(x => x.RoleName == RoleName.PereNoel);
 
-        var userRole = new UserRole
+        UserRole userRole = new UserRole
         {
             Id = Guid.NewGuid(),
             Role = role,
@@ -135,36 +134,36 @@ public class UserRepository
         _ = _playerContext.UserRoles.Add(userRole);
         _ = await _playerContext.SaveChangesAsync();
 
-        var dto = await MapUserDtoById(user.Id);
+        UserDto dto = await MapUserDtoById(user.Id);
 
         return dto;
     }
 
     public async Task<List<GameDto>> GetActiveGameDtosForUser(Guid userId) // dont want that in entity since some games can be inactive
     {
-        var user = await GetUserById(userId);
-        var activeGames = user.Games
+        User? user = await GetUserById(userId);
+        List<Guid> activeGames = user.Games
             .Where(x => x.IsActive)
             .Select(x => x.Id)
             .ToList();
 
-        var gameDtos = new List<GameDto>();
+        List<GameDto> gameDtos = new List<GameDto>();
         foreach (Guid game in activeGames)
         {
             GameDto gameDto = await _gameRepository.MapGameDto(game);
             gameDtos.Add(gameDto);
         }
-        
+
         return gameDtos;
     }
 
     public async Task<List<LobbyDto>> GetLobbyDtosForUser(Guid userId)
     {
-        var user = await GetUserById(userId);
+        User? user = await GetUserById(userId);
         List<LobbyDto> lobbyDtos = new();
-        foreach (var lobby in user.Lobbies)
+        foreach (Lobby lobby in user.Lobbies)
         {
-            var lobbyDto = await _lobbyRepository.MapLobbyDto(lobby.Id);
+            LobbyDto lobbyDto = await _lobbyRepository.MapLobbyDto(lobby.Id);
             lobbyDtos.Add(lobbyDto);
         }
         return lobbyDtos;
@@ -178,8 +177,8 @@ public class UserRepository
 
     public async Task<List<UserDto>> GetUserDtosFromUser(List<User> users)
     {
-        var userIds = users.Select(x => x.Id).ToList();
-        var userDtos = await userIds.SelectAsync(MapUserDtoById);
+        List<Guid> userIds = users.Select(x => x.Id).ToList();
+        List<UserDto> userDtos = await userIds.SelectAsync(MapUserDtoById);
         return userDtos;
     }
 }

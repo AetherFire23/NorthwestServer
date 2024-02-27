@@ -9,11 +9,11 @@ public static class DefaultRoomFactory
 {
     public static Tuple<List<Room>, List<AdjacentRoom>> CreateAndInitializeNewRoomsAndConnections(Guid gameId)
     {
-        var defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms();
+        List<Room> defaultRooms = RoomsTemplate.ReadSerializedDefaultRooms();
         InitializeDefaultRoomIds(gameId, defaultRooms);
-        var connections = CreateAndInitializeConnections(gameId, defaultRooms);
+        List<AdjacentRoom> connections = CreateAndInitializeConnections(gameId, defaultRooms);
 
-        var roomsAndAdjacents = new Tuple<List<Room>, List<AdjacentRoom>>(defaultRooms, connections);
+        Tuple<List<Room>, List<AdjacentRoom>> roomsAndAdjacents = new Tuple<List<Room>, List<AdjacentRoom>>(defaultRooms, connections);
         return roomsAndAdjacents;
     }
 

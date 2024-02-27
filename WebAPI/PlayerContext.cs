@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Shared_Resources.Entities;
-using Shared_Resources.Enums;
 using System.Reflection;
+using WebAPI.Entities;
+using WebAPI.Enums;
 using WebAPI.Extensions;
 using WebAPI.Game_Actions;
 

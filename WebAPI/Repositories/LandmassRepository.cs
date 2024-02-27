@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
+using WebAPI.DTOs;
+using WebAPI.Entities;
 using WebAPI.Landmasses;
 
 namespace WebAPI.Repositories;

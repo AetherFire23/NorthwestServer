@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
-using Shared_Resources.Enums;
 using WebAPI;
+using WebAPI.DTOs;
+using WebAPI.Entities;
+using WebAPI.Enums;
 public class PlayerRepository
 {
     private readonly PlayerContext _playerContext;

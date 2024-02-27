@@ -1,5 +1,4 @@
-﻿using Shared_Resources.GameTasks;
-using System.Net;
+﻿using System.Net;
 using WebAPI.Exceptions;
 using WebAPI.GameTasks;
 using WebAPI.Repositories;
@@ -10,32 +9,43 @@ public class GameTaskService
 {
     private readonly GameStateRepository _gameStateRepository;
     private readonly IServiceProvider _serviceProvider;
-
-    public GameTaskService(GameStateRepository gameStateRepository, IServiceProvider serviceProvider)
+    public GameTaskService(
+        GameStateRepository gameStateRepository,
+        IServiceProvider serviceProvider)
     {
         _gameStateRepository = gameStateRepository;
         _serviceProvider = serviceProvider;
     }
 
-    public async Task ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, TaskParameters parameters)
+    public async Task<GameTaskValidationResult> ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, TaskParameters parameters)
     {
-        Shared_Resources.Models.GameState? gameState = await _gameStateRepository.GetPlayerGameStateAsync(playerId, null);
-        if (gameState is null) throw new RequestException(HttpStatusCode.BadRequest);
+        //var context = await _gameTaskAvailabilityRepository.GetGameTaskContext(playerId, parameters);
+        var context = await this.GetGameTaskContext(playerId, parameters);
 
+        var gameTaskType = GameTaskTypeSelector.GetGameTaskType(taskCode);
 
-        GameTaskContext context = new GameTaskContext
+        var gameTask = _serviceProvider.GetService(gameTaskType) as GameTaskBase;
+
+        var result = await gameTask.Validate(context);
+
+        if (result.IsValid)
+        {
+            await gameTask.Execute(context);
+        }
+
+        return result;
+    }
+
+    public async Task<GameTaskExecutionContext> GetGameTaskContext(Guid playerId, TaskParameters parameters)
+    {
+        var gameState = await _gameStateRepository.GetPlayerGameStateAsync(playerId, null) ?? throw new RequestException(HttpStatusCode.BadRequest);
+
+        var context = new GameTaskExecutionContext
         {
             // ill check in integration test if this breaks
             GameState = gameState, // not tested
             Parameters = parameters,
         };
-
-        Type gameTaskType = GameTaskTypeSelector.GetGameTaskType(taskCode);
-        GameTaskBase? gameTask = _serviceProvider.GetService(gameTaskType) as GameTaskBase;
-
-        GameTaskValidationResult result = gameTask.Validate(context);
-        if (!result.IsValid)
-
-            await gameTask.Execute(context);
+        return context;
     }
 }

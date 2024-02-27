@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared_Resources.DTOs;
-using Shared_Resources.Entities;
+using WebAPI.DTOs;
+using WebAPI.Entities;
 namespace WebAPI.Repositories;
 
 public class GameRepository

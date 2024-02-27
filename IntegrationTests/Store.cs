@@ -1,6 +1,4 @@
-﻿using Shared_Resources.Models;
-
-namespace IntegrationTests;
+﻿namespace IntegrationTests;
 
 public class Store
 {

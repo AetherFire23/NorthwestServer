@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Exceptions;
+using WebAPI.GameTasks.Implementations;
+using WebAPI.GameTasks.Reflect;
 namespace WebAPI.ApiConfiguration;
 
 public static class AppConfiguration
@@ -10,10 +12,13 @@ public static class AppConfiguration
         _ = app.UseAuthentication();
         _ = app.UseAuthorization();
         ConfigureExceptions(app);
+
     }
 
     public static async Task SeedAndMigrate(WebApplication app)
     {
+        app.InitializeTaskDelegateCache();
+
         //Migration
         using (IServiceScope scope = app.Services.CreateScope())
         {
@@ -33,6 +38,18 @@ public static class AppConfiguration
                 ILogger<Program> logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occurred");
             }
+
+
+
+
+
+
+            // for testing delegate cache
+            var cache = scope.ServiceProvider.GetRequiredService<DelegateCache>();
+
+            var testTask = scope.ServiceProvider.GetRequiredService<TestTask>();
+
+            
         }
     }
 
