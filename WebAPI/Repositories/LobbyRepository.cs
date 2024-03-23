@@ -7,7 +7,7 @@ namespace WebAPI.Repositories;
 public class LobbyRepository
 {
     private readonly PlayerContext _playerContext;
-    public LobbyRepository(PlayerContext playerContext) 
+    public LobbyRepository(PlayerContext playerContext)
     {
         _playerContext = playerContext;
     }

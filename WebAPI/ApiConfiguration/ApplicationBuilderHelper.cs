@@ -8,7 +8,6 @@ using Newtonsoft.Json.Converters;
 using Quartz;
 using Quartz.AspNetCore;
 using System.Text;
-using System.Reflection;
 using WebAPI.Authentication;
 using WebAPI.Conventions;
 using WebAPI.GameTasks;
@@ -50,16 +49,18 @@ public static class ApplicationBuilderHelper
 
     }
 
+
+    // starting not to like this not being inside gameTaskTypeSelector
     private static void RegisterGameTaskTypes(WebApplicationBuilder builder) // should extract this to GameTaskStrategyMapper
     {
-        IEnumerable<Type> apiTypes = typeof(Program).Assembly.GetTypes()
-            .Where(type => type.IsClass && !type.IsAbstract
-            && typeof(IGameTask).IsAssignableFrom(type)
-            && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
-
-        foreach (Type? type in apiTypes)
+        //IEnumerable<Type> apiTypes = typeof(Program).Assembly.GetTypes()
+        //    .Where(type => type.IsClass && !type.IsAbstract
+        //    && typeof(IGameTask).IsAssignableFrom(type)
+        //    && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
+        List<Type> gameTaskTypes = GameTaskTypeSelector.GetTaskTypes();
+        foreach (Type? type in gameTaskTypes)
         {
-            _ = builder.Services.AddSingleton(type);
+            _ = builder.Services.AddScoped(type);
         }
     }
 
@@ -73,7 +74,7 @@ public static class ApplicationBuilderHelper
             .AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.All;
+                //options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.All;
 
 
 

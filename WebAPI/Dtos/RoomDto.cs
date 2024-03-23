@@ -1,15 +1,17 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using WebAPI.Entities;
 
 namespace WebAPI.DTOs;
 
-public class RoomDto
+public class RoomDto : EntityBase
 {
     public (string ParamType, string Id) TaskParam => (GetType().Name, Id.ToString());
 
-    public Guid Id { get; set; }
     public Guid GameId { get; set; }
     public string Name { get; set; } = string.Empty;
+
+    [Required]
     public List<Item> Items { get; set; } = new List<Item>();
     public List<Player> Players { get; set; } = new List<Player>();
     public RoomType RoomType { get; set; }

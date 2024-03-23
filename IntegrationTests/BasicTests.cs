@@ -23,8 +23,7 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
         var registerPhase = _serviceProvider.GetRequiredService<RegistrationPhase>();
         var lobbyPhase = _serviceProvider.GetRequiredService<LobbyPhase>();
 
-
-        Func<SwagClient> createClient = () => _factory.CreateClient().ToNSwagClient();
+        var createClient = () => _factory.CreateClient().ToNSwagClient();
 
         await registerPhase.RegisterPlayers(createClient);
         await lobbyPhase.LobbyCreation();
@@ -33,13 +32,10 @@ public class BasicTests : IClassFixture<WebApplicationFactory<Program>>
         var state = _serviceProvider.GetRequiredService<TestState>();
         var g = await state.LocalUserInfo.UpdateGameState();
 
-
         var testService = _serviceProvider.GetRequiredService<TestGameTasks>();
         await testService.DoTestTask();
 
         var g2 = await state.LocalUserInfo.UpdateGameState();
-
-        
     }
 
     [Fact]

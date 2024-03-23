@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Exceptions;
-using WebAPI.GameTasks.Implementations;
 using WebAPI.GameTasks.Reflect;
 namespace WebAPI.ApiConfiguration;
 
@@ -45,11 +44,11 @@ public static class AppConfiguration
 
 
             // for testing delegate cache
-            var cache = scope.ServiceProvider.GetRequiredService<DelegateCache>();
+            //   var cache = scope.ServiceProvider.GetRequiredService<DelegateCache>();
 
-            var testTask = scope.ServiceProvider.GetRequiredService<TestTask>();
+            // var testTask = scope.ServiceProvider.GetRequiredService<TestTask>();
 
-            
+
         }
     }
 

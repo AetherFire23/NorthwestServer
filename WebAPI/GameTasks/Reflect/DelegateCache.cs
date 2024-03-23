@@ -13,47 +13,47 @@ public class DelegateCache
 
     public List<Func<GameTaskExecutionContext, TaskRequirement>> GetGameTaskRequirementDelegates(Type type)
     {
-        var taskRequirementDelegates = GameTasksRequirementMap[type];
+        List<Func<GameTaskExecutionContext, TaskRequirement>> taskRequirementDelegates = GameTasksRequirementMap[type];
         return taskRequirementDelegates;
     }
 
     public Dictionary<Type, List<Func<GameTaskExecutionContext, TaskRequirement>>> BindDelegatesToGameTaskInstances()
     {
-        var gameTaskRequirementsMap = new Dictionary<Type, List<Func<GameTaskExecutionContext, TaskRequirement>>>();
+        Dictionary<Type, List<Func<GameTaskExecutionContext, TaskRequirement>>> gameTaskRequirementsMap = new Dictionary<Type, List<Func<GameTaskExecutionContext, TaskRequirement>>>();
 
-        var gameTaskClasses = Assembly.GetExecutingAssembly()
+        IEnumerable<Type> gameTaskClasses = Assembly.GetExecutingAssembly()
             .GetTypes()
             .Where(t => !t.IsAbstract && t.IsClass &&
              typeof(IGameTask).IsAssignableFrom(t));
 
         // Init the lists so that they're not empty 
-        foreach (var gametask in gameTaskClasses)
+        foreach (Type? gametask in gameTaskClasses)
         {
             gameTaskRequirementsMap.Add(gametask, []);
         }
 
-        foreach (var gameTask in gameTaskClasses)
+        foreach (Type? gameTask in gameTaskClasses)
         {
             // find the methods with the TaskRequirement Attribute
-            var taskRequirementMethods = gameTask
+            List<MethodInfo> taskRequirementMethods = gameTask
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Static | BindingFlags.NonPublic)
                 .Where(x => x.GetCustomAttribute<TaskRequirementAttribute>() is not null)
                 .ToList();
 
-            // create the delegates and check if wrong return type
-            var delegates = taskRequirementMethods.Select(m =>
+            // create the delegates and check if it is the wrong return type
+            IEnumerable<Func<GameTaskExecutionContext, TaskRequirement>> delegates = taskRequirementMethods.Select(m =>
             {
                 if (m.ReturnType != typeof(TaskRequirement))
                 {
                     throw new ArgumentException("Methods with the TaskRequiment Attribute should be of return type TaskRequirement");
                 }
 
-                var testt2 = m.GetType();
+                Type testt2 = m.GetType();
 
                 // so I need to specify the target of the instance or class
                 // null for static if I remember well
-                var instanceToBind = _serviceProvider.GetRequiredService(gameTask) as GameTaskBase;
-                var taskDelegate = m.CreateDelegate<Func<GameTaskExecutionContext, TaskRequirement>>(instanceToBind);
+                GameTaskBase? instanceToBind = _serviceProvider.GetRequiredService(gameTask) as GameTaskBase;
+                Func<GameTaskExecutionContext, TaskRequirement> taskDelegate = m.CreateDelegate<Func<GameTaskExecutionContext, TaskRequirement>>(instanceToBind);
                 return taskDelegate;
             });
 
@@ -63,10 +63,10 @@ public class DelegateCache
 
         // save the dels inside the gametasks bases
 
-        foreach (var item in gameTaskRequirementsMap)
+        foreach (KeyValuePair<Type, List<Func<GameTaskExecutionContext, TaskRequirement>>> item in gameTaskRequirementsMap)
         {
             // keys are the gametasks
-            var gametask = _serviceProvider.GetRequiredService(item.Key) as GameTaskBase;
+            GameTaskBase? gametask = _serviceProvider.GetRequiredService(item.Key) as GameTaskBase;
             gametask.dels = gameTaskRequirementsMap[item.Key];
         }
 
@@ -84,18 +84,18 @@ public static class DelegateCacheExtensions
     // So I need to first create the delegate cache + the gametask Types and after I will be able to map the delegates
     public static void AddTaskDelegateCache(this IServiceCollection serviceProvider)
     {
-        serviceProvider.AddSingleton<DelegateCache>();
+        // serviceProvider.AddSingleton<DelegateCache>();
     }
 
     public static void InitializeTaskDelegateCache(this WebApplication webapp)
     {
-        using (var scope = webapp.Services.CreateScope())
-        {
-            var delCache = scope.ServiceProvider.GetRequiredService<DelegateCache>();
-            delCache.GameTasksRequirementMap = delCache.BindDelegatesToGameTaskInstances();
+        //using (var scope = webapp.Services.CreateScope())
+        //{
+        //    var delCache = scope.ServiceProvider.GetRequiredService<DelegateCache>();
+        //    delCache.GameTasksRequirementMap = delCache.BindDelegatesToGameTaskInstances();
 
 
-            
-        }
+
+        //}
     }
 }

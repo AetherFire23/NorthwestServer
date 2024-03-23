@@ -25,6 +25,12 @@ public class StationRepository
         StationDTO stationDTO = CreateDTO<T>(station);
         return stationDTO;
     }
+    public async Task<StationDTO2<T>> RetrieveStationAsync2<T>(Guid gameId, string stationName) where T : new()
+    {
+        Station station = await _playerContext.Stations.FirstAsync(x => x.GameId == gameId && x.Name == stationName);
+        StationDTO2<T> stationDTO = CreateDTO2<T>(station);
+        return stationDTO;
+    }
 
     public async Task SaveStation(StationDTO station)
     {
@@ -43,6 +49,17 @@ public class StationRepository
     private StationDTO CreateDTO<T>(Station station) where T : new() // From Db
     {
         return new StationDTO()
+        {
+            Id = station.Id,
+            GameId = station.GameId,
+            Name = station.Name,
+            ExtraProperties = JsonConvert.DeserializeObject<T>(station.SerializedProperties) ?? new T(),
+        };
+    }
+
+    private StationDTO2<T> CreateDTO2<T>(Station station) where T : new() // From Db
+    {
+        return new StationDTO2<T>()
         {
             Id = station.Id,
             GameId = station.GameId,

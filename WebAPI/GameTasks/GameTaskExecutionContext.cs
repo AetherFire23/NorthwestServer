@@ -6,7 +6,7 @@ namespace WebAPI.GameTasks;
 public class GameTaskExecutionContext
 {
     public GameState GameState { get; set; }
-    public TaskParameters Parameters { get; set; } = new TaskParameters();
-    public PlayerDto Player => GameState.PlayerDTO;
+    public List<List<GameTaskTargetInfo>> Parameters { get; set; } = new();
+    public PlayerDto Player => GameState.PlayerDto;
     public Guid GameId => GameState.GameId;
 }

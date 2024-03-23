@@ -5,6 +5,7 @@ namespace WebAPI.Entities;
 public abstract class EntityBase : IEquatable<EntityBase>, IEntity
 {
     [Key]
+    [Required]
     public Guid Id { get; set; } = Guid.NewGuid();
 
     public bool Equals(EntityBase? other)

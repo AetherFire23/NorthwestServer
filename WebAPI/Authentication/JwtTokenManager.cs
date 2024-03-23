@@ -21,19 +21,19 @@ public class JwtTokenManager : IJwtTokenManager
 
     public async Task<string> GenerateToken(UserDto userDto)
     {
-        var claims = new List<Claim>()
+        List<Claim> claims = new List<Claim>()
         {
             new Claim(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
             new Claim(ClaimTypes.Name, userDto.Name)
         };
 
         // create claims for each role
-        var roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
+        List<Claim> roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
         claims.AddRange(roleClaims);
 
         // store security key
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
+        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         DateTime expires = DateTime.Now.AddDays(Convert.ToDouble(_config.ExpirationDays));
 

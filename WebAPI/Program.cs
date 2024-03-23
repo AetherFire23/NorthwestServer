@@ -1,6 +1,4 @@
 using WebAPI.ApiConfiguration;
-using WebAPI.GameTasks.Implementations;
-using WebAPI.GameTasks.Reflect;
 using WebAPI.Models;
 namespace WebAPI;
 
@@ -14,10 +12,6 @@ public class Program
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         ApplicationBuilderHelper.ConfigureWebApplication(builder);
 
-
-        // app 
-
-
         WebApplication app = builder.Build();
         _ = app.UseHttpLogging();
         await AppConfiguration.SeedAndMigrate(app);
@@ -27,7 +21,7 @@ public class Program
             _ = app.UseSwagger();
             _ = app.UseSwaggerUI();
         }
-
+   
         _ = app.UseHttpsRedirection();
 
         _ = app.UseAuthentication();

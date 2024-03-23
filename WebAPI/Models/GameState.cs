@@ -1,18 +1,22 @@
-﻿using WebAPI.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+using WebAPI.DTOs;
 using WebAPI.Entities;
 using WebAPI.GameTasks;
 namespace WebAPI.Models;
 
 public class GameState
 {
-    public PlayerDto PlayerDTO { get; set; } = new PlayerDto();
+    [Required]
+    public PlayerDto PlayerDto { get; set; } = new PlayerDto();
     // public RoomDTO Room { get; set; } = new RoomDTO(); // ark va etre called a eter delted
     //public RoomDTO LocalPlayerRoom => Rooms.FirstOrDefault(x => x.Id == PlayerDTO.CurrentGameRoomId);
+
+    [Required]
     public RoomDto LocalPlayerRoom
     {
         get
         {
-            RoomDto? room = Rooms.FirstOrDefault(x => x.Id == PlayerDTO.CurrentGameRoomId);
+            RoomDto? room = Rooms.FirstOrDefault(x => x.Id == PlayerDto.CurrentGameRoomId);
             if (room is null)
             {
                 Console.Out.WriteLine("LocalPlayerRoom was null, make sure this is intended");
@@ -21,16 +25,28 @@ public class GameState
             return room;
         }
     }
-    public List<Message> NewMessages { get; set; } = new List<Message>();
-    public List<Player> Players { get; set; } = new List<Player>();
-    public List<PrivateChatRoomParticipant> PrivateChatRoomParticipants { get; set; } = new List<PrivateChatRoomParticipant>();
-    public List<Log> Logs { get; set; } = new List<Log>();
-    public List<RoomDto> Rooms { get; set; } = new List<RoomDto>();
+
+    [Required]
+    public List<Message> NewMessages { get; set; } = [];
+
+    [Required]
+    public List<Player> Players { get; set; } = [];
+
+    [Required]
+    public List<PrivateChatRoomParticipant> PrivateChatRoomParticipants { get; set; } = [];
+
+    [Required]
+    public List<Log> Logs { get; set; } = [];
+
+    [Required]
+    public List<RoomDto> Rooms { get; set; } = [];
     public DateTime? TimeStamp { get; set; }
     public string SerializedLayout { get; set; } = string.Empty;
-    public List<PrivateChatRoom> PrivateChatRooms { get; set; } = new List<PrivateChatRoom>();
-    public List<Station> Stations { get; set; } = new List<Station>();
-    public List<GameTaskAvailabilityResult> AvailableGameTasks { get; set; } = [];
-    public Guid GameId => PlayerDTO.GameId;
-    public Guid PlayerUID => PlayerDTO.Id;
+    public List<PrivateChatRoom> PrivateChatRooms { get; set; } = [];
+    public List<Station> Stations { get; set; } = [];
+
+    [Required]
+    public List<GameTaskAvailabilityResult> VisibleGameTasks { get; set; } = [];
+    public Guid GameId => PlayerDto.GameId;
+    public Guid PlayerUID => PlayerDto.Id;
 }

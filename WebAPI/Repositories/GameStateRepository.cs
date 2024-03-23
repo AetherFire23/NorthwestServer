@@ -25,17 +25,17 @@ public class GameStateRepository
 
         var playerDTO = await _playerRepository.MapPlayerDTOAsync(playerId);
         var newMessages = await GetNewMessagesAsync(lastTimeStamp, playerDTO.GameId);
-        var players = await _playerRepository.GetPlayersInGameAsync(playerDTO.GameId);
-        var chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
-        var roomList = await GetAllRoomDTOSInGameAsync(playerDTO.GameId);
+        List<Player> players = await _playerRepository.GetPlayersInGameAsync(playerDTO.GameId);
+        List<PrivateChatRoomParticipant> chatRoomParticipants = await GetChatRoomsWithMainPlayerInItAsync(playerDTO.Id);
+        List<RoomDto> roomList = await GetAllRoomDTOSInGameAsync(playerDTO.GameId);
 
-        var logs = await _playerRepository.GetAccessibleLogsForPlayer(playerId, player.GameId);
-        var privs = await GetPrivateChatRoomsAsync(player.Id);
-        var stations = await _playerContext.Stations.Where(x => x.GameId == player.GameId).ToListAsync();
+        List<Log> logs = await _playerRepository.GetAccessibleLogsForPlayer(playerId, player.GameId);
+        List<PrivateChatRoom> privs = await GetPrivateChatRoomsAsync(player.Id);
+        List<Station> stations = await _playerContext.Stations.Where(x => x.GameId == player.GameId).ToListAsync();
 
-        var gameState = new GameState()
+        GameState gameState = new GameState()
         {
-            PlayerDTO = playerDTO,
+            PlayerDto = playerDTO,
             NewMessages = newMessages,
             Players = players,
             TimeStamp = DateTime.UtcNow,
@@ -49,8 +49,8 @@ public class GameStateRepository
 
 
         // Since it uses GameState as a dependency. Cannot initialize the gameTasks before. 
-        var gameTaskValidationResults = await _gameTaskAvailabilityRepository.GetAvailableGameTasks(gameState);
-        gameState.AvailableGameTasks = gameTaskValidationResults;
+        List<GameTasks.GameTaskAvailabilityResult> gameTaskValidationResults = await _gameTaskAvailabilityRepository.GetAvailableGameTasks(gameState);
+        gameState.VisibleGameTasks = gameTaskValidationResults;
 
         return gameState;
     }

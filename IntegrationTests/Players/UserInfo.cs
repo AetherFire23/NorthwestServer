@@ -18,7 +18,7 @@ public class UserInfo
         await UpdateMainMenuState();
         Guid gameId = Store.MainMenuState.UserDto.ActiveGames.First().Id;
         Guid playerId = Store.MainMenuState.UserDto.Players.First(x => x.GameId == gameId).Id;
-        GameState state = await Client.GamestateAsync(playerId, Store.GameState.TimeStamp);
+        GameState state = await Client.GetGameStateAsync(playerId, Store.GameState.TimeStamp);
         this.Store.GameState = state;
         return state;
     }

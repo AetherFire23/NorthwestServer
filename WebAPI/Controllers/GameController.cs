@@ -23,18 +23,18 @@ public class GameController : ControllerBase
     }
 
     [HttpGet]
-    [Route("gamestate")]
+    [Route("GetGameState")]
     public async Task<ActionResult<GameState>> GetGameState(Guid playerId, DateTime? lastTimeStamp)
     {
-        GameState gameStateResult = await _gameStateRepository.GetPlayerGameStateAsync(playerId, lastTimeStamp);
+        var gameStateResult = await _gameStateRepository.GetPlayerGameStateAsync(playerId, lastTimeStamp);
         return Ok(gameStateResult);
     }
 
     [HttpPut]
     [Route("executeTask")]
-    public async Task<ActionResult> GameTask([FromQuery] Guid playerId, [FromQuery] GameTaskCodes taskCode, [FromBody] Dictionary<string, string> parameters)
+    public async Task<ActionResult> GameTask([FromBody] List<List<GameTaskTargetInfo>> gameTaskTargets, [FromQuery] Guid playerId, [FromQuery] GameTaskCodes taskCode)
     {
-        await _gameTaskService.ExecuteGameTask(playerId, taskCode, new TaskParameters(parameters));
+        await _gameTaskService.ExecuteGameTask(playerId, taskCode, gameTaskTargets);
         return Ok();
     }
 
@@ -48,9 +48,9 @@ public class GameController : ControllerBase
 
     [HttpPut]
     [Route("transferitem")]
-    public async Task<ActionResult> TransferItem(Guid targetId, Guid ownerId, Guid itemId, Guid gameId) // pourrait devenir une method dans le service
+    public async Task<ActionResult> TransferItem([FromQuery] Guid targetId, [FromQuery] Guid itemOwnerId, [FromQuery] Guid itemId, [FromQuery] Guid gameId) // pourrait devenir une method dans le service
     {
-        await _playerService.TransferItem(targetId, ownerId, itemId, gameId);
+        await _playerService.TransferItem(targetId, itemOwnerId, itemId, gameId);
         return Ok();
     }
 

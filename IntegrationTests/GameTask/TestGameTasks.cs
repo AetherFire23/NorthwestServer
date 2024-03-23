@@ -13,12 +13,18 @@ namespace IntegrationTests.GameTask
 
         public async Task DoTestTask()
         {
-            var taskParamters = new Dictionary<string, string>()
+            var parameters = new List<List<GameTaskTargetInfo>>()
             {
-                {"test,", "test2" }
-            }; 
+                { new List<GameTaskTargetInfo>() {
+                    new GameTaskTargetInfo()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "yeah",
+                    }
+                }
+            }};
 
-            await _state.LocalUserInfo.Client.ExecuteTaskAsync(_state.LocalUserInfo.PlayerUID, GameTaskCodes.TestTask, taskParamters);
+            await _state.LocalUserInfo.Client.ExecuteTaskAsync(_state.LocalUserInfo.PlayerUID, GameTaskCodes.TestTaskNoTargets, parameters);
         }
     }
 }

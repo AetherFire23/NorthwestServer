@@ -1,4 +1,5 @@
-﻿using WebAPI.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using WebAPI.Entities;
 using WebAPI.Enums;
 
 namespace WebAPI.DTOs;
@@ -10,6 +11,8 @@ public class PlayerDto
     public Guid UserId { get; set; }
     public Guid CurrentGameRoomId { get; set; }
     public RoleType Profession { get; set; }
+
+    [Required]
     public List<Item> Items { get; set; } = new List<Item>();
     public List<SkillEnum> Skills { get; set; } = new List<Enums.SkillEnum>();
     public string Name { get; set; } = string.Empty;

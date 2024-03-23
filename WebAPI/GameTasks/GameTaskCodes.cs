@@ -35,5 +35,10 @@ public enum GameTaskCodes
     Unlock,
 
     CraftTask,
-    TestTask,
+
+
+    InvalidTestTask,
+    TestTaskInvisible,
+    TestTaskNoTargets,
+    TestTaskWithTargets,
 }

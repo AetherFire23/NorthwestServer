@@ -23,11 +23,11 @@ public class MainMenuController : ControllerBase
     [ProducesResponseType(200, Type = typeof(MainMenuState))]
     public async Task<ActionResult<MainMenuState>> GetMainMenuState(Guid userId)
     {
-        var mainMenuState = await _mainMenuRepository.GetMainMenuState(userId);
+        MainMenuState mainMenuState = await _mainMenuRepository.GetMainMenuState(userId);
 
         try
         {
-            var setts = new JsonSerializerSettings()
+            JsonSerializerSettings setts = new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.All,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -37,7 +37,7 @@ public class MainMenuController : ControllerBase
             string serializedJson = JsonConvert.SerializeObject(mainMenuState, Formatting.None, setts);
 
             // Deserialize the object
-            var deserializedObject = JsonConvert.DeserializeObject<MainMenuState>(serializedJson, setts);
+            MainMenuState? deserializedObject = JsonConvert.DeserializeObject<MainMenuState>(serializedJson, setts);
         }
         catch (Exception ex)
         {
