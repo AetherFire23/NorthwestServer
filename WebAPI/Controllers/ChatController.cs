@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAPI.Services;
-namespace WebAPI.Controllers;
+using Northwest.Domain.Services;
+
+namespace Northwest.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]

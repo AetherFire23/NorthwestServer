@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Northwest.Domain.Dtos;
+using Northwest.Domain.Models;
+using Northwest.Domain.Repositories;
 using System.ComponentModel.DataAnnotations;
-using Northwest.Models;
-using Northwest.Repositories;
-namespace Northwest.GameTasks.Implementations;
+
+namespace Northwest.Domain.GameTasks.Implementations;
 
 [GameTask(GameTaskCodes.TestTaskWithTargets)]
 public class TaskTaskMultipleTargets : GameTaskBase
@@ -46,11 +48,11 @@ public class TaskTaskMultipleTargets : GameTaskBase
 
         var targets = new List<GameTaskTargetInfo>()
         {
-            { new GameTaskTargetInfo() 
-                { 
+            { new GameTaskTargetInfo()
+                {
                     AppearanceName = "myTarget",
                     Name = "target 1 "
-                } 
+                }
             },
             { new GameTaskTargetInfo()
                 {
@@ -93,8 +95,8 @@ public class TaskTaskMultipleTargets : GameTaskBase
             TaskTargets = targets2,
         };
 
-        return new List<GameTaskPromptInfo>() 
-        { 
+        return new List<GameTaskPromptInfo>()
+        {
             firstTargetSelectionScreen,
             secondTargetSelectionScreen,
         };
@@ -118,7 +120,7 @@ public class TaskTaskMultipleTargets : GameTaskBase
 
 
 
-        DTOs.StationDTO s = await _stationRepository.RetrieveStationAsync<Station1Property>(context.GameState.GameId, "Wheel");
+        StationDTO s = await _stationRepository.RetrieveStationAsync<Station1Property>(context.GameState.GameId, "Wheel");
     }
 
     public override async Task<GameTaskValidationResult> ValidateExecution(GameTaskExecutionContext context)

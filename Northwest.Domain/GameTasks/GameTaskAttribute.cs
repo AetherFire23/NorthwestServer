@@ -1,4 +1,4 @@
-﻿namespace Northwest.GameTasks
+﻿namespace Northwest.Domain.GameTasks
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class GameTaskAttribute : Attribute

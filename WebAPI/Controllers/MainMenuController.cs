@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using WebAPI.Entities;
-using WebAPI.Models;
-using WebAPI.Repositories;
-using WebAPI.Services;
-namespace WebAPI.Controllers;
+using Northwest.Domain.Models;
+using Northwest.Domain.Repositories;
+using Northwest.Domain.Services;
+using Northwest.Persistence.Entities;
+
+namespace Northwest.WebApi.Controllers;
 
 [ApiController]
 [Route("mainmenu")]
@@ -52,7 +53,7 @@ public class MainMenuController : ControllerBase
     [Route("createlobby")]
     public async Task<ActionResult<Lobby>> CreateLobby([FromQuery] Guid userId)
     {
-        Lobby lobby = await _lobbyService.CreateAndJoinLobby(userId);
+        var lobby = await _lobbyService.CreateAndJoinLobby(userId);
         return Ok(lobby);
     }
 

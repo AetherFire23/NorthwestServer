@@ -4,7 +4,7 @@ using IntegrationTests.Players;
 using IntegrationTests.Services;
 using IntegrationTests.Utils;
 using Microsoft.AspNetCore.Mvc.Testing;
-using WebAPI;
+using Northwest.WebApi;
 namespace IntegrationTests;
 
 public class BasicTests : IClassFixture<WebApplicationFactory<Program>>

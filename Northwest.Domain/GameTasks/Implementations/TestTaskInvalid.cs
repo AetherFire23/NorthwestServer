@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Northwest.Domain.Models;
+using Northwest.Domain.Repositories;
 using System.ComponentModel.DataAnnotations;
-using Northwest.Models;
-using Northwest.Repositories;
-namespace Northwest.GameTasks.Implementations;
+
+namespace Northwest.Domain.GameTasks.Implementations;
 
 [GameTask(GameTaskCodes.InvalidTestTask)]
 public class TestTaskInvalid : GameTaskBase

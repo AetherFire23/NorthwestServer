@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI.Authentication;
-using WebAPI.DTOs;
-using WebAPI.Enums;
-using WebAPI.Models;
-using WebAPI.Models.Requests;
-using WebAPI.Services;
-namespace WebAPI.Controllers;
+using Northwest.Domain.Authentication;
+using Northwest.Domain.Dtos;
+using Northwest.Domain.Models;
+using Northwest.Domain.Models.Requests;
+using Northwest.Domain.Services;
+using Northwest.Persistence.Enums;
+namespace Northwest.WebApi.Controllers;
 
 [ApiController]
 [Route("Users")]

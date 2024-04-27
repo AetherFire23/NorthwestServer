@@ -11,17 +11,17 @@ public class RegistrationPhase
     }
     public async Task RegisterPlayers(Func<SwagClient> createClient)
     {
-        UserInfo localPlayer = await RegisterNewPlayer(createClient, true);
+        var localPlayer = await RegisterNewPlayer(createClient, true);
         Console.WriteLine($"username: {localPlayer.RegisterRequest.UserName}");
         Console.WriteLine($"password: {localPlayer.RegisterRequest.Password}");
 
-        List<UserInfo> otherPlayers = await RegisterOtherPlayers(createClient);
+        var otherPlayers = await RegisterOtherPlayers(createClient);
         _state.LocalUserInfo = localPlayer;
         _state.OtherPlayersInfos = otherPlayers.ToList();
     }
     private async Task<List<UserInfo>> RegisterOtherPlayers(Func<SwagClient> createClient)
     {
-        List<UserInfo> otherPlayers = new List<UserInfo>();
+        var otherPlayers = new List<UserInfo>();
         for (int i = 0; i < 5; i++)
         {
             UserInfo p = await RegisterNewPlayer(createClient, false);

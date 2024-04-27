@@ -1,5 +1,6 @@
-﻿using Northwest.Models;
-namespace Northwest.GameTasks;
+﻿using Northwest.Domain.Models;
+
+namespace Northwest.Domain.GameTasks;
 
 /// <summary> Is registered as Transientt </summary>
 public abstract class GameTaskBase : IGameTask

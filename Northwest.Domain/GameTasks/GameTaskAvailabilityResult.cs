@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace Northwest.GameTasks;
+namespace Northwest.Domain.GameTasks;
 
 public class GameTaskAvailabilityResult
 {
@@ -12,7 +12,7 @@ public class GameTaskAvailabilityResult
     public string GameTaskName { get; set; } = string.Empty;
 
     [Required]
-    public GameTaskCodes GameTaskCode { get; set; } 
+    public GameTaskCodes GameTaskCode { get; set; }
 
     [Required]
     public List<TaskRequirement> Requirements { get; set; } = [];
@@ -21,7 +21,7 @@ public class GameTaskAvailabilityResult
     public List<GameTaskPromptInfo> TaskPromptInfos { get; set; } = [];
 
     // Set by repository if all taskrquirements are fulfilled
-    public bool CanExecuteTask => this.Requirements.All(t => t.FulfillsRequirement);
+    public bool CanExecuteTask => Requirements.All(t => t.FulfillsRequirement);
 
 
     public GameTaskAvailabilityResult()
@@ -36,7 +36,7 @@ public class GameTaskAvailabilityResult
 
     public GameTaskAvailabilityResult(string gameTaskName, List<TaskRequirement> taskRequirements)
     {
-        this.Requirements = taskRequirements;
+        Requirements = taskRequirements;
         GameTaskName = gameTaskName;
     }
 

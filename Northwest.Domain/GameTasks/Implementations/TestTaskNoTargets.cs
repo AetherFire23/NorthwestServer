@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Northwest.Domain.Dtos;
+using Northwest.Domain.Models;
+using Northwest.Domain.Repositories;
 using System.ComponentModel.DataAnnotations;
-using Northwest.Models;
-using Northwest.Repositories;
-namespace Northwest.GameTasks.Implementations;
+
+namespace Northwest.Domain.GameTasks.Implementations;
 
 [GameTask(GameTaskCodes.TestTaskNoTargets)]
 public class TestTaskNoTargets : GameTaskBase
@@ -56,7 +58,7 @@ public class TestTaskNoTargets : GameTaskBase
 
     public override async Task Execute(GameTaskExecutionContext context)
     {
-        DTOs.StationDTO s = await _stationRepository.RetrieveStationAsync<Station1Property>(context.GameState.GameId, "Wheel");
+        StationDTO s = await _stationRepository.RetrieveStationAsync<Station1Property>(context.GameState.GameId, "Wheel");
     }
 
     public override async Task<GameTaskValidationResult> ValidateExecution(GameTaskExecutionContext context)

@@ -1,6 +1,8 @@
-using WebAPI.ApiConfiguration;
-using WebAPI.Models;
-namespace WebAPI;
+using Northwest.Domain.Models;
+using Northwest.WebApi.ApiConfiguration;
+using Northwest.WebApi.ApiConfiguration.AppConfig;
+using Northwest.WebApi.ApiConfiguration.BuilderConfig;
+namespace Northwest.WebApi;
 
 public class Program
 {
@@ -14,14 +16,16 @@ public class Program
 
         WebApplication app = builder.Build();
         _ = app.UseHttpLogging();
-        await AppConfiguration.SeedAndMigrate(app);
+
+
+        await app.SeedAndMigrate();
 
         if (app.Environment.IsDevelopment())
         {
             _ = app.UseSwagger();
             _ = app.UseSwaggerUI();
         }
-   
+
         _ = app.UseHttpsRedirection();
 
         _ = app.UseAuthentication();

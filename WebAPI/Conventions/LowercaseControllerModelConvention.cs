@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace WebAPI.Conventions;
+namespace Northwest.WebApi.Conventions;
 
 public class LowercaseControllerModelConvention : IControllerModelConvention
 {

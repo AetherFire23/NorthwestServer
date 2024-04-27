@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using WebAPI.GameTasks;
-using WebAPI.Models;
-using WebAPI.Repositories;
-using WebAPI.Services;
-namespace WebAPI.Controllers;
+using Northwest.Domain.GameTasks;
+using Northwest.Domain.Models;
+using Northwest.Domain.Repositories;
+using Northwest.Domain.Services;
+
+namespace Northwest.WebApi.Controllers;
 
 [ApiController]
 [Route("Game")]

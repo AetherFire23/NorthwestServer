@@ -1,7 +1,7 @@
-﻿using Northwest.DTOs;
-using Northwest.Models;
+﻿using Northwest.Domain.Dtos;
+using Northwest.Domain.Models;
 
-namespace Northwest.GameTasks;
+namespace Northwest.Domain.GameTasks;
 
 public class GameTaskExecutionContext
 {

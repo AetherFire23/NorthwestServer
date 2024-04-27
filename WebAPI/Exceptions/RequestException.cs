@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace WebAPI.Exceptions;
+namespace Northwest.WebApi.Exceptions;
 
 public class RequestException : Exception
 {
@@ -11,12 +11,12 @@ public class RequestException : Exception
 
     public RequestException(HttpStatusCode statusCode, string message = "(default) Request failed")
     {
-        this.HttpMessage = message;
-        this.StatusCode = statusCode;
+        HttpMessage = message;
+        StatusCode = statusCode;
     }
 
     public RequestException(object? obj)
     {
-        this.ExceptionData = obj;
+        ExceptionData = obj;
     }
 }

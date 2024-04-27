@@ -1,4 +1,4 @@
-﻿namespace Northwest.GameTasks;
+﻿namespace Northwest.Domain.GameTasks;
 
 public enum GameTaskCodes
 {

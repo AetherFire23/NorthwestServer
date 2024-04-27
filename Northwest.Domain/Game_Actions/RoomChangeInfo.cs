@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Northwest.Entities;
-using Northwest.Enums;
+using Northwest.Persistence.Entities;
+using Northwest.Persistence.Enums;
 
-namespace Northwest.Game_Actions;
+namespace Northwest.Domain.Game_Actions;
 
 public class RoomChangeInfo
 {
