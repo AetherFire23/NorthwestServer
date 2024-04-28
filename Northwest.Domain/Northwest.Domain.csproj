@@ -16,4 +16,8 @@
     <ProjectReference Include="..\SharedUtils\SharedUtils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Authentication\Working\" />
+  </ItemGroup>
+
 </Project>

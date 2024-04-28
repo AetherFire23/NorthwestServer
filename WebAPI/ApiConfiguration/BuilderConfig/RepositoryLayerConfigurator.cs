@@ -8,19 +8,19 @@ public class RepositoryLayerConfigurator
 {
     public static void AddRepositoriesLayer(WebApplicationBuilder builder)
     {
-        // Repos
-        _ = builder.Services.AddScoped<GameRepository>();
-        _ = builder.Services.AddScoped<MainMenuRepository>();
-        _ = builder.Services.AddScoped<GameActionsRepository>();
-        _ = builder.Services.AddScoped<RoomRepository>();
-        _ = builder.Services.AddScoped<GameStateRepository>();
-        _ = builder.Services.AddScoped<StationRepository>();
-        _ = builder.Services.AddScoped<PlayerRepository>();
-        _ = builder.Services.AddScoped<ShipRepository>();
-        builder.Services.AddScoped<GameTaskAvailabilityRepository>();
+        //// Repos
+        //builder.Services.AddScoped<GameRepository>();
+        //builder.Services.AddScoped<MainMenuRepository>();
+        //builder.Services.AddScoped<GameActionsRepository>();
+        //builder.Services.AddScoped<RoomRepository>();
+        //builder.Services.AddScoped<GameStateRepository>();
+        //builder.Services.AddScoped<StationRepository>();
+        //builder.Services.AddScoped<PlayerRepository>();
+        //builder.Services.AddScoped<ShipRepository>();
+        //builder.Services.AddScoped<GameTaskAvailabilityRepository>();
 
-        //landmasses
-        _ = builder.Services.AddScoped<UserRepository>();
-        _ = builder.Services.AddScoped<JwtTokenManager>();
+        //// Landmasses
+        //builder.Services.AddScoped<UserRepository>();
+        //builder.Services.AddScoped<JwtTokenManager>();
     }
 }

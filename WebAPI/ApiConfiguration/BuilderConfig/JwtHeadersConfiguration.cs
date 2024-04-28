@@ -1,24 +1,45 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Northwest.Domain.Authentication;
-using System.Text;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace Northwest.WebApi.ApiConfiguration.BuilderConfig;
+
+public static class JwtConfigReader
+{
+    public static IConfigurationSection GetJwtConfigSection(this ConfigurationManager configurationManager)
+    {
+        var jwtConfigSection = configurationManager.GetSection("Jwt");
+        return jwtConfigSection;
+    }
+    public static JwtConfig ReadJwtConfig(ConfigurationManager configurationManager)
+    {
+        var section = configurationManager.GetJwtConfigSection();
+        var jwtConfig = new JwtConfig();
+        section.Bind(jwtConfig);
+
+        return jwtConfig;
+    }
+
+    public static void RegisterJwtConfigOptions(this WebApplicationBuilder builder)
+    {
+        var section = builder.Configuration.GetJwtConfigSection();
+        builder.Services.Configure<JwtConfig>(section);
+        //builder.Services.Configure<JwtConfig>(r =>
+        //{
+        //    r.Issuer = "sd";
+        //});
+    }
+}
 
 public static class JwtHeadersConfiguration
 {
-
-    // Must be executed before
-    // _ = builder.Services.AddAuthorization();
     public static void ConfigureJWTHeaders(this WebApplicationBuilder builder)
     {
-        IConfigurationSection jwtSection = builder.Configuration.GetSection("Jwt");
-        JwtConfig jwtConfig = new JwtConfig();
-        jwtSection.Bind(jwtConfig);
-        _ = builder.Services.Configure<JwtConfig>(jwtSection);
+        builder.RegisterJwtConfigOptions();
 
-        // Configure JWT authentication
-        _ = builder.Services.AddAuthentication(options =>
+        var jwtConfig = JwtConfigReader.ReadJwtConfig(builder.Configuration);
+
+        builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -37,6 +58,5 @@ public static class JwtHeadersConfiguration
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey)),
             };
         });
-
     }
 }

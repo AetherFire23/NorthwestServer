@@ -21,23 +21,23 @@ public class JwtTokenManager : IJwtTokenManager
 
     public async Task<string> GenerateToken(UserDto userDto)
     {
-        List<Claim> claims = new List<Claim>()
+        var claims = new List<Claim>()
         {
             new Claim(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
             new Claim(ClaimTypes.Name, userDto.Name)
         };
 
         // create claims for each role
-        List<Claim> roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
+        var roleClaims = userDto.RoleNames.Select(CreateRoleClaim).ToList();
         claims.AddRange(roleClaims);
 
         // store security key
-        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
-        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        DateTime expires = DateTime.Now.AddDays(Convert.ToDouble(_config.ExpirationDays));
+        var expires = DateTime.Now.AddDays(Convert.ToDouble(_config.ExpirationDays));
 
-        JwtSecurityToken securityToken = new JwtSecurityToken(
+        var securityToken = new JwtSecurityToken(
             _config.Issuer,
             _config.Audience,
             claims,
@@ -53,7 +53,7 @@ public class JwtTokenManager : IJwtTokenManager
     {
         try
         {
-            TokenValidationParameters validationParameters = new TokenValidationParameters
+            var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
@@ -65,7 +65,7 @@ public class JwtTokenManager : IJwtTokenManager
             };
 
             // Validate and parse the token
-            ClaimsPrincipal principal = _tokenHandler.ValidateToken(token, validationParameters, out _);
+            var principal = _tokenHandler.ValidateToken(token, validationParameters, out _);
 
             // Ensure the token has the required claims or perform additional validations
 
@@ -82,7 +82,5 @@ public class JwtTokenManager : IJwtTokenManager
     {
         return new Claim(ClaimTypes.Role, roleName.ToString());
     }
-
-
 }
 

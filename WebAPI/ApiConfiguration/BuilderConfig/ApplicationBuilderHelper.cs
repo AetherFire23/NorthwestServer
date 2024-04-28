@@ -1,9 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
-using Northwest.Domain.GameTasks;
-using Northwest.Domain.GameTasks.Initialization;
+using Northwest.Domain.Initialization;
 using Northwest.Domain.Jobs;
-using Northwest.Domain.Strategies;
-using Northwest.Domain.UniversalSkills;
 using Northwest.WebApi.Conventions;
 using Quartz;
 using Quartz.AspNetCore;
@@ -15,14 +12,9 @@ public static class ApplicationBuilderHelper
     public static void ConfigureWebApplication(WebApplicationBuilder builder)
     {
         // Still domain
-        RoleStrategyMapper.RegisterRoleStrategies(builder.Services);
-        SkillStrategyMapper.RegisterSkillStrategies(builder.Services);
-        ServiceLayerConfigurator.AddServicesLayer(builder);
-        RepositoryLayerConfigurator.AddRepositoriesLayer(builder);
-        builder.Services.ConfigureDbContext();
-        builder.Services.RegisterGameTaskTypes();
 
-
+        builder.Services.InitializeDomainServices();
+        //builder.Services.ConfigureApiDbContext();
         ConfigureControllers(builder);
         ConfigureSwagger(builder);
         builder.Services.ConfigureHTTPLogging();
@@ -59,10 +51,10 @@ public static class ApplicationBuilderHelper
     {
         builder.Services.AddSwaggerGenNewtonsoftSupport();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        _ = builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddEndpointsApiExplorer();
         // Add Swagger services
 
-        _ = builder.Services.AddSwaggerGen(c =>
+        builder.Services.AddSwaggerGen(c =>
         {
             c.UseAllOfToExtendReferenceSchemas();
             // Add the security definition for JWT Bearer token
@@ -123,7 +115,7 @@ public static class ApplicationBuilderHelper
             //    .WithDescription("my awesome trigger configured for a job with single call"));
         });
 
-        _ = builder.Services.AddQuartzServer(options =>
+        builder.Services.AddQuartzServer(options =>
         {
             // when shutting down we want jobs to complete gracefully
             options.WaitForJobsToComplete = true;
