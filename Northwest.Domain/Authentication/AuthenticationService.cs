@@ -26,10 +26,10 @@ public class AuthenticationService
         (bool isTokenIssued, User? userModel) = await _userService.CanIssueTokenToUser(loginRequest);
         if (!isTokenIssued) throw new HttpRequestException(" COuld not login");
 
-        UserDto userDto = await _userRepository.MapUserDtoById(userModel.Id);
+        var userDto = await _userRepository.MapUserDtoById(userModel.Id);
         string token = await _jwtTokenManager.GenerateToken(userDto);
 
-        LoginResult loginResult = new LoginResult
+        var loginResult = new LoginResult
         {
             Token = token,
             UserId = userDto.Id,
@@ -44,7 +44,7 @@ public class AuthenticationService
         if (await _userRepository.IsUserExists(registerRequest))
             throw new Exception();
 
-        UserDto user = await _userRepository.CreateUser(registerRequest);
+        var user = await _userRepository.CreateUser(registerRequest);
         return user;
     }
 }

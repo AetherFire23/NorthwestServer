@@ -7,11 +7,13 @@ public class MainMenuRepository
 {
     private readonly PlayerContext _playerContext;
     private readonly UserRepository _userRepository;
+    private readonly GameStateRepository _gameStateRepository;
 
-    public MainMenuRepository(PlayerContext playerContext, UserRepository userRepository)
+    public MainMenuRepository(PlayerContext playerContext, UserRepository userRepository, GameStateRepository gameStateRepository)
     {
         _playerContext = playerContext;
         _userRepository = userRepository;
+        _gameStateRepository = gameStateRepository;
     }
 
     public async Task<MainMenuState> GetMainMenuState(Guid userId)

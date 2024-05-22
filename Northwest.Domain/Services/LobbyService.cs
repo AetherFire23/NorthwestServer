@@ -25,7 +25,7 @@ public class LobbyService
     {
         var newLobby = await _lobbyRepository.CreateAndAddLobby();
         await CreateNewUserLobbyAndAddToDb(userId, newLobby.Id);
-        List<Lobby> lobs = _playerContext.Lobbies.ToList();
+        var lobs = _playerContext.Lobbies.ToList();
         return newLobby;
     }
 
