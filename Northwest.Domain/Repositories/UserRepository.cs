@@ -172,14 +172,14 @@ public class UserRepository
 
     public async Task<List<UserDto>> GetUserDtosById(List<Guid> userIds)
     {
-        List<UserDto> userDtos = await userIds.SelectAsync(MapUserDtoById);
+        var userDtos = (await userIds.SelectAsync(MapUserDtoById)).ToList();
         return userDtos;
     }
 
     public async Task<List<UserDto>> GetUserDtosFromUser(List<User> users)
     {
-        List<Guid> userIds = users.Select(x => x.Id).ToList();
-        List<UserDto> userDtos = await userIds.SelectAsync(MapUserDtoById);
+        var userIds = users.Select(x => x.Id).ToList();
+        var userDtos = (await userIds.SelectAsync(MapUserDtoById)).ToList();
         return userDtos;
     }
 }

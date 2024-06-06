@@ -2,7 +2,6 @@
 using Northwest.Domain.Dtos;
 using Northwest.Persistence;
 using Northwest.Persistence.Entities;
-
 namespace Northwest.Domain.Repositories;
 
 public class LobbyRepository
@@ -13,21 +12,18 @@ public class LobbyRepository
         _playerContext = playerContext;
     }
 
-    //public async Task AddLobby(Lobby lobber) => await AddEntity(lobber);
-
     public async Task AddLobby(Lobby lobby)
     {
         _playerContext.Add(lobby);
     }
     public async Task<Lobby?> GetLobbyById(Guid lobbyId)
     {
-        Lobby? lobby = await _playerContext.Lobbies
+        var lobby = await _playerContext.Lobbies
             .Include(p => p.UserLobbies)
                 .ThenInclude(ur => ur.User)
             .FirstOrDefaultAsync(x => x.Id == lobbyId);
         return lobby;
     }
-
 
     public void RemoveLobby(Lobby entity)
     {
@@ -36,9 +32,9 @@ public class LobbyRepository
 
     public async Task<LobbyDto> MapLobbyDto(Guid lobbyId)
     {
-        Lobby? lobby = await GetLobbyById(lobbyId);
-        List<User> usersInLobby = lobby.UserLobbies.Select(ur => ur.User).ToList();
-        LobbyDto lobbyDto = new LobbyDto()
+        var lobby = await GetLobbyById(lobbyId);
+        var usersInLobby = lobby.UserLobbies.Select(ur => ur.User).ToList();
+        var lobbyDto = new LobbyDto()
         {
             Id = lobbyId,
             UsersInLobby = usersInLobby,
@@ -53,7 +49,7 @@ public class LobbyRepository
 
     public async Task<Lobby> CreateAndAddLobby()
     {
-        Lobby newLobby = new Lobby() { Id = Guid.NewGuid() };
+        var newLobby = new Lobby() { Id = Guid.NewGuid() };
         await AddLobby(newLobby);
         await _playerContext.SaveChangesAsync();
         return newLobby;
@@ -68,7 +64,7 @@ public class LobbyRepository
 
     public async Task<UserLobby?> FindUserLobby(Guid userId, Guid lobbyId)
     {
-        UserLobby? userLobby = await _playerContext.UserLobbies
+        var userLobby = await _playerContext.UserLobbies
             .Include(ul => ul.User)
             .Include(ul => ul.Lobby)
             .FirstOrDefaultAsync(x => x.User.Id == userId && x.Lobby.Id == lobbyId);
@@ -77,7 +73,7 @@ public class LobbyRepository
 
     public async Task DeleteUserFromLobby(Guid userId, Guid lobbyId)
     {
-        UserLobby? userLobby = await FindUserLobby(userId, lobbyId);
+        var userLobby = await FindUserLobby(userId, lobbyId);
         _playerContext.UserLobbies.Remove(userLobby);
         await _playerContext.SaveChangesAsync();
     }
@@ -87,7 +83,7 @@ public class LobbyRepository
         if (!lobby.UsersInLobby.Any())
         {
             RemoveLobby(lobby);
-            _ = await _playerContext.SaveChangesAsync();
+            await _playerContext.SaveChangesAsync();
         }
     }
 

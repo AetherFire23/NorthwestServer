@@ -22,17 +22,3 @@ public class User : IEntity
         : new List<Game>();
 
 }
-
-public static class FunExt
-{
-    public static IEnumerable<T2> SelectSafely<T, T2>(this IEnumerable<T> self, Func<T, T2> selector)
-    {
-        if (self.Any())
-        {
-            IEnumerable<T2> selected = self.Select(selector);
-            return selected;
-        }
-
-        return new List<T2>();
-    }
-}

@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Northwest.Domain\Northwest.Domain.csproj" />
+    <ProjectReference Include="..\SharedUtils\SharedUtils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
