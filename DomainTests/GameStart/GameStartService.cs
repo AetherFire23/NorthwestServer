@@ -14,7 +14,7 @@ public class GameStartService(UserFactory userFactory, LobbyService lobbyService
     public async Task CreateUsersAndStartGame()
     {
         var generated = await RegisterUsers();
-
+         
         var lobbyId = await CreateInitialLobby(_globalTestState.LocalUserId);
         int i = 0;
         await JoinLobbyForAllPlayers(_globalTestState.ClientAppStates, lobbyId);
@@ -30,7 +30,7 @@ public class GameStartService(UserFactory userFactory, LobbyService lobbyService
         //}
 
         var users = await Enumerable
-            .Range(0, 5)
+            .Range(0, 55)
             .SelectAsync(async x => await _userFactory.CreateUser());
 
         _globalTestState.ClientAppStates = users.ToList();
@@ -48,9 +48,9 @@ public class GameStartService(UserFactory userFactory, LobbyService lobbyService
 
     private async Task JoinLobbyForAllPlayers(List<ClientAppState> clientAppStates, Guid lobbyId)
     {
-        // localPlayer should always be the same so that react can Auto-register
-        // should filter the localState player 
-        foreach (var client in clientAppStates.Where(x => x.UserId != _globalTestState.LocalUserId))
+        var otherAppStates = clientAppStates.Where(x => x.UserId != _globalTestState.LocalUserId);
+
+        foreach (var client in otherAppStates)
         {
             await _lobbyService.JoinLobby(new JoinLobbyRequest()
             {

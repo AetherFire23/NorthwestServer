@@ -25,22 +25,21 @@ public class LobbyService
     {
         var newLobby = await _lobbyRepository.CreateAndAddLobby();
         await CreateNewUserLobbyAndAddToDb(userId, newLobby.Id);
-        var lobs = _playerContext.Lobbies.ToList();
         return newLobby;
     }
 
     public async Task JoinLobby(JoinLobbyRequest joinRequest)
     {
-        if (await _lobbyRepository.GetLobbyById(joinRequest.LobbyId) is null) throw new Exception();
-        if (await _lobbyRepository.IsUserLobbyAlreadyExists(joinRequest.UserId, joinRequest.LobbyId)) throw new Exception();
+        if (await _lobbyRepository.GetLobbyById(joinRequest.LobbyId) is null) throw new Exception("Lobby does not exist");
+        if (await _lobbyRepository.IsUserLobbyExists(joinRequest.UserId, joinRequest.LobbyId)) throw new Exception("User already in room");
 
         await CreateNewUserLobbyAndAddToDb(joinRequest.UserId, joinRequest.LobbyId);
     }
 
     public async Task ExitLobby(Guid userId, Guid lobbyId)
     {
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
-        if (lobby is null) throw new Exception();
+        var lobby = await _lobbyRepository.GetLobbyById(lobbyId)
+            ?? throw new Exception();
         if (await _lobbyRepository.FindUserLobby(userId, lobbyId) is null) throw new Exception();
 
         await _lobbyRepository.DeleteUserFromLobby(userId, lobbyId);
@@ -59,7 +58,7 @@ public class LobbyService
 
     public async Task CreateGameIfLobbyIsFull(Guid lobbyId) // important method cos it creates the game
     {
-        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
 
         // magic number 5 to determine that game is full
         if (lobby.UsersInLobby.Count == 5)
@@ -79,8 +78,6 @@ public class LobbyService
             User = trackedUser,
             Lobby = trackedLobby,
         };
-
-
 
         _playerContext.UserLobbies.Add(userLobby);
         await _playerContext.SaveChangesAsync();

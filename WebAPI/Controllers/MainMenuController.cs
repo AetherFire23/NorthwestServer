@@ -4,20 +4,12 @@ using Northwest.Domain.Models;
 using Northwest.Domain.Repositories;
 using Northwest.Domain.Services;
 using Northwest.Persistence.Entities;
-
 namespace Northwest.WebApi.Controllers;
 
 [ApiController]
 [Route("mainmenu")]
-public class MainMenuController : ControllerBase
+public class MainMenuController(MainMenuRepository _mainMenuRepository, LobbyService _lobbyService) : ControllerBase
 {
-    private readonly MainMenuRepository _mainMenuRepository;
-    private readonly LobbyService _lobbyService;
-    public MainMenuController(MainMenuRepository mainMenuRepository, LobbyService lobbyService)
-    {
-        _mainMenuRepository = mainMenuRepository;
-        _lobbyService = lobbyService;
-    }
 
     [HttpGet]
     [Route("GetMainMenuState")]

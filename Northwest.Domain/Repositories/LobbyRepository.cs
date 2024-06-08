@@ -55,7 +55,7 @@ public class LobbyRepository
         return newLobby;
     }
 
-    public async Task<bool> IsUserLobbyAlreadyExists(Guid userId, Guid lobbyId) // pourrait avoir dequoi de plus generic 
+    public async Task<bool> IsUserLobbyExists(Guid userId, Guid lobbyId) // pourrait avoir dequoi de plus generic 
     {
         bool userExists = await _playerContext.UserLobbies
             .AnyAsync(x => x.User.Id == userId && x.Lobby.Id == lobbyId);
