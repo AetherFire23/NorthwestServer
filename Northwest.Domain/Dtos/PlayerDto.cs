@@ -14,7 +14,7 @@ public class PlayerDto
 
     [Required]
     public List<Item> Items { get; set; } = new List<Item>();
-    public List<SkillEnum> Skills { get; set; } = new List<SkillEnum>();
+    public List<Skills> Skills { get; set; } = new List<Skills>();
     public string Name { get; set; } = string.Empty;
     public float X { get; set; }
     public float Y { get; set; }

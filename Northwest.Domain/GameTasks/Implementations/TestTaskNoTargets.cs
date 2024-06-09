@@ -24,7 +24,7 @@ public class TestTaskNoTargets : GameTaskBase
     #region Availability
     public override async Task<bool> IsVisible(GameState context)
     {
-        return true;
+        return await Task.FromResult(true);
     }
 
     public override async Task<List<TaskRequirement>> GetTaskRequirements(GameState context)

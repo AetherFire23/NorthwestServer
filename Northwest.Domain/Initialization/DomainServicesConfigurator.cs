@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Northwest.Domain.Authentication;
+using Northwest.Domain.GameStart;
 using Northwest.Domain.GameTasks;
-using Northwest.Domain.Repositories;
 using Northwest.Domain.Services;
 using Northwest.Persistence;
 
@@ -22,6 +22,8 @@ internal static class DomainServicesConfigurator
         serviceCollection.AddScoped<ChatService>();
         serviceCollection.AddScoped<GameMakerService>();
         serviceCollection.AddScoped<ShipService>();
+        serviceCollection.AddScoped<JoinLobbyService>();
+        
 
         // Landmasses
         serviceCollection.AddScoped<UserService>();

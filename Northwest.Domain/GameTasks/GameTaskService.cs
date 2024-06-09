@@ -16,10 +16,6 @@ public class GameTaskService
 
     public async Task<GameTaskValidationResult> ExecuteGameTask(Guid playerId, GameTaskCodes taskCode, List<List<GameTaskTargetInfo>> targets)
     {
-        int i = 3;
-        double d = i;
-
-
         var gameTaskType = GameTaskTypeSelector.GetGameTaskType(taskCode);
 
         var gameTask = _serviceProvider.GetService(gameTaskType) as GameTaskBase;

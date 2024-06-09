@@ -1,6 +1,6 @@
 ﻿namespace Northwest.Persistence.Enums;
 
-public enum SkillEnum
+public enum Skills
 {
     CookBonus,
     AttackBonus,

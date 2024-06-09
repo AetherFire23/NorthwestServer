@@ -14,7 +14,7 @@ public class Program
         await Task.Delay(4000);
         _serviceProvider = TestServicesRegistration.RegisterTestServices();
 
-        Func<SwagClient> createClient = () => new SwagClient("http://localhost:7060", new HttpClient());
+        var createClient = () => new SwagClient("http://localhost:7060", new HttpClient());
 
 
 

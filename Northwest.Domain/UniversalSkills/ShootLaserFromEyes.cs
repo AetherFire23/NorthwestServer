@@ -4,7 +4,7 @@ using Northwest.Persistence.Enums;
 
 namespace Northwest.Domain.UniversalSkills;
 
-[UniversalSkill(SkillEnum.ShootLaser)]
+[UniversalSkill(Skills.ShootLaser)]
 public class ShootLaserFromEyes : ITickedSkills
 {
     private readonly PlayerContext _playerContext;

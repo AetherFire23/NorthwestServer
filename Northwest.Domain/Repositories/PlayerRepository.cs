@@ -53,7 +53,7 @@ public class PlayerRepository
 
         List<Item> items = await GetOwnedItems(playerId);
 
-        List<SkillEnum> skillsOwned = GetOwnedSkills(playerId);
+        List<Skills> skillsOwned = GetOwnedSkills(playerId);
 
         PlayerDto playerDTO = new PlayerDto()
         {
@@ -78,7 +78,7 @@ public class PlayerRepository
         return playerDTO;
     }
 
-    public List<SkillEnum> GetOwnedSkills(Guid ownerId)
+    public List<Skills> GetOwnedSkills(Guid ownerId)
     {
         return _playerContext.Skills
             .Where(s => s.OwnerId == ownerId)

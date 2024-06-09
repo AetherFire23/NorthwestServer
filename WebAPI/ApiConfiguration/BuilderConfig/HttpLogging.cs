@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.HttpLogging;
-
-namespace Northwest.WebApi.ApiConfiguration.BuilderConfig;
+﻿namespace Northwest.WebApi.ApiConfiguration.BuilderConfig;
 
 public static class HttpLogging
 {

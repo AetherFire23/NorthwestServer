@@ -7,5 +7,5 @@ public class Skill
     //[Key]
     public Guid Id { get; set; }
     public Guid OwnerId { get; set; }
-    public SkillEnum SkillType { get; set; }
+    public Skills SkillType { get; set; }
 }

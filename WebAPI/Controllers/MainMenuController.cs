@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Northwest.Domain.GameStart;
 using Northwest.Domain.Models;
 using Northwest.Domain.Repositories;
-using Northwest.Domain.Services;
 using Northwest.Persistence.Entities;
 namespace Northwest.WebApi.Controllers;
 
@@ -16,11 +16,11 @@ public class MainMenuController(MainMenuRepository _mainMenuRepository, LobbySer
     [ProducesResponseType(200, Type = typeof(MainMenuState))]
     public async Task<ActionResult<MainMenuState>> GetMainMenuState(Guid userId)
     {
-        MainMenuState mainMenuState = await _mainMenuRepository.GetMainMenuState(userId);
+        var mainMenuState = await _mainMenuRepository.GetMainMenuState(userId);
 
         try
         {
-            JsonSerializerSettings setts = new JsonSerializerSettings()
+            var setts = new JsonSerializerSettings()
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.All,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -30,7 +30,7 @@ public class MainMenuController(MainMenuRepository _mainMenuRepository, LobbySer
             string serializedJson = JsonConvert.SerializeObject(mainMenuState, Formatting.None, setts);
 
             // Deserialize the object
-            MainMenuState? deserializedObject = JsonConvert.DeserializeObject<MainMenuState>(serializedJson, setts);
+            var deserializedObject = JsonConvert.DeserializeObject<MainMenuState>(serializedJson, setts);
         }
         catch (Exception ex)
         {

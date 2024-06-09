@@ -2,6 +2,6 @@
 
 public class TaskRequirement
 {
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
     public bool FulfillsRequirement { get; set; }
 }

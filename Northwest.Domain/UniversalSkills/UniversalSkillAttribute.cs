@@ -5,9 +5,9 @@ namespace Northwest.Domain.UniversalSkills;
 [AttributeUsage(AttributeTargets.Class)]
 public class UniversalSkillAttribute : Attribute
 {
-    public SkillEnum SkillAttribute { get; set; }
+    public Skills SkillAttribute { get; set; }
 
-    public UniversalSkillAttribute(SkillEnum skill)
+    public UniversalSkillAttribute(Skills skill)
     {
         SkillAttribute = skill;
     }

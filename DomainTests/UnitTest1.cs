@@ -26,19 +26,26 @@ public class UnitTest1
             jc.ExpirationDays = 999;
         });
 
+
         serviceCollection.RegisterTestServices();
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
+
         await serviceProvider.SeedAndMigrate2();
 
 
 
         // ------ TEST ---------
 
+        await TestStuff(serviceProvider);
+
+        // Just start a game I guess
+    }
+
+    private static async Task TestStuff(ServiceProvider serviceProvider)
+    {
         var gss = serviceProvider.GetRequiredService<GameStartService>();
 
         await gss.CreateUsersAndStartGame();
-
-        // Just start a game I guess
     }
 }

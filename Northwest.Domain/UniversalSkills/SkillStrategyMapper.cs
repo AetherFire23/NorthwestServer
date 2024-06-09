@@ -7,7 +7,7 @@ namespace Northwest.Domain.UniversalSkills;
 
 public static class SkillStrategyMapper
 {
-    public static IReadOnlyDictionary<SkillEnum, Type> RoleStrategyTypeMap = CreateSkillStratMap();
+    public static IReadOnlyDictionary<Skills, Type> RoleStrategyTypeMap = CreateSkillStratMap();
 
     public static List<Type> GetAllUniversalSkillTypes()
     {
@@ -15,7 +15,7 @@ public static class SkillStrategyMapper
         return skillTypes;
     }
 
-    public static Type GetStrategyTypeBySkill(SkillEnum role)
+    public static Type GetStrategyTypeBySkill(Skills role)
     {
         if (!RoleStrategyTypeMap.ContainsKey(role)) throw new Exception($"Strategy not found for role: {role}");
 
@@ -23,17 +23,17 @@ public static class SkillStrategyMapper
         return strategyType;
     }
 
-    private static IReadOnlyDictionary<SkillEnum, Type> CreateSkillStratMap()
+    private static IReadOnlyDictionary<Skills, Type> CreateSkillStratMap()
     {
         List<Type> types = DiscoverStrategyTypesInAssembly();
 
-        Dictionary<SkillEnum, Type> map = new Dictionary<SkillEnum, Type>();
+        Dictionary<Skills, Type> map = new Dictionary<Skills, Type>();
         foreach (Type type in types)
         {
-            SkillEnum roleType = type.GetCustomAttribute<UniversalSkillAttribute>().SkillAttribute;
+            Skills roleType = type.GetCustomAttribute<UniversalSkillAttribute>().SkillAttribute;
             map.Add(roleType, type);
         }
-        ConcurrentDictionary<SkillEnum, Type> mapConcurrent = new ConcurrentDictionary<SkillEnum, Type>(map);
+        ConcurrentDictionary<Skills, Type> mapConcurrent = new ConcurrentDictionary<Skills, Type>(map);
         return mapConcurrent;
     }
 

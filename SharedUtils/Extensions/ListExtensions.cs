@@ -4,7 +4,7 @@ public static class ListExtensions
 {
     public static List<T> Shuffle<T>(this List<T> initialList)
     {
-        List<T> shuffled = new List<T>();
+        var shuffled = new List<T>();
         while (initialList.Count != 0)
         {
             int randomNumber = Random.Shared.Next(0, initialList.Count);
@@ -16,7 +16,7 @@ public static class ListExtensions
         return shuffled;
     }
 
-    public static async Task<IEnumerable<T2>> SelectAsync<T, T2>(this IEnumerable<T> source, Func<T, Task<T2>> selection)
+    public static async Task<IEnumerable<T2>> SequentialSelectAsync<T, T2>(this IEnumerable<T> source, Func<T, Task<T2>> selection)
     {
         var elements = new List<T2>();
 

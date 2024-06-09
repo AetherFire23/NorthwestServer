@@ -17,7 +17,7 @@ public class GameState
     {
         get
         {
-            RoomDto? room = Rooms.FirstOrDefault(x => x.Id == PlayerDto.CurrentGameRoomId);
+            var room = Rooms.FirstOrDefault(x => x.Id == PlayerDto.CurrentGameRoomId);
             if (room is null)
             {
                 Console.Out.WriteLine("LocalPlayerRoom was null, make sure this is intended");

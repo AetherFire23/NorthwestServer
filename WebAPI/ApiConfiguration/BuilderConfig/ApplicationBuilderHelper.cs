@@ -1,9 +1,10 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Quartz;
+using Microsoft.OpenApi.Models;
 using Northwest.Domain.Initialization;
 using Northwest.Domain.Jobs;
 using Northwest.WebApi.Conventions;
-using Quartz;
 using Quartz.AspNetCore;
+using Northwest.Domain.Models;
 
 namespace Northwest.WebApi.ApiConfiguration.BuilderConfig;
 
@@ -11,10 +12,9 @@ public static class ApplicationBuilderHelper
 {
     public static void ConfigureWebApplication(WebApplicationBuilder builder)
     {
-        // Still domain
+
 
         builder.Services.InitializeDomainServices();
-        //builder.Services.ConfigureApiDbContext();
         ConfigureControllers(builder);
         ConfigureSwagger(builder);
         builder.Services.ConfigureHTTPLogging();
@@ -23,28 +23,13 @@ public static class ApplicationBuilderHelper
         builder.Services.AddAuthorization();
     }
 
-    // starting not to like this not being inside gameTaskTypeSelector
-    //private static void RegisterGameTaskTypes(WebApplicationBuilder builder) // should extract this to GameTaskStrategyMapper
-    //{
-    //    //IEnumerable<Type> apiTypes = typeof(Program).Assembly.GetTypes()
-    //    //    .Where(type => type.IsClass && !type.IsAbstract
-    //    //    && typeof(IGameTask).IsAssignableFrom(type)
-    //    //    && CustomAttributeExtensions.GetCustomAttribute<GameTaskAttribute>(type) != null);
-    //    List<Type> gameTaskTypes = GameTaskTypeSelector.GetTaskTypes();
-    //    foreach (Type? type in gameTaskTypes)
-    //    {
-    //        _ = builder.Services.AddScoped(type);
-    //    }
-    //}
-
     private static void ConfigureControllers(WebApplicationBuilder builder) // required for my library for endpoints
     {
         builder.Services.AddControllers(options =>
         {
             options.Conventions.Add(new LowercaseControllerModelConvention());
             options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-        })
-            .ConfigureControllerSerialization();
+        }).ConfigureControllerSerialization();
     }
 
     private static void ConfigureSwagger(WebApplicationBuilder builder)
@@ -101,7 +86,7 @@ public static class ApplicationBuilderHelper
                 tp.MaxConcurrency = 10;
             });
 
-            _ = q.ScheduleJob<CycleTickJob>(trigger => trigger
+            q.ScheduleJob<CycleTickJob>(trigger => trigger
                 .WithIdentity("Combined Configuration Trigger")
                 .StartAt(DateBuilder.EvenSecondDate(DateTimeOffset.UtcNow.AddSeconds(3)))
                 .WithDescription("my awesome trigger configured for a job with single call"));
@@ -124,29 +109,4 @@ public static class ApplicationBuilderHelper
         // Add Jobs here
         builder.Services.AddTransient<CycleTickJob>();
     }
-
-    private static void ConfigureAutoMapper(WebApplicationBuilder builder)
-    {
-        // Configure Automapper
-        // _ = builder.Services.AddAutoMapper(typeof(Program).Assembly);
-    }
-
-    //private static void ConfigureDbContext(WebApplicationBuilder builder)
-    //{
-    //    // Add db context here
-    //    string? playerContextConnectionString = builder.Configuration.GetConnectionString("PlayerConnectionSql");
-
-    //    // useNp
-    //    // https://stackoverflow.com/questions/3582552/what-is-the-format-for-the-postgresql-connection-string-url
-    //    // for parameters https://www.npgsql.org/doc/connection-string-parameters.html
-    //    // Host and Server works
-    //    // DBeaver tick "show all conncetions"
-    //    //_ = builder.Services.AddDbContext<PlayerContext>(options =>
-    //    //    options.UseSqlServer(playerContextConnectionString)
-    //    //    .EnableSensitiveDataLogging(true)); // only should be appleid to development
-
-    //    builder.Services.AddDbContext<PlayerContext>();
-
-    //}
 }
-// will have to configure CORS some day

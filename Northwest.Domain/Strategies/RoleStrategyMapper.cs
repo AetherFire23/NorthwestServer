@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Northwest.Domain.Interfaces;
 using Northwest.Persistence.Enums;
 using System.Collections.Concurrent;
-using System.Reflection;
-
 namespace Northwest.Domain.Strategies;
 
 public static class RoleStrategyMapper
@@ -38,8 +37,8 @@ public static class RoleStrategyMapper
             .Where(x => x.IsClass && !x.IsAbstract
               && typeof(IRoleInitializationStrategy).IsAssignableFrom(x)).ToList();
 
-        // should have customAttributes
         bool hasAllCustomAttributes = types.Any(x => x.GetCustomAttribute<RoleStrategyAttribute>() is null);
+
         if (hasAllCustomAttributes) throw new Exception("All role strategies must have a RoleTypeAttribute");
 
         return types;

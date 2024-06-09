@@ -20,10 +20,10 @@ public class CommanderRoleStrategy : IRoleInitializationStrategy
 
     public async Task InitializePlayerFromRoleAsync(Player player) // not added to Db yet
     {
-        Room room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.MiddleCorridor));
+        var room = await _roomRepository.GetRoomFromName(player.GameId, nameof(RoomsTemplate.MiddleCorridor));
         player.CurrentGameRoomId = room.Id;
 
-        Item item = new Item()
+        var item = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Wrench,

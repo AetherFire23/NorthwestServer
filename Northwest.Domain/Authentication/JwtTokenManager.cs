@@ -8,23 +8,17 @@ using System.Text;
 
 namespace Northwest.Domain.Authentication;
 
-public class JwtTokenManager : IJwtTokenManager
+public class JwtTokenManager(IOptions<JwtConfig> jwtConfig) : IJwtTokenManager
 {
-    private readonly JwtConfig _config;
-    private readonly JwtSecurityTokenHandler _tokenHandler;
-    // IOptions retrievces jwetconfig from apsset
-    public JwtTokenManager(IOptions<JwtConfig> jwtConfig)
-    {
-        _config = jwtConfig.Value;
-        _tokenHandler = new JwtSecurityTokenHandler();
-    }
+    private readonly JwtConfig _config = jwtConfig.Value;
+    private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
     public async Task<string> GenerateToken(UserDto userDto)
     {
         var claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
-            new Claim(ClaimTypes.Name, userDto.Name)
+            new(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
+            new(ClaimTypes.Name, userDto.Name)
         };
 
         // create claims for each role

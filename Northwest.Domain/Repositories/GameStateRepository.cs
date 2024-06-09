@@ -74,7 +74,7 @@ public class GameStateRepository
 
         foreach (Room? room in roomsInGame)
         {
-            RoomDto roomDTO = await _roomRepository.GetRoomDTOAsync(room.Id);
+            RoomDto roomDTO = await _roomRepository.GetRoomDtoAsync(room.Id);
             roomDtos.Add(roomDTO);
         }
 

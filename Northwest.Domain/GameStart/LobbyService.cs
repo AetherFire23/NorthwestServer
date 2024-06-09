@@ -1,39 +1,26 @@
 ﻿using Northwest.Domain.Models;
 using Northwest.Domain.Repositories;
+using Northwest.Domain.Services;
 using Northwest.Persistence;
 using Northwest.Persistence.Entities;
-namespace Northwest.Domain.Services;
+namespace Northwest.Domain.GameStart;
 
-public class LobbyService
+public class LobbyService(LobbyRepository _lobbyRepository,
+        PlayerContext _playerContext,
+        UserRepository _userRepository,
+        GameMakerService _gameMakerService,
+        JoinLobbyService joinLobbyService)
 {
-    private readonly PlayerContext _playerContext;
-    private readonly LobbyRepository _lobbyRepository;
-    private readonly UserRepository _userRepository;
-    private readonly GameMakerService _gameMakerService;
-    public LobbyService(LobbyRepository lobbyRepository,
-        PlayerContext playerContext,
-        UserRepository userRepository,
-        GameMakerService gameMakerService)
-    {
-        _lobbyRepository = lobbyRepository;
-        _playerContext = playerContext;
-        _userRepository = userRepository;
-        _gameMakerService = gameMakerService;
-    }
 
     public async Task<Lobby> CreateAndJoinLobby(Guid userId)
     {
-        var newLobby = await _lobbyRepository.CreateAndAddLobby();
-        await CreateNewUserLobbyAndAddToDb(userId, newLobby.Id);
+        var newLobby = await joinLobbyService.CreateAndJoinLobby(userId); 
         return newLobby;
     }
 
     public async Task JoinLobby(JoinLobbyRequest joinRequest)
     {
-        if (await _lobbyRepository.GetLobbyById(joinRequest.LobbyId) is null) throw new Exception("Lobby does not exist");
-        if (await _lobbyRepository.IsUserLobbyExists(joinRequest.UserId, joinRequest.LobbyId)) throw new Exception("User already in room");
-
-        await CreateNewUserLobbyAndAddToDb(joinRequest.UserId, joinRequest.LobbyId);
+        await joinLobbyService.JoinLobby(joinRequest);
     }
 
     public async Task ExitLobby(Guid userId, Guid lobbyId)
@@ -45,7 +32,7 @@ public class LobbyService
         await _lobbyRepository.DeleteUserFromLobby(userId, lobbyId);
         await _lobbyRepository.DeleteLobbyIfEmpty(lobby);
 
-        // Send signal to update Lobbies
+        
         await _playerContext.SaveChangesAsync();
     }
 
@@ -65,24 +52,8 @@ public class LobbyService
         {
             await _gameMakerService.CreateGameFromLobby(lobbyId); // important call!
             await CleanupLobbyAndUsersAfterGameStart(lobbyId);
-        }
+        } 
     }
-
-    private async Task CreateNewUserLobbyAndAddToDb(Guid userId, Guid lobbyId)
-    {
-        await _playerContext.SaveChangesAsync();
-        var trackedUser = await _userRepository.GetUserById(userId);
-        var trackedLobby = await _lobbyRepository.GetLobbyById(lobbyId);
-        var userLobby = new UserLobby()
-        {
-            User = trackedUser,
-            Lobby = trackedLobby,
-        };
-
-        _playerContext.UserLobbies.Add(userLobby);
-        await _playerContext.SaveChangesAsync();
-    }
-
     private async Task CleanupLobbyAndUsersAfterGameStart(Guid lobbyId)
     {
         var lobby = await _lobbyRepository.GetLobbyById(lobbyId);

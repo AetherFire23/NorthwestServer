@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Northwest.Domain.Dtos;
+using Northwest.Domain.GameStart;
 using Northwest.Domain.Models.Requests;
 using Northwest.Persistence;
 using Northwest.Persistence.Entities;
@@ -24,14 +25,15 @@ public class UserRepository
 
     public async Task<UserDto> MapUserDtoById(Guid userId)
     {
-        User? user = await GetUserById(userId);
+        var user = await GetUserById(userId);
         if (user is null) throw new ArgumentException(nameof(user));
-        List<Player> players = user.Players.ToList();
-        List<Lobby> availablesLobbies = _playerContext.Lobbies.Any() ? _playerContext.Lobbies.ToList() : new List<Lobby>();
-        List<RoleName> roleNames = user.UserRoles.Select(x => x.Role.RoleName).ToList();
-        List<GameDto> activeGames = await GetActiveGameDtosForUser(user.Id);
-        List<LobbyDto> lobbyDtos = await GetLobbyDtosForUser(userId);
-        UserDto userDto = new UserDto
+
+        var players = user.Players.ToList();
+        var availablesLobbies = _playerContext.Lobbies.Any() ? _playerContext.Lobbies.ToList() : [];
+        var roleNames = user.UserRoles.Select(x => x.Role.RoleName).ToList();
+        var activeGames = await GetActiveGameDtosForUser(user.Id);
+        var lobbyDtos = await _lobbyRepository.GetLobbyDtosForUser(user);
+        var userDto = new UserDto
         {
             Id = user.Id,
             Name = user.Name,
@@ -64,12 +66,12 @@ public class UserRepository
     {
         User? user = await _playerContext.Users
             .Include(u => u.UserRoles)
-            .ThenInclude(ur => ur.Role)
+                .ThenInclude(ur => ur.Role)
             .Include(u => u.Players)
-            .ThenInclude(p => p.Game)
+                .ThenInclude(p => p.Game)
             .Include(x => x.Players)
             .Include(u => u.UserLobbies)
-            .ThenInclude(ur => ur.Lobby)
+                .ThenInclude(ur => ur.Lobby)
             .FirstOrDefaultAsync(u => u.Id == id);
 
         return user;
@@ -94,7 +96,6 @@ public class UserRepository
             .ThenInclude(u => u.Role)
             .FirstOrDefaultAsync(u => u.Name == name);
 
-
         return user;
     }
 
@@ -103,6 +104,7 @@ public class UserRepository
         User? user = await GetUserById(id).ConfigureAwait(false);
         bool isCorrect = BCrypt.Net.BCrypt.Verify(user.PasswordHash, password);
         if (!isCorrect) throw new ArgumentException("Password incorrect");
+
         return isCorrect ? user : null;
     }
 
@@ -114,7 +116,7 @@ public class UserRepository
 
     public async Task<UserDto> CreateUser(RegisterRequest request)
     {
-        User user = new User
+        var user = new User
         {
             Id = Guid.NewGuid(),
             Email = request.Email,
@@ -122,64 +124,68 @@ public class UserRepository
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)
         };
 
-        Role role = await _playerContext.Roles.SingleAsync(x => x.RoleName == RoleName.PereNoel);
+        var role = await _playerContext.Roles.SingleAsync(x => x.RoleName == RoleName.PereNoel);
 
-        UserRole userRole = new UserRole
+        var userRole = new UserRole
         {
             Id = Guid.NewGuid(),
             Role = role,
             User = user
         };
 
-        _ = _playerContext.Users.Add(user);
-        _ = _playerContext.UserRoles.Add(userRole);
-        _ = await _playerContext.SaveChangesAsync();
+        _playerContext.Users.Add(user);
+        _playerContext.UserRoles.Add(userRole);
+        await _playerContext.SaveChangesAsync();
 
-        UserDto dto = await MapUserDtoById(user.Id);
+        var dto = await MapUserDtoById(user.Id);
 
         return dto;
     }
 
     public async Task<List<GameDto>> GetActiveGameDtosForUser(Guid userId) // dont want that in entity since some games can be inactive
     {
-        User? user = await GetUserById(userId);
-        List<Guid> activeGames = user.Games
+        var user = await GetUserById(userId);
+        var activeGames = user.Games
             .Where(x => x.IsActive)
             .Select(x => x.Id)
             .ToList();
 
-        List<GameDto> gameDtos = new List<GameDto>();
-        foreach (Guid game in activeGames)
+        var gameDtos = new List<GameDto>();
+        foreach (var gameId in activeGames)
         {
-            GameDto gameDto = await _gameRepository.MapGameDto(game);
+            var gameDto = await _gameRepository.MapGameDto(gameId);
             gameDtos.Add(gameDto);
         }
 
         return gameDtos;
     }
 
-    public async Task<List<LobbyDto>> GetLobbyDtosForUser(Guid userId)
-    {
-        User? user = await GetUserById(userId);
-        List<LobbyDto> lobbyDtos = new();
-        foreach (Lobby lobby in user.Lobbies)
-        {
-            LobbyDto lobbyDto = await _lobbyRepository.MapLobbyDto(lobby.Id);
-            lobbyDtos.Add(lobbyDto);
-        }
-        return lobbyDtos;
-    }
+    //public async Task<List<LobbyDto>> GetLobbyDtosForUser(Guid userId)
+    //{
+    //    var user = await GetUserById(userId);
+    //    //List<LobbyDto> lobbyDtos = new();
+    //    //foreach (Lobby lobby in user.Lobbies)
+    //    //{
+    //    //    var lobbyDto = await _lobbyRepository.MapLobbyDto(lobby.Id);
+    //    //    lobbyDtos.Add(lobbyDto);
+    //    //}
+
+    //    //var lobbyDtos2 = await user.Lobbies.SelectAsync(async l => await _lobbyRepository.MapLobbyDto(l.Id));
+    //    var lobbyDtos2 = await user.Lobbies.SelectAsync(l => _lobbyRepository.MapLobbyDto(l.Id));
+
+    //    return lobbyDtos2.ToList();
+    //}
 
     public async Task<List<UserDto>> GetUserDtosById(List<Guid> userIds)
     {
-        var userDtos = (await userIds.SelectAsync(MapUserDtoById)).ToList();
+        var userDtos = (await userIds.SequentialSelectAsync(MapUserDtoById)).ToList();
         return userDtos;
     }
 
     public async Task<List<UserDto>> GetUserDtosFromUser(List<User> users)
     {
         var userIds = users.Select(x => x.Id).ToList();
-        var userDtos = (await userIds.SelectAsync(MapUserDtoById)).ToList();
+        var userDtos = (await userIds.SequentialSelectAsync(MapUserDtoById)).ToList();
         return userDtos;
     }
 }

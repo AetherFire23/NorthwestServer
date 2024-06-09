@@ -1,4 +1,5 @@
 ﻿using Northwest.Domain.Dtos;
+using Northwest.Domain.GameStart;
 using Northwest.Domain.Interfaces;
 using Northwest.Domain.Models;
 using Northwest.Domain.Repositories;
@@ -7,6 +8,7 @@ using Northwest.Persistence;
 using Northwest.Persistence.Entities;
 using Northwest.Persistence.Enums;
 using SharedUtils.Extensions;
+
 namespace Northwest.Domain.Services;
 
 public class GameMakerService
@@ -38,9 +40,10 @@ public class GameMakerService
         _userRepository = userRepository;
         _gameRepository = gameRepository;
     }
+
     public async Task CreateGameFromLobby(Guid lobbyId)
     {
-        NewGameInfo newGameInfo = await CreateGameInfoPreparation(lobbyId);
+        var newGameInfo = await CreateGameInfoPreparation(lobbyId);
         await InitializeNewGame(newGameInfo);
     }
 
@@ -100,11 +103,11 @@ public class GameMakerService
           created before the other. */
         foreach (UserDto userDto in gameInfo.Users)
         {
-            User? userEntity = await _userRepository.GetUserById(userDto.Id); // entity doit etre tracked encore une fois. jpas sur daimer ca 
-            Game gameEntity = await _gameRepository.GetGameById(gameInfo.GameId);
+            var userEntity = await _userRepository.GetUserById(userDto.Id); // entity doit etre tracked encore une fois. jpas sur daimer ca 
+            var gameEntity = await _gameRepository.GetGameById(gameInfo.GameId);
             // ouache 
-            UserGamePreparation selection = gameInfo.UserGamePreparation.First(x => x.UserId == userDto.Id);
-            Player newPlayer = new Player()
+            var selection = gameInfo.UserGamePreparation.First(x => x.UserId == userDto.Id);
+            var newPlayer = new Player()
             {
                 Id = userDto.Id, // users not saved yet in db, so can use user key as primary key. Will have to Guid.NewGuid() some day
                 ActionPoints = 0,
@@ -135,16 +138,16 @@ public class GameMakerService
 
     private async Task InitializeItemsAsync(NewGameInfo info) // problems with disappearing items : check landmass creation that swaps the landmasses...
     {
-        List<Room> rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
+        var rooms = await _roomRepository.GetRoomsInGamesync(info.Game.Id);
 
-        Item item2 = new Item()
+        var item2 = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Hose,
             OwnerId = rooms.First(x => x.Name == nameof(RoomsTemplate.CrowsNest)).Id,
         };
 
-        Item item3 = new Item()
+        var item3 = new Item()
         {
             Id = Guid.NewGuid(),
             ItemType = ItemType.Hose,
@@ -159,8 +162,8 @@ public class GameMakerService
     private async Task<List<UserGamePreparation>> GetPlayerGamePrepFromLobby(Guid lobbyId)
     {
         // name is stored in UserLobby upon joining a lobby
-        Lobby? lobby = await _lobbyRepository.GetLobbyById(lobbyId);
-        List<UserGamePreparation> playerSelections = lobby.UserLobbies.Select(x => new UserGamePreparation
+        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
+        var playerSelections = lobby.UserLobbies.Select(x => new UserGamePreparation
         {
             UserId = x.User.Id,
         }).ToList();
@@ -170,8 +173,8 @@ public class GameMakerService
 
     private IRoleInitializationStrategy ResolveRoleStrategy(RoleType role)
     {
-        Type strategType = RoleStrategyMapper.GetStrategyTypeByRole(role);
-        IRoleInitializationStrategy? strategy = _serviceProvider.GetService(strategType) as IRoleInitializationStrategy;
+        var strategType = RoleStrategyMapper.GetStrategyTypeByRole(role);
+        var strategy = _serviceProvider.GetService(strategType) as IRoleInitializationStrategy;
         return strategy;
     }
 }

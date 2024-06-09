@@ -6,6 +6,10 @@ public enum RoleType
     Medic,
     Sailor,
     Cook,
+
     Engineer,
+    Engineer2,
+    Engineer3,
+    Engineer4,
 
 }

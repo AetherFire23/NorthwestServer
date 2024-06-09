@@ -4,7 +4,6 @@ using Northwest.Persistence.Entities;
 using Northwest.Persistence.Enums;
 using SharedUtils.Extensions;
 using System.Reflection;
-
 namespace Northwest.Persistence;
 
 public class PlayerContext : DbContext
@@ -31,8 +30,6 @@ public class PlayerContext : DbContext
     public DbSet<Season> Seasons { get; set; }
     public DbSet<Lobby> Lobbies { get; set; }
     public DbSet<UserLobby> UserLobbies { get; set; }
-
-    // authentication
     public DbSet<User> Users { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Role> Roles { get; set; }
