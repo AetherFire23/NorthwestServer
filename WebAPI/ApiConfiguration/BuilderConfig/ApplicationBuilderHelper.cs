@@ -12,9 +12,8 @@ public static class ApplicationBuilderHelper
 {
     public static void ConfigureWebApplication(WebApplicationBuilder builder)
     {
-
-
         builder.Services.InitializeDomainServices();
+
         ConfigureControllers(builder);
         ConfigureSwagger(builder);
         builder.Services.ConfigureHTTPLogging();

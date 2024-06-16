@@ -48,6 +48,7 @@
 		<None Include="..\.editorconfig" Link=".editorconfig" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\CommonTests\CommonTests.csproj" />
 	  <ProjectReference Include="..\Northwest.Domain\Northwest.Domain.csproj" />
 	</ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DomainTests.AdditionalServices;
 
-internal static class ServiceRegistrar
+public static class ServiceRegistrar
 {
     public static void RegisterTestServices(this IServiceCollection serviceCollection)
     {

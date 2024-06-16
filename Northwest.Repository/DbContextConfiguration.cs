@@ -9,6 +9,7 @@ public static class DbContextConfiguration
     {
         using var scope = serviceProvider.CreateScope();
         var playerContextService = scope.ServiceProvider.GetService<PlayerContext>();
+
         try
         {
             playerContextService.Database.EnsureDeleted(); // deocher our recommecner
