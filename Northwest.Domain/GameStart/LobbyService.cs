@@ -27,33 +27,24 @@ public class LobbyService(LobbyRepository _lobbyRepository,
     {
         var lobby = await _lobbyRepository.GetLobbyById(lobbyId)
             ?? throw new Exception();
+
         if (await _lobbyRepository.FindUserLobby(userId, lobbyId) is null) throw new Exception();
 
         await _lobbyRepository.DeleteUserFromLobby(userId, lobbyId);
         await _lobbyRepository.DeleteLobbyIfEmpty(lobby);
-
-        
+                
         await _playerContext.SaveChangesAsync();
     }
 
     // The host should decide when it is full
     public async Task StartGame(Guid lobbyId)
     {
+        if (!await _lobbyRepository.IsLobbyFull(lobbyId)) throw new Exception("Game cannot strat with a lobby that is not full");
+
         await _gameMakerService.CreateGameFromLobby(lobbyId); // important call!
         await CleanupLobbyAndUsersAfterGameStart(lobbyId);
     }
 
-    public async Task CreateGameIfLobbyIsFull(Guid lobbyId) // important method cos it creates the game
-    {
-        var lobby = await _lobbyRepository.GetLobbyById(lobbyId);
-
-        // magic number 5 to determine that game is full
-        if (lobby.UsersInLobby.Count == 5)
-        {
-            await _gameMakerService.CreateGameFromLobby(lobbyId); // important call!
-            await CleanupLobbyAndUsersAfterGameStart(lobbyId);
-        } 
-    }
     private async Task CleanupLobbyAndUsersAfterGameStart(Guid lobbyId)
     {
         var lobby = await _lobbyRepository.GetLobbyById(lobbyId);

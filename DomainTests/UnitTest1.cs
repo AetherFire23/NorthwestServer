@@ -6,6 +6,9 @@ using Northwest.Domain.Initialization;
 using Northwest.WebApi.ApiConfiguration;
 namespace DomainTests;
 
+// Depending on the lifetimes nad connections sqlite would run differently
+// If you have at least 1 connection open at all times, same connection string, while you have a connection open
+// Then you will get the same database
 public class UnitTest1
 {
     [Fact]
@@ -26,20 +29,15 @@ public class UnitTest1
             jc.ExpirationDays = 999;
         });
 
-
         serviceCollection.RegisterTestServices();
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         await serviceProvider.SeedAndMigrate2();
 
-
-
         // ------ TEST ---------
 
         await TestStuff(serviceProvider);
-
-        // Just start a game I guess
     }
 
     private static async Task TestStuff(ServiceProvider serviceProvider)

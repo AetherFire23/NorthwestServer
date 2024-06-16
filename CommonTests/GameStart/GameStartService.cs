@@ -1,7 +1,8 @@
-﻿using Northwest.Domain.GameStart;
+﻿using DomainTests.UserSession;
+using Northwest.Domain.GameStart;
 using Northwest.Domain.Initialization.GameOptions;
 using Northwest.Domain.Models;
-using DomainTests.UserSession;
+using SharedUtils;
 using SharedUtils.Extensions;
 namespace DomainTests.GameStart;
 
@@ -20,6 +21,8 @@ public class GameStartService(UserFactory _userFactory, LobbyService _lobbyServi
         var users = await Enumerable
             .Range(0, GameOptionsData.MaximumPlayerAmount) // Creates the exact amount of users I need 
             .SequentialSelectAsync(async x => await _userFactory.CreateUser());
+
+            //.SequentialSelectAsync(async x => await _userFactory.CreateUser());
 
         _globalTestState.ClientAppStates = users.ToList();
         _globalTestState.LocalPlayerState = users.First();
